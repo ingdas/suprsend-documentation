@@ -1,0 +1,134 @@
+---
+title: "API Reference"
+description: "JUMP TO"
+---
+
+* [Overview](/reference/overview)
+* [Authentication](/reference/api-keys)
+* [Idempotent Requests](/reference/idempotent-requests)
+* [SuprSend APIs on Postman](/reference/using-suprsnd-apis-on-postman)
+
+## USERS
+
+* [Overview](/reference/user_overview)
+* [Create / Update Userspost](/reference/create-update-users)
+* [Edit User Profilepost](/reference/edit-user-profile)
+* [Fetch User by idget](/reference/fetch-user-profile)
+* [List Usersget](/reference/list-users)
+* [Delete userdelete](/reference/delete-user)
+* [Merge User Profilespost](/reference/merge-users)
+
+## WORKFLOWS
+
+* [Overview](/reference/workflow-overview)
+* [Trigger Workflowpost](/reference/trigger-workflow-api)
+  * [Adding Email Attachmentpost](/reference/dynamic-workflow-add-attachment)
+* [Dynamic Workflow Triggerpost](/reference/dynamic-workflow-trigger)
+  * [Adding Email Attachmentpost](/reference/workflow-trigger-add-attachment)
+
+## EVENTS
+
+* [Overview](/reference/event-overview)
+* [Trigger an Eventpost](/reference/event-api)
+  * [Adding Email Attachmentpost](/reference/trigger-event-add-attachment)
+
+## OBJECTS
+
+* [Create / Update Objectspost](/reference/create-update-objects)
+* [Edit Object Profilepatch](/reference/edit-object-profile)
+* [Add Subscriptionpost](/reference/add-object-subscription)
+* [Fetch Object by idget](/reference/get-object-by-id)
+* [List Objects by typeget](/reference/list-objects-by-type)
+* [List Object Subscriptionsget](/reference/list-object-subscriptions)
+* [Delete an Objectdelete](/reference/delete-object)
+* [Remove Object Subscriptiondelete](/reference/delete-object-subscriptions)
+
+## TeMPLATES
+
+* [Fetch Template Listget](/reference/fetch-template-list)
+* [Fetch Template detailsget](/reference/fetch-template-details)
+* [Fetch Template content for a channelget](/reference/fetch-template-details-channel)
+
+## BRANDS
+
+* [Overview](/reference/brand-overview)
+* [Create / Update Brandspost](/reference/create-brands)
+* [Get Brand dataget](/reference/get-brand)
+* [Get Brand listget](/reference/get-brand-list)
+* [Delete Tenantdelete](/reference/delete-tenant)
+
+## PREFERENCE
+
+* [Overview](/reference/preference-overview)
+
+* [Update User Preference](/reference/update-user-preference)
+
+  * [Category and Channel within Categorypatch](/reference/update-user-preference-category)
+  * [Overall Channel levelpatch](/reference/update-user-preference-channel)
+  * [Bulk Updatepatch](/reference/bulk-update-user-preference)
+  * [Resetpatch](/reference/reset-user-preferences)
+
+* [Get User Preferences](/reference/get-user-preferences)
+
+  * [Full Preferenceget](/reference/get-user-full-preference)
+  * [All Categoriesget](/reference/get-user-preference-all-categories)
+  * [All Channelsget](/reference/get-user-preference-channel)
+  * [Single Categoryget](/reference/get-user-preferences-single-category)
+
+* [Update Brand Default Preferencepost](/reference/update-brand-default-preference)
+
+* [Get Brand Default Preferenceget](/reference/get-brand-default-preference)
+
+* [Update Object Preference](/reference/update-object-preference)
+
+  * [Category and Channel within Categorypatch](/reference/object-preference-category)
+  * [Overall Channel levelpatch](/reference/object-preference-channel)
+
+* [Get Object Preferences](/reference/get-object-preferences)
+
+  * [Full Preferenceget](/reference/fetch-object-full-preference)
+  * [All Categoriesget](/reference/fetch-object-preference-all-categories)
+  * [All Channelsget](/reference/fetch-object-preference-all-channels)
+  * [Single Categoryget](/reference/fetch-object-preference-single-category)
+
+## LISTS
+
+* [Overview](/reference/list-overview)
+
+* [Create a Listpost](/reference/create-list)
+
+* [Get all Listsget](/reference/get-all-lists)
+
+* [Get List configurationget](/reference/get-list)
+
+* [Add Subscribers to Listpost](/reference/add-subscribers-to-list)
+
+* [Remove Subscribers from Listpost](/reference/remove-users-from-list)
+
+* [Replace list subscribers](/reference/replace-users-in-the-list)
+
+  * [Start Syncpost](/reference/start-sync)
+  * [Add Subscribers to Draft Listpost](/reference/add-subscribers-to-draft-list)
+  * [Remove Subscribers from Draft Listpost](/reference/remove-subscribers-from-draft-list)
+  * [Finish Syncpatch](/reference/finish-sync)
+  * [Delete Draft Listpatch](/reference/delete-draft-list)
+
+* [Get list subscribersget](/reference/get-subscriber-list-users)
+
+* [Delete Listpatch](/reference/delete-list)
+
+## BROADCAST
+
+* [Overview](/reference/broadcast-overview)
+* [Trigger Broadcastpost](/reference/trigger-broadcast)
+
+Powered by [](https://readme.com?ref_src=hub\&project=suprsend)
+
+# Get Object Preferences
+
+[Object](/docs/objects) preferences are used to configure notification preferences for non-user entities, like group email addresses or Slack channels. This is particularly useful in SaaS products where you may need to send notifications, such as anomaly alerts, directly to team-based communication channels rather than individual users. Preferences can be fetched in bulk or for individual components, depending on your UI implementation. All the API options are to fetch preference of a single object at a time.
+
+* [Get Overall Preferences](/reference/fetch-object-full-preference): Most recommended method for preference UI preview if you are giving granular preference control to your users at both channel and category level. You can also use our [pre-built preference component](/docs/overview-preference-page) rather than building it in-house.
+* [Get Preferences for all categories](/reference/fetch-object-preference-all-categories): Returns preference of all categories and channels inside the category. Useful if you are just showing category opt-out option on UI.
+* [Get Preferences for all channels](/reference/fetch-object-preference-all-channels): Retrieves preferences for all active channels in a user's profile. Suitable if you are just showing channel opt-out option on UI.
+* [Get Preferences for a single category](/reference/fetch-object-preference-single-category): Fetches preferences for a specific category and its channels. Typically used for debugging purposes and not ideal for UI since it requires calling individual APIs for all categories.

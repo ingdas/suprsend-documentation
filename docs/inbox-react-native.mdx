@@ -1,0 +1,199 @@
+---
+title: "React Native (Headless)"
+description: "Headless library to integrate Inbox, and Toast notification functionality in React Native Applications using hooks"
+---
+
+[Suggest Edits](/edit/inbox-react-native)
+
+The Headless Inbox library provides hooks that can be integrated into React Native components for building inbox, and toast functionality in your applications.
+
+## Installation
+
+<CodeGroup>
+  ```shell npm
+  npm install @suprsend/react-headless
+  ```
+
+  ```shell yarn
+  yarn add @suprsend/react-headless
+  ```
+</CodeGroup>
+
+## Initialization
+
+Enclose your app in **SuprSendProvider** like below and pass the workspace key, distinct\_id, and [subscriber\_id](/docs/hmac-authentication).
+
+<CodeGroup>
+  ```javascript App.js
+  import { SuprSendProvider } from "@suprsend/react-headless";
+
+  function App() {
+    return (
+      <SuprSendProvider
+        workspaceKey="<workspace_key>"
+        subscriberId="<subscriber_id>"
+        distinctId="<distinct_id>"
+      >
+        <YourAppCode />
+      </SuprSendProvider>
+    );
+  }
+  ```
+</CodeGroup>
+
+**NOTE**: SuprSend hooks can only be used inside of SuprSendProvider.
+
+## Adding SuprSend Inbox component
+
+### useBell hook
+
+This hook provides unSeenCount, markAllSeen which is related to the Bell icon in the inbox
+
+**unSeenCount**: Use this variable to show the unseen notification count anywhere in your application. **markAllSeen**: Used to mark seen for all notifications. Call this method on clicking the bell icon so that it will reset the bell count to 0.
+
+<CodeGroup>
+  ```javascript Bell.js
+  import { useBell } from "@suprsend/react-headless";
+
+  function Bell() {
+    const { unSeenCount, markAllSeen } = useBell();
+    return <p onClick={() => markAllSeen()}>{unSeenCount}</p>;
+  }
+  ```
+</CodeGroup>
+
+### useNotifications hook
+
+This hook provides a notifications list, unSeenCount, markClicked, markAllSeen.
+
+**notifications**: List of all notifications. This array can be looped and notifications can be displayed. **unSeenCount**: Use this variable to show the unseen notification count anywhere in your application. **markClicked**: Method used to mark a notification as clicked. Pass notification id which is clicked as the first param.
+
+**markAllRead**: This method is used to mark all individual notifications as seen. Add a button anywhere in your notification tray as **Mark all as read** and on clicking of that call this method.
+
+<Frame caption="mark all read sample">
+  <img src="/images/docs/f0d8bcc-Screenshot_2023-06-27_at_12.51.24_PM.png" />
+</Frame>
+
+<CodeGroup>
+  ```javascript Notifications.js
+  import { useNotifications } from "@suprsend/react-headless";
+
+  function Notifications() {
+    const { notifications, markAllRead } = useNotifications();
+
+    return (
+      <div>
+        <h3>Notifications</h3>
+      	<p onClick={()=>{markAllRead()}}>Mark all read</p>
+        {notifications.map((notification) => {
+          return (
+            <NotificationItem
+              notification={notification}
+              key={notification.n_id}
+    					markClicked={markClicked}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
+  function NotificationItem({ notification, markClicked }) {
+    const message = notification.message;
+    const created = new Date(notification.created_on).toDateString();
+    
+    return (
+      <div
+        onClick={() => {
+          markClicked(notification.n_id);
+        }}
+        style={{
+          backgroundColor: "lightgray",
+          margin: 2,
+          borderRadius: 5,
+          padding: 4,
+          cursor: "pointer",
+        }}
+      >
+        <div style={{ display: "flex" }}>
+          <p>{message.header}</p>
+          {!notification.seen_on && <p style={{ color: "green" }}>*</p>}
+        </div>
+        <div>
+          <p>{message.text}</p>
+        </div>
+        <div>
+          <p style={{ fontSize: "12px" }}>{created}</p>
+        </div>
+      </div>
+    );
+  }
+  ```
+</CodeGroup>
+
+##### Notification Object structure
+
+<CodeGroup>
+  ```javascript Notification.js
+  interface IRemoteNotification {
+    n_id: string
+    n_category: string
+    created_on: number
+    seen_on?: number
+    message: IRemoteNotificationMessage
+  }
+
+  interface IRemoteNotificationMessage {
+    header: string
+    schema: string
+    text: string
+    url: string
+    extra_data?: string
+    actions?: { url: string; name: string }[]
+    avatar?: { avatar_url?: string; action_url?: string }
+    subtext?: { text?: string; action_url?: string }
+  }
+  ```
+</CodeGroup>
+
+### useEvent hook
+
+This hook is an event emitter when and takes arguments event type and callback function when the event happens. Must be called anywhere inside SuprSendProvider
+
+**Handled Events:**
+
+1. new\_notification: Called when the new notification occurs can be used to show toast in your application.
+
+<CodeGroup>
+  ```javascript Sample.js
+  import { useEvent } from "@suprsend/react-headless";
+
+  function Home() {
+    useEvent("new_notification", (newNotification) => {
+      console.log("new notification data: ", newNotification);
+      alert("You have new notifications");
+    });
+
+    return <p>Home</p>;
+  }
+  ```
+</CodeGroup>
+
+### Example Implementation
+
+Check the example implementation: [https://codesandbox.io/s/suprsend-react-headless-example-qkxobd?file=/src/App.tsx](https://codesandbox.io/s/suprsend-react-headless-example-qkxobd?file=/src/App.tsx)
+
+***
+
+* [Table of Contents](#)
+
+* * [Installation](#installation)
+
+  * [Initialization](#initialization)
+
+  * [Adding SuprSend Inbox component](#adding-suprsend-inbox-component)
+
+    * [useBell hook](#usebell-hook)
+    * [useNotifications hook](#usenotifications-hook)
+    * [useEvent hook](#useevent-hook)
+    * [Example Implementation](#example-implementation)

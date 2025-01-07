@@ -1,0 +1,114 @@
+---
+title: "Tenants/Brands"
+description: "Suggest Edits"
+---
+
+Tenants are used for personalizing communication on behalf of some other entity/organization. In SuprSend, tenants are workspace level entities. By default, SuprSend creates a brand with `brand_id="default"` (representing your organization) in each of your workspaces. You can create more brands using one of our backend SDKs or from SuprSend Dashboard.
+
+## Tenant datastructure:
+
+<CodeGroup>
+  ```json json
+  {
+    "tenant_id": "br-01",
+    "tenant_name": "Awesome Brand",
+    "logo": "https://ik.imagekit.io/l0quatz6utm/suprsend/staging/media/suprsend-only-logo_c8aa27faef118418e8c5bd7b31a1cafc74e09200.png",
+    "primary_color": "#ff0000",
+    "secondary_color": "#00ff00",
+    "tertiary_color": "#0000ff",
+    "social_links": {
+      "website": "https://suprsend.com",
+      "facebook": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": "",
+      "medium": "",
+      "discord": "",
+      "telegram": "",
+      "youtube": ""
+    },
+    "embedded_preference_url": "",
+    "hosted_preference_domain": "",
+    "properties": {
+      "prop1": "value1",
+      "prop2": { "prop3": ["value2"]}
+    }
+  }
+  ```
+</CodeGroup>
+
+| Field                                 | Description                                                                                                                                                               |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| tenant\_id (mandatory)                | max 64 characters and should contains alphanumeric characters(a-z, 0-9), hyphen (-) and underscode(\_).                                                                   |
+| tenant\_name (mandatory)              | name of the tenant.                                                                                                                                                       |
+| colors (primary, secondary, tertiary) | used while designing templates. If not provided `default` tenant colour will be picked.                                                                                   |
+| social\_links                         | social links to your tenant. Pass `""` if you want to remove existing link.                                                                                               |
+| properties                            | Custom properties associated with the tenant. Update operation is upsert (new properties are added to existing one's and if key is already present, value is overridden). |
+
+## Tenant methods
+
+### Upsert tenant
+
+This method will create a new tenant or update an existing tenant.
+
+<CodeGroup>
+  ```javascript javascript
+  const { Suprsend } = require("@suprsend/node-sdk");
+
+  const supr_client = new Suprsend("workspace_key", "workspace_secret")
+
+  const tenant_payload = {...} // prepare tenant datastructure payload
+                   
+  const response = supr_client.tenants.upsert(tenant_id, tenant_payload); // create or update tenant
+  response.then((res) => console.log("response", res));
+  ```
+</CodeGroup>
+
+### Get tenant details
+
+<CodeGroup>
+  ```javascript Javascript
+  const response = supr_client.tenants.get(tenant_id)
+  ```
+</CodeGroup>
+
+### Get tenants list
+
+<CodeGroup>
+  ```javascript Javascript
+  const response = supr_client.brands.list();  // default limit 20
+  const response = supr_client.brands.list({limit:20, offset:0}); //  max limit 1000
+  ```
+</CodeGroup>
+
+## Add tenant in Workflow
+
+<CodeGroup>
+  ```javascript Javascript
+  const wf = new Workflow(workflow_body, {tenant_id :  "_tenant_id_"})
+  ```
+</CodeGroup>
+
+## Add tenant in Event
+
+<CodeGroup>
+  ```javascript Javascript
+  const event = new Event(distinct_id, event_name, properties, {tenant_id :  "_tenant_id_"})
+  ```
+</CodeGroup>
+
+***
+
+* [Table of Contents](#)
+
+* * [Tenant datastructure:](#tenant-datastructure)
+
+  * [Tenant methods](#tenant-methods)
+
+    * [Upsert tenant](#upsert-tenant)
+    * [Get tenant details](#get-tenant-details)
+    * [Get tenants list](#get-tenants-list)
+
+  * [Add tenant in Workflow](#add-tenant-in-workflow)
+
+  * [Add tenant in Event](#add-tenant-in-event)

@@ -1,0 +1,89 @@
+---
+title: "Broadcast"
+description: "Trigger broadcast notifications to list of subscribers in single call"
+---
+
+[Suggest Edits](/edit/node-broadcast)
+
+<CodeGroup>
+  ```javascript javascript
+  const { Suprsend, SubscriberListBroadcast } = require("@suprsend/node-sdk");
+
+  const supr_client = new Suprsend("workspace_key", "workspace_secret");
+
+  // prepare payload
+  const broadcast_body = {
+    list_id: "_list_id_",
+    template: "_template_slug_",
+    notification_category: "_",
+    channels: [],
+    delay: "_time_delay_",
+    trigger_at: "_ISO_timestamp_"/"number in seconds",
+    data: {
+      key1: "value1",
+      key2: "value2",
+    },
+  };
+
+  const broadcast_instance = new SubscriberListBroadcast(broadcast_body, {tenant_id : "your_tenant_id", idempotency_key="__uniq_request_id__"}); // create broadcast instance
+
+  const response = supr_client.subscriber_lists.broadcast(inst); // trigger broadcast
+  response.then((res) => console.log("response", res));
+  ```
+
+  ```javascript Example
+  const { Suprsend, SubscriberListBroadcast } = require("@suprsend/node-sdk");
+
+  const supr_client = new Suprsend("workspace_key", "workspace_secret");
+
+  const broadcast_body = {
+    "list_id": "bulk_list",
+    "template": "purchase-confirmation",
+    "notification_category": "transactional",
+    "channels": ["iospush","sms","inbox"],
+    "delay": 30,
+    "trigger_at": "2022-12-27T11:14:51.643Z",
+    "data": {
+      "amount": "$100",
+      "product_name": "Medicines"
+      "regions": ["USA", "UK"]
+    }
+  }
+
+  const broadcast_instance = new SubscriberListBroadcast(broadcast_body);
+
+  const response = supr_client.subscriber_lists.broadcast(inst);
+  response.then((res) => console.log("response", res));
+  ```
+</CodeGroup>
+
+| Parameter              | Format                                              | Description                                                                                                                                                                                                                                              |
+| ---------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| list\_id               | string                                              | list of users that you want to send broadcast messages.                                                                                                                                                                                                  |
+| template               | string                                              | It is the template slug which can be found in Templates tab in SuprSend dashboard.                                                                                                                                                                       |
+| notification\_category | system / transactional / promotional                | You can understand more about them in the [Notification Category](/docs/notification-category).                                                                                                                                                          |
+| channels (Optional)    | string\[]                                           | User channels on which the broadcast messages to be sent. If not provided, it will trigger notifications on all available channels in user profile. Available channels: androidpush / iospush / inbox / email / whatsapp / sms Example:\["sms", "inbox"] |
+| delay (Optional)       | **XX**d**XX**h**XX**m**XX**s or Number (in seconds) | Broadcast will be halted for the time mentioned in delay, and become active once the delay period is over. Example: 1d2h3m4s / 60                                                                                                                        |
+| trigger\_at (Optional) | date string in ISO 8601                             | Trigger broadcast on a specific date-time. Example: "2021-08-27T20:14:51.643Z"                                                                                                                                                                           |
+| data (Optional)        | object                                              | variable data defined in templates                                                                                                                                                                                                                       |
+
+## Add file attachment (for email)
+
+To add one or more attachments to a notification (viz. Email), call `add_attachment()` on broadcast instance for each attachment file. Ensure that attachment url is valid and public, otherwise error will be raised. Since broadcast instance size can't be > 100 KB, local file paths can't be passed in event attachment.
+
+<CodeGroup>
+  ```javascript javascript
+  const broadcast_instance = new SubscriberListBroadcast(broadcast_body);
+
+  broadcast_instance.add_attachment("https://www.adobe.com/sample_file.pdf");
+  ```
+</CodeGroup>
+
+<Warning>
+  A single broadcast instance size (including attachment) must not exceed 100KB (100 x 1024 bytes).
+</Warning>
+
+***
+
+* [Table of Contents](#)
+* * [Add file attachment (for email)](#add-file-attachment-for-email)

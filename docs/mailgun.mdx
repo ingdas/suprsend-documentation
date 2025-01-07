@@ -1,0 +1,84 @@
+---
+title: "Mailgun"
+description: "https://www.mailgun.com/"
+---
+
+[Suggest Edits](/edit/mailgun)
+
+This section is a step by step guide to add Mailgun as your email service provider. You can use use your existing Mailgun account to integrate, or create a new account from [here](https://signup.mailgun.com/new/signup)
+
+## Mailgun integration on SuprSend account
+
+**Step 1:** On the SuprSend dashboard, follow the steps as below:
+
+1. Select Vendors from the left panel
+2. Select 'Email' as the channel from the list
+3. Select the communication category from the list - System, Transactional, Promotional
+4. Select 'Mailgun' from the list of Vendors
+
+![](/images/docs/b670124-Screenshot_2022-07-08_at_6.23.10_PM.png "Screenshot 2022-07-08 at 6.23.10 PM.png")
+
+**Step 2:** On the Settings, enter the details:
+
+![1752](/images/docs/964652f-Screenshot_2022-07-08_at_6.59.52_PM.png "Screenshot 2022-07-08 at 6.59.52 PM.png")
+
+| Form Field                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nickname                       | You can give any name which may help you to identify this account easily                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Private API Key                | You will get this Private API key from your Mailgun account. SuprSend uses this API key to send email on your behalf via your registered Mailgun account. Check [below section](/docs/mailgun#how-to-get-api-key-from-mailgun-account) on how to get your Mailgun API keys                                                                                                                                                                                                   |
+| Webhook Signing Key            | You will get this key from your Mailgun account. SuprSend uses this API key to sign the delivery events received via webhook. Check [below section](/docs/mailgun#how-to-get-api-key-from-mailgun-account) on how to get your Mailgun API keys                                                                                                                                                                                                                               |
+| Is Sandbox environment         | Select this if you are using Mailgun sandbox domain for sending emails                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Domain Prefix / Sandbox Domain | **Sandbox Domain** - Add sandbox domain name if you are using mailgun sandbox domain for sending emails **Domain Prefix** - Prefix of the subdomain names added in mailgun account. For example - if your subdomain name is *mg.mydomain.com*, the domain prefix will be *mg* Leave it blank if your root domain is added as the domain in mailgun account like *mydomain.com* Mailgun domain names can be referred from [here](https://app.mailgun.com/app/sending/domains) |
+| Data center region             | For domain region = EU, select "Europe region" else select "Outside Europe"                                                                                                                                                                                                                                                                                                                                                                                                  |
+| From Name                      | Default 'From Name' that email will go from. You can override this in the individual template.*eg. SuprSend*                                                                                                                                                                                                                                                                                                                                                                 |
+| From Address                   | Default 'From Email ID' that email will go from. You can override this in the individual template.*eg. [\[email protected\]](/cdn-cgi/l/email-protection#ec9f999c9c839e98ac9f999c9e9f898288c28f8381)*                                                                                                                                                                                                                                                                        |
+| Reply Address                  | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. [\[email protected\]](/cdn-cgi/l/email-protection#83f0f6f3f3ecf1f7c3f0f6f3f1f0e6ede7ade0ecee)*                                                                                                                                                                                                                                                              |
+| Price per notification         | This is the amount you pay per email notification to Mailgun. It helps us to calculate, estimate and optimise your cost spent on notifications.                                                                                                                                                                                                                                                                                                                              |
+
+## How to get API Key from Mailgun account
+
+Once logged in to your Mailgun account, navigate to [API Security](https://app.mailgun.com/settings/api_security) from your profile.
+
+![](/images/docs/ea0ce31-image.png)
+
+Private API key can be seen only at the time of creation. You can either use any of your existing keys or **"Add new key"**.
+
+<Warning>
+  Users with "developer" or "admin" role can only read the API keys. Please check with relevant folks in your team if you are not able to see the API keys in your account
+</Warning>
+
+## Setting Callback URL in Mailgun Account
+
+One of the platform advantage of using SuprSend as a central communication system is that it shows notification analytics for all channels in your SuprSend account together.
+
+Go to **Sending->Webhooks->Add webhook**
+
+Add below URL for all event types (`Delivered Messages`, `Clicks`, `Opens`, `Spam Complaints`, `Permanent Failure`, `Temporary Failure`)
+
+URL: `https://hub.suprsend.com/webhook/mailgun/`
+
+![](/images/docs/e6649d0-Screenshot_2022-07-09_at_7.25.38_PM.png "Screenshot 2022-07-09 at 7.25.38 PM.png")
+
+## How to add Unsubscription link in email
+
+It is advisable to give your recipients the ability to unsubscribe from emails. First, it is required by the [CAN-Spam Act](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business). Second, if you don’t give them this option, they are more likely to click on the spam complaint button, which will cause more harm than allowing them to unsubscribe. Finally, many ESPs look for unsubscribe links and are more likely to filter your email if they don’t have them.
+
+You can add "Unsubscribe" link to your email by enabling **Unsubscribes** in *Sending -> Domain settings (Tracking section)*
+
+![](/images/docs/afc5e04-Screenshot_2022-07-09_at_11.15.03_PM.png "Screenshot 2022-07-09 at 11.15.03 PM.png")
+
+***
+
+What’s Next
+
+Create an email template and start sending email notifications with your Mailgun account
+
+* [Email Template](/docs/email)
+* [Create Workflow](https://docs.suprsend.com/docs/design-workflow)
+
+* [Table of Contents](#)
+
+* * [Mailgun integration on SuprSend account](#mailgun-integration-on-suprsend-account)
+  * [How to get API Key from Mailgun account](#how-to-get-api-key-from-mailgun-account)
+  * [Setting Callback URL in Mailgun Account](#setting-callback-url-in-mailgun-account)
+  * [How to add Unsubscription link in email](#how-to-add-unsubscription-link-in-email)

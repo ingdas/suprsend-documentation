@@ -1,0 +1,35 @@
+---
+title: "Tenant Vendor"
+description: "An overview of how tenant vendor works and how to configure it"
+---
+
+[Suggest Edits](/edit/tenant-vendor)
+
+When sending notifications for your enterprise customers, not just notification styling; your clients might also want the notifications to come from their own brand handles. For instance, in emails, the 'from address' should be from your clients' domain. Similarly, for SMS and WhatsApp, they might prefer to use their own brand headers. Managing these different vendor configurations for all your tenants in your codebase can become complex and messy.
+
+With SuprSend's tenant vendor support, you can seamlessly route messages through your customer's channel providers without any code level changes. All you have to do is add vendor configuration for your tenants once and SuprSend will take care of routing the messages for each brand via their vendors.
+
+> In case you don't have vendor defined for a tenant, notifications will automatically fallback to the default vendor credentials.
+
+## How to add tenant vendors
+
+Adding a tenant vendor is quite simple. Just go to the ["Vendor" page](https://app.suprsend.com/en/staging/vendors/) on the SuprSend dashboard. Select the desired brand from the top right side and add vendors for relevant channels.
+
+![](/images/docs/f7230b5-image.png)
+
+*Currently, this support is extended for Email and MS Teams Channel. We'll be expanding the functionality soon on other channels as well.*
+
+<Check>
+  You can also use our APIs to set tenant vendors dynamically if you have a higher number of tenants or their configurations change more dynamically. The API support is in beta right now. You can email us on [\[email protected\]](/cdn-cgi/l/email-protection#f4878184849b8680b48781848687919a90da979b99) for an early access.
+</Check>
+
+***
+
+What’s Next
+
+Next, you can integrate vendors for your tenants.
+
+* [Vendor Integration Overview](/docs/vendors)
+
+* [Table of Contents](#)
+* * [How to add tenant vendors](#how-to-add-tenant-vendors)

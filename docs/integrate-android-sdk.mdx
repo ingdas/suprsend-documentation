@@ -1,0 +1,125 @@
+---
+title: "Integrate Android SDK"
+description: "This document will cover SDK installation and initialization steps for your Android application"
+---
+
+[Suggest Edits](/edit/integrate-android-sdk)
+
+## Installation
+
+**Step 1: Add the mavenCentral() repository to your build file.**
+
+<CodeGroup>
+  ```groovy Add it in your root build.gradle at the end of repositories
+  allprojects {
+  		repositories {
+  			...
+  			mavenCentral()
+  		}
+  	}
+  ```
+</CodeGroup>
+
+**Step 2. Add Android SDK dependency inside app level build.gradle** Add following line of code inside dependencies in app build.gradle
+
+<CodeGroup>
+  ```java build.gradle
+  dependencies {
+  	        implementation("com.suprsend:native:1.0.1")
+  	}
+  ```
+</CodeGroup>
+
+## Initialization
+
+**Step 1.** To integrate SuprSend in your Android app, initialise the Suprsend android sdk in MainApplication inside `onCreate` method and just above `super.onCreate()` line.
+
+<CodeGroup>
+  ```kotlin kotlin
+  class MyApplication : Application() {
+
+      override fun onCreate() {
+          SSApi.init(this,"WORKSPACE KEY", "WORKSPACE SECRET")
+          super.onCreate()
+      }
+  }
+  ```
+</CodeGroup>
+
+Replace **WORKSPACE KEY** and **WORKSPACE SECRET** with your workspace values. You will get both the tokens from [Suprsend dashboard](https://app.suprsend.com/) (***Settings page -> "API keys"*** section). For more details, check the [documentation on 'Workspaces'](/docs/workspace).
+
+![](/images/docs/d60fec2-Frame_58_1.png)
+
+**Step 2.** Import SuprSend SDK in your client side code
+
+<CodeGroup>
+  ```kotlin kotlin
+  val ssApi = SSApi.getInstance()
+  ```
+</CodeGroup>
+
+## Logging
+
+By default the logs of SuprSend SDK are disabled. We recommend you to enable the SDK logs by setting its value to VERBOSE. You can enable the logs just in debug mode while in development by below condition.
+
+<CodeGroup>
+  ```kotlin kotlin
+  ssApi.setLogLevel(level: LogLevel)
+    
+  if (BuildConfig.DEBUG)
+    ssApi.setLogLevel(LogLevel.VERBOSE)
+
+  or
+
+  //You can send the sdk exception to your crashlytics server
+  SSApi.setLogger(object : LoggerCallback {
+    override fun i(tag: String, message: String) {
+      // you will receive sdk info messages here
+    }
+
+    override fun e(tag: String, message: String, throwable: Throwable?) {
+      throwable ?: return
+      //Ex - FirebaseCrashlytics.getInstance().recordException(throwable)
+    }
+  })
+  ```
+</CodeGroup>
+
+## Proguard Rules (For release build)
+
+For creating a release build you will need to add these below pro-guard rules:
+
+<CodeGroup>
+  ```yaml yaml
+  # SuprSend Sdk
+  -dontwarn app.suprsend.**
+  -keep class app.suprsend.**{*;}
+
+  # Xiaomi
+  -keep class app.suprsend.xiaomi.SSXiaomiReceiver {*;}
+  #SDK has been obfuscated and compressed to avoid class not found error due to re-obfuscation.
+  -keep class com.xiaomi.**
+  #If the compiling Android version you are using is 23, you can prevent getting a false warning which makes it impossible to compile.
+  -dontwarn com.xiaomi.push.**
+  -keep class com.xiaomi.mipush.sdk.MiPushMessage {*;}
+  -keep class com.xiaomi.mipush.sdk.MiPushCommandMessage {*;}
+  -keep class com.xiaomi.mipush.sdk.PushMessageReceiver {*;}
+  -keep class com.xiaomi.mipush.sdk.MessageHandleService {*;}
+  -keep class com.xiaomi.push.service.XMJobService {*;}
+  -keep class com.xiaomi.push.service.XMPushService {*;}
+  -keep class com.xiaomi.mipush.sdk.PushMessageHandler {*;}
+  -keep class com.xiaomi.push.service.receivers.NetworkStatusReceiver {*;}
+  -keep class com.xiaomi.push.service.receivers.PingReceiver {*;}
+  -keep class com.xiaomi.mipush.sdk.NotificationClickedActivity {*;}
+  }
+  ```
+</CodeGroup>
+
+***
+
+* [Table of Contents](#)
+
+* * [Installation](#installation)
+  * [Initialization](#initialization)
+  * [Logging](#logging)
+  * [Proguard Rules (For release build)](#proguard-rules-for-release-build)

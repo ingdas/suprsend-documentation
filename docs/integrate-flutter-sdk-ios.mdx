@@ -1,0 +1,95 @@
+---
+title: "Integrate Flutter SDK - iOS"
+description: "This document will cover SDK installation and initialization steps for your iOS application"
+---
+
+[Suggest Edits](/edit/integrate-flutter-sdk-ios)
+
+Please follow the below steps for Suprsend SDK set up in your Flutter iOS project
+
+## Installation
+
+**Step 1: Open your Flutter project’s pubspec.yaml file**
+
+Add following line of code inside dependencies in pubspec.yaml file
+
+<CodeGroup>
+  ```yaml pubspec.yaml
+  dependencies:
+    flutter:
+    	sdk: flutter
+    suprsend_flutter_sdk: "^2.2.0"
+  ```
+</CodeGroup>
+
+**Step 2: Run `flutter pub get` in the terminal**
+
+<CodeGroup>
+  ```shell shell
+  flutter pub get
+  ```
+</CodeGroup>
+
+**Step 3: Changes in PodFile and Run pod Install** SuprSend sdk needs iOS platform version of 13 or above, so check it inside PodFile and change if its less than 13.0 and then run **pod install** from inside iOS folder.
+
+<CodeGroup>
+  ```ruby PodFile
+  platform :ios, '13.0' // this version has to be 13 or greater
+  ```
+</CodeGroup>
+
+**Step 4: Change iOS Deployment Target** SuprSend sdk needs an iOS deployment target of 11 or above, open your project in Xcode(*project > ios > project.xcworkspace*) and update the target as given in below image.
+
+![](/images/docs/18650ad-Screenshot_2022-07-27_at_12.36.03_PM.png "Screenshot 2022-07-27 at 12.36.03 PM.png")
+
+## 2. Initialization
+
+**Step 1:** To integrate SuprSend in your iOS app, you'll need to import Suprsend iOS sdk into your application. In `AppDelegate` add the below mentioned code inside `didFinishLaunchingWithOptions` method, just before returning.
+
+<CodeGroup>
+  ```objectivec AppDelegate.swift
+  import UIKit
+  import Flutter
+  import SuprSendSdk // Add this
+
+  ...
+
+  override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    GeneratedPluginRegistrant.register(with: self)
+
+      // Add below 2 lines
+      let suprSendConfiguration = SuprSendSDKConfiguration(withKey: "your workspace key", secret:"your workspace secret", baseUrl:nil)
+      SuprSend.shared.configureWith(configuration: suprSendConfiguration  , launchOptions: launchOptions)
+
+      return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+  ```
+</CodeGroup>
+
+Replace **WORKSPACE KEY** and **WORKSPACE SECRET** with your workspace values. You will get both the tokens from [Suprsend dashboard](https://app.suprsend.com/) (***Settings page -> "API keys"*** section). For more details, check the [documentation on 'Workspaces'](/docs/workspace).
+
+![](/images/docs/d60fec2-Frame_58_1.png)
+
+## Logging
+
+By default the logs of SuprSend SDK are disabled. We recommend you to enable the SDK logs by setting its value to VERBOSE. You can enable the logs just in debug mode while in development by below condition.
+
+<CodeGroup>
+  ```javascript javascript
+  suprsend.setLogLevel(level) // level is optional for iOS
+
+  suprsend.setLogLevel("VERBOSE")
+  suprsend.setLogLevel("DEBUG")
+  suprsend.setLogLevel("INFO")
+  suprsend.setLogLevel("ERROR")
+  suprsend.setLogLevel("OFF")
+  ```
+</CodeGroup>
+
+***
+
+* [Table of Contents](#)
+
+* * [Installation](#installation)
+  * [2. Initialization](#2-initialization)
+  * [Logging](#logging)

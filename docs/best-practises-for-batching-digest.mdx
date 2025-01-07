@@ -1,0 +1,69 @@
+---
+title: "Best practices for Batching & Digest"
+description: "Suggest Edits"
+---
+
+Creating an effective notification system is essential for maintaining user engagement without overwhelming them. By leveraging batching and digest techniques, you can enhance the user experience while ensuring that important updates are communicated effectively. Below, we delve into best practices for building notifications using batching and digest.
+
+# Group Similar Notifications
+
+![](/images/docs/d121c83-422315a-image.png)
+
+One of the fundamental principles of effective notification management is grouping similar notifications. The primary goal here is to avoid overwhelming the user with a barrage of alerts. For instance, if a user receives multiple social media notifications, it is more efficient to combine them into a single alert. This approach not only reduces notification fatigue but also makes it easier for users to manage their alerts. By [batching](/docs/batch) similar notifications, you provide a more streamlined and user-friendly experience.
+
+![](/images/docs/6001aa2-f7de8ef-image.png)
+
+In addition to grouping notifications by general use case, employing a [grouping key](/docs/batch#batch-key) can further enhance the efficiency of your notification system. For instance, rather than aggregating all comments across various posts, you can group notifications specifically by comments on a single post. This refined approach ensures that users receive more relevant and organised information, reducing clutter and improving the overall user experience.
+
+# Prioritise Important Notifications
+
+Not all notifications are created equal. Some are more critical than others and need to be highlighted or sent immediately. For instance, security alerts or urgent messages should not wait for the next batch or digest but should be delivered instantly. Prioritising important notifications ensures that users do not miss out on crucial information. This practice also helps in building trust, as users know that they will be promptly informed about significant events.
+
+![](/images/docs/1f86cca-Screenshot_2024-07-22_at_2.47.04_AM.png)
+
+If similar types of alerts can vary in severity, implement [conditional logic](/docs/branch) to determine whether they should be delivered immediately or included in a batch. For instance, critical alerts that require urgent user attention should bypass batching and be sent instantly, while less critical alerts can be aggregated and sent at a later time. This approach ensures that users are promptly informed of urgent issues while reducing the frequency of less critical notifications, thereby enhancing the overall user experience.
+
+# Allow User Customisation
+
+![](/images/docs/b30f51a-Screenshot_2024-07-22_at_2.53.48_AM.png)
+
+Empowering users to customise their notification [preferences](/docs/preferences) is a key aspect of a user-centric approach. Allow users to choose the type of notifications they receive and the frequency of digests. This customisation can include options such as receiving notifications for certain types of activities, setting quiet hours, or choosing between immediate alerts and daily digests. By offering this level of customisation, you respect user preferences and enhance their overall experience.
+
+# Respect Quiet Hours
+
+Implementing respect for user-defined quiet hours is an essential consideration. Allow users to set periods during which they do not wish to receive any notifications. This feature is particularly important for maintaining a healthy work-life balance and preventing notification fatigue. By respecting quiet hours, you show consideration for the user's time and well-being.
+
+<Info />
+
+# Monitor Engagement Metrics
+
+Keeping an eye on how users interact with your notifications and digests is crucial for assessing their effectiveness. Track engagement metrics such as open rates, click-through rates, and user feedback. Low engagement levels might indicate the need for adjustments in your notification strategy. Monitoring these metrics helps you understand user behaviour and preferences, enabling you to refine your approach accordingly.
+
+# Keep Digests Concise
+
+When creating digest emails or messages, brevity is essential. Users are more likely to engage with concise and to-the-point information. Highlight the most important updates at the beginning of the digest to capture the user's attention quickly. A well-structured and concise digest ensures that users can easily grasp the key points without feeling overwhelmed by too much information.
+
+To enhance user experience and ensure that your communications remain concise, [limit the items](/docs/batch#retain-batch-events) in your list to either the last 'n' items or the first 'n' items based on your specific use case. This approach prevents users from having to sift through overly lengthy emails and allows them to focus on the most relevant and recent information. By curating the content in this manner, you can deliver a more streamlined and efficient notification system that respects the user's time and attention.
+
+# Provide Easy Unsubscribe Options
+
+Make it simple for users to unsubscribe from notifications or digests they no longer find useful. An easy and straightforward unsubscribe process helps maintain a positive user experience. Users should not feel trapped by notifications; instead, they should have the freedom to opt-out whenever they choose. Providing this option demonstrates respect for user preferences and contributes to a more user-friendly system.
+
+# Test and Iterate
+
+Regularly testing your batching and digest strategy is vital to ensure it meets user needs and preferences. Collect feedback from users and analyse how they interact with notifications. Use this data to make informed adjustments. Iterative testing helps in fine-tuning your approach, ensuring that your notification system remains effective and aligned with user expectations. This continuous improvement process is essential for maintaining a high level of user satisfaction.
+
+In conclusion, building an effective notification system using batching and digest techniques requires careful planning and consideration of user preferences. By following these best practices, you can create a notification strategy that enhances user experience, maintains engagement, and ensures the timely delivery of important updates.
+
+***
+
+* [Table of Contents](#)
+
+* * [Group Similar Notifications](#group-similar-notifications)
+  * [Prioritise Important Notifications](#prioritise-important-notifications)
+  * [Allow User Customisation](#allow-user-customisation)
+  * [Respect Quiet Hours](#respect-quiet-hours)
+  * [Monitor Engagement Metrics](#monitor-engagement-metrics)
+  * [Keep Digests Concise](#keep-digests-concise)
+  * [Provide Easy Unsubscribe Options](#provide-easy-unsubscribe-options)
+  * [Test and Iterate](#test-and-iterate)

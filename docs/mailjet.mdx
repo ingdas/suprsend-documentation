@@ -1,0 +1,76 @@
+---
+title: "Mailjet"
+description: "https://www.mailjet.com/"
+---
+
+[Suggest Edits](/edit/mailjet)
+
+This section is a step by step guide to setup Mailjet as your email service provider You can use use your existing Mailjet account to integrate, or create a new account from [here](https://app.mailjet.com/signup?lang=en_US)
+
+## Mailjet integration on SuprSend account
+
+**Step 1**: On the SuprSend dashboard, follow the steps as below:
+
+1. Select **Vendors** from the left panel
+2. Select **Email** as the channel from the list
+3. Choose a notification category from the list: **System**, **Transactional**, or **Promotional**. You have the option to add different vendors in each notification category. This helps you to manage different messaging queues at vendor end based on the criticality of notification and doesn't let your marketing or promotional notifications to impact the deliverability of critical system notifications, such as OTPs or verification messages.
+4. Select **Mailjet** from the list of Vendors
+
+![](/images/docs/8863183-image.png)
+
+**Step 2**: On the **Mailjet Integration settings** page, enter following details.
+
+| Form Field             | Description                                                                                                                                                                                                                                                                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nickname               | You can give any name which may help you to identify this account easily                                                                                                                                                                                                                                                                                |
+| API Key                | You will get from the API key management section in your Mailjet account settings. This is a mandatory field. SuprSend will use this key to route emails through your Mailjet account. Check [below section](/docs/postmark#how-to-get-a-server-token-from-postmark) on how to get your API and Secret Key.                                             |
+| Secret Key             | Secret generate along with your API key. You will get this from API key management section in your Mailjet account settings. This is a mandatory field. SuprSend will use this token to route emails through your Mailjet account. Check [below section](/docs/postmark#how-to-get-a-server-token-from-postmark) on how to get your API and Secret Key. |
+| From Name              | Default 'From Name' that email will go from. You can override this in the individual template.*eg. SuprSend*                                                                                                                                                                                                                                            |
+| From Email             | Default 'From Name' that email will go from. You can override this in the individual template. *eg. [\[email protected\]](/cdn-cgi/l/email-protection#5a292f2a2a35282e1a292f2a28293f343e74393537)* From email domain should be verified by Mailjet.                                                                                                     |
+| Reply Email            | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. [\[email protected\]](/cdn-cgi/l/email-protection#f2818782829d8086b28187828081979c96dc919d9f)*                                                                                                                                         |
+| Price per notification | This is the amount you pay per email notification to Mailjet. It helps us to calculate, estimate and optimise your cost spent on notifications. We use this cost to set the order of channels in smart routing where routing rule is `optimize on cost`.                                                                                                |
+
+## How to get API and Secret key from Mailjet
+
+1. Login to your Mailjet account
+2. Click on your profile from the top bar and select account settings.
+
+![](/images/docs/ecb4fd8-image.png)
+
+3. On account Information Page, click on **Rest API -> API Key Management**
+
+![](/images/docs/4c4dd8e-image.png)
+
+4. On the API Key Management page, you'll get the option to create API key. Create one if you haven't already or else you can add the existing API Key and Secret in SuprSend vendor form.
+
+![](/images/docs/8f2e98f-image.png)
+
+![](/images/docs/92ef18f-image.png)
+
+## Configuring Open/Click tracking for emails on Mailjet
+
+SuprSend uses webhooks to update notification statuses on delivery, user actions like open/click or the failure scenarios. This allows SuprSend to track notification status in logs and to power analytics. To allow SuprSend to receive these events via webhook, add SuprSend's webhook URL in your Mailjet account.
+
+SuprSend's webhook URL: `https://hub.suprsend.com/webhook/mailjet/`
+
+1. Go to Mailjet Account Settings Page from the top profile and select **Rest API -> Event Notifications (Webhooks)**
+
+![](/images/docs/955e7d8-image.png)
+
+2. On the webhook page, add SuprSend's tracking URL `<https://hub.suprsend.com/webhook/mailjet/>` and apply this URL to all events.
+
+![](/images/docs/604d0d5-image.png)
+
+***
+
+What’s Next
+
+Design your Email template if you haven't already.
+
+* [Email Template](/docs/email)
+
+* [Table of Contents](#)
+
+* * [Mailjet integration on SuprSend account](#mailjet-integration-on-suprsend-account)
+  * [How to get API and Secret key from Mailjet](#how-to-get-api-and-secret-key-from-mailjet)
+  * [Configuring Open/Click tracking for emails on Mailjet](#configuring-openclick-tracking-for-emails-on-mailjet)

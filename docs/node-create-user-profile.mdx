@@ -1,0 +1,421 @@
+---
+title: "Create User Profile"
+description: "This document will cover the methods to update user information like properties and channels"
+---
+
+[Suggest Edits](/edit/node-create-user-profile)
+
+## Create user
+
+`distinct_id` is needed to create/update user profile in SuprSend. This ID will be unique throughout workspace.
+
+<CodeGroup>
+  ```javascript javascript
+  const user = supr_client.user.get_instance("__uniq_distinct_id__"); // create user instance
+
+  // user methods mentioned in this docs can be attached to user instance if needed
+
+  const response = user.save() // IMP: trigger request
+  response.then((res) => console.log("response", res));
+  ```
+</CodeGroup>
+
+## Response
+
+When you call `user.save()`, on any of user methods, SDK internally makes an API call to SuprSend, and you'll receive a response indicating the acceptance / failure status.
+
+<CodeGroup>
+  ```javascript javascript
+  {
+    "success": boolean,
+    "status": "success"/"fail",
+    "status_code": http_status_code,
+    "message": "response_message"/"error_message",
+  }
+  ```
+</CodeGroup>
+
+## Communication channel methods
+
+Communication Channel Preference decides whether a user will receive communication on a particular channel or not. Setting Channel preferences means that whenever you are triggering a workflow, the communication will be sent on the channels set in user profile (given that the template for that channel is present in the template group).
+
+<Info>
+  In event based workflows, since you only pass user's `distinct_id` in your track event call, you'll have to add channel preference first in user profile before making the call, as channels info is picked from user profile.
+</Info>
+
+### Add User Channels
+
+Use `user.add_*` method(s) to add user channels.
+
+<CodeGroup>
+  ```javascript javascript
+  user.add_email("[email protected]") // add Email
+
+  user.add_sms("+15555555555") // add SMS
+
+  user.add_whatsapp("+15555555555") // add Whatsapp
+
+  user.add_androidpush("__android_push_fcm_token__") // add fcm push token
+
+  // // set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
+  user.add_androidpush("__android_push_xiaomi_token__", provider)
+
+  user.add_iospush("__iospush_token__") // add apns push token
+
+  // add Slack using email
+  user.add_slack({
+    email: "[email protected]",
+    access_token: "xoxb-XXXXXXXX"
+  }); 
+
+  // add Slack if slack member_id is known
+  user.add_slack({
+    user_id: "U03XXXXXXXX",
+    access_token: "xoxb-XXXXXXXX"
+  });
+
+  // add Slack channel
+  user.add_slack({
+    channel_id: "CXXXXXXXX",
+    access_token: "xoxb-XXXXXXXX"
+  });
+
+  // add Slack incoming webhook
+  user.add_slack({
+    incoming_webhook: {
+      url: "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
+    }
+  });
+
+  // add MS teams user or channel using conversation_id
+  user.add_ms_teams({
+    tenant_id: "c1981ab2-9aaf-xxxx-xxxx",
+    service_url: "https://smba.trafficmanager.net/amer",
+    conversation_id: "19:c1524d7c-a06f-456f-8abe-xxxx"
+  });
+
+  // add MS teams user using user_id
+  user.add_ms_teams({
+    tenant_id: "c1981ab2-9aaf-xxxx-xxxx",
+    service_url: "https://smba.trafficmanager.net/amer",
+    user_id: "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
+  });
+
+  // add MS teams using incoming webhook
+  user.add_ms_teams({
+    incoming_webhook: {
+      url: "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
+    }
+  });
+  ```
+</CodeGroup>
+
+### Remove User Channels
+
+Use `user.remove_*` method(s) to remove user channels. These methods will detach provided value from the user profile in specified channel.
+
+<CodeGroup>
+  ```javascript javascript
+  user.remove_email("[email protected]") // remove Email
+
+  user.remove_sms("+15555555555") // remove SMS
+
+  user.remove_whatsapp("+15555555555") // remove Whatsapp
+
+  user.remove_androidpush("__android_push_fcm_token__") // remove fcm push token
+
+  // set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
+  user.remove_androidpush("__android_push_token__", provider)
+
+  user.remove_iospush("__iospush_token__") // remove apns push token
+
+  // remove Slack email
+  user.remove_slack({
+    email: "[email protected]",
+    access_token: "xoxb-XXXXXXXX"
+  });  
+
+  // remove Slack if slack member_id is known
+  user.remove_slack({
+    user_id: "U03XXXXXXXX",
+    access_token: "xoxb-XXXXXXXX"
+  });
+
+  // remove Slack channel
+  user.remove_slack({
+    channel_id: "CXXXXXXXX",
+    access_token: "xoxb-XXXXXXXX"
+  });
+
+  // remove Slack incoming webhook
+  user.remove_slack({
+    incoming_webhook: {
+      url: "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
+    }
+  });
+
+  // remove MS teams user or channel using conversation_id
+  user.remove_ms_teams({
+    tenant_id: "c1981ab2-9aaf-xxxx-xxxx",
+    service_url: "https://smba.trafficmanager.net/amer",
+    conversation_id: "19:c1524d7c-a06f-456f-8abe-xxxx"
+  });
+
+  // remove MS teams user using user_id
+  user.remove_ms_teams({
+    tenant_id: "c1981ab2-9aaf-xxxx-xxxx",
+    service_url: "https://smba.trafficmanager.net/amer",
+    user_id: "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
+  });
+
+  // remove MS teams using incoming webhook
+  user.remove_ms_teams({
+    incoming_webhook: {
+      url: "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
+    }
+  });
+  ```
+</CodeGroup>
+
+### Remove User Channels in bulk
+
+This method will delete/unset all values in specified channel for user (ex: remove all emails attached to user).
+
+<CodeGroup>
+  ```javascript javascript
+  user.unset("$email")
+  user.unset(["$email", "$sms", "$whatsapp"])
+
+  // what value to pass to unset channels
+  // for email:                $email
+  // for whatsapp:             $whatsapp
+  // for SMS:                  $sms
+  // for androidpush tokens:   $androidpush
+  // for iospush tokens:       $iospush
+  // for webpush tokens:       $webpush
+  // for slack:                $slack
+  // for ms_teams:             $ms_teams
+  ```
+</CodeGroup>
+
+## Bulk API for updating multiple user profiles
+
+To update multiple user profiles use Bulk API. There isn't any limit on number-of-records that can be added to `bulk_users` instance. Use `append()` on `bulk_users` instance to add however-many-records to call in bulk.
+
+<CodeGroup>
+  ```javascript javascript
+  const { Suprsend } = require("@suprsend/node-sdk");
+
+  const supr_client = new Suprsend("workspace_key", "workspace_secret");
+
+  const bulk_ins = supr_client.bulk_users.new_instance()
+
+  const user1 = supr_client.user.get_instance("distinct_id_1") // user1 instance
+  user1.add_email("[email protected]")
+  user1.set_preferred_language("en")
+
+  const user2 = supr_client.user.get_instance("distinct_id_2") // user2 instance
+  user2.remove_email("[email protected]")
+
+  //append users instance to bulk instance
+  bulk_ins.append(user1)
+  bulk_ins.append(user2)
+  // OR
+  bulk_ins.append(user1, user2)
+
+   // trigger request
+  const response = bulk_ins.save()
+  response.then((res) => console.log("response", res));
+  ```
+</CodeGroup>
+
+### Bulk Response
+
+<CodeGroup>
+  ```javascript javascript
+  {
+    status: "success/fail/partial",
+    total: 10,
+    success: 10,
+    failure: 0,
+    failed_records: [{"record": {...}, "error": "error_str", "code": "<status_code>"}],
+    warnings: []
+  }
+  ```
+</CodeGroup>
+
+## Other user methods
+
+### Set preferred language
+
+If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
+
+<CodeGroup>
+  ```javascript javascript
+  user.set_preferred_language("en")
+  ```
+</CodeGroup>
+
+### Set preferred timezone
+
+You can set timezone of user using this method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab).
+
+<CodeGroup>
+  ```javascript javascript
+  user.set_timezone("America/Los_Angeles")
+  ```
+</CodeGroup>
+
+### Set
+
+Set is used to set the custom user property or properties. The given key and value will be assigned to the user, overwriting an existing property with the same key if present.
+
+<CodeGroup>
+  ```javascript javascript
+  user.set(key, value);
+  user.set({ key1: value1, key2: value2 });
+  ```
+
+  ```javascript Example
+  user.set("name", "user")
+
+  user.set({
+    "prop1": "val1", 
+    "prop2": ["one", "two", "three"], 
+    "number": 20
+  })
+  ```
+</CodeGroup>
+
+| Parameters | type                                       |
+| ---------- | ------------------------------------------ |
+| key        | string (shouldn't start with `ss_` or `$`) |
+| value      | any                                        |
+
+### Set Once
+
+Works just like `user.set`, except it will not override already existing property values. This is useful for properties like first\_login\_date.
+
+<CodeGroup>
+  ```javascript JavaScript
+  user.set_once(key, value);
+  user.set_once({ key1: value1, key2: value2 });
+  ```
+
+  ```javascript Example
+  user.set_once("first_login", "2021-11-02")
+
+  user.set_once({"first_login" : "2021-11-02", "DOB" : "1991-10-02"})
+  ```
+</CodeGroup>
+
+### Append
+
+This method will append a value to the list for a given property.
+
+<CodeGroup>
+  ```javascript javascript
+  user.append(key, value);
+  user.append({ key1: value1, key2: value2 });
+  ```
+
+  ```javascript Example
+  user.append("wishlist", "iphone12")
+
+  user.append({"wishlist" : "iphone12"})
+  ```
+</CodeGroup>
+
+### Remove
+
+This method will remove a value from the list for a given property.
+
+<CodeGroup>
+  ```javascript javascript
+  user.remove(key, value);
+  user.remove({ key1: value1, key2: value2 });
+  ```
+
+  ```javascript Example
+  user.remove("wishlist", "iphone12")
+
+  user.remove({"wishlist" : "iphone12"})
+  ```
+</CodeGroup>
+
+### Increment
+
+Add the given number to an existing property on the user. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
+
+<CodeGroup>
+  ```javascript javascript
+  user.increment(key, value)
+  user.increment({ key1: value1, key2: value2 })
+  ```
+
+  ```javascript Example
+  user.increment("login_count", 1)
+
+  user.increment({"login_count" : 1, "order_count" : 1})
+  ```
+</CodeGroup>
+
+| Parameters | type                                       |
+| ---------- | ------------------------------------------ |
+| key        | string (shouldn't start with `ss_` or `$`) |
+| value      | number (+ or -)                            |
+
+### Unset
+
+This will remove a property permanently from user properties.
+
+<CodeGroup>
+  ```javascript javascript
+  user.unset(key);
+  user.unset([key1, key2]);
+  ```
+
+  ```javascript Example
+  user.unset("wishlist")
+
+  user.unset(["wishlist", "cart"])
+  ```
+</CodeGroup>
+
+| Parameters | type                                                           |
+| ---------- | -------------------------------------------------------------- |
+| keys       | string or array of strings (shouldn't start with `ss_` or `$`) |
+
+***
+
+What’s Next
+
+After setting user channels send events which trigger workflow to get notifications
+
+* [Send and Track Events](/docs/node-send-event-data)
+
+* [Table of Contents](#)
+
+* * [Create user](#create-user)
+
+  * [Response](#response)
+
+  * [Communication channel methods](#communication-channel-methods)
+
+    * [Add User Channels](#add-user-channels)
+    * [Remove User Channels](#remove-user-channels)
+    * [Remove User Channels in bulk](#remove-user-channels-in-bulk)
+
+  * [Bulk API for updating multiple user profiles](#bulk-api-for-updating-multiple-user-profiles)
+    * [Bulk Response](#bulk-response)
+
+  * [Other user methods](#other-user-methods)
+
+    * [Set preferred language](#set-preferred-language)
+    * [Set preferred timezone](#set-preferred-timezone)
+    * [Set](#set)
+    * [Set Once](#set-once)
+    * [Append](#append)
+    * [Remove](#remove)
+    * [Increment](#increment)
+    * [Unset](#unset)

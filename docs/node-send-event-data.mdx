@@ -1,0 +1,163 @@
+---
+title: "Send and Track Events"
+description: "This document will cover the method to send event to SuprSend."
+---
+
+[Suggest Edits](/edit/node-send-event-data)
+
+## Create Workflow on SuprSend Dashboard
+
+For Event based workflow trigger, you'll have to [create the workflow on SuprSend Dashboard](/docs/design-workflow). After creating workflow you can copy `Event Name` field in Trigger Node of that published workflow and use it trigger that workflow by send track event using this guide.
+
+![577](/images/docs/a245033-Screenshot_2024-05-03_at_10.59.34_PM.png "Frame 2.png")
+
+## Send Event
+
+<CodeGroup>
+  ```javascript javascript
+  const { Suprsend, Event } = require("@suprsend/node-sdk");
+
+  const supr_client = new Suprsend("_workspace_key_", "_workspace_secret_");
+
+  // dictionary containing variable/info about event, If none use {}
+  const properties = {
+    "key1":"value1",
+    "key2":"value2"
+  }
+
+  const event = new Event(distinct_id, event_name, properties, {tenant_id : "your_tenant_id", idempotency_key="__uniq_request_id__"})
+
+  const response  = supr_client.track_event(event) // trigger request
+  response.then((res) => console.log("response", res));
+  ```
+
+  ```javascript Example
+  const { Event } = require("@suprsend/node-sdk");
+
+  const supr_client = new Suprsend("_workspace_key_", "_workspace_secret_");
+
+  const distinct_id = "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08" 
+  const event_name = "product_purchased"
+  const properties = {													
+    "first_name": "User",
+    "spend_amount": "$10",
+    "nested_key_example": {
+      "nested_key1": "some_value_1",
+      "nested_key2": {
+        "nested_key3": "some_value_3",
+      },
+    }
+  }
+
+  const event = new Event(distinct_id, event_name, properties)
+
+  const response = supr_client.track_event(event)
+  response.then((res) => console.log("response", res));
+  ```
+</CodeGroup>
+
+| Parameter                   | Description                                                                                                                                 |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| distinct\_id                | distinct\_id of subscriber performing the event.                                                                                            |
+| event\_name                 | string identifier for the event like `product_purchased`. This should exactly match the one from created workflow.                          |
+| properties                  | dictionary representing event information. This can be used to pass variables to template. Property keys shouldn't start with `ss_` or `$`. |
+| tenant\_id (Optional)       | Tenant ID of the tenant.                                                                                                                    |
+| idempotency\_key (Optional) | unique key in the request call for [idempotent requests](/docs/node-send-event-data#idempotent-requests).                                   |
+
+### Idempotent requests
+
+SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives and processes a request with an idempotency\_key, it will skip processing requests with same idempotency\_key for next 24 hours. You can use this key to track webhooks related to workflow notifications.
+
+To make an idempotent request, pass idempotency\_key in the event instance. idempotency\_key should be unique that you generate for each request. You may use any string up to 255 characters in length as an idempotency key. Ensure that you don’t add any space in start and end of the key as it will be trimmed.
+
+Here are some common approaches for assigning idempotency keys:
+
+* **Generate a random UUID** for each request.
+* **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like `user147-new-comment-1687437670`
+* **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
+
+### Response
+
+<CodeGroup>
+  ```javascript javascript
+  {
+    "success": boolean,
+    "status": "success"/"fail",
+    "status_code": http_status_code,
+    "message": "response_message"/"error_message",
+  }
+  ```
+</CodeGroup>
+
+## Trigger multiple events in bulk
+
+Use `.append()` on `bulk_events` instance to add however-many-records to call in bulk.
+
+<CodeGroup>
+  ```javascript javascript
+  const { Suprsend, Event } = require("@suprsend/node-sdk");
+
+  const supr_client = new Suprsend("_workspace_key_", "_workspace_secret_");
+
+  const bulk_ins = supr_client.bulk_events.new_instance(); // create bulk instance
+
+  const event1 = new Event("distinct_id1", "event_name1", {"k1": "v1"}) // create event1 instance
+  const event2 = new Event("distinct_id2", "event_name2", {"k2": "v2"}) // create event2 instance
+
+  // add event instance to bulk instance
+  bulk_ins.append(event1);
+  bulk_ins.append(event2);
+  // OR
+  bulk_ins.append(event1, event2);
+
+  const response = bulk_ins.trigger(); // trigger request
+  response.then((res) => console.log("response", res));
+  ```
+</CodeGroup>
+
+### Bulk Response
+
+<CodeGroup>
+  ```javascript javascript
+  {
+    status: "success/fail/partial",
+    total: 10,
+    success: 10,
+    failure: 0,
+    failed_records: [{"record": {...}, "error": "error_str", "code": "<status_code>"}],
+    warnings: []
+  }
+  ```
+</CodeGroup>
+
+## Add file attachment (for email)
+
+To add one or more attachments to a notification (viz. Email), call `add_attachment()` on event instance for each attachment file. Ensure that attachment url is valid and public, otherwise error will be raised. Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
+
+<CodeGroup>
+  ```javascript javascript
+  const event = new Event(distinct_id, event_name, properties);
+
+  event.add_attachment("https://www.adobe.com/sample_file.pdf");
+  ```
+</CodeGroup>
+
+<Warning>
+  A single event instance size (including attachment) must not exceed 100KB (100 x 1024 bytes).
+</Warning>
+
+***
+
+* [Table of Contents](#)
+
+* * [Create Workflow on SuprSend Dashboard](#create-workflow-on-suprsend-dashboard)
+
+  * [Send Event](#send-event)
+
+    * [Idempotent requests](#idempotent-requests)
+    * [Response](#response)
+
+  * [Trigger multiple events in bulk](#trigger-multiple-events-in-bulk)
+    * [Bulk Response](#bulk-response)
+
+  * [Add file attachment (for email)](#add-file-attachment-for-email)

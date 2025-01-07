@@ -1,0 +1,137 @@
+---
+title: "Whatsapp Template"
+description: "Suggest Edits"
+---
+
+This section is a step-by-step guide on how to design and publish Whatsapp notification template.
+
+## Design Template
+
+You can design the template with a simple form editor tool. You can add variables with `Handlebarsjs` language. You can see how the message will look in the preview section on the right side.
+
+Once designed, save the Whatsapp template by clicking on the **Save Draft** button. When you are ready, you can **Publish Draft** by providing a name to the version. This will create a version in 'Pending Approval' state.
+
+Whatsapp requires a template approval process, where every template has to be submitted to Whatsapp for approval, where Whatsapp reviews and either Approves or Rejects the message.
+
+SuprSend handles the Whatsapp approval process for you. All you have to do is create a template on SuprSend while following [Whatsapp template guidelines](/docs/whatsapp-template-guidelines), and we'll send an email to you as soon as Whatsapp approves / rejects the template.
+
+Based on the approval status, the published template version's state will move to 'Live' or 'Rejected'. Once the version goes 'Live', you can use the template to send messages to your users.
+
+![](/images/docs/4c18ffe-Screenshot_2022-08-11_at_5.11.03_PM.png "Screenshot 2022-08-11 at 5.11.03 PM.png")
+
+## Whatsapp Fields description
+
+| Field                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                        |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Template Category**                        | Category of the template as defined by whatsapp. Choose the category which is most relevant for your message content. For example - if you are sending a message informing the user about his/her doctor appointment, select the category as *Appointment Update*. In case you are not able to find the relevant category for your message, select *Alert Update*                                                  |
+| **Type**                                     | Type of the message template - `MEDIA/TEXT`. You can select one of the options.                                                                                                                                                                                                                                                                                                                                    |
+| **Header***(Type - TEXT)*                    | Header of the message shown in bold in your whatsapp message Small message text box. You can add upto 60 characters in this field*Emojis are not supported in header*                                                                                                                                                                                                                                              |
+| **Header -> Media Type***(Type - MEDIA)*     | Media type of the header - Document(.pdf) / Image (.jpg, .png) / Video (.mp4). You can select one the media types based on the type of content that you want to add in the message                                                                                                                                                                                                                                 |
+| **Header -> Media File URL***(Type - MEDIA)* | Add the Public URL of the document that you want to send. You can add dynamic URL by adding variables in the URL link, like this -[http://s3.amazonaws.com/\{\{url\_params}}](http://s3.amazonaws.com/%7B%7Burl_params%7D%7D) or \{\{url\_link}}                                                                                                                                                                   |
+| **Header -> Document Name***(Type - MEDIA)*  | *Valid only for media type - Document (.pdf)* This is the name of the document that will be visible to your user. Will be shown as "Untitled" if not added. You can add variable in media file as \{\{file\_name}}                                                                                                                                                                                                 |
+| **Body**                                     | Large message text box. Can add multi-line texts. Use handlebarsjs to add variables.                                                                                                                                                                                                                                                                                                                               |
+| **Footer**                                   | Small message text box. You can add upto 60 characters in this field*Variables are not supported in footer*                                                                                                                                                                                                                                                                                                        |
+| **Buttons**                                  | Button type to be added - Call to Action / Quick Reply. Select **"None"** if you don't require buttons                                                                                                                                                                                                                                                                                                             |
+| **Action Buttons**                           | There are 2 types of action buttons that can be added: 1. **Call Phone Number Button** - To initiate a Call Action. 2. **Visit Website Button** - To redirect users to a website. Add the URL where a user will go when he/she clicks on this button Only one variable is allowed in "Website URL" at the end of the URL link, like this - [www.suprsend.com/\{\{page}}](http://www.suprsend.com/%7B%7Bpage%7D%7D) |
+| **Quick Reply Buttons**                      | You can add upto 3 quick reply buttons to take user input.*Variables or emojis are not allowed in quick reply button*                                                                                                                                                                                                                                                                                              |
+
+<Info>
+  Please note that to send the Whatsapp, you will need to integrate Whatsapp vendor with SuprSend. Please visit the 'Vendor Integration Guideline' section to see vendors list and how to integrate them.
+</Info>
+
+## How to format whatsapp messages
+
+WhatsApp allows you to format text inside your messages. Use below options to format the text. **Other formatting like HTML tags or markdown will not work** for formatting the content
+
+| Text Format       | Method           | Description                                                                  |
+| ----------------- | ---------------- | ---------------------------------------------------------------------------- |
+| **Italic**        | \_text\_         | To *italicize* your message, place an underscore on both sides of the text   |
+| **Bold**          | \*text\*         | To **bold** your message, place an asterisk on both sides of the text        |
+| **Strikethrough** | \~text\~         | To ~~strikethrough~~ your message, place a tilde on both sides of the text   |
+| **Monospace**     | \`\`\`text\`\`\` | To `monospace` your message, place three backticks on both sides of the text |
+
+## Adding Dynamic Content in the template
+
+There will always be the case where you would require to add dynamic content to a template, so as to personalise it for your users. To achieve this, you can add variables in the template, which will be replaced with the dynamic content at the time of sending the message. You'll need to pass these while triggering the communication from one of our frontend or backend SDKs. Here is a step-by-step guide on how to add dynamic content in Inbox:
+
+### Step 1: Declaring Variables in the global 'Mock data' button
+
+If you are at this stage, it is assumed that you have declared the variables along with sample values in the global **Mock data** button. To see how to declare variables before using them in designing templates, refer refer to [this section in the Templates documentation](/docs/templates#adding-dynamic-content).
+
+### Step 2: Using variables in the templates
+
+Once the variables are declared, you can use them while designing the android push template. We support `handlebarsjs` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: `**{{variable_name}}**`
+
+If you have declared the variables in the global 'Mock data' button, then they will come as auto-suggestions when you type a curly bracket `{`. This will remove the chances of errors like variable mismatch at the time of template rendering.
+
+Note that you will be able to enter a variable name even when you have not declared it inside the 'Variables' button. To manually enter the variable name, follow the [handlerbarsjs guide here](https://handlebarsjs.com/guide/#what-is-handlebars).
+
+Below is an example of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the 'Templates' section:
+
+<CodeGroup>
+  ```json json
+  {
+    "array": [
+      {
+        "product_name": "Aldo Sling Bag",
+        "product_price": "$50"
+      },
+      {
+        "product_name": "Clarles & Keith Women Slipper, Biege, 38UK",
+        "product_price": "$39"
+      },
+      {
+        "product_name": "RayBan Sunglasses",
+        "product_price": "$120"
+      }
+    ],
+    "event": {
+      "location": {
+        "city": "San Francisco",
+        "state": "California"
+      },
+      "order_id": "11200123",
+      "first_name": "Joe"
+    },
+    "product_page": "https://www.suprsend.com"
+  }
+  ```
+</CodeGroup>
+
+1. To enter a nested variable, enter in the format `{{var1.var2.var3}}`. Eg. to refer to city in the example above, you need to enter `{{event.location.city}}`
+2. To refer to an array element, enter in format `{{var1.[_index_].var2}}. Eg. to refer to `product\_name`of the first element of the array`array`, enter `\{\{array.\[0].product\_name}}\`
+3. If you have any space in the variable name, enclose it in square bracket `{{event.[first name]}}`
+
+You will be able to see the sample values in the Preview section, as well as in the Live version when you publish a draft. If you cannot see your variable being rendered with the sample value, check one of the following:
+
+1. Make sure you have entered the variable name and the sample value in the **Variables** button.
+2. Make sure you have entered the correct variable name in the template, as per the `handlebarsjs` guideline.
+
+![](/images/docs/9142527-Screenshot_2022-07-05_at_10.47.18_AM.png "Screenshot 2022-07-05 at 10.47.18 AM.png")
+
+<Warning>
+  At the time of sending communication, if there is a variable present in the template whose value is not rendered due to mismatch or missing, SuprSend will simply discard the template and not send that particular notification to your user.
+
+  Please note that the rest of the templates will be sent. Eg. if there is an error in rendering Android Push template, but email template is successfully rendered, Android Push notification will not be triggered, but email notification will be triggered by SuprSend.
+</Warning>
+
+***
+
+What’s Next
+
+After template creation, you can trigger workflows using one of our APIs
+
+* [Triggering Workflows](/docs/workflows)
+
+* [Table of Contents](#)
+
+* * [Design Template](#design-template)
+
+  * [Whatsapp Fields description](#whatsapp-fields-description)
+
+  * [How to format whatsapp messages](#how-to-format-whatsapp-messages)
+
+  * [Adding Dynamic Content in the template](#adding-dynamic-content-in-the-template)
+
+    * [Step 1: Declaring Variables in the global 'Mock data' button](#step-1-declaring-variables-in-the-global-mock-data-button)
+    * [Step 2: Using variables in the templates](#step-2-using-variables-in-the-templates)

@@ -1,0 +1,175 @@
+---
+title: "Send and Track Events"
+description: "This document will cover the method to send event to Suprsend platform"
+---
+
+[Suggest Edits](/edit/android-send-event-data)
+
+In this section, we'll cover how to send events to the Suprsend platform for both iOS and Android application
+
+## Pre-requisites
+
+1. [Integrate Android SDK](/docs/integrate-android-sdk)
+2. [Create User Profile](/docs/android-create-user)
+3. [Create Template on SuprSend platform](/docs/templates) - if you want to trigger workflow by passing the event
+4. [Create Workflow on SuprSend Platform](/docs/workflows) - if you want to trigger workflow by passing the event
+
+## Create Workflow on SuprSend Platform
+
+For Event based workflow trigger, you'll have to [create the workflow on SuprSend Platform](/docs/workflows).
+
+![577](/images/docs/d95d579-Frame_2.png "Frame 2.png")
+
+## Sending Events to SuprSend
+
+Once the workflow is configured, you can pass the `Event Name` ( `GROCERY_PURCHASED` in above example) defined in workflow configuration from your SDK and the related workflow will be triggered. Variables added in the template should be passed as event `properties`
+
+You can send Events from your app to SuprSend platform by using `ssApi.track()` method
+
+<CodeGroup>
+  ```kotlin kotlin
+  //method
+  ssApi.track(eventName: String) //for single event
+  ssApi.track(eventName: String, properties: JSONObject) //for event with multiple properties
+
+  //Sample values 
+  ssApi.track(eventName = "Home Screen Viewed") //for single event
+
+  //for event with multiple properties
+  ssApi.track(
+              eventName = "product_viewed",
+              properties = JSONObject().apply {
+                put("product_id", "P1")
+                put("product_name", "Car")
+                put("amount", 10000)
+              }
+          )
+  ```
+</CodeGroup>
+
+<Warning>
+  When you create an Event or a property, please ensure that the Event Name or Property Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
+</Warning>
+
+### System Events tracked by SuprSend
+
+There are some system events tracked by SuprSend SDK by default. These are some basic events, as well as events that are necessary for tracking notifications related activity (like delivered, clicked, etc). You are not required to do anything here.
+
+| Event Name               | Description                                                                                                                                                                                                                                                                                                                                                                 |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| $app\_installed          | $app\_installed will get tracked when user launch his app for the first time. FYI cases in which it will also get called 1. When user lanches his app for first time. 2. When user uninstall the app and installs it again. 3. \[Multiple device login ]When user launch app for first time on different devices. 4. When user clears the app cache and relaunches the app. |
+| $app\_launched           | Gets tracked when user launches the app each time.                                                                                                                                                                                                                                                                                                                          |
+| $user\_login             | Gets tracked when user logs in inside the app                                                                                                                                                                                                                                                                                                                               |
+| $user\_logout            | Gets tracked when user logs in to the app                                                                                                                                                                                                                                                                                                                                   |
+| $notification\_delivered | Will get tracked when the suprsend notification payload is received at sdk end.                                                                                                                                                                                                                                                                                             |
+| $notification\_clicked   | Will get tracked when user either clicks the notification body or any action button in the notification.                                                                                                                                                                                                                                                                    |
+| $notification\_dismissed | Will get tracked when user dismisses the notification by left swiping the notification or by clicking on "Clear All" button                                                                                                                                                                                                                                                 |
+
+## Advanced Concepts
+
+### 1. Super Properties
+
+Super properties are data that are always sent with events data. These super properties will be sent in each event after calling this method. Super properties will be stored in local storage, and will persist across invocations of app.
+
+#### Set Super Property
+
+There are some super properties that SuprSend SDK will send by default. Developer can set custom super properties as well with `ssApi.getUser().setSuperProperty()` method
+
+<CodeGroup>
+  ```kotlin kotlin
+  //method
+
+  //for setting single super property
+  ssApi.getUser().setSuperProperty(key: String, value: Any)
+  //for setting multiple super properties
+  ssApi.getUser().setSuperProperties(jsonObject: JSONObject) 
+
+  //Example
+
+  //for setting single super property
+  ssApi.getUser().setSuperProperty("Location", "Banglore")
+  //for setting multiple super properties
+  ssApi.getUser().setSuperProperties(JSONObject().apply {
+      put("Location","XYZ")
+      put("Pincode", 1234567)
+      put("Amount", 99.99")
+  })
+  ```
+</CodeGroup>
+
+Default Super properties tracked by SuprSend SDK:
+
+| Super Property        | Description                                  | Sample Value     |
+| --------------------- | -------------------------------------------- | ---------------- |
+| $app\_version\_string | Version of your app                          | 0.0.1            |
+| $app\_build\_number   | Build number of your app                     | 2                |
+| $os                   | Operating system of the user                 | android          |
+| $manufacturer         | Manufacturer of the user's device            | OnePlus          |
+| $brand                | Brand of the user's device                   | OnePlus          |
+| $model                | Model of the user's device                   | GM1901           |
+| $deviceId             | Device id                                    | 89eead05a0150146 |
+| $ss\_sdk\_version     | SuprSend SDK version                         | 0.1.31           |
+| $network              | Network on which the user is                 | wifi             |
+| $connected            | Whether the user is connected to the network | true             |
+
+#### Unset Super Property
+
+There are unset custom super properties with `ssApi.getUser().unSetSuperProperty()` method. This method will stop calling that property with every event trigger.
+
+<CodeGroup>
+  ```kotlin kotlin
+  //method
+  ssApi.getUser().unSetSuperProperty(key: String) 
+
+  //Example
+  ssApi.getUser().unSetSuperProperty(listOf("Location","Pincode","Amount"))
+  ```
+</CodeGroup>
+
+### 2. Special Events
+
+Special events are some best use case events defined by SuprSend. You could call these events with some of their pre-defined properties.
+
+#### 1. Purchase Made
+
+You can call purchase made event if user is doing a transaction on your platform. You can pass property values like product id, product name, and amount in the event.
+
+<CodeGroup>
+  ```kotlin kotlin
+  ssApi.purchaseMade(properties: JSONObject)
+  ssApi.purchaseMade(JSONObject().apply {
+              put("product_id", "P1")
+              put("product_name", "Car")
+              put("amount", "$15000")
+          })
+  ```
+</CodeGroup>
+
+### 3. Flush Events
+
+SuprSend SDK automatically flushes events at an interval of 5 seconds, and on certain activities like app relaunch, etc. If you wish to flush a time sensitive event to SuprSend immediately, you can use the `suprSendApi.flush()` method.
+
+All the system tracked events are flushed immediately
+
+<CodeGroup>
+  ```javascript javascript
+  suprSendApi.flush();
+  ```
+</CodeGroup>
+
+***
+
+* [Table of Contents](#)
+
+* * [Pre-requisites](#pre-requisites)
+
+  * [Create Workflow on SuprSend Platform](#create-workflow-on-suprsend-platform)
+
+  * [Sending Events to SuprSend](#sending-events-to-suprsend)
+    * [System Events tracked by SuprSend](#system-events-tracked-by-suprsend)
+
+  * [Advanced Concepts](#advanced-concepts)
+
+    * [1. Super Properties](#1-super-properties)
+    * [2. Special Events](#2-special-events)
+    * [3. Flush Events](#3-flush-events)

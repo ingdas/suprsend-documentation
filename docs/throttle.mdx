@@ -1,0 +1,26 @@
+---
+title: "Throttle"
+description: "Put a rate limit on number of workflow executions per user in a given time frame"
+---
+
+[Suggest Edits](/edit/throttle)
+
+Throttle function allows you to limit the number of workflow executions per user in a given time frame. For instance, in monitoring and alerting systems, you can set a throttle to limit alerts to 1 every 30 minutes. This prevents IT teams from being overwhelmed by excessive alerts during maintenance windows. All triggers coming after the throttle limit is reached will be discarded and will not result in workflow trigger.
+
+Throttling is important to avoid notification fatigue and to ensure that user is not bombarded with too many notifications in a short span of time. It also helps avoid unnecessary notifications stemming from system issues or repetitive user actions.
+
+## How throttle works
+
+You can set throttle limit in workflow settings. A typical throttle configuration comprises 2 key properties:
+
+![](/images/docs/c70511e-image.png)
+
+* **Max Executions** - Maximum number of workflow executions permitted in the time window.
+* **Window** - The duration for which the throttle count is maintained. For example, if max executions is set to 3 and the window is 15 minutes, a maximum of 3 workflows can execute within a 15-minute window. You can define window as `**d **h **m **s`.
+
+Now, on each workflow trigger, it checks for the number of workflows executed in the relative window from your trigger and skips the execution if count exceeds `Max executions`.
+
+***
+
+* [Table of Contents](#)
+* * [How throttle works](#how-throttle-works)

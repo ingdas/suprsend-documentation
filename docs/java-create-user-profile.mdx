@@ -1,0 +1,440 @@
+---
+title: "Create User Profile"
+description: "This document will cover the methods to create a user and set channel preferences"
+---
+
+[Suggest Edits](/edit/java-create-user-profile)
+
+You can follow the steps mentioned in the documentation below or refer to our quick code recipe
+
+🦉
+
+Create User using Java SDK
+
+Open Recipe
+
+## Pre-requisites
+
+[Integrate Java SDK](/docs/integrate-java-sdk)
+
+## How Suprsend identifies a user
+
+Suprsend identifies a user by a unique identifier `distinct_id`. The identifier for a user is important as we use this key to create user profile and all the information related to a user, like channel preferences, is attached to that profile. You can view user profile by searching `distinct_id` on [Subscribers page](https://app.suprsend.com/en/production/subscribers/subscribers/)
+
+**Please note:** you cannot change a user's id once it has been set, so we recommend you use a non-transient id like a primary key rather than a phone number or email address.
+
+## Create a user and add communication channels
+
+If you regularly trigger a workflow for users on some pre-decided channels, then instead of adding user channel details in each workflow request, you can set those channel details in the user profile once, and after that, in any workflow trigger request, you only need to pass the `distinct_id` of the user. All associated channels in the user profile will be automatically picked when executing the workflow.
+
+For event based workflow triggers, you'll have to add channel preference first before sending the event
+
+## Step 1. Create a new user
+
+To create a new user or to update the profile of an existing user, you'll have to first instantiate the user object. Call `supr_client.user.getInstance` to instantiate user object.
+
+<CodeGroup>
+  ```java java
+  import org.json.JSONObject;
+
+  import suprsend.Suprsend;
+  import suprsend.Subscriber;
+
+  public class Subscribers {
+    public static void main(String[] args) throws Exception {
+      getSubscriber();
+    }
+    
+    private static Subscriber getSubscriber() throws SuprsendException {
+  		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
+  		// Instiantiate user
+      String distinctId = "__distinct_id__";
+  		Subscriber user = suprClient.user.getInstance(distinctId);
+  		return user;
+  	}
+  ```
+</CodeGroup>
+
+## Step 2: Set Communication Channel preferences
+
+Communication Channel Preference decides whether a user will receive communication on a particular channel or not. Setting Channel preferences means that whenever you are triggering a workflow, the communication will be sent on the channels set in user profile (given that the template for that channel is present in the template group).
+
+Especially for event based workflow triggers, where you just pass the user's `distinct_id` and the communication channels are picked from user profile
+
+<Info>
+  In event based workflows, since you only pass user's `distinct_id` in your track event call, you'll have to add channel preference first in user profile first before making the call.
+</Info>
+
+### 1. Add User Channels
+
+Use `user.add*` method(s) to add user channels in a profile
+
+<CodeGroup>
+  ```java java
+  import org.json.JSONObject;
+
+  import suprsend.Suprsend;
+  import suprsend.Subscriber;
+
+  public class Subscribers {
+    public static void main(String[] args) throws Exception {
+      addChannel();
+    }
+
+    public static void addChannel() throws Exception {
+      // SDK instance
+      Suprsend suprsendClient = new Suprsend("workspace_key", "workspace_secret");
+      // Subscriber Instance
+      String distinctID = "__distinct_id__";
+      Subscriber user = suprsendClient.user.getInstance(distinctID);
+      
+      // Add Email
+      user.addEmail("[email protected]");
+      
+      //Add SMS
+      user.addSms("+919999999999");
+      
+      //Add Whatsapp
+      user.addWhatsapp("+919999999999");
+      
+      // Add Androidpush token.Pass the vendor as 2nd param.
+      user.addAndroidpush("androidpush_fcm_token__","fcm");
+      user.addAndroidpush("androidpush_xiaomi_token__", "xiaomi");
+      
+      // Add iospush token 
+  		user.addIospush("__iospush_apns_token__");
+      
+      // Add Slack using user email id
+      JSONObject slackIdent = new JSONObject()
+  				.put("access_token", "xoxb-XXXXXXXX")
+          .put("email", "[email protected]");
+      user.addSlack(slackIdent);
+      
+      // Add Slack using member_id of the user if known
+      JSONObject slackIdent = new JSONObject()
+  				.put("access_token", "xoxb-XXXXXXXX")
+          .put("user_id", "U03XXXXXXXX");
+      user.addSlack(slackIdent);
+      
+      // Add Slack channel_id
+      JSONObject slackIdent = new JSONObject()
+  				.put("access_token", "xoxb-XXXXXXXX")
+          .put("channel_id", "C04XXXXXXXX");
+      user.addSlack(slackIdent);
+      
+      // Add Slack incoming webhook
+      JSONObject slackIdent = new JSONObject()
+  				.put("incoming_webhook", new JSONObject().put("url", "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"))
+      user.addSlack(slackIdent); 
+      
+      // Add Webpush token json (VAPID)
+      JSONObject webpush = new JSONObject()
+          .put("endpoint", "__end_point__")
+          .put("expirationTime", "")
+          .put("keys", new JSONObject()
+              .put("p256dh", "__p256dh__")
+              .put("auth", "__auth_key__"));
+      user.addWebpush(webpush, "vapid");
+      
+      // Save
+      JSONObject response = user.save();
+      System.out.println(response);
+    }
+  ```
+</CodeGroup>
+
+### 2. Remove User Channels
+
+Use `user.remove*` method(s) to remove channels from a user profile
+
+<CodeGroup>
+  ```java java
+  import org.json.JSONObject;
+
+  import suprsend.Suprsend;
+  import suprsend.Subscriber;
+
+  public class Subscribers {
+    public static void main(String[] args) throws Exception {
+      removeChannel();
+    }
+
+    public static void removeChannel() throws Exception {
+      // SDK instance
+      Suprsend suprsendClient = new Suprsend("workspace_key", "workspace_secret");
+      // Subscriber Instance
+      String distinctID = "__distinct_id__";
+      Subscriber user = suprsendClient.user.getInstance(distinctID);
+      
+      // Remove Email
+      user.removeEmail("[email protected]");
+      
+      //Remove SMS
+      user.removeSms("+919999999999");
+      
+      //Remove Whatsapp
+      user.removeWhatsapp("+919999999999");
+      
+      // Remove Androidpush token.Pass the vendor as 2nd param.
+      user.removeAndroidpush("androidpush_fcm_token__","fcm");
+      user.removeAndroidpush("androidpush_xiaomi_token__", "xiaomi");
+      
+      // Remove iospush token 
+  		user.removeIospush("__iospush_apns_token__");
+      
+      // Remove Slack using user email id
+      JSONObject slackIdent = new JSONObject()
+  				.put("access_token", "xoxb-XXXXXXXX")
+          .put("email", "[email protected]");
+      user.removeSlack(slackIdent);
+      
+      // Remove Slack using member_id of the user if known
+      JSONObject slackIdent = new JSONObject()
+  				.put("access_token", "xoxb-XXXXXXXX")
+          .put("user_id", "U03XXXXXXXX");
+      user.removeSlack(slackIdent);
+      
+      // Remove Slack channel_id
+      JSONObject slackIdent = new JSONObject()
+  				.put("access_token", "xoxb-XXXXXXXX")
+          .put("channel_id", "C04XXXXXXXX");
+      user.removeSlack(slackIdent);
+      
+      // Remove Slack incoming webhook
+      JSONObject slackIdent = new JSONObject()
+  				.put("incoming_webhook", new JSONObject().put("url", "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"))
+      user.removeSlack(slackIdent); 
+      
+      // Remove Webpush token json (VAPID)
+      JSONObject webpush = new JSONObject()
+          .put("endpoint", "__end_point__")
+          .put("expirationTime", "")
+          .put("keys", new JSONObject()
+              .put("p256dh", "__p256dh__")
+              .put("auth", "__auth_key__"));
+      user.removeWebpush(webpush, "vapid");
+      
+      // Save
+      JSONObject response = user.save();
+      System.out.println(response);
+    }
+  ```
+</CodeGroup>
+
+### 3. Remove User Channels in bulk
+
+If you need to delete/unset all emails (or any other channel) of a user, you can call `user.unset()` method on the user instance. The method accepts the channel key/s (a single key or list of keys)
+
+<CodeGroup>
+  ```java java
+  import org.json.JSONObject;
+
+  import suprsend.Suprsend;
+  import suprsend.Subscriber;
+
+  public class Subscribers {
+    public static void main(String[] args) throws Exception {
+      unsetChannel();
+    }
+
+    public static void unsetChannel() throws Exception {
+      // SDK instance
+      Suprsend suprsendClient = new Suprsend("workspace_key", "workspace_secret");
+      // Subscriber Instance
+      String distinctID = "__distinct_id__";
+      Subscriber user = suprsendClient.user.getInstance(distinctID);
+
+      // --- To unset one channel, for example to delete all emails associated with user
+      user.unset("$email");
+      
+      //what value to pass to unset channels
+      // for email:                $email
+      // for whatsapp:             $whatsapp
+      // for SMS:                  $sms
+      // for androidpush tokens:   $androidpush
+      // for iospush tokens:       $iospush
+      // for webpush tokens:       $webpush
+      // for slack:                $slack
+      
+      // --- multiple channels can also be deleted in one call by passing argument as a list
+      ArrayList<String> channels =  new ArrayList<>(Arrays.asList("$email","$slack","$androidpush","$iospush","$webpush","$whatsapp"));
+      user.unset(channels);
+      
+      // Save
+      JSONObject response = user.save();
+      System.out.println(response);
+    }
+  ```
+</CodeGroup>
+
+<Warning>
+  After calling `add*/remove*/unset` methods, don't forget to call `user.save()`. On call of save(), SDK sends the request to SuprSend platform to update the User Profile.
+</Warning>
+
+## Add Preferences in User Profile
+
+You can also set custom properties in user profile that is used to set user preferences
+
+### Set Preferred language
+
+If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in `user.setPreferredLanguage()` method. This is useful especially for the applications which offer vernacular or multi-lingual support.
+
+<CodeGroup>
+  ```java java
+  import org.json.JSONObject;
+
+  import suprsend.Suprsend;
+  import suprsend.Subscriber;
+
+  public class Subscribers {
+    public static void main(String[] args) throws Exception {
+      setPreference();
+    }
+
+    public static void setPreference() throws Exception {
+      // SDK instance
+      Suprsend suprsendClient = new Suprsend("workspace_key", "workspace_secret");
+      // Subscriber Instance
+      String distinctID = "__distinct_id__";
+      Subscriber user = suprsendClient.user.getInstance(distinctID);
+
+      // Pass language in ISO 639-1 code
+      user.setPreferredLanguage("es");
+      
+      // Save
+      JSONObject response = user.save();
+      System.out.println(response);
+    }
+  ```
+</CodeGroup>
+
+## Response
+
+When you call `user.save()`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance / failure status.
+
+<CodeGroup>
+  ```java java
+  // Response structure
+  {
+      "success": true, // if true, request was accepted.
+      "status": "success",
+      "status_code": 202, // http status code
+      "message": "OK",
+  }
+
+  {
+      "success": false, // error will be present in message
+      "status": "fail",
+      "status_code": 500, // http status code
+      "message": "error message",
+  }
+  ```
+</CodeGroup>
+
+## Bulk API for handling multiple user profiles
+
+To update user profiles in bulk, use Bulk users API. There isn't any limit on number-of-records that can be added to `bulkIns` instance.
+
+Use `.append()` on bulk\_users instance to add however-many-records to call in bulk.
+
+<CodeGroup>
+  ```java java
+  import org.json.JSONObject;
+
+  import suprsend.Suprsend;
+  import suprsend.Subscriber;
+
+  public class Subscribers {
+    public static void main(String[] args) throws Exception {
+      bulkSubscriber();
+    }
+
+    public static void bulkSubscriber() throws Exception {
+      // SDK instance
+      Suprsend suprsendClient = new Suprsend("workspace_key", "workspace_secret");
+      
+      //Creating bulk instance
+      BulkSubscribers bulkIns = suprClient.bulkUsers.newInstance();
+      
+      // Prepare multiple users
+      String distinctID1 = "__distinct_id1__"; // User 1
+      Subscriber u1 = suprsendClient.user.getInstance(distinctID1);
+      u1.addEmail("[email protected]");
+      
+      String distinctID2 = "__distinct_id2__"; // User 2
+      Subscriber u2 = suprsendClient.user.getInstance(distinctID2);
+      u2.addEmail("[email protected]");
+      
+      // --- use .append on bulk instance to add one or more records
+      bulkIns.append(u1);
+      bulkIns.append(u2);
+      // OR
+      bulkIns.append(u1, u2);
+
+      // Save
+      JSONObject response = bulkIns.save();
+      System.out.println(response);
+    }
+  ```
+</CodeGroup>
+
+<Warning>
+  Bulk API is supported in SuprSend java-sdk version 0.5.0 and above. If you are using an older version, please upgrade to the latest SDK version.
+</Warning>
+
+### How SuprSend Processes the bulk API request
+
+* On calling `bulkIns.save()`, the SDK internally makes one-or-more Callable-chunks.
+* Each callable-chunk contains a subset of records, the subset calculation is based on each record's bytes-size and max allowed chunk-size, chunk-length etc.
+* For each callable-chunk SDK makes an HTTP call to SuprSend to register the request.
+
+### Response
+
+Response is an instance of `suprsend.BulkResponse` class
+
+<CodeGroup>
+  ```java java
+  // Response structure
+  import suprsend.BulkResponse;
+
+  BulkResponse{status: 'success' | total: 2 | success: 2 | failure: 0 | warnings: 0}
+
+  BulkResponse{status: 'fail' | total: 2 | success: 0 | failure: 2 | warnings: 0}
+
+  BulkResponse{status: 'partial' | total: 2 | success: 1 | failure: 1 | warnings: 0}
+  ```
+</CodeGroup>
+
+***
+
+What’s Next
+
+Once channels are set in user profile, just add user's `distinct_id` in send event or workflow trigger call and all the user channels will automatically be fetched from user profile
+
+* [Send and Track Events](/docs/java-send-event-data)
+
+* [Table of Contents](#)
+
+* * [Pre-requisites](#pre-requisites)
+
+  * [How Suprsend identifies a user](#how-suprsend-identifies-a-user)
+
+  * [Create a user and add communication channels](#create-a-user-and-add-communication-channels)
+
+  * [Step 1. Create a new user](#step-1-create-a-new-user)
+
+  * [Step 2: Set Communication Channel preferences](#step-2-set-communication-channel-preferences)
+
+    * [1. Add User Channels](#1-add-user-channels)
+    * [2. Remove User Channels](#2-remove-user-channels)
+    * [3. Remove User Channels in bulk](#3-remove-user-channels-in-bulk)
+
+  * [Add Preferences in User Profile](#add-preferences-in-user-profile)
+    * [Set Preferred language](#set-preferred-language)
+
+  * [Response](#response)
+
+  * [Bulk API for handling multiple user profiles](#bulk-api-for-handling-multiple-user-profiles)
+
+    * [How SuprSend Processes the bulk API request](#how-suprsend-processes-the-bulk-api-request)
+    * [Response](#response-1)

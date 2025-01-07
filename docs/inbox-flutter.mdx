@@ -1,0 +1,141 @@
+---
+title: "Flutter (Headless)"
+description: "SuprSend SDK for Flutter applications for integrating inbox functionality using flutter hooks"
+---
+
+[Suggest Edits](/edit/inbox-flutter)
+
+SuprSend uses flutter hooks to provide inbox functionality in flutter applications.
+
+## Installation
+
+#### Step-1: Project’s pubspec.yaml changes
+
+Add the following line of code inside dependencies in the `pubspec.yaml` file under the dependencies section
+
+<CodeGroup>
+  ```yaml pubspec.yaml
+  dependencies:
+    flutter:
+    	sdk: flutter
+    suprsend_flutter_inbox: "^0.0.1"
+  ```
+</CodeGroup>
+
+#### Step-2: Run `flutter pub get` in the terminal
+
+<CodeGroup>
+  ```shell Bash
+  $ flutter pub get
+  ```
+</CodeGroup>
+
+## Initialization
+
+Enclose your Material App inside *SuprSendProvider* and pass the workspace key, workspace secret, distinct\_id, and [subscriber\_id](/docs/hmac-authentication).
+
+<CodeGroup>
+  ```javascript main.dart
+  import 'package:suprsend_flutter_inbox/main.dart';
+
+  SuprSendProvider(
+      workspaceKey: <your workspace key>,
+      workspaceSecret:  <your workspace secret>,
+      distinctId: distinct_id,
+      subscriberId: subscriber_id,
+      child: YourAppComponent()
+  )
+  ```
+</CodeGroup>
+
+**NOTE**: SuprSend hooks can only be used inside of SuprSendProvider.
+
+## Adding SuprSend Inbox component
+
+### useBell hook
+
+This hook provides unSeenCount, markAllSeen which is related to the Bell icon in the inbox
+
+**unSeenCount**: Use this variable to show the unseen notification count anywhere in your application. **markAllSeen**: Used to mark seen for all notifications. Call this method on clicking the bell icon so that it will reset the notification count to 0.
+
+<CodeGroup>
+  ```javascript bell.dart
+  import 'package:suprsend_flutter_inbox/main.dart';
+
+  final bellData = useBell();
+
+  // bellData structure:
+  {
+    "unSeenCount": int,
+    "markAllSeen": ()=>void
+  }
+  ```
+</CodeGroup>
+
+### useNotifications hook
+
+This hook provides a notifications list, unSeenCount, markClicked, and markAllSeen.
+
+**notifications**: List of all notifications. This array can be looped and notifications can be displayed. **unSeenCount**: Use this variable to show the unseen notification count anywhere in your application. **markClicked**: Method used to mark a notification as clicked. Pass notification id which is clicked as the first param.
+
+<CodeGroup>
+  ```javascript code.dart
+  import 'package:suprsend_flutter_inbox/main.dart';
+
+  final notifData = useNotifications();
+
+  // notifData structure:
+  {
+    "notifications": List<Noticication>,
+    "unSeenCount": int,
+    "markAllSeen": ()=>void
+    "markClicked":(n_id)=>void
+  }
+
+  // Noticication structure:
+  {
+    "n_id": string,
+    "n_category": string,
+    "created_on": int,
+    "seen_on": int,
+    "message": {
+      "header": string,
+      "text": string,
+      "url": string,
+      "extra_data": string,
+      "avatar":{
+      	"action_url": string,
+        "avatar_url": string
+      },
+      "subtext":{
+        "text": string,
+        "action_url": string
+      }
+      "actions":[
+        {
+          "name": string,
+          "url": string
+        }
+      ]
+    }
+  }
+  ```
+</CodeGroup>
+
+### Example Implementation
+
+Example implementation can be found here: [https://github.com/suprsend/suprsend-flutter-sdk/blob/main/example/lib/main.dart](https://github.com/suprsend/suprsend-flutter-sdk/blob/main/example/lib/main.dart)
+
+***
+
+* [Table of Contents](#)
+
+* * [Installation](#installation)
+
+  * [Initialization](#initialization)
+
+  * [Adding SuprSend Inbox component](#adding-suprsend-inbox-component)
+
+    * [useBell hook](#usebell-hook)
+    * [useNotifications hook](#usenotifications-hook)
+    * [Example Implementation](#example-implementation)

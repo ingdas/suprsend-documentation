@@ -1,0 +1,145 @@
+---
+title: "Firebase Push (FCM)"
+description: "This will guide you to integrate FCM push notifications in android react native applications using SuprSend"
+---
+
+[Suggest Edits](/edit/react-native-firebase-fcm-push-integration)
+
+This section is a step-by-step guide to integrating FCM as your service provider for sending Android Push notifications.
+
+## Step-1: Create a Firebase project in the firebase console
+
+To start sending notifications from FCM, you'll have to first create a firebase project. Create a firebase project and application in [firebase console](https://firebase.google.com/) with your applications package name which you can find in *MainApplication.java* or *AndroidManifest.xml*.
+
+## Step-2: Adding google-services.json to your project
+
+You can get your Service Account JSON from Firebase Console Project Settings. Download *google-services.json* and add the file inside your *android > app* folder.
+
+## Step-3: Adding Firebase dependencies and plugins
+
+3.1. Add the below dependency inside projects *build.gradle* inside dependencies
+
+<CodeGroup>
+  ```groovy build.gradle
+  dependencies {
+          ...
+          classpath 'com.google.gms:google-services:4.3.10' // or latest version
+  }
+  ```
+</CodeGroup>
+
+3.2. Add the below plugin inside the app *build.gradle*
+
+<CodeGroup>
+  ```groovy build.gradle
+  apply plugin: 'com.google.gms.google-services'
+  ```
+</CodeGroup>
+
+3.3. Add the below dependency inside apps *build.gradle* inside dependencies
+
+<CodeGroup>
+  ```groovy build.gradle
+  implementation("com.google.firebase:firebase-messaging:22.0.0") // or latest version
+  ```
+</CodeGroup>
+
+## Step-4: Implementing push
+
+Push feature can be implemented in two ways:
+
+### Option-1: Token Generation and Notification handled By SDK
+
+You may use this option if all of your android push notifications are to be handled via SuprSend SDK. We recommend you use this method as it is just a single-step process to just register the service in your application manifest and everything else will be ready.
+
+<CodeGroup>
+  ```xml AndroidManifest.xml
+  <!--If you are targeting to API 33 (Android 13) you will additional need to add POST_NOTIFICATIONS -->
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+  <service
+      android:name="app.suprsend.fcm.SSFirebaseMessagingService"
+      android:enabled="true"
+      android:exported="false">
+      <intent-filter>
+          <action android:name="com.google.firebase.MESSAGING_EVENT" />
+      </intent-filter>
+  </service>
+  ```
+</CodeGroup>
+
+### Option-2: Token Generation and Notification handled By Your Application:
+
+2.1. Once you get a token from Firebase you can pass the token by using the below code
+
+<CodeGroup>
+  ```javascript javascript
+  suprsend.user.setAndroidFcmPush(fcm_token);
+  ```
+</CodeGroup>
+
+2.2 When you get a push notification you will get a payload and it can be passed to the method provided by Suprsend React Native SDK and the notification displaying part will be handled by SDK.
+
+<CodeGroup>
+  ```javascript javascript
+  suprsend.showNotification(notification_payload);
+  ```
+</CodeGroup>
+
+<Info>
+  If notification payload contains key **supr\_send\_n\_pl** then simply consider this as payload sent from suprsend and pass the payload to suprsend sdk by:
+
+  if (payload?.data?.supr\_send\_n\_pl) \{ suprsend.showNotification(payload.data.supr\_send\_n\_pl); }
+</Info>
+
+## Targeting Android 13 (API-33):
+
+In Android13 (API 33) or higher [notification permission](https://developer.android.com/develop/ui/views/notifications/notification-permission) will be disabled by default so permission needs to be asked to enable notifications if you are targeting android 13 users. You can follow this doc to update to support Andriod 13(API 33), if not already supported: [https://developer.android.com/about/versions/13/setup-sdk](https://developer.android.com/about/versions/13/setup-sdk). Please test the application as well as upgrading to API 33 may causes breaking changes.
+
+1. Add POST\_NOTIFICATIONS permission in AndroidManifest.xml if not present already.
+
+<CodeGroup>
+  ```xml AndroidManifest.xml
+  <manifest ...>
+      <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/> 
+      <application ...>
+          ...
+      </application>
+  </manifest>
+  ```
+</CodeGroup>
+
+2. From your code call the SDK method to show a notification permission popup. This method is asynchronous and returns permission values like granted, denied, and never\_ask\_again.
+
+**NOTE**: This method is available from react-native-sdk v2.0.0. Please update it if using lower versions
+
+<CodeGroup>
+  ```javascript App.js
+  const permission = await Suprsend.askNotificationPermission();
+  ```
+</CodeGroup>
+
+Once permission is granted users can be able to get push notifications.
+
+***
+
+What’s Next
+
+Add FCM vendor configuration on SuprSend dashboard vendor page to start sending notification
+
+* [Firebase FCM](/docs/firebase-fcm-androidpush)
+
+* [Table of Contents](#)
+
+* * [Step-1: Create a Firebase project in the firebase console](#step-1-create-a-firebase-project-in-the-firebase-console)
+
+  * [Step-2: Adding google-services.json to your project](#step-2-adding-google-servicesjson-to-your-project)
+
+  * [Step-3: Adding Firebase dependencies and plugins](#step-3-adding-firebase-dependencies-and-plugins)
+
+  * [Step-4: Implementing push](#step-4-implementing-push)
+
+    * [Option-1: Token Generation and Notification handled By SDK](#option-1-token-generation-and-notification-handled-by-sdk)
+    * [Option-2: Token Generation and Notification handled By Your Application:](#option-2-token-generation-and-notification-handled-by-your-application)
+
+  * [Targeting Android 13 (API-33):](#targeting-android-13-api-33)

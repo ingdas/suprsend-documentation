@@ -1,0 +1,133 @@
+---
+title: "Overview"
+description: "JUMP TO"
+---
+
+* [Overview](/reference/overview)
+* [Authentication](/reference/api-keys)
+* [Idempotent Requests](/reference/idempotent-requests)
+* [SuprSend APIs on Postman](/reference/using-suprsnd-apis-on-postman)
+
+## USERS
+
+* [Overview](/reference/user_overview)
+* [Create / Update Userspost](/reference/create-update-users)
+* [Edit User Profilepost](/reference/edit-user-profile)
+* [Fetch User by idget](/reference/fetch-user-profile)
+* [List Usersget](/reference/list-users)
+* [Delete userdelete](/reference/delete-user)
+* [Merge User Profilespost](/reference/merge-users)
+
+## WORKFLOWS
+
+* [Overview](/reference/workflow-overview)
+* [Trigger Workflowpost](/reference/trigger-workflow-api)
+  * [Adding Email Attachmentpost](/reference/dynamic-workflow-add-attachment)
+* [Dynamic Workflow Triggerpost](/reference/dynamic-workflow-trigger)
+  * [Adding Email Attachmentpost](/reference/workflow-trigger-add-attachment)
+
+## EVENTS
+
+* [Overview](/reference/event-overview)
+* [Trigger an Eventpost](/reference/event-api)
+  * [Adding Email Attachmentpost](/reference/trigger-event-add-attachment)
+
+## OBJECTS
+
+* [Create / Update Objectspost](/reference/create-update-objects)
+* [Edit Object Profilepatch](/reference/edit-object-profile)
+* [Add Subscriptionpost](/reference/add-object-subscription)
+* [Fetch Object by idget](/reference/get-object-by-id)
+* [List Objects by typeget](/reference/list-objects-by-type)
+* [List Object Subscriptionsget](/reference/list-object-subscriptions)
+* [Delete an Objectdelete](/reference/delete-object)
+* [Remove Object Subscriptiondelete](/reference/delete-object-subscriptions)
+
+## TeMPLATES
+
+* [Fetch Template Listget](/reference/fetch-template-list)
+* [Fetch Template detailsget](/reference/fetch-template-details)
+* [Fetch Template content for a channelget](/reference/fetch-template-details-channel)
+
+## BRANDS
+
+* [Overview](/reference/brand-overview)
+* [Create / Update Brandspost](/reference/create-brands)
+* [Get Brand dataget](/reference/get-brand)
+* [Get Brand listget](/reference/get-brand-list)
+* [Delete Tenantdelete](/reference/delete-tenant)
+
+## PREFERENCE
+
+* [Overview](/reference/preference-overview)
+
+* [Update User Preference](/reference/update-user-preference)
+
+  * [Category and Channel within Categorypatch](/reference/update-user-preference-category)
+  * [Overall Channel levelpatch](/reference/update-user-preference-channel)
+  * [Bulk Updatepatch](/reference/bulk-update-user-preference)
+  * [Resetpatch](/reference/reset-user-preferences)
+
+* [Get User Preferences](/reference/get-user-preferences)
+
+  * [Full Preferenceget](/reference/get-user-full-preference)
+  * [All Categoriesget](/reference/get-user-preference-all-categories)
+  * [All Channelsget](/reference/get-user-preference-channel)
+  * [Single Categoryget](/reference/get-user-preferences-single-category)
+
+* [Update Brand Default Preferencepost](/reference/update-brand-default-preference)
+
+* [Get Brand Default Preferenceget](/reference/get-brand-default-preference)
+
+* [Update Object Preference](/reference/update-object-preference)
+
+  * [Category and Channel within Categorypatch](/reference/object-preference-category)
+  * [Overall Channel levelpatch](/reference/object-preference-channel)
+
+* [Get Object Preferences](/reference/get-object-preferences)
+
+  * [Full Preferenceget](/reference/fetch-object-full-preference)
+  * [All Categoriesget](/reference/fetch-object-preference-all-categories)
+  * [All Channelsget](/reference/fetch-object-preference-all-channels)
+  * [Single Categoryget](/reference/fetch-object-preference-single-category)
+
+## LISTS
+
+* [Overview](/reference/list-overview)
+
+* [Create a Listpost](/reference/create-list)
+
+* [Get all Listsget](/reference/get-all-lists)
+
+* [Get List configurationget](/reference/get-list)
+
+* [Add Subscribers to Listpost](/reference/add-subscribers-to-list)
+
+* [Remove Subscribers from Listpost](/reference/remove-users-from-list)
+
+* [Replace list subscribers](/reference/replace-users-in-the-list)
+
+  * [Start Syncpost](/reference/start-sync)
+  * [Add Subscribers to Draft Listpost](/reference/add-subscribers-to-draft-list)
+  * [Remove Subscribers from Draft Listpost](/reference/remove-subscribers-from-draft-list)
+  * [Finish Syncpatch](/reference/finish-sync)
+  * [Delete Draft Listpatch](/reference/delete-draft-list)
+
+* [Get list subscribersget](/reference/get-subscriber-list-users)
+
+* [Delete Listpatch](/reference/delete-list)
+
+## BROADCAST
+
+* [Overview](/reference/broadcast-overview)
+* [Trigger Broadcastpost](/reference/trigger-broadcast)
+
+Powered by [](https://readme.com?ref_src=hub\&project=suprsend)
+
+# Overview
+
+Overview of what events stand for in SuprSend
+
+The event (referred to as event\_name) is a string describing an event. Events are also used to trigger workflows designed on SuprSend Platform. All you have to do is send the event to SuprSend platform and the associated workflows will be triggered.
+
+[Learn more about events here](/docs/events)

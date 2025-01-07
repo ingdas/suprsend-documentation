@@ -1,0 +1,51 @@
+---
+title: "Postgres"
+description: "Setting up Postgres database connection for syncing subscriber lists"
+---
+
+[Suggest Edits](/edit/postgres)
+
+With this integration, you can directly send notifications on your 360 degree data sitting in your data warehouse. This enables your data teams or product managers to automate user syncing, setup recurring user cohort sync and create [subscriber lists](/docs/lists) on SuprSend. You can then trigger notification to this list using our [broadcast](/docs/broadcast) API.
+
+## Getting Started
+
+To start syncing data from your postgres database, you need to add postgres integration on the connector page.
+
+1. Go to [SuprSend dashboard -> Settings -> Connectors](https://app.suprsend.com/en/staging/connectors) page. Here, you'll see the list of available connectors. If you have already setup any connectors in the past, you'll see a list of existing connectors. Click on **"+New Connector"** button to add the connector.
+2. Click on Postgres and add your database user’s credentials. All fields in the form are mandatory.
+
+![](/images/docs/5c68e43-image.png)
+
+| Field         | Description                                                                                                                                                                                                |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Name          | A name to uniquely qualify the connection as you'll see it in the connector list on your sync task. You can add the name of database here for easy identification.                                         |
+| Host          | Host’s IP address or [DNS Name](https://docs.aws.amazon.com/redshift/latest/mgmt/jdbc20-obtain-url.html).                                                                                                  |
+| Port          | The port on which your Amazon Postgres server is listening for connections.                                                                                                                                |
+| Database Name | Name of database you created for your cluster.                                                                                                                                                             |
+| Username      | Database username created for suprsend sync. We recommend using a user with the minimal privileges here. This user only requires read permissions with access limited to the tables you want to sync from. |
+| Password      | Database password created for suprsend sync. We recommend using a user with the minimal privileges here. This user only requires read permissions with access limited to the tables you want to sync from. |
+| SSL Mode      | We support both SSL and non-SSL connections.                                                                                                                                                               |
+
+After adding the required information, click on "connect" to enable this connection. You'll see the error while connecting in case of incorrect credentials. Once your connection is setup, you'll see it in existing connector list and the connector dropdown on sync task.
+
+## Best Practices
+
+Before you setup your database sync, you should take some measures to ensure the security of your customers’ data and limit performance impacts to your backend database. The following “best practice” suggestions can help you limit the potential for data exposure and minimize performance impacts:
+
+1. **Sync your read-only replica instance**: Do not sync data directly from your main instance. Instead use a read-only data replica to minimize the load and avoid data loss on your main database.
+2. **User connected here should have minimal privileges**: You should have a database user with minimal privileges. This person only requires read permissions with access limited to the tables you want to sync from.
+3. **Sync only the data that you’ll need**: Limiting your query can improve performance, and minimize the potential to expose sensitive data. Select only the columns you need to either update user profile in SuprSend and to create list sync.
+4. **Use \{\{last\_sync\_time}} to limit query results**: Make sure you use the **\{\{last\_sync\_time}}** variable in your recurring sync queries. It stores the timestamp of last successful sync in your list. Adding it in your where statement against datetime index can really speed up the query and limit the number of results returned in consecutive syncs. \{\{last\_sync\_time}} is stored in timestamp format. Use relevant cast expression to format it based on your column type.
+5. **Limit your sync frequency**: Setup a sync frequency based on how frequently you want to send notifications on that list. If the previous sync is still in progress when the next interval occurs, we’ll skip the operation and catch up your data on the next interval. Skipped syncs show `Ignored` status in the logs. Frequently skipped operations may indicate that you’re syncing too often. You should monitor your first few syncs to ensure that you haven’t impacted your system’s performance.
+
+***
+
+What’s Next
+
+* [Create List](https://docs.suprsend.com/docs/lists)
+* [Create SQL query sync to update users in the list](https://docs.suprsend.com/docs/list-sync-via-database)
+
+* [Table of Contents](#)
+
+* * [Getting Started](#getting-started)
+  * [Best Practices](#best-practices)

@@ -1,0 +1,348 @@
+---
+title: "Preferences"
+description: "Suggest Edits"
+---
+
+### Prerequisites
+
+* Integration of [Javascript SDK](/docs/javascript-sdk)
+* [Configure notification categories](/docs/preferences#creating--updating-notification-categories) on SuprSend dashboard
+
+## Understanding Preferences Structure
+
+This is how a typical preference page will look like:
+
+![](/images/docs/9204517-full_preferences.png)
+
+Preference Page contains 2 sections:
+
+1. Category-level preference settings (Sections)
+
+   1. [Sections](/docs/js-preferences#11-sections)
+
+   2. [Categories](/docs/js-preferences#12-categories-sections---sub-categories)
+
+   3. [Category Channel](/docs/js-preferences#13-category-channels-sections---sub-categories---channels)
+
+      ![](/images/docs/4476752-sections.png)
+
+2. [Overall Channel-level preference](/docs/js-preferences#2-overall-channel-preferences)
+
+![](/images/docs/3063a30-overallChannel.png)
+
+### Preferences Data Structure
+
+<CodeGroup>
+  ```typescript Preferences Types
+  interface PreferenceData {
+    sections: Section[] | null;
+    channel_preferences: ChannelPreference[] | null;
+  }
+
+  interface ChannelPreference {
+    channel: string;
+    is_restricted: boolean;
+  }
+
+  interface Section {
+    name?: string | null;
+    description?: string | null;
+    subcategories?: Category[] | null;
+  }
+
+  interface Category {
+    name: string;
+    category: string;
+    description?: string | null;
+    preference: PreferenceOptions;
+    is_editable: boolean;
+    channels?: CategoryChannel[] | null;
+  }
+
+  interface CategoryChannel {
+    channel: string;
+    preference: PreferenceOptions;
+    is_editable: boolean;
+  }
+
+  enum PreferenceOptions {
+    OPT_IN = "opt_in",
+    OPT_OUT = "opt_out",
+  }
+
+  enum ChannelLevelPreferenceOptions {
+    ALL = "all",
+    REQUIRED = "required",
+  }
+  ```
+
+  ```typescript Example
+  {
+    "sections": [
+      {
+        "name": null,
+        "subcategories": [
+          {
+            "name": "Payment and History",
+            "category": "payment-and-history",
+            "description": "Send updates related to my payment history.",
+            "preference": "opt_in",
+            "is_editable": false,
+            "channels": [
+              {
+                "channel": "androidpush",
+                "preference": "opt_in",
+                "is_editable": true
+              },
+              {
+                "channel": "email",
+                "preference": "opt_in",
+                "is_editable": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Product Updates",
+        "description": "Non-marketing notifications related to authentication, activity updates, reminders etc.",
+        "subcategories": [
+          {
+            "name": "Newsletter",
+            "category": "newsletter",
+            "description": "Send updates on new feature in the product",
+            "preference": "opt_in",
+            "is_editable": true,
+            "channels": [
+              {
+                "channel": "androidpush",
+                "preference": "opt_in",
+                "is_editable": true
+              },
+              {
+                "channel": "email",
+                "preference": "opt_out",
+                "is_editable": false
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "channel_preferences": [
+      {
+        "channel": "androidpush",
+        "is_restricted": false
+      },
+      {
+        "channel": "email",
+        "is_restricted": true
+      }
+    ]
+  }
+  ```
+</CodeGroup>
+
+### 1.1 Sections
+
+This contains the name, description, and subcategories. We have to loop through the sections list and for every section item if there is a name and description present, then show the heading, and if a subcategories list is present, loop through that subcategories list and show all subcategories under that section heading.
+
+Subcategories can exist without sections as the section is an optional field. In that case, the section's name will not be available. For sections where the name is not present, you can directly show its subcategories list without showing Heading for the section in UI.
+
+![](/images/docs/e65f303-section.png)
+
+<CodeGroup>
+  ```typescript syntax
+  interface Section {
+    name?: string | null;
+    description?: string | null;
+    subcategories?: Category[] | null;
+  }
+  ```
+</CodeGroup>
+
+| Property      | Description                                               |
+| ------------- | --------------------------------------------------------- |
+| name          | name of the section                                       |
+| description   | description of the section                                |
+| subcategories | data of all sub-categories to be shown inside the section |
+
+### 1.2 Categories (sections -> sub-categories)
+
+This is the place where the user sets his category-level preferences. While looping through the subcategories list for every subcategory item, show the name and description in UI.
+
+![](/images/docs/2317beb-subcategories.png)
+
+<CodeGroup>
+  ```typescript syntax
+  interface Category {
+    name: string;
+    category: string;
+    description?: string | null;
+    preference: PreferenceOptions;
+    is_editable: boolean;
+    channels?: CategoryChannel[] | null;
+  }
+  ```
+</CodeGroup>
+
+| Property     | Description                                                                                                                                        |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| category     | This key is the id of the category which is used while updating the preference.                                                                    |
+| name         | name of the category to be shown on the UI                                                                                                         |
+| description  | description of the category to be shown on the UI                                                                                                  |
+| preference   | This key indicates if the category's preference switch is on or off. Get **OPT\_IN** when the switch is on and **OPT\_OUT** when the switch is off |
+| is\_editable | Indicates if the preference switch button is disabled or not. If its value is false then the preference setting for that category can't be edited  |
+| channels     | data of all category channels to be shown below the sub-category. Loop through it to show checkboxes under every subcategory item.                 |
+
+### 1.3 Category channels (sections -> sub-categories -> channels)
+
+This contains a list of channels, channel preference status and whether it's editable or not. While looping through the subcategory list for every subcategory item we have to loop through its channels list and for every channel to show channel level checkbox.
+
+![](/images/docs/74de834-channelCategory.png)
+
+<CodeGroup>
+  ```typescript syntax
+  interface CategoryChannel {
+    channel: string;
+    preference: PreferenceOptions;
+    is_editable: boolean;
+  }
+  ```
+</CodeGroup>
+
+| Property     | Description                                                                                                                                 |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| channel      | name of the channel to be shown on UI. The same key will be used as id of the channel while updating the preference.                        |
+| preference   | This key indicates if the channel's preference switch is on or off. Get OPT\_IN when the switch is on and OPT\_OUT when the switch is off   |
+| is\_editable | Indicates if the preference checkbox is disabled or not. If its value is false then the preference setting for that channel can't be edited |
+
+### 2. Overall Channel Preferences
+
+It's a list of all channel-level preferences. We have to loop through the list and for each item, show the UI as given in the below image.
+
+![](/images/docs/7ffb4c5-overallChannelPref.png)
+
+<CodeGroup>
+  ```typescript syntax
+  interface ChannelPreference {
+    channel: string;
+    is_restricted: boolean;
+  }
+  ```
+</CodeGroup>
+
+| Property       | Description                                                                                                                                                                                                                                                                                    |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| channel        | name of the channel to be shown on UI. The same key will be used as id of the channel while updating the preference.                                                                                                                                                                           |
+| is\_restricted | This key indicates the restriction level of channel. If restricted, notification will only be sent in the category where this channel is added as mandatory in notification category settings. **True** means Required radio button is selected. **False** means All radio button is selected. |
+
+## Integration
+
+### Get Preferences Data
+
+Use this method to get preferences data and create the preferences UI by following the above sections. This method should be called first before any update preference methods.
+
+<CodeGroup>
+  ```typescript syntax
+  const preferencesResp = await suprSendClient.user.preferences.getPreferences(args?: {tenantId?: string});
+  ```
+</CodeGroup>
+
+**Returns:** `Promise<ApiResponse>`
+
+### Update Category Preference
+
+Calling this method will opt-in/opt-out user from that category. When the category is editable and the switch is toggled you can call this method.
+
+<CodeGroup>
+  ```typescript syntax
+  const updatedPreferencesResp = await suprSendClient.user.preferences.updateCategoryPreference(category: string, preference: PreferenceOptions, args?: { tenantId?: string });
+
+  enum PreferenceOptions {
+    OPT_IN = "opt_in",
+    OPT_OUT = "opt_out"
+  }
+  ```
+</CodeGroup>
+
+**Returns:** `Promise<ApiResponse>`
+
+![](/images/docs/90acce7-update1.png)
+
+### Update Channel Preference in Category
+
+Calling this method will opt-in/opt-out users from that category-level channel. When the category's channel checkbox is editable and the user clicks on the checkbox you can call this method.
+
+<CodeGroup>
+  ```typescript syntax
+  const updatedPreferencesResp = await suprSendClient.user.preferences.updateChannelPreferenceInCategory(channel: string, preference: PreferenceOptions, category: string, args?: { tenantId?: string });
+
+  enum PreferenceOptions {
+    OPT_IN = "opt_in",
+    OPT_OUT = "opt_out"
+  }
+  ```
+</CodeGroup>
+
+**Returns:** `Promise<ApiResponse>`
+
+![](/images/docs/068dbe0-update2.png)
+
+### Update Overall Channel Preference
+
+This method updated the channel-level preference of the user.
+
+<CodeGroup>
+  ```typescript syntax
+  const updatedPreferencesResp = await suprSendClient.user.preferences.updateOverallChannelPreference(channel: string, preference: ChannelLevelPreferenceOptions);
+
+  enum ChannelLevelPreferenceOptions {
+    ALL = "all",
+    REQUIRED = "required"
+  }
+  ```
+</CodeGroup>
+
+**Returns:** `Promise<ApiResponse>`
+
+![](/images/docs/a3249bd-update3.png)
+
+### Event Listeners
+
+All preferences update api's are optimistic updates. Actual api call will happen in background with 1 second debounce. Since its a background task SDK provides event listeners to get updated preference data based on api call status. Listen to this event listeners and update the UI accordingly.
+
+<CodeGroup>
+  ```typescript syntax
+  suprSendClient.emitter.on('preferences_updated', (preferenceDataResp: ApiResponse) => void);
+  suprSendClient.emitter.on('preferences_error', (errorResponse: ApiResponse) => void);
+  ```
+</CodeGroup>
+
+Example Usage:
+
+For **preferences\_error** event you could show error toast.
+
+For **preferences\_updated** event you could update UI with latest data returned in as param in callback function.
+
+***
+
+* [Table of Contents](#)
+
+* * * [Prerequisites](#prerequisites)
+
+  * [Understanding Preferences Structure](#understanding-preferences-structure)
+
+    * [Preferences Data Structure](#preferences-data-structure)
+    * [1.1 Sections](#11-sections)
+    * [1.2 Categories (sections -> sub-categories)](#12-categories-sections---sub-categories)
+    * [1.3 Category channels (sections -> sub-categories -> channels)](#13-category-channels-sections---sub-categories---channels)
+    * [2. Overall Channel Preferences](#2-overall-channel-preferences)
+
+  * [Integration](#integration)
+
+    * [Get Preferences Data](#get-preferences-data)
+    * [Update Category Preference](#update-category-preference)
+    * [Update Channel Preference in Category](#update-channel-preference-in-category)
+    * [Update Overall Channel Preference](#update-overall-channel-preference)
+    * [Event Listeners](#event-listeners)

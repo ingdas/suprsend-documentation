@@ -1,0 +1,79 @@
+---
+title: "Go-live checklist"
+description: "Use this checklist to ensure a smooth transition when making notification live in your non-testing workspace."
+---
+
+[Suggest Edits](/edit/go-live-checklist)
+
+In SuprSend, workspaces are logically isolated and share no data by default. This means, all your assets (workflows, templates, users, preferences) and config files (vendor, API keys) are independently set in workspaces and won't be shared across workspaces.
+
+Also check our [best practices](/docs/best-practices) to design an effective notification system for your use case.
+
+## Pre-Go-Live Preparation
+
+### Configure Production Workspace (Vendor and API keys)
+
+* Add [vendor settings](/docs/vendors) in your production workspace for the channels you plan to use for notifications.
+* Set the API keys, workspace key, and secret for your production workspace in both client-side and server-side applications.
+* For Inbox integration, update the Inbox secret in your server-side code to generate user [HMAC](/docs/hmac-authentication) for the production environment. You can obtain this secret from the [Inbox vendor configuration page](https://app.suprsend.com/en/staging/vendors/inbox/suprsend-inbox?brand_id=default) on the SuprSend dashboard.
+
+### 2. Setup Notification tracking
+
+Add SuprSend webhook url in respective vendor portals for SMS, Email and Whatsapp to track delivery metrics (delivered, click, seen) in logs and analytics.
+
+### 3. Sync users in your production workspace
+
+<Warning>
+  only required if you are using event based workflow triggers
+</Warning>
+
+You can [setup user sync](/docs/users#creating-user-profile-on-suprsend) from your frontend application or via backend systems. The best way to keep user data updated at all times is to setup a sync when user profile is created or updated in your database.
+
+Be cautious of large user syncs just before triggering notifications, as users are updated in async manner and it may result in some users not being synced in time and eventually getting missed from final notifications.
+
+### 4. Thoroughly test your workflows in staging workspace
+
+Test your workflow changes using test runner with actual trigger data to make sure that template content and workflow logic is working as expected. Some common issues to check:
+
+* URLs and text with special characters should be enclosed in triple curly braces `{{{...}}}` to avoid random text added in final template due to HTML character escaping.
+* Adding batch node in workflow also changes the output variables structure and the template should also be modified to include batched variables output. See how to add [batched variables in templates](/docs/batch#using-batch-variables-in-templates).
+* Remember to commit all template and workflow changes, as uncommitted edits will not be used when triggered from backend.
+
+### 5. Push your workflow changes to production
+
+You'll need to push template, workflow, preference changes from staging to production workspace. You can do this by cloning your assets between workspaces. You'll get clone option next to each asset that you created.
+
+You can also push your changes in an automated manner as feature release using CLI (coming soon...).
+
+## Post-Go-Live Checks
+
+### 6. Track and monitor notification performance
+
+Check Analytics to track engagement metrics (open, seen, click) and use it to optimize workflow and templates over time. You can see analytics for each workflow inside workflow details page and overall analytics on the [home page](https://app.suprsend.com/en/sandbox/). You can refer to all the [statuses tracked per channel](/docs/logging#notification-statuses-tracked-per-channel) here.
+
+### 7. Check logs for any critical errors
+
+Regularly check the [Logs page](https://app.suprsend.com/en/staging/logs/api?last_n_minutes=1440) for the first 3-4 days after going live. Look for any anomalies or critical errors and address them promptly. Logs are divided in 3 sections:
+
+* **Requests**: All the requests sent to SuprSend from your backend or Frontend systems are logged here. You can see the input payload and request response here.
+* **Executions**: Workflow executions are logged in this tab. You can click on each log in this tab to see step-by-step debugger of the workflows.
+* **Messages**: This is where all delivery nodes and their sent message status (delivery, seen, clicked) can be tracked. You'll also be able to see message preview of your delivered messages here (coming soon).
+
+For any assistance in fixing errors, our Slack support channel is available 24/7.
+
+***
+
+* [Table of Contents](#)
+
+* * [Pre-Go-Live Preparation](#pre-go-live-preparation)
+
+    * [Configure Production Workspace (Vendor and API keys)](#configure-production-workspace-vendor-and-api-keys)
+    * [2. Setup Notification tracking](#2-setup-notification-tracking)
+    * [3. Sync users in your production workspace](#3-sync-users-in-your-production-workspace)
+    * [4. Thoroughly test your workflows in staging workspace](#4-thoroughly-test-your-workflows-in-staging-workspace)
+    * [5. Push your workflow changes to production](#5-push-your-workflow-changes-to-production)
+
+  * [Post-Go-Live Checks](#post-go-live-checks)
+
+    * [6. Track and monitor notification performance](#6-track-and-monitor-notification-performance)
+    * [7. Check logs for any critical errors](#7-check-logs-for-any-critical-errors)

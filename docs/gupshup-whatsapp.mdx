@@ -1,0 +1,65 @@
+---
+title: "Gupshup"
+description: "https://www.gupshup.io/"
+---
+
+[Suggest Edits](/edit/gupshup-whatsapp)
+
+This section is a step-by-step guide to set Gupshup as your Whatsapp service provider.
+
+## Pre-Requisites
+
+1. You'll need a Gupshup account to complete this tutorial. You can use your existing Gupshup account to integrate, or [Create a Gupshup account](https://www.gupshup.io/auth/signup)
+
+## Gupshup integration on SuprSend account
+
+On the SuprSend dashboard, follow the steps as below:
+
+1. Select Vendors from the left panel
+2. Select 'Whatsapp' as the channel from the list
+3. Select 'Gupshup' from the list of Vendors
+
+![](/images/docs/b8baba4-gupshup_WA.png)
+
+Clicking on the vendor name will open settings page. In the **Settings** page, enter the details:
+
+![](/images/docs/427003a-image.png)
+
+| Form Field                        | Description                                                                                                                                                                                                                                  |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nickname                          | You can give any name which may help you to identify this account easily                                                                                                                                                                     |
+| App Name                          | App name of your gupshup whatsapp account. SuprSend uses this information to send Whatsapp on your behalf via your Gupshup account                                                                                                           |
+| Whatsapp Mobile Number            | Mobile number of your whatsapp business account. SuprSend uses this information to send Whatsapp on your behalf via your registered whatsapp number                                                                                          |
+| Notification Account User ID      | Gupshup creates 2 accounts - one for sending one way messages and other for 2-way messages. Add the user ID of 1-way message account here. SuprSend will use this information to send 1-way messages on your behalf via your Gupshup account |
+| Notification Account Password     | Login password of 1-way message account. SuprSend will use this information to send 1-way messages on your behalf via your Gupshup account                                                                                                   |
+| Two way Account User ID           | User ID of 2-way message account. SuprSend will use this information to send 2-way messages on your behalf via your Gupshup account                                                                                                          |
+| Two way Account Password          | Password of 2-way message account. SuprSend will use this information to send 2-way messages on your behalf via your Gupshup account                                                                                                         |
+| Whatsapp Analytics Panel User ID  | User ID of [whatsapp analytics](https://unify.smsgupshup.com/WhatsApp/Analytics/) account. SuprSend will use this information to upload templates on your behalf in your gupshup account for approval                                        |
+| Whatsapp Analytics Panel Password | Password of [whatsapp analytics](https://unify.smsgupshup.com/WhatsApp/Analytics/) account. SuprSend will use this information to upload templates on your behalf in your gupshup account for approval                                       |
+| Facebook Page URL                 | URL of your facebook business page                                                                                                                                                                                                           |
+| Price per notification            | This is the amount you pay per SMS notification to Gupshup. It helps us to calculate, estimate and optimise your cost spent on notifications.                                                                                                |
+
+You'll get all the account credentials from Gupshup team as soon as your account is created
+
+## Setting Callback URL in Gupshup Account
+
+One of the platform advantage of using SuprSend as a central communication system is that it shows notification analytics for all channels in your SuprSend account together.
+
+Send a mail to Gupshup team to enable below webhook URL to your account:
+
+Http Method: POST URL: `https://hub.suprsend.com/webhook/gupshup/whatsapp/` Headers: Content-Type: application/json
+
+***
+
+What’s Next
+
+Create Whatsapp template and add a workflow to start sending your Whatsapp notifications
+
+* [Whatsapp Template](/docs/whatsapp)
+* [Create Workflow](https://docs.suprsend.com/docs/design-workflow)
+
+* [Table of Contents](#)
+
+* * [Pre-Requisites](#pre-requisites)
+  * [Gupshup integration on SuprSend account](#gupshup-integration-on-suprsend-account)
+  * [Setting Callback URL in Gupshup Account](#setting-callback-url-in-gupshup-account)

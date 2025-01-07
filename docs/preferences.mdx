@@ -1,0 +1,204 @@
+---
+title: "Preferences"
+description: "Learn how preferences work in SuprSend and how to setup it up for your users"
+---
+
+[Suggest Edits](/edit/preferences)
+
+Preferences allow users to opt out of notification categories, choose their preferred communication channels, and set the frequency of notifications. Providing granular preferences significantly reduces the likelihood of users disabling all notifications from your platform.
+
+In SuprSend, you have access to [ready-made UI](/docs/preferences#taking-preferences-from-your-users) and [APIs](/reference/preference-overview) that facilitate simple to complex multi-tenant preference use cases. This includes allowing admins to set preferences for internal teams and managing notifications for enterprise customers, where companies, customers, and end users, all have different preferences.
+
+## How preferences work?
+
+Every user will have a preference set within SuprSend and users get notifications in the category and channel they haven't opted-out from. If user preferences are not set for a category, it falls back to [default preferences](/docs/preferences#set-default-preferences).
+
+Preference set contains three level of preferences: `channel_preferences` (for channel-level opt-outs), `categories`, and `opt_out_channels` within each category. In the below example, user has opted out of `email`, `invoice-ready` category and slack channel in `payment-reminder` category.
+
+<CodeGroup>
+  ```json User Preference set
+  {
+    "channel_preferences": [
+      {
+        "channel": "email",
+        "is_restricted": true
+      }
+    ],
+    "categories": [
+      {
+        "category": "invoice-ready",
+        "preference": "opt_out"
+      },
+      {
+        "category": "payment-reminder",
+        "preference": "opt_in",
+        "opt_out_channels": [
+          "slack"
+        ]
+      }
+    ]
+  }
+  ```
+</CodeGroup>
+
+## Set up preference categories in SuprSend
+
+### Create notification category
+
+To setup notification preferences, you first have to create notification categories. While you can create one category for each trigger, we recommend grouping similar notifications to make categories more user-friendly. You can also add sections to organize your categories better.
+
+> Do not add too many categories as it can drive users to use channel level opt-outs.
+
+<Frame caption="Creating Billing section">
+  <img src="/images/docs/461967377bb45816a5a0f13812ac496bbb5145a27833a00aface5590c93ca9cb-image.png" />
+</Frame>
+
+<Frame caption="Adding categories in Billing section">
+  <img src="/images/docs/d5cf5c1ab42023d327a3944519ce156953ba529f2c6c9c33dc7afddabfa2361a-image.png" />
+</Frame>
+
+You can update notification categories from **[Developers -> Preference categories](https://app.suprsend.com/en/staging/developers/preference-categories)** page. Categories are added within 3 predefined root categories:
+
+* **System**: For critical system notifications like OTPs, verification, and authentication. Users cannot opt out of this category.
+* **Transactional**: Notifications related to user transactions on your platform, such as payment confirmations, delivery statuses, comments. Default preference in this category is opt-in, can be changed at individual category level.
+* **Promotional**: Marketing notifications like newsletter, announcements, deals and discounts. Default preference is opt-out in this category, can be changed at individual category level.
+
+### Set default preferences
+
+If user has not set preferences in a category, notifications are sent based on default preferences. Default preferences are configured in notification category. Tenant can override default preference for their users. The same can be set using [tenant preference API](/reference/update-brand-default-preference) or from tenant details page.
+
+You can set following default preferences at category level:
+
+1. **On**: opt-in on all channels
+2. **Off**: opt-out on all channels
+3. **Can't Unsubscribe**: use this to prevent users from completely opting out of critical notification categories, such as anomaly alerts or important transactions (e.g., completed trades, payments). Channel `opt-out` of does not block notifications from mandatory channels in this category.
+
+### Map category to notifications
+
+Once set, publish your preference categories to see the latest categories in workflow. You can then map these categories when configuring your workflow for preferences to take effect.
+
+## Capture user preferences
+
+You can capture user preference choice using an out-of-the-box hosted subscription page or by embedding a preference center within your product.
+
+### Hosted Preference Page
+
+Once you publish preference categories, SuprSend automatically generates a dedicated webpage for collecting out-of-the-box user preferences. Users can set channel-specific preferences from the hosted page. For example, if you add it in your email, it will display only the relevant preference categories for email, and user selections will also be saved for email. Include it in your templates using `{{$hosted_preference_url}}`.
+
+![](/images/docs/e46d21ae0de53196f50ba38f00ab208eb961ab96d2dbbf55b585a8dbbfa4ea27-hosted_page.svg)
+
+> This page is currently hosted on the SuprSend domain, but you can contact us if you'd like it hosted on your own domain.
+
+### Embed in your product
+
+You can load the preference interface inside your product using our ready UI code. SDKs are available in below languages. You can update your product preference page link on tenant page and render it in templates using `{{$embedded_preference_url}}`.
+
+<Card title="" href="/docs/preferences-javascript">
+  ## Javascript
+</Card>
+
+<Card title="" href="/docs/preferences-react-headless">
+  ## React
+</Card>
+
+<Card title="" href="/docs/preferences-angular">
+  ## Angular
+</Card>
+
+![](/images/docs/a2ec79a301149f157c50fcd94378fbe448d2b789d68da8cb4a1b97dccfd15680-image.png)
+
+### Channel specific unsubscription options
+
+In addition to the preference center within SuprSend, communication channels provide their own opt-out options, which SuprSend manages internally.
+
+#### Email: Unsubscribe URL header
+
+Gmail is empathising you to add unsubscribe URL in email headers if you are sending bulk emails (5,000+ emails/ day). Most email providers expect you to add your own unsubscription page or offer a basic all-or-nothing opt-out option. You can add `{{$hosted_preference_url}}` here to load SuprSend hosted preference page from email header.
+
+![](/images/docs/96222900be2910eeaae1edfb7bd8e532ef2b090d828616ac87409085cb1bd89a-image.png)
+
+#### Inbox: Render Preference Page within Inbox
+
+Companies also give option for users to load the Inbox preferences as a separate page within their Inbox or give a link to redirect users to Preference center in their product.
+
+#### Mobile Push: Preference Page in App settings
+
+For mobile push notifications, users typically manage their preferences through the app settings. We pass the categories set in your workflow as push category as well. So, if you setup preference categories with us, the same will also be reflected in user's app settings automatically, loading similar preference control in user's app settings.
+
+![](/images/docs/0a8782302c5613a1a952b362912789007197bf449b8c5888e9857470840a1865-image.png)
+
+#### SMS & Whatsapp: Reply `STOP`
+
+Users generally unsubscriber from SMS by replying "STOP". In SuprSend, we mark the channel as inactive in the user profile upon receiving this response.
+
+### Controlling what categories to show on UI
+
+In a multi-tenant system, tenants can manage which notifications are visible to their end users. For example, a company admin might want to set notification preferences for their team, ensuring that team members only see categories relevant to them or those they are opted into by the admin. This behavior can be controlled by setting `visible_to_subscriber` to `false` in the default tenant preferences.
+
+The same can be controlled for your tenants by turning off category preference from SuprSend console. For instance, if you operate a SaaS platform where customers access different services or products based on their pricing plans, you can ensure that users only see the categories available to them.
+
+## Preference evaluation
+
+When a workflow is triggered, preference is evaluated for each recipient before each delivery node.
+
+### Evaluating Recipient preferences
+
+If recipient preferences are not set, default preference setting is picked. Once user preference is set in a category, any changes in the default preference of existing categories will not effect recipient preferences.
+
+### Factoring in tenant preferences
+
+If you are triggering notification for a tenant, tenant default preference setting takes precedence over default preference set at category level.
+
+### Resolving preference conflicts
+
+The order of precedence is always user > tenant > org (set in notification category settings). However, if you turn off notifications in a category from the [tenant page](https://app.suprsend.com/en/demo/brands), users will not receive notifications in that category.
+
+### Debugging preference evaluation in workflow runs
+
+User preferences can change over time and when checking a workflow run, you need to know what was user's preferences at that time. You can view this using the step-by-step debugger in [workflow executions](https://app.suprsend.com/en/demo/logs/executions/?last_n_minutes=1440).
+
+![](/images/docs/e0555b827b95d61b16ba0f58fa1faa05b5109709828157df9d774fb123954516-image.png)
+
+You can also track when user updated their preference by filtering on `Subscriber preference update` in [request logs](https://app.suprsend.com/en/demo/logs/api/?last_n_minutes=1440).
+
+## Tenant Preference
+
+In multi-tenant B2B and B2B2C products, you can use [tenant preference](/docs/brand-preference) to allow company admins setting preference for their internal team / departments or your enterprise customers setting preference for their end users.
+
+***
+
+### Frequently asked questions
+
+* **How to setup digest schedule in my preferences?** You can either create multiple sub-categories for different digest schedules, or setup digest schedule in user profile and pass dynamic schedule in workflow digest node. We will soon introduce an option to set the digest schedule directly on your preference page.
+* **I have a use case where a company has multiple departments/roles, and the admin will set preferences for users in these departments.** You can handle this with tenant preferences. Here, every tenant in SuprSend system will represent a organization, and admin will set what categories should be sent to their internal team using [tenant preference API](/reference/update-brand-default-preference).
+* **What happens to existing user preference view if I change default preference setting?** Changing the default preference for a category does not affect users who have already made changes to that category. For categories where users haven't made any changes will update as per new default settings.
+* **I have multiple enterprise customers with various product offerings. Customers should only receive notifications for the products they have enabled, and the same should be visible on their preference page. How can I manage this in SuprSend?** You can disable categories for tenants from tenant page on SuprSend console. Turning off overall preference on a category will automatically remove that category from tenant preference APIs / UI view. If you want to further expand it to tenant's users, you can set `visible to subscriber` as `false` in default tenant preferences to not show that category to tenant's end users.
+
+***
+
+* [Table of Contents](#)
+
+* * [How preferences work?](#how-preferences-work)
+
+  * [Set up preference categories in SuprSend](#set-up-preference-categories-in-suprsend)
+
+    * [Create notification category](#create-notification-category)
+    * [Set default preferences](#set-default-preferences)
+    * [Map category to notifications](#map-category-to-notifications)
+
+  * [Capture user preferences](#capture-user-preferences)
+
+    * [Hosted Preference Page](#hosted-preference-page)
+    * [Embed in your product](#embed-in-your-product)
+    * [Channel specific unsubscription options](#channel-specific-unsubscription-options)
+    * [Controlling what categories to show on UI](#controlling-what-categories-to-show-on-ui)
+
+  * [Preference evaluation](#preference-evaluation)
+
+    * [Evaluating Recipient preferences](#evaluating-recipient-preferences)
+    * [Factoring in tenant preferences](#factoring-in-tenant-preferences)
+    * [Resolving preference conflicts](#resolving-preference-conflicts)
+    * [Debugging preference evaluation in workflow runs](#debugging-preference-evaluation-in-workflow-runs)
+
+  * [Tenant Preference](#tenant-preference)
+    * [Frequently asked questions](#frequently-asked-questions)

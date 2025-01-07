@@ -1,0 +1,472 @@
+---
+title: "Subscriptions"
+description: "Learn how to use subscriptions to notify a list of recipients associated with an object"
+---
+
+[Suggest Edits](/edit/subscriptions)
+
+Subscriptions are an extension to [Objects](/docs/objects) and used to link [recipient/user](/docs/users) with the object. You can use subscriptions to:
+
+* Maintain relationship for a group of users and reuse them in all triggers, without having to compute recipient list in individual workflow triggers.
+* Notify all users subscribed to a topic or event when it occurs, with users able to subscribe and unsubscribe as needed. Eg. Notify all users subscribed to an event when the event starts.
+* SaaS applications managing notifications for end-users where recipient relationships are coming from an system and event triggers or notification calls are coming from an external systems like CRM or SAP, and the trigger doesn't have information of the users who are subscriber to that trigger.
+
+Objects can have one or more subscribers, and triggering a workflow on an object will automatically propagate notifications to all subscribers, without you needing to maintain this subscription in your database.
+
+## Managing Subscriptions
+
+### Add Subscription
+
+You can add subscribers by passing an array of existing users or identifying them inline, which will automatically create user profiles in the background. The subscription is an upsert operation, meaning it adds new subscribers to the object but overwrites existing subscriber properties if passed with updated values.
+
+You can subscribe up to 100 subscribers to an object in one go, with no cap on the total number of subscribers an object can have.
+
+[Create/Update Subscription API ->](/reference/add-object-subscription)
+
+<CodeGroup>
+  ```curl Adding existing users
+  curl --request POST \
+  --url https://hub.suprsend.com/v1/object/:object_type/:object_id/subscription/ \
+  --header 'Authorization: Bearer <API_KEY>' \
+  --header 'accept: application/json' \
+  --header 'content-type: application/json' \
+  --data '
+  {
+      "recipients": ["id1","id2"],
+      "properties": {}
+  }'
+  ```
+
+  ```javascript NodeJs
+  const {Suprsend} = require("@suprsend/node-sdk");
+
+  // Initialize SDK
+  const supr_client = new Suprsend("__workspace_uid__", "__worksapce_secret__")
+
+  res = supr_client.objects.create_subscriptions("_object_type_", "_object_id_", {
+      recipients: ["id1","id2"],
+      properties: {}
+  });
+  res.then((res) => console.log(res)).catch((err) => console.log(err));
+  ```
+
+  ```python python
+  from suprsend import Suprsend
+
+  # Initialize SDK
+  supr_client = Suprsend("<WORKSPACE_KEY>", "<WORKSPACE_SECRET>>")
+
+  subscription_payload = {
+  "recipients": ["id1","id2"],
+      "properties": {}
+  }
+  obj = supr_client.objects.create_subscriptions("_object_type_", "__object_id__", subscription_payload)
+  print(obj)
+  ```
+</CodeGroup>
+
+<CodeGroup>
+  ```curl Identifying subscribers inline
+  curl --request POST \
+  --url https://hub.suprsend.com/v1/object/:object_type/:object_id/subscription/ \
+  --header 'Authorization: Bearer <API_KEY>' \
+  --header 'accept: application/json' \
+  --header 'content-type: application/json' \
+  --data '
+  {
+      "recipients": [
+          {
+              "distinct_id": "id1",
+              "$email": ["[email protected]"],
+              "name": "recipient_name"
+          },
+        	{
+              "object_type": "teams",
+              "id": "devs"
+          }
+      ],
+      "properties": {}
+  }'
+  ```
+
+  ```javascript NodeJs
+  const {Suprsend} = require("@suprsend/node-sdk");
+
+  // Initialize SDK
+  const supr_client = new Suprsend("__workspace_uid__", "__worksapce_secret__")
+
+  res = supr_client.objects.create_subscriptions("_object_type_", "_object_id_", {
+      recipients: [
+          {
+              "distinct_id": "id1",
+              "$email": ["[email protected]"],
+              "name": "recipient_name"
+          },
+          {
+              "object_type": "teams",
+              "id": "devs"
+          }
+      ],
+      properties: {}
+  });
+  res.then((res) => console.log(res)).catch((err) => console.log(err));
+  ```
+
+  ```python python
+  from suprsend import Suprsend
+
+  # Initialize SDK
+  supr_client = Suprsend("<WORKSPACE_KEY>", "<WORKSPACE_SECRET>>")
+
+  subscription_payload = {
+      "recipients": [
+          {
+              "distinct_id": "id1",
+              "$email": ["[email protected]"],
+              "name": "recipient_name"
+          },
+          {
+              "object_type": "teams",
+              "id": "devs"
+          }
+      ],
+      "properties": {}
+  }
+  obj = supr_client.objects.create_subscriptions("_object_type_", "__object_id__", subscription_payload)
+  print(obj)
+  ```
+</CodeGroup>
+
+### Subscription Properties
+
+Subscription properties define the specifics of the relationship between a subscriber and an object. During a workflow execution, these properties can be accessed under the `recipient.subscription` namespace as `recipient.subscription.property_key`. Properties can be assigned when creating a subscription, and since creating a subscription is an upsert operation, any properties passed will overwrite existing values in subsequent calls for the same user-object relationship.
+
+### Adding nested object hierarchies
+
+It's possible to model nested subscription hierarchies by associating child objects as subscribers of a parent object. This allows you to create structures like "matches" having many "players" which have their own "followers"(users).
+
+<CodeGroup>
+  ```curl curl
+  curl --request POST \
+  --url https://hub.suprsend.com/v1/object/:object_type/:object_id/subscription/ \
+  --header 'Authorization: Bearer <API_KEY>' \
+  --header 'accept: application/json' \
+  --header 'content-type: application/json' \
+  --data '
+  {
+      "recipients": [
+        	{
+              "object_type": "players",
+              "id": "player1",
+              "name":"Player 1"
+          }
+      ]
+  }'
+  ```
+
+  ```javascript NodeJs
+  const {Suprsend} = require("@suprsend/node-sdk");
+
+  // Initialize SDK
+  const supr_client = new Suprsend("__workspace_uid__", "__worksapce_secret__")
+
+  res = supr_client.objects.create_subscriptions("_object_type_", "_object_id_", {
+      recipients: [
+          {
+              "object_type": "players",
+              "id": "player1",
+              "name": "Player 1"
+          }
+      ]
+  });
+  res.then((res) => console.log(res)).catch((err) => console.log(err));
+  ```
+
+  ```python python
+  from suprsend import Suprsend
+
+  # Initialize SDK
+  supr_client = Suprsend("<WORKSPACE_KEY>", "<WORKSPACE_SECRET>>")
+
+  subscription_payload = {
+      "recipients": [
+          {
+              "object_type": "players",
+              "id": "player1",
+              "name": "Player 1"
+          }
+      ]
+  }
+  obj = supr_client.objects.create_subscriptions("_object_type_", "__object_id__", subscription_payload)
+  print(obj)
+  ```
+</CodeGroup>
+
+Once you've established a nested hierarchy like the above, it's also possible to notify all child subscribers from a parent object. In the example above, that means we could notify all followers of a player by setting the recipient of the trigger to be match.
+
+<Info>
+  Note: currently we only support subscriptions at a maximum depth of 2, meaning you can model a hierarchy such as parent -> child -> user but no deeper. If you need to support a deeper nesting, please [get in touch](/cdn-cgi/l/email-protection#81f2f4f1f1eef3f5c1f2f4f1f3f2e4efe5afe2eeec).
+</Info>
+
+### Remove Subscription
+
+To remove one or more subscribers from an object, you can pass a list of subscriber distinct\_ids or object\_type and id for child objects. Similar to subscription addition, you can remove upto 100 subscribers in one go.
+
+[Delete Subscription API ->](/reference/delete-object-subscriptions)
+
+<CodeGroup>
+  ```curl remove users
+  curl --request DELETE \
+  --url https://hub.suprsend.com/v1/object/:object_type/:object_id/subscription/ \
+  --header 'Authorization: Bearer <API_KEY>' \
+  --header 'accept: application/json' \
+  --header 'content-type: application/json' \
+  --data '
+  {
+      "recipients": ["id1","id2","id3"]
+  }'
+  ```
+
+  ```javascript NodeJs
+  const {Suprsend} = require("@suprsend/node-sdk");
+
+  // Initialize SDK
+  const supr_client = new Suprsend("__workspace_uid__", "__worksapce_secret__")
+
+  res = supr_client.objects.delete_subscriptions("_object_type_", "_object_id_", {
+      recipients: ["id1","id2","id3"]
+  });
+  res.then((res) => console.log(res)).catch((err) => console.log(err));
+  ```
+
+  ```python python
+  from suprsend import Suprsend
+
+  # Initialize SDK
+  supr_client = Suprsend("<WORKSPACE_KEY>", "<WORKSPACE_SECRET>>")
+
+  subscription_payload = {
+      "recipients": ["id1","id2","id3"]
+  }
+  obj = supr_client.objects.delete_subscriptions("_object_type_", "__object_id__", subscription_payload)
+  print(obj)
+  ```
+</CodeGroup>
+
+<CodeGroup>
+  ```curl remove child objects
+  curl --request DELETE \
+  --url https://hub.suprsend.com/v1/object/:object_type/:object_id/subscription/ \
+  --header 'Authorization: Bearer <API_KEY>' \
+  --header 'accept: application/json' \
+  --header 'content-type: application/json' \
+  --data '
+  {
+    "recipients": [
+      {
+      	"object_type": "players",
+     		"id": "player1"
+    	},
+      {
+        "object_type": "players",
+        "id": "player2"
+      }       
+    ]
+  }'
+  ```
+
+  ```javascript NodeJs
+  const {Suprsend} = require("@suprsend/node-sdk");
+
+  // Initialize SDK
+  const supr_client = new Suprsend("__workspace_uid__", "__worksapce_secret__")
+
+  res = supr_client.objects.delete_subscriptions("_object_type_", "_object_id_", {
+      recipients: [
+          {
+              "object_type": "players",
+              "id": "player1"
+          },
+          {
+              "object_type": "players",
+              "id": "player2"
+          }
+      ]
+  });
+  res.then((res) => console.log(res)).catch((err) => console.log(err));
+  ```
+
+  ```python python
+  from suprsend import Suprsend
+
+  # Initialize SDK
+  supr_client = Suprsend("<WORKSPACE_KEY>", "<WORKSPACE_SECRET>>")
+
+  subscription_payload = {
+      "recipients": [
+          {
+              "object_type": "players",
+              "id": "player1"
+          },
+          {
+              "object_type": "players",
+              "id": "player2"
+          }
+      ]
+  }
+  obj = supr_client.objects.delete_subscriptions("_object_type_", "__object_id__", subscription_payload)
+  print(obj)
+  ```
+</CodeGroup>
+
+### Retrieving object subscriptions
+
+You can fetch a cursor pointer based paginated list of object subscriptions.
+
+[Get object subscription API ->](/reference/list-object-subscriptions)
+
+<CodeGroup>
+  ```json json
+  {
+      "meta": {
+          "count": 20,
+          "limit": 10,
+          "has_prev": false,
+          "before": null,
+          "has_next": true,
+          "after": "01JAWC72RCY8FRE06SABJSQ0ZP"
+      },
+      "results": [
+          {
+              "properties": {...},
+              "user": null,
+              "object": {
+                  "id": "devs",
+                  "object_type": "teams",
+                  "subscriptions_count": 0,
+                  "updated_at": "2024-10-23T10:14:25.082642+00:00"
+              },
+              "created_at": "2024-10-23T10:14:25.083588+00:00",
+              "updated_at": "2024-10-23T10:14:25.083588+00:00"
+          },
+          {
+              "properties": {
+                  "role": "manager"
+              },
+              "user": {
+                  "distinct_id": "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
+                  "updated_at": "2023-12-26T23:35:17.97078+00:00"
+              },
+              "object": null,
+              "created_at": "2024-10-23T10:13:51.900851+00:00",
+              "updated_at": "2024-10-23T10:13:51.900851+00:00"
+          },
+          ...   
+          ]
+  }
+  ```
+</CodeGroup>
+
+## Trigger notification to object subscribers
+
+When you trigger notification on an object. It automatically fans out and send notifications to all its subscribers. If a child object is subscribed to the parent object, the notification will propagate up to two levels down the hierarchy, notifying both the direct subscribers of the parent and the subscribers of the child object. You can just pass object type and id as recipient in workflow trigger to send notification to object subscribers.
+
+<CodeGroup>
+  ```curl curl
+  curl --request POST \
+  --url https://hub.suprsend.com/trigger/ \
+  --header 'Authorization: Bearer <API_KEY>' \
+  --header 'accept: application/json' \
+  --header 'content-type: application/json' \
+  --data '
+  {
+      "workflow": "_workflow_slug_",
+      "recipients": [
+          {
+              "object_type": "teams",
+              "id": "product"
+          }
+      ],
+      "data": {
+          "key": {
+              "k1": "v1",
+              "k2": "v2"
+          }
+      }
+  }'
+  ```
+
+  ```javascript NodeJs
+  const {Suprsend, WorkflowTriggerRequest} = require("@suprsend/node-sdk");
+
+  // Initialize SDK
+  const supr_client = new Suprsend("__workspace_uid__", "__worksapce_secret__")
+
+  wf_trigger_req = new WorkflowTriggerRequest(
+      body = {
+          "workflow": "_workflow_slug_",
+          "recipients": [
+              {
+                  "object_type": "teams",
+                  "id": "product"
+              }
+          ],
+          "data": {
+              "key": {
+                  "k1": "v1",
+                  "k2": "v2"
+              }
+          }
+      }
+  )
+
+  res = supr_client.workflows.trigger(wf_trigger_req);
+  res.then((res) => console.log(res)).catch((err) => console.log(err));
+  ```
+
+  ```python python
+  from suprsend import Workflow, WorkflowTriggerRequest, Suprsend
+
+  supr_client = Suprsend("<WORKSPACE_KEY>", "<WORKSPACE_SECRET>", debug=True)
+
+  w = WorkflowTriggerRequest(
+      body={
+          "workflow": "_workflow_slug_",
+          "recipients": [
+              {
+                  "object_type": "teams",
+                  "id": "product"
+              }
+          ],
+          "data": {
+              "key": {
+                  "k1": "v1",
+                  "k2": "v2"
+              }
+          }
+      }
+  )
+  res = supr_client.workflows.trigger(w)
+  print(res)
+  ```
+</CodeGroup>
+
+<Info>
+  **Deduplication of recipients**
+
+  Recipients are deduplicated when executing a notification fan out, which will ensure your notification workflow is executed only once for each unique recipient.
+</Info>
+
+***
+
+* [Table of Contents](#)
+
+* * [Managing Subscriptions](#managing-subscriptions)
+
+    * [Add Subscription](#add-subscription)
+    * [Subscription Properties](#subscription-properties)
+    * [Adding nested object hierarchies](#adding-nested-object-hierarchies)
+    * [Remove Subscription](#remove-subscription)
+    * [Retrieving object subscriptions](#retrieving-object-subscriptions)
+
+  * [Trigger notification to object subscribers](#trigger-notification-to-object-subscribers)

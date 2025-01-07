@@ -1,0 +1,82 @@
+---
+title: "iOS Push"
+description: "This document guides you to integrate apns push vendor on SuprSend dashboard"
+---
+
+[Suggest Edits](/edit/ios-push-vendor-integration)
+
+This section is a step-by-step guide to integrate APNs as your service provider for sending iOS Push notifications.
+
+## Add APNs Configuration on SuprSend dashboard
+
+On the SuprSend dashboard, follow the below steps:
+
+1. Select Vendors from the left panel
+2. Select 'iOS Push' as the channel from the list
+3. Select 'iOS APNs' from the list of Vendors
+
+![](/images/docs/f8409f2-APNs_vendor_page.png)
+
+On the Settings, enter the following configuration details. You'll get all these informations from [Apple developer account](https://developer.apple.com/account/)
+
+| Form Field       | Description                                                                                                                                                                                                                         |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nickname         | You can give any name which may help you to identify this account easily                                                                                                                                                            |
+| Mode/Environment | Use "Production" if you are adding it in your final app or testing app. Use "Development" if you are testing in your local environment                                                                                              |
+| Upload p8 file   | You'll get .p8 key file from your apple developer account. Refer [section below](/docs/ios-push-vendor-integration#generating-p8-key-file-and-auth-key-id) to see how to generate .p8 file                                          |
+| Auth Key ID      | Auth key ID is a part of the filename of your .p8 file. Refer [section below](/docs/ios-push-vendor-integration#generating-p8-key-file-and-auth-key-id) to see how to get Auth key ID                                               |
+| Team ID          | You'll get Team ID from your apple developer account. Refer [section below ](/docs/ios-push-vendor-integration#how-to-get-team-id)to see how to get Team ID                                                                         |
+| Bundle ID        | Bundle ID is a unique identifier of your app. SuprSend will require this key to identify your app for sending push notification.[Refer section](/docs/ios-push-vendor-integration#how-to-get-bundle-id) to see how to get Bundle ID |
+
+### Generating .p8 key file and Auth key ID
+
+1. To generate a .p8 key file, login to your [Apple developer account](https://developer.apple.com/account/) page, then select **Certificates, IDs & Profiles**.
+
+![](/images/docs/db8afde-Frame_57_1.png)
+
+2. Under Certificates, IDs & Profiles section, select **"keys"**
+
+![](/images/docs/aa8b860-image.png)
+
+3. Click on "+" button next to keys to add a new key
+
+![](/images/docs/00113e9-image.png)
+
+4. On the new key page, type in your key name and check the Apple Push Notification service (APNs) box, then click “Continue” and click “Register".
+
+![](/images/docs/c1c2f64-image.png)
+
+5. Once the key is generated, **download the p8 key** file by clicking on "Download"
+
+![](/images/docs/65f5a48-Frame_58.png)
+
+The Auth Key filename will look like this: `**AuthKeyABCD1234.p8**`, the `**ABCD1234**` is the Key ID for this key, add this key ID in Auth key ID field on Vendor configuration page
+
+### How to get Team ID
+
+You can get team ID on your [Apple developer account membership page](https://developer.apple.com/account/#/membership)
+
+![](/images/docs/d2d176d-Frame_59.png)
+
+### How to get Bundle ID
+
+You can get this ID from your app project
+
+![](/images/docs/e5f785b-Frame_60.png)
+
+***
+
+What’s Next
+
+After you add the vendor configurations, you'll need to add push notification capability to your iOS application to start receiving push notifications in your app. The integration steps for supported SDKs are listed below
+
+* [Flutter](/docs/flutter-apns-push)
+* [React Native](/docs/react-native-apns-push)
+
+* [Table of Contents](#)
+
+* * [Add APNs Configuration on SuprSend dashboard](#add-apns-configuration-on-suprsend-dashboard)
+
+    * [Generating .p8 key file and Auth key ID](#generating-p8-key-file-and-auth-key-id)
+    * [How to get Team ID](#how-to-get-team-id)
+    * [How to get Bundle ID](#how-to-get-bundle-id)

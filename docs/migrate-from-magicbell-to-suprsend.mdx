@@ -1,0 +1,122 @@
+---
+title: "Migrate from Magicbell to SuprSend"
+description: "Migration guide to move your existing Magicbell notifications to SuprSend."
+---
+
+[Suggest Edits](/edit/migrate-from-magicbell-to-suprsend)
+
+SuprSend's API first approach simplifies migration of users, templates, workflows, preferences and Inbox implementation from Magicbell to SuprSend. This guide provides a structured migration plan with steps to facilitate a smooth transition.
+
+## Mapping Magicbell's Concepts with SuprSend Concepts
+
+### 1. Project and Workspace Setup
+
+MagicBell's Project maps to SuprSend's Workspace. By default, when you sign up on SuprSend, you will have Staging & Production workspace setup, which can be linked to your respective projects in Magicbell. If you need more workspaces, like `Pre-Production`, reach out to our support team at [\[email protected\]](/cdn-cgi/l/email-protection#21525451514e5355615254515352444f450f424e4c).
+
+### 2. Configuring Channel Providers as Vendors
+
+In MagicBell, downstream providers are set up as Channel Providers. In SuprSend, these are referred as Vendors and can be configured via vendor tab from right navigation panel on SuprSend dashboard. Check full list of supported Channel types and providers [here](/docs/vendors).
+
+### 3. Migrate Users to Subscribers
+
+MagicBell's Users translate to SuprSend's Subscribers. Magicbell supports user identification via email or external ID, while SuprSend uses `distinct_id` as the only identifier as there can be multiple emails attached to a user or it can be changed with time. If you are using email identifier in Magicbell, pass the same in `distinct_id` and also set email channel separately using `$email` key. Use SuprSend's API or SDK to [create or update subscriber profiles](/docs/users#creating-user-profile-on-suprsend) with the information from your MagicBell user base.
+
+You can also identify recipients inline in [workflow trigger](/docs/trigger-workflow#identifying-recipients-inline) without having to migrate all users at once.
+
+### 4. Migrating Notification Inbox
+
+Inbox Implementation in SuprSend is similar to Magicbell. Though, we take security quite seriously and HMAC authentication is a must for subscriber authentication in SuprSend. You can quickly implement it using customizable [drop-in react components](/docs/inbox-react) or have your custom implementation with [headless library](/docs/headless-inbox).
+
+### 5. Notification templates
+
+[Templates](/docs/templates) in Magicbell are designed at category level. In SuprSend, Templates are independent resources and defined in workflow step. Categories are assigned in context to workflows (to apply preference settings). This way, you can start with a basic setup and keep refining your preference categories and workflow logic over time, without having to make any changes in your set resources.
+
+You can create templates on the SuprSend dashboard using an intuitive WYSIWYG editor, allowing you to design even complex notification use cases with ease.
+
+### 6. Setup Broadcasts as Workflows
+
+Broadcasts in Magicbell translate to [Workflows](/docs/design-workflow) in SuprSend. While Magicbell supports only single-step triggers, you can design multi-step workflows in SuprSend with advanced options —like delays, batching, conditional branches, throttling and timezone awareness. You can design Workflows on SuprSend dashboard and just keep the trigger in your code. This way, workflow logic is decoupled from code and can be easily modified on the fly.
+
+SuprSend also has a [Broadcast](/docs/broadcast) capability, but it’s specifically used for one-time campaigns sent to a targeted list of users.
+
+### 7. Smart Delivery
+
+In SuprSend, [Smart Channel Routing](/docs/smart-delivery) (akin to MagicBell’s Smart Delivery) is embedded within the workflow rather than defining it a category level. This gives you flexibility to customize trigger sequence at notification level rather than tying it to the category.
+
+### 8. Preference Categories
+
+In Magicbell, users can opt-out from category and channel level. SuprSend supports more granular [preference](/docs/preferences) control down to channel, category, channel within a category and notification frequency (immediately, daily, weekly). Further, in magicbell, `{{unsubscribe_url}}` in email notifications is powered by topics and unsubscription happens at topic level. To unsubscribe from multiple topics, user will have to go to the email linked to that topic and unsubscribe from it. In SuprSend, the same categories shown in preference centre, are visible on unsubscription page as well, giving users granular unsubscription control. Also, you don't have to define topics and categories separately to power in-app preference page vs hosted unsubscription page.
+
+Magicbell organizes most resources at the category level, whereas in SuprSend, categories are linked to workflows, enabling flexible configuration of resources within workflows rather than limiting configurations to categories.
+
+### 9. Topics and Subscriptions
+
+Topics and Subscriptions are managed with [lists](/docs/lists) in SuprSend in terms of sending notification to a group of users by just defining the topic. Other topic functionalities like threading, batching can be achieved within workflow. Topic unsubscription can be handled by preference categories and available to users via [hosted preference page](/docs/preferences#hosted-preference-page). Notification can be sent to lists via [broadcast](/docs/broadcast). List can be updated programatically via API, synced from third party like Mixpanel, via csv upload, or in an automated manner using database connector. Check all list update methods [here](/docs/list-sync-via-database#setting-up-list-update).
+
+### 10. Additional SuprSend Concepts (not available in Magicbell)
+
+* **Tenants**: If your application supports multi-tenancy, you can use tenants in SuprSend to trigger [per-tenant notifications](/docs/tenant-workflows), set [per-tenant preferences](/docs/brand-preference), render per-tenant Inbox feed and route notifications via [tenant vendors](/docs/tenant-vendor).
+* **Objects**: Use objects to trigger notification to non-user entities (like departments, teams, and projects) and their subscribers. Objects are really powerful at handling hierarchical subscriptions and to send notifications to group channels like group email, slack channel and group Inbox feed.
+* **Tracking and Monitoring**: SuprSend provides extensive logging capabilities where you can dig deep into each workflow execution and track analytics to gauge overall notification performance. Along with this, you also get audit logs to keep track of user activities on SuprSend dashboard.
+* **Third party integrations for data-in and out**: In addition to first-party integrations with notification delivery platforms, we also offer connections with customer data platforms (CDPs) ([Segment](/docs/segment), [Mixpanel](/docs/mixpanel)) and [S3 connector](/docs/amazon_s3) to sync notification data back into your warehouse.
+* **Vendor Fallback**: Configure [vendor and channel fallbacks](/docs/vendor-fallback) in SuprSend for reliable delivery and broader audience reach.
+
+## Migrating data from Magicbell to SuprSend
+
+Now that you have a clear understanding of how MagicBell concepts translate to SuprSend, you can start migrating your data. With SuprSend's [APIs and bulk endpoints](/reference), you can easily migrate your notifications into SuprSend.
+
+We recommend moving your data in the following order for a smooth transition:
+
+#### 1. Create your assets and resources in Staging workspace
+
+Start your setup in the staging workspace for a thorough testing of notifications before making them live for your production users.
+
+#### 2. Configure Vendors
+
+Configure vendors for the channels of your choice on [SuprSend dashboard -> vendor page](https://app.suprsend.com/en/staging/vendors). You can also start with a single channel (e.g., email) and add other channels later. Adding channels doesn't require any changes in your codebase. All you have to do is update template of that channel and use multi-channel delivery node in your workflows to ensure that it picks the newly set channel for delivery.
+
+#### 3. Map Preference Categories
+
+If you are using magicbell's preference centre, map the same categories in [SuprSend dashboard -> Developers -> Preference categories](https://app.suprsend.com/en/staging/developers/preference-categories) section. Once configured, publish these categories for use in workflows.
+
+#### 4. Create Workflows and templates
+
+Design workflows that mirror your MagicBell broadcast logic and create template for each of these triggers on SuprSend dashboard. If you have a large number of templates, our [support](/cdn-cgi/l/email-protection#2d5e585d5d425f596d5e585d5f5e484349034e4240) team is available to assist you with template migration.
+
+#### 5. Sync Users
+
+You can migrate your users all at once using [user APIs or SDK](/docs/users#creating-user-profile-on-suprsend) or just pass [recipient information in workflow trigger](/docs/trigger-workflow#identifying-recipients-inline) to gradually sync users in SuprSend with each notification trigger. Mapping Magicbell User profile in SuprSend involves:
+
+* **Mapping user identifiers**: If email is used as an identifier in MagicBell, pass it as `distinct_id` in SuprSend and also set email channel separately using `$email` key. External id can directly be set as `distinct_id` in SuprSend.
+
+* **Mapping User channels and properties**:
+
+  * Channels are defined with `$<channel>` keys (`$email, $sms, $slack...`) in SuprSend and can support multiple channels in an array.
+  * In Magicbell, fixed properties are passed at parent level whereas custom properties are passed in `custom_attributes` key . In SuprSend, you can pass both fixed and custom properties at parent level. with fixed properties starting with `$`.
+
+#### 6. Trigger Notification
+
+Till this point, all the resources have been migrated to SuprSend. You can now setup [workflow triggers](/docs/trigger-workflow) in your backend code to invoke workflows created on SuprSend dashboard. If you are using Lists and broadcast, use [broadcast API](/docs/broadcast#triggering-broadcast) to trigger broadcast.
+
+#### 7. Test & Deploy
+
+Thoroughly test all notification use cases in staging workspace. Once tested, you can clone the resources to production workspace to make it live for your end users and gradually shift your notification traffic to ensure a seamless switchover from MagicBell to SuprSend.
+
+***
+
+* [Table of Contents](#)
+
+* * [Mapping Magicbell's Concepts with SuprSend Concepts](#mapping-magicbells-concepts-with-suprsend-concepts)
+
+    * [1. Project and Workspace Setup](#1-project-and-workspace-setup)
+    * [2. Configuring Channel Providers as Vendors](#2-configuring-channel-providers-as-vendors)
+    * [3. Migrate Users to Subscribers](#3-migrate-users-to-subscribers)
+    * [4. Migrating Notification Inbox](#4-migrating-notification-inbox)
+    * [5. Notification templates](#5-notification-templates)
+    * [6. Setup Broadcasts as Workflows](#6-setup-broadcasts-as-workflows)
+    * [7. Smart Delivery](#7-smart-delivery)
+    * [8. Preference Categories](#8-preference-categories)
+    * [9. Topics and Subscriptions](#9-topics-and-subscriptions)
+    * [10. Additional SuprSend Concepts (not available in Magicbell)](#10-additional-suprsend-concepts-not-available-in-magicbell)
+
+  * [Migrating data from Magicbell to SuprSend](#migrating-data-from-magicbell-to-suprsend)
