@@ -1,14 +1,57 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "What is SuprSend?",
-  "logo": "/images/384c7d7-small-logo_1.png",
+  "name": "SuprSend, Notification infrastructure for product teams",
+  "logo": "/images/suprsend-logo.svg",
+  "layout": "solidSidenav",
+  "sidebar": {
+    "items": "card"
+  },
+  "codeBlock": {
+    "mode": "auto"
+  },
   "colors": {
     "primary": "#2e70e8",
     "light": "#2e70e8",
     "dark": "#2e70e8"
   },
-  "theme": "prism",
-  "favicon": "/favicon.svg",
+  "theme": "quill",
+  "favicon": "favicon.svg",
+  "topbarLinks": [
+    {
+      "name": "Contact Us",
+      "url": "mailto:support@suprsend.com"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get Started",
+    "url": "https://app.suprsend.com"
+  },
+  "anchors": [
+    {
+      "name": "Community",
+      "icon": "slack",
+      "color": "#f59f0b",
+      "url": "https://join.slack.com/t/suprsendcommunity/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw"
+    },
+    {
+      "name": "Trust Center",
+      "icon": "shield-halved",
+      "color": "#2564eb",
+      "url": "https://trust.suprsend.com"
+    },
+    {
+      "name": "Platform Status",
+      "icon": "wifi",
+      "color": "#2564eb",
+      "url": "https://status.suprsend.com"
+    },
+    {
+      "name": "Postman Collection",
+      "icon": "code",
+      "color": "#2564eb",
+      "url": "https://www.postman.com/suprsend/suprsend/collection/16bdmwa/suprsend-apis"
+    }
+  ],
   "navigation": [
     {
       "group": "GETTING STARTED",
@@ -436,5 +479,11 @@
       "name": "API Reference",
       "url": "/reference"
     }
-  ]
+  ],
+  "footerSocials": {
+    "x": "https://x.com/suprsend",
+    "github": "https://github.com/suprsend",
+    "linkedin": "https://linkedin.com/company/suprsend",
+    "youtube": "https://youtube.com/@suprsend"
+  }
 }
