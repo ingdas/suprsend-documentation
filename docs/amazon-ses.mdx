@@ -14,21 +14,21 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
 
     * Create an IAM user (with Programmatic access).
 
-    * Attach Policy 
+    * Attach Policy
 
       `AmazonSESFullAccess`
 
-       to this user.
+      to this user.
 
-    * Copy and save the 
+    * Copy and save the
 
       `Access-key-ID`
 
-       and 
+      and
 
       `Secret-Access-Key`
 
-       securely. You'll need to add this information on SuprSend vendor integration page
+      securely. You'll need to add this information on SuprSend vendor integration page
 
     An AWS SES resource resides in a particular region. Make a note of which aws-region you are going to use for sending emails. In this guide, we'll assume aws-region :`ap-south-1` for all illustrative purposes.
   </Step>
@@ -42,31 +42,29 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
 
     In SES console, go to `Configuration sets`
 
-    1. Click 
+    1. Click
 
        `create set`
 
-        button to create a new configuration-set
+       button to create a new configuration-set
 
-    2. Give it a name (e.g. 
+    2. Give it a name (e.g.
 
        `ses_suprsend_configset`
 
        )
 
-    3. Select your Sending IP-pool (you can leave 
+    3. Select your Sending IP-pool (you can leave
 
        `default`
 
-        if you don't have a dedicated-IP-pool)
+       if you don't have a dedicated-IP-pool).
 
-    4. Click 
+    4. Click
 
-       `Create set`
+       `Create Set`
 
-        button.
-
-
+       button.
   </Step>
 
   <Step title="Manange Event destinations" stepNumber="4">
@@ -80,126 +78,101 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
 
 
 
-    Steps to follow for setting up event destination and enable event tracking:
+    <Accordion title="Steps to follow for setting up Event Destination and enable Event Tracking:" defaultOpen={false}>
+      1. Go to
+
+         `Event Destinations`
+
+         tab and click
+
+         `Add destination`
+
+         In "Select event types" step, click
+
+         `Select all`
+
+         button to received all the events to destination.
+
+      2. Click 
+
+         `Next`
+
+         .
+
+      3. In "
+
+         `Specify destination`
+
+         " step.
+
+         1. Select Destination Type:
+
+            `Amazon SNS`
+
+            .
+
+         2. Enter a destination Name (e.g
+
+            `ses_suprsend_configset_destination`
+
+            )
+
+         3. Make sure
+
+            `Event publishing`
+
+            is marked
+
+            `Enabled`
+
+            .
+
+         4. Select an SNS topic from the dropdown (or create a new topic) for events destination.
+
+         5. To create a topic, click
+
+            ` Create SNS topic`
+
+            . In the popup, put "Topic Name" and "Display Name"
+
+         6. Click Create.
+
+         7. Now from the dropdown, select the topic you just created.
+
+      4. Click Next.
+
+      5. In the "Review" step, verify the info.
+
+      6. Click "Add destination".
+    </Accordion>
 
 
-
-    <Steps>
-      <Step title="Step 1">
-
-      </Step>
-
-      <Step title="Step 2">
-
-      </Step>
-    </Steps>
-
-    1. Go to 
-
-       `Event Destinations`
-
-        tab and click 
-
-       `Add destination`
-
-       In "Select event types" step, click 
-
-       `Select all`
-
-        button to received all the events to destination.
-
-    2. Click Next
-
-    3. In "Specify destination" step.
-
-       1. Select Destination Type: 
-
-          `Amazon SNS`
-
-          .
-
-       2. Enter a destination Name (e.g 
-
-          `ses_suprsend_configset_destination`
-
-          )
-
-       3. Make sure 
-
-          `Event publishing`
-
-           is marked 
-
-          `Enabled`
-
-          .
-
-       4. Select an SNS topic from the dropdown (or create a new topic) for events destination.
-
-       5. To create a topic, click 
-
-          ` Create SNS topic`
-
-          . In the popup, put "
-
-          `Topic Name`
-
-          " and "
-
-          `Display Name`
-
-          "
-
-       6. Click 
-
-          `Create`
-
-          .
-
-       7. Now from the dropdown, select the topic you just created.
-
-    4. Click 
-
-       `Next`
-
-       .
-
-    5. In the "
-
-       `Review`
-
-       " step, verify the info.
-
-    6. Click "
-
-       `Add destination`
-
-       ".
 
     Now that you've created a configuration-set to send emails and have specified to receive its events to an SNS-topic, next step is to give SuprSend permission to subscribe to this SNS-topic.
 
-    AWS provides functionality where a different AWS account (in this case SuprSend) can subscribe to an SNS-topic in your account. For more details, checkout [https://docs.aws.amazon.com/sns/latest/dg/sns-send-message-to-sqs-cross-account.html](https://docs.aws.amazon.com/sns/latest/dg/sns-send-message-to-sqs-cross-account.html)
+    AWS provides functionality where a different AWS account (in this case SuprSend) can subscribe to an SNS-topic in your account. For more details, [checkout here](https://docs.aws.amazon.com/sns/latest/dg/sns-send-message-to-sqs-cross-account.html).
+
+    &#x20;
   </Step>
 
   <Step title="Give SuprSend permission to Subscribe to SNS topic." stepNumber="5">
     Go to AWS SNS Console and open Topics list. Click on the topic that you created in the earlier step.
 
-    1. Click 
+    1. Click
 
        `Edit`
 
        .
 
-    2. On the edit page, expand the 
+    2. On the edit page, expand the
 
        `Access Policy`
 
-        section. The policy looks something like below. You'll notice that the current policy gives 
+       section. The policy looks something like below. You'll notice that the current policy gives
 
        `sns:Publish`
 
-        permission to your SES account.
-
+       permission to your SES account.
 
     <CodeGroup>
       ```javascript helloWorld.js
@@ -230,16 +203,15 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
 
     1.
 
-
-    2. Next you need to add a policy to give 
+    2. Next you need to add a policy to give
 
        `sns:Subscribe`
 
-        permission to SuprSend (Account: 924219879248). Add below json inside the 
+       permission to SuprSend (Account: 924219879248). Add below json inside the
 
        `Statement`
 
-        list: (replace the "
+       list: (replace the "
 
        `Resource`
 
@@ -247,7 +219,7 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
 
     3. So in effect, the whole policy would look like:
 
-    4. Click 
+    4. Click
 
        `Save`
 
@@ -284,15 +256,15 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
 	}
 ```
 
-1. Next you need to add a policy to give 
+1. Next you need to add a policy to give
 
    `sns:Subscribe`
 
-    permission to SuprSend (Account: 924219879248). Add below json inside the 
+   permission to SuprSend (Account: 924219879248). Add below json inside the
 
    `Statement`
 
-    list: (replace the "Resource" value with your "Resource" value)
+   list: (replace the "Resource" value with your "Resource" value)
 
 ```
 {
