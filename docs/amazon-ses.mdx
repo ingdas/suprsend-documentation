@@ -70,13 +70,9 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
   <Step title="Manange Event destinations" stepNumber="4">
     After creating configuration-set, you'll see a tab "Event Destinations". Email-sending events (send, delivery, open, click, bounce, complaint etc.) will end up in the events destination. Reference documentations:
 
-
-
     [**Creating Amazon SES event destinations**](https://docs.aws.amazon.com/ses/latest/dg/event-destinations-manage.html)
 
     [Setup SNS event destination for event Publishing](https://docs.aws.amazon.com/ses/latest/dg/event-publishing-add-event-destination-sns.html)
-
-
 
     <Accordion title="Steps to follow for setting up Event Destination and enable Event Tracking:" defaultOpen={false}>
       1. Go to
@@ -149,8 +145,6 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
     Now that you've created a configuration-set to send emails and have specified to receive its events to an SNS-topic, next step is to give SuprSend permission to subscribe to this SNS-topic.
 
     AWS provides functionality where a different AWS account (in this case SuprSend) can subscribe to an SNS-topic in your account. For more details, [checkout here](https://docs.aws.amazon.com/sns/latest/dg/sns-send-message-to-sqs-cross-account.html).
-
-
   </Step>
 
   <Step title="Give SuprSend permission to Subscribe to SNS topic." stepNumber="5">
@@ -286,10 +280,10 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
     On the Vendor Settings page, enter the details in the vendor form:
 
     ![](/images/docs/82ef816-Screenshot_2022-08-25_at_6.28.31_PM.png)
-
-
   </Step>
 </Steps>
+
+Here's a description on what each of these form fields describe:
 
 | Form Field             | Description                                                                                                                                                                                                                                                                                                                   |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -311,29 +305,3 @@ One of the platform advantage of using SuprSend as a central communication syste
 Once you've given "sns:Subscribe" Action permission (to SuprSend AWS Account) on your SNS-topic, suprsend will attempt to create a subscription on that topic. Once subscription succeeds, you should see successfully "Subscribed" to topic when you visit the Vendor settings page. Email Tracking should start working
 
 ***
-
-What’s Next
-
-Next step is to design an email template. If you have already designed an email template, you can move onto creating a workflow
-
-* [Email Template](/docs/email)
-
-* [Triggering Workflows](/docs/workflows)
-
-* [Table of Contents](#)
-
-* * [Amazon SES integration on SuprSend account](#amazon-ses-integration-on-suprsend-account)
-
-    * [Step 1. Create AWS IAM user](#step-1-create-aws-iam-user)
-
-    * [Step 2. Create SES Verified Identity](#step-2-create-ses-verified-identity)
-
-    * [Step 3. Create Configuration Set](#step-3-create-configuration-set)
-
-    * [Step 4. Manange Event destinations](#step-4-manange-event-destinations)
-
-    * [Step 5. Give SuprSend permission to Subscribe to SNS topic.](#step-5-give-suprsend-permission-to-subscribe-to-sns-topic)
-
-    * [Step 6. Fill Vendor settings page on Suprsend](#step-6-fill-vendor-settings-page-on-suprsend)
-
-  * [Setting Amazon SES event tracking](#setting-amazon-ses-event-tracking)
