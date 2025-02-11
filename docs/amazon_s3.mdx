@@ -19,45 +19,41 @@ Note that this integration only publishes parquet files to your storage bucket. 
   <Step title="Create S3 bucket" stepNumber="1">
     This will be the location of data export. Skip this step If you want to sync to an existing bucket or you can create a new bucket by following below steps:
 
-    1. Sign into the 
+    1. Sign into the
 
-       [Amazon AWS S3 Management Console](https://eu-west-2.signin.aws.amazon.com/oauth?response_type=code&client_id=arn%3Aaws%3Aiam%3A%3A015428540659%3Auser%2Fs3&redirect_uri=https%3A%2F%2Fs3.console.aws.amazon.com%2Fs3%2F%3Fstate%3DhashArgs%2523%26isauthcode%3Dtrue&forceMobileLayout=0&forceMobileApp=0&code_challenge=e9KtrxOOGcXg2wHjDELaAHe3tE2kBKR2yklpkrrms-g&code_challenge_method=SHA-256)
+       [Amazon AWS S3 Management Console](https://eu-west-2.signin.aws.amazon.com/oauth?response_type=code\&client_id=arn%3Aaws%3Aiam%3A%3A015428540659%3Auser%2Fs3\&redirect_uri=https%3A%2F%2Fs3.console.aws.amazon.com%2Fs3%2F%3Fstate%3DhashArgs%2523%26isauthcode%3Dtrue\&forceMobileLayout=0\&forceMobileApp=0\&code_challenge=e9KtrxOOGcXg2wHjDELaAHe3tE2kBKR2yklpkrrms-g\&code_challenge_method=SHA-256)
 
-        and Click on Create Bucket button.
-
+       and Click on Create Bucket button.
 
        ![](/images/docs/c37cc40-image.png)
 
-    2. This will open a form. Enter a relevant bucket name, something like: 
+    2. This will open a form. Enter a relevant bucket name, something like:
 
        **`suprsend-notification`.**
 
-    3. Select the region and Set Object Ownership to 
+    3. Select the region and Set Object Ownership to
 
        **ACLs disabled. (recommended).**
 
-
-
-
        ![](/images/docs/9e66556-image.png)
 
-    4. Next, Select 
+    4. Next, Select
 
        **`Block all public access`**
 
-        and 
+       and
 
        **`disable`**
 
-        bucket versioning.
+       bucket versioning.
 
     5. Do not add any Tags.
 
-    6. Leave Default encryption at defaults: 
+    6. Leave Default encryption at defaults:
 
        `Encryption key type = Server-side encryption`
 
-        with Amazon S3 managed keys (SSE-S3) and 
+       with Amazon S3 managed keys (SSE-S3) and
 
        `Bucket Key = Enable.`
 
@@ -65,8 +61,7 @@ Note that this integration only publishes parquet files to your storage bucket. 
 
        **`Create bucket`**
 
-        button.
-
+       button.
 
        ![](/images/docs/4a07acb-Screenshot_2023-08-09_at_9.29.19_PM.png)
   </Step>
@@ -74,11 +69,7 @@ Note that this integration only publishes parquet files to your storage bucket. 
   <Step title="Set permission policy for the bucket" stepNumber="2">
     We'll need permission to `PutObject` for data ingestion in your bucket. To set permission policy, On your [Amazon AWS IAM Management Console](https://console.aws.amazon.com/iam/) , select Policies Page from the side bar. Click on **`Create Policy`** and on the JSON tab, copy paste the below code.
 
-
-
     Replace **`suprsend-notification`** with the bucket name you've created.
-
-
 
     <CodeGroup>
       ```json Amazon AWS IAM Management Console
@@ -100,26 +91,22 @@ Note that this integration only publishes parquet files to your storage bucket. 
       ```
     </CodeGroup>
 
-
-
     Create a relevant name to the policy, something like - **`SingleBucketWriteAccess`**.
   </Step>
 
   <Step title="Create a user with access to the bucket" stepNumber="3">
     This user will be needed to get the `access key id` and `secret`. To create user permission policy, On your [Amazon AWS IAM Management Console](https://console.aws.amazon.com/iam/) , select `Users Page`from the side bar. If you want to use an existing user, just assign the [permission created in step 2](/docs/amazon_s3#step-2-set-permission-policy-for-the-bucket) to your existing user.
 
-
-
     <Accordion title="You can create a new user by these steps" defaultOpen={false}>
-      1. On the user page, click on 
+      1. On the user page, click on
 
          **"Add users"**
 
-      2. Add relevant user name, you can use this name for example: 
+      2. Add relevant user name, you can use this name for example:
 
          `s3-bucket-suprsend`
 
-      3. Leave provide user access to the AWS Management Console unchecked and click on 
+      3. Leave provide user access to the AWS Management Console unchecked and click on
 
          **"Next: Permissions"**
 
@@ -127,19 +114,19 @@ Note that this integration only publishes parquet files to your storage bucket. 
 
       5. Search for the policy created in step 2 and select it.
 
-      6. Click 
+      6. Click
 
          **"Next: Tags"**
 
-          -> 
+         ->
 
          **"Next:Review"**
 
-          -> 
+         ->
 
          **"Create User"**
 
-          buttons
+         buttons
 
       7. Continue to step 4 before closing the browser.
     </Accordion>
@@ -150,34 +137,33 @@ Note that this integration only publishes parquet files to your storage bucket. 
 
     1. On users page, choose the IAM user name created in step 3
 
-    2. Open the Security credentials tab, and create 
+    2. Open the Security credentials tab, and create
 
        **access key**
 
        .
 
-
        ![](/images/docs/795e47f-image.png)
 
-    3. Choose 
+    3. Choose
 
        **`third party service`**
 
-        and click 
+       and click
 
        `next`
 
        .
 
-    4. Next, you can add description for your reference or leave it blank. Click on the 
+    4. Next, you can add description for your reference or leave it blank. Click on the
 
        **`create access key`**
 
     5. **Copy the access key and secret**
 
-        and store it somewhere safe. You'll not be able to retrieve this information later once you leave this modal. Add this information in SuprSend S3 connector form.
+       and store it somewhere safe. You'll not be able to retrieve this information later once you leave this modal. Add this information in SuprSend S3 connector form.
 
-    6. Once copied, click on 
+    6. Once copied, click on
 
        `Done`
   </Step>
@@ -187,46 +173,24 @@ Note that this integration only publishes parquet files to your storage bucket. 
 
     ![](/images/docs/3fdddd0-image.png)
 
+    Here's a description on what each of these form fields describe:
 
+    | Form Field            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+    | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | Connector name        | This name is identify the connector and is for your reference                                                                                                                                                                                                                                                                                                                                                                                         |
+    | AWS Key               | This is the access key ID linked to the IAM user. [Refer step 4](/docs/amazon_s3#step-4-get-access-key-id-and-secret-for-the-above-user) for steps to create access key                                                                                                                                                                                                                                                                               |
+    | AWS Secret            | This is the secret access linked to the IAM user. [Refer step 4](/docs/amazon_s3#step-4-get-access-key-id-and-secret-for-the-above-user) for steps to get secret access                                                                                                                                                                                                                                                                               |
+    | Export bucket         | Name of the S3 bucket where the parquet files should be exported. [Refer step 1](/docs/amazon_s3#step-1-create-s3-bucket) to create an export bucket                                                                                                                                                                                                                                                                                                  |
+    | Data points to export | Here you can choose what all information should be exported to your S3 bucket: **Notifications Status** - To sync details to the each notification - users, brands, vendor, channel, DLR status of the notification (delivery, seen, click etc.), and failure reasons for failed notifications **Template** - To sync all templates created in SuprSend in your S3 bucket. Template sync will happen every time you are making change in the template |
+  </Step>
+
+  <Step title="Enable Sync" stepNumber="6">
+    Your S3 setup is now complete. Click on **`Enable sync`** to start data export. You can pause and resume your sync anytime you want. To Pause sync for certain data points, deselect the ones not needed from "Data Points to export" and save the changes.
+
+
+
+    You can also disable your entire sync by disabling the `Enable sync` button, in which case we’ll stop the export. When you enable your sync again, we send all of your historical data as if you’re starting a new integration.
   </Step>
 </Steps>
 
-
-
-###
-
-
-
-| Form Field            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Connector name        | This name is identify the connector and is for your reference                                                                                                                                                                                                                                                                                                                                                                                         |
-| AWS Key               | This is the access key ID linked to the IAM user. [Refer step 4](/docs/amazon_s3#step-4-get-access-key-id-and-secret-for-the-above-user) for steps to create access key                                                                                                                                                                                                                                                                               |
-| AWS Secret            | This is the secret access linked to the IAM user. [Refer step 4](/docs/amazon_s3#step-4-get-access-key-id-and-secret-for-the-above-user) for steps to get secret access                                                                                                                                                                                                                                                                               |
-| Export bucket         | Name of the S3 bucket where the parquet files should be exported. [Refer step 1](/docs/amazon_s3#step-1-create-s3-bucket) to create an export bucket                                                                                                                                                                                                                                                                                                  |
-| Data points to export | Here you can choose what all information should be exported to your S3 bucket: **Notifications Status** - To sync details to the each notification - users, brands, vendor, channel, DLR status of the notification (delivery, seen, click etc.), and failure reasons for failed notifications **Template** - To sync all templates created in SuprSend in your S3 bucket. Template sync will happen every time you are making change in the template |
-
-### Step 6: Enable Sync
-
-Your S3 setup is now complete. **"Enable sync"** to start data export. You can pause and resume your sync anytime you want. To Pause sync for certain data points, deselect the ones not needed from "Data Points to export" and save the changes.
-
-You can also disable your entire sync by disabling the "Enable sync" button, in which case we’ll stop the export. When you enable your sync again, we send all of your historical data as if you’re starting a new integration.
-
 ***
-
-* [Table of Contents](#)
-
-* * [How it works?](#how-it-works)
-
-  * [Setting up Amazon S3 connector](#setting-up-amazon-s3-connector)
-
-    * [Step 1. Create S3 bucket](#step-1-create-s3-bucket)
-
-    * [Step 2. Set permission policy for the bucket](#step-2-set-permission-policy-for-the-bucket)
-
-    * [Step 3. Create a user with access to the bucket](#step-3-create-a-user-with-access-to-the-bucket)
-
-    * [Step 4. Get access key ID and secret for the above user](#step-4-get-access-key-id-and-secret-for-the-above-user)
-
-    * [Step 5. Add your S3 connector details on SuprSend](#step-5-add-your-s3-connector-details-on-suprsend)
-
-    * [Step 6: Enable Sync](#step-6-enable-sync)
