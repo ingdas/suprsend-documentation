@@ -3,9 +3,10 @@ title: "AWS SNS"
 description: "https://aws.amazon.com/sns/"
 ---
 
-[Suggest Edits](/edit/aws-sns-sms)
-
-This section is a step-by-step guide to setting up AWS SNS as your SMS service provider.
+---
+title: "AWS SNS"
+description: "https://aws.amazon.com/sns/"
+---This section is a step-by-step guide to setting up AWS SNS as your SMS service provider.
 
 ## Pre-Requisites
 
@@ -15,90 +16,118 @@ You'll need a AWS account to complete this tutorial. You can use your existing A
 
 Follow below steps to integrate your Amazon SNS account with SuprSend
 
-### Step 1. Create AWS IAM user
+### Step-1 : Create AWS IAM user
 
 To send email through SNS, you need an IAM user (Access-Key-ID and Secret-Access-Key) with necessary permission. To ceate an IAM user, refer to this [documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html)
 
 * Create an IAM user (with Programmatic access).
-* Attach Policy `AmazonSNSFullAccess` to this user.
-* Copy and save the `Access-key-ID` and `Secret-Access-Key` securely. You'll need to add this information on SuprSend vendor integration page
+
+* Attach Policy 
+
+  `AmazonSNSFullAccess`
+
+   to this user.
+
+* Copy and save the 
+
+  `Access-key-ID`
+
+   and 
+
+  `Secret-Access-Key`
+
+   securely. You'll need to add this information on SuprSend vendor integration page
 
 An AWS SNS resource resides in a particular region. Make a note of which aws-region you are going to use for sending SMS. In this guide, we'll assume aws-region :`ap-south-1` for all illustrative purposes.
 
-### Step 2. Adding phone number in your SNS account
+### Step-2 : Adding phone number in your SNS account
 
 Before moving into configuration steps, here are a few other things to keep in mind:
 
-* **SNS sandbox mode** If you are creating a new SNS account. Your account will be in SNS sandbox. AWS adds all new accounts in the SNS sandbox by default. In sandbox mode, you'll be able to send messages to only verified destination phone numbers. Once you're done testing, you can move out of the SNS sandbox. Refer next section for the steps to configure SNS sandbox and how to move your account out of it.
+* **SNS Sandbox Mode:**
 
-* **Delivery tracking**. We cannot currently track delivery for SMS sent through AWS SNS. This means that messages sent through SNS will always show on triggered state in logs.
+   If you are creating a new SNS account. Your account will be in SNS sandbox. AWS adds all new accounts in the SNS sandbox by default. In sandbox mode, you'll be able to send messages to only verified destination phone numbers. Once you're done testing, you can move out of the SNS sandbox. Refer next section for the steps to configure SNS sandbox and how to move your account out of it.
+
+* **Delivery Tracking**
+
+  . We cannot currently track delivery for SMS sent through AWS SNS. This means that messages sent through SNS will always show on triggered state in logs.
 
 Follow below Steps to add phone number and set tracking in your SNS account:
 
-#### Step 1. Provision phone numbers on SNS dashboard
+<Steps>
+  <Step title="Provision phone numbers on SNS dashboard" stepNumber="1">
+    Go to AWS SNS console -> Mobile -> Text Messaging (SMS). Select origination numbers either from top right or from left side menu and Click on **"Provision number in Pinpoint"**
 
-Go to AWS SNS console -> Mobile -> Text Messaging (SMS). Select origination numbers either from top right or from left side menu and Click on **"Provision number in Pinpoint"**
+    ![](/images/docs/45d3200-image.png)
 
-![](/images/docs/45d3200-image.png)
+    This will open pinpoint console. Click on **"Request Phone Number"** on this screen and provision a phone number from a country where SMS channel is enabled.
 
-This will open pinpoint console. Click on **"Request Phone Number"** on this screen and provision a phone number from a country where SMS channel is enabled.
+    <Info>
+      If you’re provisioning numbers from USA, you need to complete your phone number registration to send messages successfully across the USA. Read more about phone number registration [here](https://docs.aws.amazon.com/pinpoint/latest/userguide/settings-sms-tfn-register.html)
+    </Info>
 
-<Info>
-  If you’re provisioning numbers from USA, you need to complete your phone number registration to send messages successfully across the USA. Read more about phone number registration [here](https://docs.aws.amazon.com/pinpoint/latest/userguide/settings-sms-tfn-register.html)
-</Info>
+    ![](/images/docs/1f039b2-image.png)
 
-![](/images/docs/1f039b2-image.png)
+    You can also register for Sender ID if you want to send messages with an alphanumeric code. Sender IDs is not supported in all countries. To see if it is supported in your region, see [Supported Regions and Countries](https://docs.aws.amazon.com/sns/latest/dg/sns-supported-regions-countries.html)
+  </Step>
 
-You can also register for Sender ID if you want to send messages with an alphanumeric code. Sender IDs is not supported in all countries. To see if it is supported in your region, see [Supported Regions and Countries](https://docs.aws.amazon.com/sns/latest/dg/sns-supported-regions-countries.html)
+  <Step title="Testing in Sandbox mode" stepNumber="2">
+    By default, your account will be in sandbox mode where you’ll only be able to send messages to added destination numbers. Add few phone numbers here to test out the integration.
 
-#### Step 2. Testing in Sandbox mode
+    ![](/images/docs/4db0bb1-image.png)
 
-By default, your account will be in sandbox mode where you’ll only be able to send messages to added destination numbers. Add few phone numbers here to test out the integration.
+    Once the numbers are added, scroll up the screen and click on **"Publish Text Message"** to send one test message from the console itself to test out the integration.
 
-![](/images/docs/4db0bb1-image.png)
+    ![](/images/docs/3d58906-image.png)
 
-Once the numbers are added, scroll up the screen and click on **"Publish Text Message"** to send one test message from the console itself to test out the integration.
+    If the message is successful, we recommend you to exit sandbox before integrating with SuprSend.
 
-![](/images/docs/3d58906-image.png)
+    * Click on 
 
-If the message is successful, we recommend you to exit sandbox before integrating with SuprSend.
+      **Exit SMS Sandbox**
 
-* Click on **Exit SMS Sandbox** from console.
+       from console.
 
-![](/images/docs/08e1306-image.png)
+    ![](/images/docs/08e1306-image.png)
 
-* A prompt will open to raise an AWS support case to exit sandbox and increase spending limits.
-* Add relevant information and in the new limit add 100 USD (recommended) or higher if needed.
+    * A prompt will open to raise an AWS support case to exit sandbox and increase spending limits.
 
-The account will be production ready within 24 hours of raising this request
+    * Add relevant information and in the new limit add 100 USD (recommended) or higher if needed.
 
-#### Step 3. Setup tracking inside AWS dasboard
+    The account will be production ready within 24 hours of raising this request
+  </Step>
 
-Remember that this setup is just to see the delivery reports within AWS dashboard. It doesn't enable delivery tracking in SuprSend logs.
+  <Step title="Setup tracking inside AWS dasboard" stepNumber="3">
+    Remember that this setup is just to see the delivery reports within AWS dashboard. It doesn't enable delivery tracking in SuprSend logs.
 
-Follow below steps to setup tracking:
+    Follow below steps to setup tracking:
 
-1. Go to Text Messaging Preferences in SNS console and click edit.
+    1. Go to Text Messaging Preferences in SNS console and click edit.
 
-![](/images/docs/aa77a88-image.png)
+    ![](/images/docs/aa77a88-image.png)
 
-2. Add relevant configuration and expand Delivery status logging.
-3. Create a new IAM role on this screen. It will ask for permission to send delivery logs to cloudwatch, allow that and save changes.
+    1. Add relevant configuration and expand Delivery status logging.
 
-![](/images/docs/27e8dfa-image.png)
+    2. Create a new IAM role on this screen. It will ask for permission to send delivery logs to cloudwatch, allow that and save changes.
 
-Once configured, you’ll be able to see delivery logs of your sent messages on this console. You can also access it from cloudwatch console.
+    ![](/images/docs/27e8dfa-image.png)
 
-![](/images/docs/5eb5497-image.png)
+    Once configured, you’ll be able to see delivery logs of your sent messages on this console. You can also access it from cloudwatch console.
 
-You’ll also be able to view message analytics on SNS console.
+    ![](/images/docs/5eb5497-image.png)
 
-### Step 3. Add SNS Vendor settings on Suprsend dashboard
+    You’ll also be able to view message analytics on SNS console.
+  </Step>
+</Steps>
+
+### Step-3 : Add SNS Vendor settings on Suprsend dashboard
 
 On the SuprSend dashboard, select Vendors from the left panel.
 
 1. Select 'SMS' channel from the list.
+
 2. Select the communication category from the list - System, Transactional, Promotional
+
 3. Click on 'Amazon SNS' from the list of Vendors
 
 ![](/images/docs/0612965-image.png)
@@ -118,20 +147,3 @@ On the Vendor Settings page, add relevant details in the vendor form and **Save*
 | Price per notification   | This is the amount you pay per email notification to SNS. It helps us to calculate, estimate and optimise your cost spent on notifications.                                                                                   |
 
 ***
-
-What’s Next
-
-Create SMS template and add a workflow to start sending your SMS notifications
-
-* [SMS Template](/docs/sms-template)
-* [Create Workflow](https://docs.suprsend.com/docs/design-workflow)
-
-* [Table of Contents](#)
-
-* * [Pre-Requisites](#pre-requisites)
-
-  * [Amazon SNS integration on SuprSend account](#amazon-sns-integration-on-suprsend-account)
-
-    * [Step 1. Create AWS IAM user](#step-1-create-aws-iam-user)
-    * [Step 2. Adding phone number in your SNS account](#step-2-adding-phone-number-in-your-sns-account)
-    * [Step 3. Add SNS Vendor settings on Suprsend dashboard](#step-3-add-sns-vendor-settings-on-suprsend-dashboard)
