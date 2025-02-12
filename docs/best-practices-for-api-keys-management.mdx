@@ -1,11 +1,11 @@
 ---
 title: "Best Practices for API Keys Management"
-description: "Suggest Edits"
 ---
 
 SuprSend uses API keys to authenticate requests. SuprSend provides 2 methods for authentication:
 
 * [Workspace Key & Secret](/docs/best-practices-for-api-keys-management#1-workspace-key--secret)
+
 * [API Keys](/docs/best-practices-for-api-keys-management#2-api-keys)
 
 ## 1. Workspace Key & Secret
@@ -17,7 +17,16 @@ This authentication method is available when you are using one of our SDKs to se
 The Workspace Key and Secret are pre-generated for every environment. You can access your workspace key & secret by following steps below:
 
 1. Go to a workspace > Settings (left panel) > API Keys
-2. On API Keys page, you will find `Workspace Key` and `Workspace Secret`. Click on them to copy.
+
+2. On API Keys page, you will find 
+
+   `Workspace Key`
+
+    and 
+
+   `Workspace Secret`
+
+   . Click on them to copy.
 
 ![](/images/docs/9a0aa16-image.png)
 
@@ -34,12 +43,20 @@ When making requests over HTTPS, you can generate your private API key for a wor
 Use these steps to create an API key for your SuprSend account:
 
 1. Go to a workspace > Settings (left panel) > API Keys
-2. On API Keys page, click on `Generate Key`
+
+2. On API Keys page, click on 
+
+   `Generate Key`
+
 3. Enter a Name for the API key
 
 ![](/images/docs/bcc40c1-image.png)
 
-4. Select `Create and View` and copy the token
+1. Select 
+
+   `Create and View`
+
+    and copy the token
 
 ![](/images/docs/dcd6078-image.png)
 
@@ -55,15 +72,22 @@ Use these steps to create an API key for your SuprSend account:
 
 As a security best practice, rotate tokens periodically.
 
-* To rotate an existing API key, select `Disable` to disable the existing key and generate a new API key.
+* To rotate an existing API key, select 
+
+  `Disable`
+
+   to disable the existing key and generate a new API key.
 
 ![](/images/docs/4926893-image.png)
 
 ## Best Practices for Enhanced Security
 
 1. Never commit your key to your repository
+
 2. Use Environment Variables in place of your API key
+
 3. Use a Key Management Service
+
 4. Monitor your account usage and rotate your keys when needed
 
 ### Rotation Strategy:
@@ -73,15 +97,3 @@ As a security best practice, rotate tokens periodically.
 **2. Ad-Hoc Rotation:** Rotate keys immediately if you suspect that a key has been compromised or if it has been inadvertently exposed.
 
 ***
-
-* [Table of Contents](#)
-
-* * [1. Workspace Key & Secret](#1-workspace-key--secret)
-
-  * [2. API Keys](#2-api-keys)
-
-    * [Generate API Keys:](#generate-api-keys)
-    * [Rotate API Keys](#rotate-api-keys)
-
-  * [Best Practices for Enhanced Security](#best-practices-for-enhanced-security)
-    * [Rotation Strategy:](#rotation-strategy)
