@@ -3,119 +3,197 @@ title: "Bigquery"
 description: "Setting up Bigquery database connection for syncing subscriber lists"
 ---
 
-[Suggest Edits](/edit/bigquery)
-
 With this integration, you can directly send notifications on your 360 degree data sitting in your data warehouse. This enables your data teams or product managers to automate user syncing, setup recurring user cohort sync and create [subscriber lists](/docs/lists) on SuprSend. You can then trigger notification to this list using our [broadcast](/docs/broadcast) API.
 
 ## Getting Started
 
 To start syncing data from your Bigquery database, you need to add this integration on the connector page.
 
-1. Go to [SuprSend dashboard -> Settings -> Connectors](https://app.suprsend.com/en/staging/connectors) page. Here, you'll see the list of available connectors. If you have already setup any connectors in the past, you'll see a list of existing connectors. Click on **"+New Connector"** button to add the connector.
+1. Go to 
+
+   [SuprSend dashboard -> Settings -> Connectors](https://app.suprsend.com/en/staging/connectors)
+
+    page. Here, you'll see the list of available connectors. If you have already setup any connectors in the past, you'll see a list of existing connectors. Click on 
+
+   **"+New Connector"**
+
+    button to add the connector.
 
 2. Click on Bigquery and add below information:
 
-   1. **Name** - A name to uniquely qualify the connection as you'll see it in the connector list on your sync task. You can add the name of database here for easy identification.
-   2. **Service account key json** - Steps to generate this are mentioned in the next section.
+   1. **Name**
+
+       \- A name to uniquely qualify the connection as you'll see it in the connector list on your sync task. You can add the name of database here for easy identification.
+
+   2. **Service account key json**
+
+       \- Steps to generate this are mentioned in the next section.
 
 ![](/images/docs/151c7dd-image.png)
 
-### Step 1: Generating OAuth Client Key and Secret
+Lets' see an in-detail approach:
 
-1. Go to the [Credentials](https://console.cloud.google.com/apis/credentials) page in the Google Cloud Platform console and click on **"+Create Credentials"**. Select OAuth client ID from the options list.
+<Steps>
+  <Step title="Generating OAuth Client Key and Secret" stepNumber="1">
+    1. Go to the 
 
-![](/images/docs/cc6d2c3-Screenshot_2022-11-23_at_6.15.28_PM.png)
+       [Credentials](https://console.cloud.google.com/apis/credentials)
 
-2. If you have not created OAuth consent screen before, you will need to create one.
+        page in the Google Cloud Platform console and click on 
 
-![](/images/docs/ca30516-Screenshot_2022-11-23_at_6.17.34_PM.png)
+       **"+Create Credentials"**
 
-3. Since SuprSend will be used for your internal employees only, Use `Internal` option from the list
+       . Select OAuth client ID from the options list.
 
-![](/images/docs/719d9d2-Screenshot_2022-11-23_at_6.18.48_PM.png)
+    ![](https://files.readme.io/cc6d2c3-Screenshot_2022-11-23_at_6.15.28_PM.png)
 
-4. Enter required details like App name, your email, developer contact information, authorized domain etc.
+    1. If you have not created OAuth consent screen before, you will need to create one.
 
-![](/images/docs/fd1f40b-Screenshot_2022-11-23_at_6.28.58_PM.png)
+    ![](https://files.readme.io/ca30516-Screenshot_2022-11-23_at_6.17.34_PM.png)
 
-5. After creating consent screen, Once on the **Create OAuth client ID** screen choose Web application from the Application type dropdown. Give your application a name. We recommend something like SuprSend to make it easy to identify and locate in the future.
+    1. Since SuprSend will be used for your internal employees only, Use 
 
-![](/images/docs/1818be2-Screenshot_2022-11-23_at_6.34.44_PM.png)
+       `Internal`
 
-### Step 2: Granting permissions
+        option from the list
 
-SuprSend requires you to grant certain user permissions on your BigQuery warehouse to successfully access data from it. Perform the following steps in the exact order to grant these permissions:
+    ![](/images/docs/719d9d2-Screenshot_2022-11-23_at_6.18.48_PM.png)
 
-**Step 1: Creating a role and granting permissions**
+    1. Enter required details like App name, your email, developer contact information, authorized domain etc.
 
-1. Go to the [Roles](https://console.cloud.google.com/iam-admin/roles) section of Google Cloud platform dashboard and click on **CREATE ROLE**.
+    ![](/images/docs/fd1f40b-Screenshot_2022-11-23_at_6.28.58_PM.png)
 
-![](/images/docs/1593c56-image.png)
+    1. After creating consent screen, Once on the 
 
-2. Fill in the details as shown
+       **Create OAuth client ID**
 
-![](/images/docs/f4c596c-Bifrost_role.jpg)
+        screen choose Web application from the Application type dropdown. Give your application a name. We recommend something like SuprSend to make it easy to identify and locate in the future.
 
-3. Click on **ADD PERMISSIONS** and add the following permissions
+    ![](/images/docs/1818be2-Screenshot_2022-11-23_at_6.34.44_PM.png)
+  </Step>
 
-> bigquery.datasets.get bigquery.jobs.create bigquery.jobs.list bigquery.tables.get bigquery.tables.getData bigquery.tables.list
+  <Step title="Granting permissions" stepNumber="2">
+    SuprSend requires you to grant certain user permissions on your BigQuery warehouse to successfully access data from it. Perform the following steps in the exact order to grant these permissions:
 
-4. Finally, click on **CREATE**.
+    <Steps>
+      <Step title="Creating a role and granting permissions" stepNumber="1.1">
+        1. Go to the 
 
-**Step 2: Creating a service account and attaching a role to it**
+           [Roles](https://console.cloud.google.com/iam-admin/roles)
 
-1. Go to [Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts) and select the project which has the dataset or the table that you want to use and Click on CREATE SERVICE ACCOUNT
+            section of Google Cloud platform dashboard and click on 
 
-![](/images/docs/5fd5659-image.png)
+           **CREATE ROLE**
 
-3. Fill in the Service Account details as shown below, and click on CREATE AND CONTINUE:
+           .
 
-![](/images/docs/f032300-Screenshot_2022-11-29_at_11.11.49_AM.png)
+        ![](/images/docs/1593c56-image.png)
 
-4. Fill in the Role details as shown below, and click on CONTINUE:
+        1. Fill in the details as shown
 
-![](/images/docs/14c0317-Screenshot_2022-11-29_at_11.13.18_AM.png)
+        ![](/images/docs/f4c596c-Bifrost_role.jpg)
 
-5. Click on DONE to move to the list of service accounts.
+        1. Click on 
 
-**Step 3: Creating and downloading the JSON key**
+           **ADD PERMISSIONS**
 
-1. Click on the three dots icon under Actions in the service account that you just created and select **Manage keys**, as shown:
+            and add the following permissions
 
-![](/images/docs/772b9a7-Screenshot_2022-11-29_at_11.16.39_AM.png)
+        > bigquery.datasets.get
+        > bigquery.jobs.create
+        > bigquery.jobs.list
+        > bigquery.tables.get
+        > bigquery.tables.getData
+        > bigquery.tables.list
 
-2. Click on **ADD KEY**, followed by Create new key, as shown:
+        1. Finally, click on 
 
-![](/images/docs/84ae3e5-Screenshot_2022-11-29_at_11.18.37_AM.png)
+           **CREATE**
 
-3. Select **JSON** and click on **CREATE**
+           .
+      </Step>
 
-![](/images/docs/19d6cdb-Screenshot_2022-11-29_at_11.19.04_AM.png)
+      <Step title="Creating a service account and attaching a role to it" stepNumber="2">
+        1. Go to 
 
-4. A JSON file will be downloaded on your system. This file is required in your database integration form.
+           [Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts)
 
-## Best Practices
+            and select the project which has the dataset or the table that you want to use and Click on CREATE SERVICE ACCOUNT
+
+        ![](/images/docs/5fd5659-image.png)
+
+        1. Fill in the Service Account details as shown below, and click on CREATE AND CONTINUE:
+
+        ![](/images/docs/f032300-Screenshot_2022-11-29_at_11.11.49_AM.png)
+
+        1. Fill in the Role details as shown below, and click on CONTINUE:
+
+        ![](/images/docs/14c0317-Screenshot_2022-11-29_at_11.13.18_AM.png)4. Click on `Done` to move to the list of service accounts.
+      </Step>
+
+      <Step title="Creating and downloading the JSON key" stepNumber="3">
+        1. Click on the three dots icon under Actions in the service account that you just created and select 
+
+           **Manage keys**
+
+           , as shown:
+
+        ![](/images/docs/772b9a7-Screenshot_2022-11-29_at_11.16.39_AM.png)
+
+        1. Click on 
+
+           **`ADD KEY`**
+
+           , followed by Create new key, as shown:
+
+        ![](/images/docs/84ae3e5-Screenshot_2022-11-29_at_11.18.37_AM.png)
+
+        1. Select 
+
+           **`JSON`**
+
+            and click on 
+
+           **`CREATE`**
+
+        ![](/images/docs/19d6cdb-Screenshot_2022-11-29_at_11.19.04_AM.png)
+
+        1. A JSON file will be downloaded on your system. This file is required in your database integration form.
+      </Step>
+    </Steps>
+  </Step>
+</Steps>
+
+### Best Practices
 
 Before you setup your database sync, you should take some measures to ensure the security of your customers’ data and limit performance impacts to your backend database. The following “best practice” suggestions can help you limit the potential for data exposure and minimize performance impacts:
 
-1. **Sync your read-only replica instance**: Do not sync data directly from your main instance. Instead use a read-only data replica to minimize the load and avoid data loss on your main database.
-2. **User connected here should have minimal privileges**: You should have a database user with minimal privileges. This person only requires read permissions with access limited to the tables you want to sync from.
-3. **Sync only the data that you’ll need**: Limiting your query can improve performance, and minimize the potential to expose sensitive data. Select only the columns you need to either update user profile in SuprSend and to create list sync.
-4. **Use \{\{last\_sync\_time}} to limit query results**: Make sure you use the **\{\{last\_sync\_time}}** variable in your recurring sync queries. It stores the timestamp of last successful sync in your list. Adding it in your where statement against datetime index can really speed up the query and limit the number of results returned in consecutive syncs. \{\{last\_sync\_time}} is stored in timestamp format. Use relevant cast expression to format it based on your column type.
-5. **Limit your sync frequency**: Setup a sync frequency based on how frequently you want to send notifications on that list. If the previous sync is still in progress when the next interval occurs, we’ll skip the operation and catch up your data on the next interval. Skipped syncs show `Ignored` status in the logs. Frequently skipped operations may indicate that you’re syncing too often. You should monitor your first few syncs to ensure that you haven’t impacted your system’s performance.
+1. **Sync your read-only replica instance**
+
+   : Do not sync data directly from your main instance. Instead use a read-only data replica to minimize the load and avoid data loss on your main database.
+
+2. **User connected here should have minimal privileges**
+
+   : You should have a database user with minimal privileges. This person only requires read permissions with access limited to the tables you want to sync from.
+
+3. **Sync only the data that you’ll need**
+
+   : Limiting your query can improve performance, and minimize the potential to expose sensitive data. Select only the columns you need to either update user profile in SuprSend and to create list sync.
+
+4. **Use {{last_sync_time}} to limit query results**
+
+   : Make sure you use the 
+
+   **{{last_sync_time}}**
+
+    variable in your recurring sync queries. It stores the timestamp of last successful sync in your list. Adding it in your where statement against datetime index can really speed up the query and limit the number of results returned in consecutive syncs. {{last_sync_time}} is stored in timestamp format. Use relevant cast expression to format it based on your column type.
+
+5. **Limit your sync frequency**
+
+   : Setup a sync frequency based on how frequently you want to send notifications on that list. If the previous sync is still in progress when the next interval occurs, we’ll skip the operation and catch up your data on the next interval. Skipped syncs show 
+
+   `Ignored`
+
+    status in the logs. Frequently skipped operations may indicate that you’re syncing too often. You should monitor your first few syncs to ensure that you haven’t impacted your system’s performance.
 
 ***
-
-What’s Next
-
-* [Create List](https://docs.suprsend.com/docs/lists)
-* [Create SQL query sync to update users in the list](https://docs.suprsend.com/docs/list-sync-via-database)
-
-* [Table of Contents](#)
-
-* * [Getting Started](#getting-started)
-
-    * [Step 1: Generating OAuth Client Key and Secret](#step-1-generating-oauth-client-key-and-secret)
-    * [Step 2: Granting permissions](#step-2-granting-permissions)
-
-  * [Best Practices](#best-practices)
