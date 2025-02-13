@@ -1,11 +1,16 @@
 ---
 title: "Headless Inbox"
-description: "Suggest Edits"
 ---
+
+<Warning>
+  ## End of Support for `@suprsend/react-inbox`: Migrate to `@suprsend/react`
+
+  > Development of the [@suprsend/react-inbox](https://github.com/suprsend/suprsend-react-inbox) SDK has been discontinued in favour of the new [@suprsend/react](https://docs.suprsend.com/docs/headless-feed) SDK. Please refer the [migration guide](https://docs.suprsend.com/docs/migration-guide) for instructions on transitioning to the new SDK.
+</Warning>
 
 This Headless Inbox can be used if you want more control on the UI of Inbox Notifications like showing notifications in Sidepanel or in Fullscreen etc.
 
-# Installation
+## Installation
 
 <CodeGroup>
   ```shell npm
@@ -17,9 +22,11 @@ This Headless Inbox can be used if you want more control on the UI of Inbox Noti
   ```
 </CodeGroup>
 
-# Adding SuprSend Inbox component
 
-## SuprSendProvider Component
+
+## Adding SuprSend Inbox component
+
+### SuprSendProvider Component
 
 Enclose your notifications component in **SuprSendProvider**. SuprSend hooks can only be used in children of SuprSendProvider component.
 
@@ -50,7 +57,7 @@ Enclose your notifications component in **SuprSendProvider**. SuprSend hooks can
   Make sure that you have only one active SuprSend's socket connection at a time (inspect -> network -> ws tab) to avoid unexpected issues.
 </Warning>
 
-## useUnseenCount hook
+### useUnseenCount hook
 
 This hook provides unSeenCount, markAllSeen which you can show on Bell icon.
 
@@ -67,7 +74,7 @@ This hook provides unSeenCount, markAllSeen which you can show on Bell icon.
 | unSeenCount | number | Use this variable to show the unseen notification count anywhere in your application.                                           |
 | markAllSeen | method | Used to mark seen for all notifications. Call this method on clicking the bell icon so that it will reset the unSeenCount to 0. |
 
-## useNotifications hook
+### useNotifications hook
 
 This hook is used to get notifications related data and methods
 
@@ -165,7 +172,9 @@ This hook is an event emitter, takes arguments event type and callback function(
 
 **Handled Event Names:**
 
-1. **new\_notification**: Called when the new notification occurs, can be used to show toast notification in your application.
+1. **new_notification**
+
+   : Called when the new notification occurs, can be used to show toast notification in your application.
 
 <CodeGroup>
   ```javascript Sample.js
@@ -182,13 +191,3 @@ This hook is an event emitter, takes arguments event type and callback function(
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-
-  * [Adding SuprSend Inbox component](#adding-suprsend-inbox-component)
-
-    * [SuprSendProvider Component](#suprsendprovider-component)
-    * [useUnseenCount hook](#useunseencount-hook)
-    * [useNotifications hook](#usenotifications-hook)
