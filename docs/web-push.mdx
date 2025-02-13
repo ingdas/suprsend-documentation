@@ -1,9 +1,7 @@
 ---
 title: "Web Push Template"
-description: "Suggest Edits"
+description: "This section is a step-by-step guide on how to design and publish android push notification template."
 ---
-
-This section is a step-by-step guide on how to design and publish android push notification template.
 
 ## Design Template
 
@@ -26,74 +24,102 @@ You can design template with a simple form editor tool. You can add variables wi
 
 There will always be the case where you would be required to add dynamic content to a template, so as to personalise it for your users. To achieve this, you can add variables in the template, which will be replaced with the dynamic content at the time of sending push. To send actual values to replace variables at the time of communication trigger, use one of our frontend or backend SDKs. Here is a step by step guide on how to add dynamic content in web push:
 
-### Step 1: Declaring Variables in the global 'Variables' button:
+<Steps>
+  <Step title="Declaring Variables in the global 'Variables' button:">
+    If you are at this stage, it is assumed that you have declared the variables along with sample values in the global **Mock data** button. To see how to declare variables before using them in designing templates, refer refer to [this section in the Templates documentation](/docs/templates#adding-dynamic-content).
+  </Step>
 
-If you are at this stage, it is assumed that you have declared the variables along with sample values in the global **Mock data** button. To see how to declare variables before using them in designing templates, refer refer to [this section in the Templates documentation](/docs/templates#adding-dynamic-content).
+  <Step title="Using variables in the templates:">
+    Once the variables are declared, you can use them while designing the web push template. We support `handlebarsjs` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: `**{{variable_name}}**`
 
-### Step 2: Using variables in the templates:
+    If you have declared the variables in the global 'Variables' button, then they will come as auto-suggestions when you type a curly bracket `{`. This will remove the chances of error like variable mismatch at the time of template rendering.
 
-Once the variables are declared, you can use them while designing the web push template. We support `handlebarsjs` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: `**{{variable_name}}**`
+    Note that you will be able to enter a variable name even when you have not declared it inside the 'Variables' button. To manually enter the variable name, follow the [handlerbarsjs guide here](https://handlebarsjs.com/guide/#what-is-handlebars).
 
-If you have declared the variables in the global 'Variables' button, then they will come as auto-suggestions when you type a curly bracket `{`. This will remove the chances of error like variable mismatch at the time of template rendering.
+    Below are some examples of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the 'Templates' section:
 
-Note that you will be able to enter a variable name even when you have not declared it inside the 'Variables' button. To manually enter the variable name, follow the [handlerbarsjs guide here](https://handlebarsjs.com/guide/#what-is-handlebars).
-
-Below are some examples of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the 'Templates' section:
-
-<CodeGroup>
-  ```json json
-  {
-    "array": [
+    <CodeGroup>
+      ```json json
       {
-        "product_name": "Aldo Sling Bag",
-        "product_price": "3,950.00"
-      },
-      {
-        "product_name": "Clarles & Keith Women Slipper, Biege, 38UK",
-        "product_price": "2,549.00"
-      },
-      {
-        "product_name": "RayBan Sunglasses",
-        "product_price": "7,899.00"
+        "array": [
+          {
+            "product_name": "Aldo Sling Bag",
+            "product_price": "3,950.00"
+          },
+          {
+            "product_name": "Clarles & Keith Women Slipper, Biege, 38UK",
+            "product_price": "2,549.00"
+          },
+          {
+            "product_name": "RayBan Sunglasses",
+            "product_price": "7,899.00"
+          }
+        ],
+        "event": {
+          "location": {
+            "city": "Bangalore",
+            "state": "KA"
+          },
+          "order_id": "11200123",
+          "first_name": "Nikita"
+        },
+        "product_page": "https://www.suprsend.com"
       }
-    ],
-    "event": {
-      "location": {
-        "city": "Bangalore",
-        "state": "KA"
-      },
-      "order_id": "11200123",
-      "first_name": "Nikita"
-    },
-    "product_page": "https://www.suprsend.com"
-  }
-  ```
-</CodeGroup>
+      ```
+    </CodeGroup>
 
-1. To enter a nested variable, enter in the format `{{var1.var2.var3}}`. Eg. to refer to city in the example above, you need to enter `{{event.location.city}}`
-2. To refer to an array element, enter in format `{{var1.[index].var2}}`. Eg. to refer to `product_name` of the first element of the array `array`, enter `{{array.[0].product_name}}`
-3. If you have any space in the variable name, enclose it in square bracket `{{event.[first name]}}`
+    1. To enter a nested variable, enter in the format 
 
-You will be able to see the sample values in the Preview section, as well as in the Live version when you publish a draft. If you cannot see your variable being rendered with the sample value, check one of the following:
+       `{{var1.var2.var3}}`
 
-1. Make sure you have entered the variable name and the sample value in the **Variables** button.
-2. Make sure you have entered the correct variable name in the template, as per the `handlebarsjs` guideline.
+       . Eg. to refer to city in the example above, you need to enter 
 
-<Warning>
-  At the time of sending communication, if there is a variable present in the template whose value is not rendered due to mismatch or missing, SuprSend will simply discard the template and not send that particular notification to your user.
+       `{{event.location.city}}`
 
-  Please note that the rest of the templates will be sent. Eg. if there is an error in rendering Web Push template, but email template is successfully rendered, Web Push notification will not be triggered, but email notification will be triggered by SuprSend.
-</Warning>
+    2. To refer to an array element, enter in format 
+
+       `{{var1.[index].var2}}`
+
+       . Eg. to refer to 
+
+       `product_name`
+
+        of the first element of the array 
+
+       `array`
+
+       , enter 
+
+       `{{array.[0].product_name}}`
+
+    3. If you have any space in the variable name, enclose it in square bracket 
+
+       `{{event.[first name]}}`
+
+    You will be able to see the sample values in the Preview section, as well as in the Live version when you publish a draft. If you cannot see your variable being rendered with the sample value, check one of the following:
+
+    1. Make sure you have entered the variable name and the sample value in the 
+
+       **Variables**
+
+        button.
+
+    2. Make sure you have entered the correct variable name in the template, as per the 
+
+       `handlebarsjs`
+
+        guideline.
+
+    <Warning>
+      ## What happens if there is variable mismatch at the time of sending?
+
+
+
+      At the time of sending communication, if there is a variable present in the template whose value is not rendered due to mismatch or missing, SuprSend will simply discard the template and not send that particular notification to your user.
+
+      Please note that the rest of the templates will be sent. Eg. if there is an error in rendering Web Push template, but email template is successfully rendered, Web Push notification will not be triggered, but email notification will be triggered by SuprSend.
+    </Warning>
+  </Step>
+</Steps>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Design Template](#design-template)
-
-  * [Web Push Notification Fields Description](#web-push-notification-fields-description)
-
-  * [Adding Dynamic Content in Web Push](#adding-dynamic-content-in-web-push)
-
-    * [Step 1: Declaring Variables in the global 'Variables' button:](#step-1-declaring-variables-in-the-global-variables-button)
-    * [Step 2: Using variables in the templates:](#step-2-using-variables-in-the-templates)

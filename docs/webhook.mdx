@@ -3,8 +3,6 @@ title: "Webhook"
 description: "Learn about Webhook node functionality within SuprSend workflows"
 ---
 
-[Suggest Edits](/edit/webhook)
-
 Webhook is an http api request call to notify an endpoint such as your CRMs, send chat notifications via platforms like Facebook Messenger, or call custom vendors. You can club it with branches to route notifications via different services based on user properties like region, city etc.
 
 Any data returned in the api request response is appended to the response\_key in your webhook function and then merged with the input payload.
@@ -39,7 +37,9 @@ Fetch node supports JSONNET rendering language. You can add workflow trigger pay
 When executing a webhook function, SuprSend expects the following from your service:
 
 * The response to the request is one of: 200 OK, 201 Created, or 204 No Content.
+
 * If the request response contains data, it's encoded as JSON and can be decoded into a map/dictionary/hash.
+
 * The response to the request takes no longer than 5 seconds for SuprSend to receive.
 
 ### Merging Response to workflow input
@@ -95,11 +95,3 @@ Here's how webhook function data output would look like with response key and wi
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Configuring Webhook node](#configuring-webhook-node)
-
-    * [Adding variables in Webhook node](#adding-variables-in-webhook-node)
-    * [Request execution](#request-execution)
-    * [Merging Response to workflow input](#merging-response-to-workflow-input)
