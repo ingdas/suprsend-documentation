@@ -1,61 +1,129 @@
 ---
 title: "Templates"
-description: "Suggest Edits"
 ---
 
 Templates are the content block of your notification. In SuprSend, content for all channels (SMS, email, chat, push etc.) is grouped under a single template group for simplified management. Your template can have 2 types of content:
 
-* **Static Content**: This remains the same for all users and contains your core message or design.
-* **Dynamic Content**: These are placeholders for user or tenant-specific information, such as first names, booking amounts, appointment times, and more. The variables are populated dynamically based on the data provided in your workflow or event request.
+* **Static Content**
+
+  : This remains the same for all users and contains your core message or design.
+
+* **Dynamic Content**
+
+  : These are placeholders for user or tenant-specific information, such as first names, booking amounts, appointment times, and more. The variables are populated dynamically based on the data provided in your workflow or event request.
 
 ### Benefits of Templates with SuprSend:
 
-* **Unified Content Management**: Content for all channels is grouped together in a single template, making it easy to manage your content in one place.
-* **WYSWYG editors**: Designing a template is a piece of cake with drag-and-drop and form editors. Your product managers and designers can take control of content creation without involving developers.
-* **[Multi-Lingual support:](/docs/templates#adding-multiple-languages)** You can add content for multiple languages in a single template and the user will receive notification in their preferred language
-* **Create white-labeled notifications for your [tenants](/docs/brands) with ease**: You can create brands for your own company and each of your tenants. Use it to dynamically change your email template styling to match the brand's identity.
-* **Easy to iterate**: You can directly design and store templates on the SuprSend dashboard, decoupling templates from your code.
-* **[Version control](/docs/templates#template-versions)**: Each template change is published as a new version, so you can always track historical changes. You can also monitor user engagement for each version and retain the one that performs better. Trigger a test notification on your current live version to see the content preview on your actual device before pushing it to production.
-* **Add / Remove channels without touching code**: To add any channel to your existing template group, you need to simply design a template for that channel on SuprSend platform and publish it. Notifications will start going through that channel, with no alterations to your existing code.
+* **Unified Content Management**
+
+  : Content for all channels is grouped together in a single template, making it easy to manage your content in one place.
+
+* **WYSWYG editors**
+
+  : Designing a template is a piece of cake with drag-and-drop and form editors. Your product managers and designers can take control of content creation without involving developers.
+
+* [Multi-Lingual support:](/docs/templates#adding-multiple-languages)
+
+   You can add content for multiple languages in a single template and the user will receive notification in their preferred language
+
+* **Create white-labeled notifications for your**
+
+   
+
+  [tenants](/docs/brands)
+
+   
+
+  **with ease**
+
+  : You can create brands for your own company and each of your tenants. Use it to dynamically change your email template styling to match the brand's identity.
+
+* **Easy to iterate**
+
+  : You can directly design and store templates on the SuprSend dashboard, decoupling templates from your code.
+
+* [Version control](/docs/templates#template-versions)
+
+  : Each template change is published as a new version, so you can always track historical changes. You can also monitor user engagement for each version and retain the one that performs better. Trigger a test notification on your current live version to see the content preview on your actual device before pushing it to production.
+
+* **Add / Remove channels without touching code**
+
+  : To add any channel to your existing template group, you need to simply design a template for that channel on SuprSend platform and publish it. Notifications will start going through that channel, with no alterations to your existing code.
 
 ## Template Designer
 
 SuprSend's template designer empowers you to create beautiful templates with easy drag-and-drop editor
 
-### Create a template
+<Steps>
+  <Step title="Create a template">
+    ![](/images/docs/e551cb0-image.png)
 
-![](/images/docs/e551cb0-image.png)
+    Add a template name and Click on "**`Save`**"
 
-Add a template name and Click on "**Save**"
+    ![](/images/docs/0ae3096-image.png)
 
-![](/images/docs/0ae3096-image.png)
+    The new Template will be created, which you can see on the top of 'Templates' listing page. Click on the template to start editing.
+  </Step>
 
-The new Template will be created, which you can see on the top of 'Templates' listing page. Click on the template to start editing.
+  <Step title="Select the Channel">
+    Select the channel that you want to edit and enable it
 
-### Select the Channel
+    ![](/images/docs/a06f3be-image.png)
+  </Step>
 
-Select the channel that you want to edit and enable it
-
-![](/images/docs/a06f3be-image.png)
-
-### Add template content
-
-![](/images/docs/501c227-image.png)
+  <Step title="Add template content">
+    ![](/images/docs/501c227-image.png)
+  </Step>
+</Steps>
 
 You can get the detailed guide to design the template for each channel in their respective documents:
 
 * [Email](/docs/email)
-* [SMS](/docs/sms-template)
-* [Inbox](/docs/in-app-inbox-template)
-* Push channels: [Androidpush](/docs/push-notification), [iOSpush](/docs/ios-push-template), [Webpush](/docs/web-push)
-* Chat: [Slack](/docs/slack-template), [Whatsapp](/docs/whatsapp), [Microsoft Teams](/docs/ms-teams-template)
 
-#### Template Versions:
+* [SMS](/docs/sms-template)
+
+* [Inbox](/docs/in-app-inbox-template)
+
+* Push channels: 
+
+  [Androidpush](/docs/push-notification)
+
+  , 
+
+  [iOSpush](/docs/ios-push-template)
+
+  , 
+
+  [Webpush](/docs/web-push)
+
+* Chat: 
+
+  [Slack](/docs/slack-template)
+
+  , 
+
+  [Whatsapp](/docs/whatsapp)
+
+  , 
+
+  [Microsoft Teams](/docs/ms-teams-template)
+
+## Template Versions:
 
 SuprSend creates a new version every time you publish a template. This is to ensure that you have historical reference to all the changes done in your template. Helps with audit trails and understanding which template content performed better in terms of user engagement.
 
-* A **draft version** is created by default. You'll always do your changes in the draft version and publish the template once finalized.
-* The recent published template will become the **live version**. All your notifications will be using the live template version.
+* A 
+
+  **draft version**
+
+   is created by default. You'll always do your changes in the draft version and publish the template once finalized.
+
+* The recent published template will become the 
+
+  **live version**
+
+  . All your notifications will be using the live template version.
+
 * Earlier published versions will become inactive as soon as you publish a new template. You can see inactive template versions by selecting "All" tab from the top right side options.
 
 ![](/images/docs/7deea89-image.png)
@@ -64,13 +132,20 @@ SuprSend creates a new version every time you publish a template. This is to ens
 
 We use **`handlebarsjs`** as the template variables language. You can learn about **`handlebarsjs`** [here.](/docs/handlebars-helpers)
 
-1. To add dynamic data, first add the variable data from your event and workflow request in the **mock data**.
+1. To add dynamic data, first add the variable data from your event and workflow request in the 
+
+   **mock data**
+
+   .
 
 ![](/images/docs/a647239-image.png)
 
 1. Often times there is a mismatch between template variables and the data that come as part of payload of the trigger or event. Defining the JSON structure of variables before hand reduces the chances of error.
+
 2. The variables will show as auto-suggestions while designing the template, reducing the possibility of typo errors.
+
 3. Once declared, these variables can be used consistently across all channels for that particular template.
+
 4. The sample values are used to send test notification and show the preview of final notification.
 
 ![](/images/docs/d055e38-image.png)
@@ -127,13 +202,35 @@ Once finalized, you can publish the template by clicking on **"Publish template"
 
 ![](/images/docs/4314582-image.png)
 
-### Testing the template
+## Testing the template
 
 You can send test notifications directly from the template editor page to see how the message will appear on user's device. To send a test notification,
 
-* Click on the **"Test"** button on the top right corner.
-* Add the `distinct_id` of the [user](/docs/users), and click on search. It will show all the available channels for the user.
-* Choose the relevant channels on which you'd like to test, and then click on **Trigger Test using mock data**. This will trigger a test notification. **Go to logs** to monitor the real-time status of your sent notification.
+* Click on the 
+
+  **"Test"**
+
+   button on the top right corner.
+
+* Add the 
+
+  `distinct_id`
+
+   of the 
+
+  [user](/docs/users)
+
+  , and click on search. It will show all the available channels for the user.
+
+* Choose the relevant channels on which you'd like to test, and then click on 
+
+  **Trigger Test using mock data**
+
+  . This will trigger a test notification. 
+
+  **Go to logs**
+
+   to monitor the real-time status of your sent notification.
 
 JSON data added in the global **"Mock Data"** button will be used to render variables in the template. Make sure to add mock data for all the variables added in the template else notifications will fail.
 
@@ -149,8 +246,23 @@ The **`template slug`** serves as a unique identifier for referencing a template
 
 You can edit the **template description, name, and add tags** to the template by clicking on the edit icon next to the its name.
 
-* We recommend adding your template trigger logic and other relevant notes pertaining to the notification in the**description**. This is helpful for later reference and note keeping.
-* **Tags** are used for better organization of the templates on listing page. You can group similar templates using tags. Tags can then be used to [filter](/docs/templates#view-and-filter-your-template-list) out templates on listing page and also while [fetching templates through API](/reference/fetch-template-list).
+* We recommend adding your template trigger logic and other relevant notes pertaining to the notification in the
+
+  **description**
+
+  . This is helpful for later reference and note keeping.
+
+* **Tags**
+
+   are used for better organization of the templates on listing page. You can group similar templates using tags. Tags can then be used to 
+
+  [filter](/docs/templates#view-and-filter-your-template-list)
+
+   out templates on listing page and also while 
+
+  [fetching templates through API](/reference/fetch-template-list)
+
+  .
 
 ![](/images/docs/c17d0f4-image.png)
 
@@ -181,37 +293,3 @@ Archived templates can be seen by clicking on **Archived** tab from the top righ
 ![](/images/docs/033a92a-Screenshot_2023-09-28_at_5.25.08_PM.png)
 
 ***
-
-What’s Next
-
-See how to create templates for all channels
-
-* [Email Template](/docs/email-1)
-* [SMS Template](/docs/sms-template)
-* [In-App Inbox Template](/docs/in-app-inbox-template)
-* [Whatsapp Template](/docs/whatsapp)
-* [Slack Template](/docs/slack-template)
-* [Android Push Template](/docs/push-notification)
-* [iOS Push Template](/docs/ios-push-template)
-* [Web Push Template](/docs/web-push)
-* [Microsoft teams Template](/docs/ms-teams-template)
-
-* [Table of Contents](#)
-
-* * * [Benefits of Templates with SuprSend:](#benefits-of-templates-with-suprsend)
-
-  * [Template Designer](#template-designer)
-
-    * [Create a template](#create-a-template)
-    * [Select the Channel](#select-the-channel)
-    * [Add template content](#add-template-content)
-    * [Adding dynamic content](#adding-dynamic-content)
-    * [Using variables in the templates:](#using-variables-in-the-templates)
-    * [Preview and Publish](#preview-and-publish)
-    * [Testing the template](#testing-the-template)
-    * [Defining template in your workflow request](#defining-template-in-your-workflow-request)
-    * [Edit template name and other details](#edit-template-name-and-other-details)
-    * [Clone template](#clone-template)
-    * [Adding multiple languages](#adding-multiple-languages)
-    * [Archive template](#archive-template)
-    * [View and filter your template list](#view-and-filter-your-template-list)
