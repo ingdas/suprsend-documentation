@@ -3,8 +3,6 @@ title: "Sendgrid"
 description: "https://sendgrid.com/"
 ---
 
-[Suggest Edits](/edit/sendgrid)
-
 This section is a step by step guide to select Sendgrid as your email service provider. You can use use your existing Sendgrid account to integrate, or create a new account from [here](https://signup.sendgrid.com/)
 
 ## Sendgrid integration on SuprSend account
@@ -12,13 +10,16 @@ This section is a step by step guide to select Sendgrid as your email service pr
 On the SuprSend dashboard, follow the steps as below:
 
 1. Select Vendors from the left panel
+
 2. Select 'Email' as the channel from the list
+
 3. Select the communication category from the list - System, Transactional, Promotional
+
 4. Select 'Sendgrid' from the list of Vendors
 
 ![](/images/docs/ef29b03-Sendgrid.png "Sendgrid.png")
 
-5. On the Vendor Settings page, enter the details in the vendor form:
+1. On the Vendor Settings page, enter the details in the vendor form:
 
 ![1942](/images/docs/f216396-Screenshot_2022-01-19_at_1.22.39_PM.png "Screenshot 2022-01-19 at 1.22.39 PM.png")
 
@@ -41,7 +42,7 @@ One of the platform advantage of using SuprSend as a central communication syste
 
 Go to Settings->Mail settings -> Event Webhook
 
-Authorization: None Post URL: `https://hub.suprsend.com/webhook/sendgrid/` Deliverability data: select all Engagement Data: select all
+Authorization: None Post URL: [`https://hub.suprsend.com/webhook/sendgrid/`](https://hub.suprsend.com/webhook/sendgrid/) Deliverability data: select all Engagement Data: select all
 
 ## How to add Unsubscription link in email
 
@@ -53,76 +54,72 @@ To add "Unsubscribe" link in your email, refer to the section: [Unsubscribe via 
 
 If you have used sendgrid design library to design email templates and planning to migrate your existing templates to SuprSend. You can do that using our email HTML editor. Please follow the steps below for migration:
 
-### Step1. Export HTML file of your existing template
+<Steps>
+  <Step title="Export HTML file of your existing template">
 
-#### Option 1: Sendgrid templates are designed using drag and drop editor
 
-* Go to Sendgrid Design Library
-* Select the email template that you want to export and click on "Edit"
-* In the design editor, you'll find the option to **"Export HTML"** in build -> Advanced section
+    <Accordion title="Option 1: Sendgrid templates are designed using drag and drop editor" defaultOpen={false}>
+      * Go to Sendgrid Design Library
 
-<Frame caption="Sendgrid Design Editor template">
-  <img src="/images/docs/4946616-image.png" />
-</Frame>
+      * Select the email template that you want to export and click on "Edit"
 
-#### Option 2: Templates are designed using Code editor
+      * In the design editor, you'll find the option to 
 
-* Go to Sendgrid Design Library
-* Select the email template that you want to export and click on "Edit"
-* In the editor, simply copy paste the HTML content and [add it in SuprSend email editor](/docs/sendgrid#step2-copy-paste-the-html-content-in-suprsend-email-editor)
+        **"Export HTML"**
 
-<Frame caption="Sendgrid Code Editor template">
-  <img src="/images/docs/ce5e8b5-image.png" />
-</Frame>
+         in build -> Advanced section
 
-### Step2. Copy paste the HTML content in SuprSend email editor
+      <Frame caption="Sendgrid Design Editor template">
+        <img src="/images/docs/4946616-image.png" />
+      </Frame>
+    </Accordion>
 
-* Go to [SuprSend dashboard -> Templates page](https://app.suprsend.com/en/staging)
-* Click on "+New Template" and add a template name.
+    <Accordion title="Templates are designed using Code editor" defaultOpen={false}>
+      * Go to Sendgrid Design Library
 
-![](/images/docs/d7fef59-Group_7.png)
+      * Select the email template that you want to export and click on "Edit"
 
-* Go to email editor and click on "Switch to HTML editor" and paste the HTML template downloaded from Sendgrid and click on Publish
+      * In the editor, simply copy paste the HTML content and 
 
-![](https://files.readme.io/58f3d0d-ezgif.com-gif-maker_6.gif)
+        [add it in SuprSend email editor](/docs/sendgrid#step2-copy-paste-the-html-content-in-suprsend-email-editor)
 
-Make sure to add sample data for all variables before publishing the template. You can add sample data via "Mock data" button on the top right side of template editor. If you using default footer in Sendgrid template, please add below mock data along with other template variables.
+      <Frame caption="Sendgrid Code Editor template">
+        <img src="/images/docs/ce5e8b5-image.png" />
+      </Frame>
+    </Accordion>
+  </Step>
 
-<CodeGroup>
-  ```json json
-  {
-    "Sender_Zip": "test",
-    "Sender_City": "test",
-    "Sender_Name": "Nikita",
-    "unsubscribe": "test",
-    "Sender_State": "test",
-    "Sender_Address": "test",
-    "unsubscribe_preferences": "test"
-  }
-  ```
-</CodeGroup>
+  <Step title="Copy paste the HTML content in SuprSend email editor">
+    * Go to 
 
-After publishing the template, you can test template using ["Test template"](/docs/testing-the-template) functionality on the template editor.
+      [SuprSend dashboard -> Templates page](https://app.suprsend.com/en/staging)
+
+    * Click on "+New Template" and add a template name.
+
+    ![](/images/docs/d7fef59-Group_7.png)
+
+    * Go to email editor and click on "Switch to HTML editor" and paste the HTML template downloaded from Sendgrid and click on Publish
+
+    ![](https://files.readme.io/58f3d0d-ezgif.com-gif-maker_6.gif)
+
+    Make sure to add sample data for all variables before publishing the template. You can add sample data via "Mock data" button on the top right side of template editor. If you using default footer in Sendgrid template, please add below mock data along with other template variables.
+
+    <CodeGroup>
+      ```json json
+      {
+        "Sender_Zip": "test",
+        "Sender_City": "test",
+        "Sender_Name": "Nikita",
+        "unsubscribe": "test",
+        "Sender_State": "test",
+        "Sender_Address": "test",
+        "unsubscribe_preferences": "test"
+      }
+      ```
+    </CodeGroup>
+
+
+  </Step>
+</Steps>
 
 ***
-
-What’s Next
-
-Next step is to design an email template. If you have already designed an email template, you can move onto creating a workflow
-
-* [Email Template](/docs/email)
-* [Create Workflow](https://docs.suprsend.com/docs/design-workflow)
-
-* [Table of Contents](#)
-
-* * [Sendgrid integration on SuprSend account](#sendgrid-integration-on-suprsend-account)
-    * [How to get API Key from Sendgrid account](#how-to-get-api-key-from-sendgrid-account)
-
-  * [Setting Callback URL in Sendgrid Account](#setting-callback-url-in-sendgrid-account)
-
-  * [How to add Unsubscription link in email](#how-to-add-unsubscription-link-in-email)
-
-  * [Migrating Email templates from Sendgrid](#migrating-email-templates-from-sendgrid)
-
-    * [Step1. Export HTML file of your existing template](#step1-export-html-file-of-your-existing-template)
-    * [Step2. Copy paste the HTML content in SuprSend email editor](#step2-copy-paste-the-html-content-in-suprsend-email-editor)
