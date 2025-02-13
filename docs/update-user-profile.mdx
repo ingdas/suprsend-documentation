@@ -3,8 +3,6 @@ title: "Update User Profile"
 description: "Update User Profile within workflow based on event or condition."
 ---
 
-[Suggest Edits](/edit/update-user-profile)
-
 Use this node to update recipient or actor profile within the workflow. Common use cases include fetching data during the workflow to update the user profile or updating the profile when a user successfully completes a step. For instance, during onboarding, when a user completes a step, you can update their `%completion` in the profile and later use it in workflow condition or template content.
 
 This functionality is especially powerful for event-based systems. If all updates, including user profile updates, are sent as events from your product or a third-party system, you can skip writing custom user update APIs in your codebase. Simply send events to SuprSend, and let the workflow handle user profile updation.
@@ -23,6 +21,3 @@ User properties are passed in [JSONNET](https://jsonnet.org/ref/language.html) f
 | Brand / Tenant | pass as`data["$tenant"].<property_key>`     | Brand / Tenant properties corresponding to the tenant\_id passed in workflow trigger.                                                                                                                                                |
 
 ***
-
-* [Table of Contents](#)
-* * [Property JSON](#property-json)
