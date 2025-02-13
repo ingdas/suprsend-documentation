@@ -3,12 +3,12 @@ title: "Subscriptions"
 description: "Learn how to use subscriptions to notify a list of recipients associated with an object"
 ---
 
-[Suggest Edits](/edit/subscriptions)
-
 Subscriptions are an extension to [Objects](/docs/objects) and used to link [recipient/user](/docs/users) with the object. You can use subscriptions to:
 
 * Maintain relationship for a group of users and reuse them in all triggers, without having to compute recipient list in individual workflow triggers.
+
 * Notify all users subscribed to a topic or event when it occurs, with users able to subscribe and unsubscribe as needed. Eg. Notify all users subscribed to an event when the event starts.
+
 * SaaS applications managing notifications for end-users where recipient relationships are coming from an system and event triggers or notification calls are coming from an external systems like CRM or SAP, and the trigger doesn't have information of the users who are subscriber to that trigger.
 
 Objects can have one or more subscribers, and triggering a workflow on an object will automatically propagate notifications to all subscribers, without you needing to maintain this subscription in your database.
@@ -205,8 +205,44 @@ It's possible to model nested subscription hierarchies by associating child obje
 Once you've established a nested hierarchy like the above, it's also possible to notify all child subscribers from a parent object. In the example above, that means we could notify all followers of a player by setting the recipient of the trigger to be match.
 
 <Info>
-  Note: currently we only support subscriptions at a maximum depth of 2, meaning you can model a hierarchy such as parent -> child -> user but no deeper. If you need to support a deeper nesting, please [get in touch](/cdn-cgi/l/email-protection#81f2f4f1f1eef3f5c1f2f4f1f3f2e4efe5afe2eeec).
+  📘 **Note**: currently we only support subscriptions at a maximum depth of 2, meaning you can model a hierarchy such as parent -> child -> user but no deeper. If you need to support a deeper nesting, please [get in touch](/cdn-cgi/l/email-protection#81f2f4f1f1eef3f5c1f2f4f1f3f2e4efe5afe2eeec).
 </Info>
+
+### Object Subscription fan out in trigger
+
+In nested object hierarchies, a workflow trigger fans out up to two levels by default. This means notifications are sent to Object channels (e.g., team email, Slack), Object subscribers and Subscribers of child objects.
+
+You can however change the fanout heirarchy by passing `$object_subscriptions_query -> depth` in the recipient JSON.
+
+* `depth: 0`
+
+   would mean sending notification to object channels and not its subscribers.
+
+* `depth: 1`
+
+   would mean sending notification to object channels and its subscribers.
+
+* `depth: 2`
+
+   (maximum) → Expands up to two levels of subscription. <department -> teams -> team members>. If you need to support a deeper nesting, please 
+
+  [get in touch](mailto:support@suprsend.com)
+
+  .
+
+```json
+"recipients": [
+  {
+    "object_type": "teams",
+    "id":"finance",
+
+    //optional parameter to define subscription fan-out depth in workflows
+    "$object_subscriptions_query": {
+      "depth": 0
+    }
+  }
+]
+```
 
 ### Remove Subscription
 
@@ -452,21 +488,9 @@ When you trigger notification on an object. It automatically fans out and send n
 </CodeGroup>
 
 <Info>
-  **Deduplication of recipients**
+  📘 **Deduplication of recipients**
 
   Recipients are deduplicated when executing a notification fan out, which will ensure your notification workflow is executed only once for each unique recipient.
 </Info>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Managing Subscriptions](#managing-subscriptions)
-
-    * [Add Subscription](#add-subscription)
-    * [Subscription Properties](#subscription-properties)
-    * [Adding nested object hierarchies](#adding-nested-object-hierarchies)
-    * [Remove Subscription](#remove-subscription)
-    * [Retrieving object subscriptions](#retrieving-object-subscriptions)
-
-  * [Trigger notification to object subscribers](#trigger-notification-to-object-subscribers)
