@@ -1,79 +1,96 @@
 ---
 title: "Brands / Tenants"
-description: "An overview of what brand stands for in SuprSend and how you can manage it"
+description: "An overview of what tenant (previously named as brand) stands for in SuprSend and how you can manage it"
 ---
 
-[Suggest Edits](/edit/brands)
+If you handle communications to end users on behalf of your customers, you might be tasked with handling custom styling in the messages. This can be quite cumbersome if you have to maintain these customisation for every tenant in your codebase.
 
-If you handle communications to end users on behalf of your customers, you might be tasked with handling custom styling in the messages. This can be quite cumbersome if you have to maintain these customisation for every brand in your codebase.
+Tenants empower you to send personalized communication on behalf of your customers using a single API. You just have to store tenant guidelines like logo, name, colors, social links and other custom properties for your customers once and then use your tenant variables in templates to dynamically render the template for each of your customer.
 
-Brands empower you to send personalized communication on behalf of your customers using a single API. You just have to store brand guidelines like logo, name, colors, social links and other custom properties for your customers once and then use your brand variables in templates to dynamically render the template for each of your customer.
+You can programatically create / update tenant tenant using either one of our backend SDKs ([Python](/docs/brands-python), [Node](/docs/node-brands), [Java](/docs/brands-java), [Go](/docs/brands-api-go)) or through SuprSend dashboard. We'll cover the method to create tenant using SuprSend dashboard.
 
-You can programatically create / update brand tenant using either one of our backend SDKs ([Python](/docs/brands-python), [Node](/docs/node-brands), [Java](/docs/brands-java), [Go](/docs/brands-api-go)) or through SuprSend dashboard. We'll cover the method to create brand using SuprSend dashboard.
+## Creating / Updating Tenant on SuprSend Platform
 
-## Creating / Updating Brand on SuprSend Platform
+Go to Tenants page from Side Navigation panel. On the tenants page, you'll see a default tenant created. For every organization, we create a default tenant which represents org level settings like org logo, colors, social links etc.
 
-Go to Brands page from Side Navigation panel. On the brands page, you'll see a default brand created. For every organization, we create a default brand which represents org level settings like org logo, colors, social links etc.
-
-You can create a new brand by clicking on "New Brand" button.
+You can create a new tenant by clicking on "New Tenant" button.
 
 ![](/images/docs/bc020da-brands.png)
 
-This will open a form to add "**brand id**" and "**brand name**". Add the required fields and click on **"Create brand"**
+This will open a form to add **`tenant id`** and **`tenant name`**. Add the required fields and click on **`Create tenant`**
 
-**Brand id** is a unique identifier for your brand and can't be changed once the brand is created. You'll have to pass brand\_id in your workflow / event calls to render brand level customization in your templates. (if no brand\_id is passed, default brand properties are picked). So, add a brand id which is unique and easily identifiable for you.
+**Tenant id** is a unique identifier for your tenant and can't be changed once the tenant is created. You'll have to pass tenant\_id in your workflow / event calls to render tenant level customization in your templates. (if no tenant\_id is passed, default tenant properties are picked). So, add a tenant\_id which is unique and easily identifiable for you.
 
-**Brand name** can be your customer company / organization name
+**Tenant name** can be your customer company / organization name
 
 ![](/images/docs/44b6a8b-create_brand.png)
 
-This will open brand details page. Fill brand details and Save changes. You can always come back and edit it again later
+This will open tenant details page. Fill tenant details and Save changes. You can always come back and edit it again later
 
 ![](/images/docs/80675b7-Screenshot_2023-03-18_at_11.15.28_AM.png)
 
 Here are the form fields and its description
 
-| Field             | Type                                                                                                                                                 | Description                                                                                                                                                                                                                                                                                                                                                   |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Brand ID          | string of max character length of 64 characters with allowed characters (\[a-z0-9\_-] i.e. alphanumeric characters, \_ (underscore) and - (hyphen).) | brand\_id is used to identify brand in workflow and event call                                                                                                                                                                                                                                                                                                |
-| Brand Name        | single line text                                                                                                                                     | Name of the company / organization                                                                                                                                                                                                                                                                                                                            |
-| Logo              | image                                                                                                                                                | Brand logo. Used to render logo in email brand header                                                                                                                                                                                                                                                                                                         |
-| Brand colors      | 6 digit color code                                                                                                                                   | brand color settings are mainly used while designing templates. Primary brand color is used in button, header and footer border in brand email template. If you don't provide any of the colors for the brand, SuprSend will assume you want to use the default values, so color settings will automatically be set to the color settings of `default` brand. |
-| Social Links      | URL                                                                                                                                                  | URLs of social media accounts of the brand It is used to render social media logos in brand email footer. if the link is not passed, that logo will not be shown in the footer.                                                                                                                                                                               |
-| Custom Properties | JSON                                                                                                                                                 | Custom properties associated with the brand. The option to add custom properties is currently not available on the dashboard but you can update it using backend SDK or APIs                                                                                                                                                                                  |
+| Field             | Type                                                                                                                                                 | Description                                                                                                                                                                                                                                                                                                                                                        |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Tenant ID         | string of max character length of 64 characters with allowed characters (\[a-z0-9\_-] i.e. alphanumeric characters, \_ (underscore) and - (hyphen).) | tenant\_id is used to identify tenant in workflow and event call                                                                                                                                                                                                                                                                                                   |
+| Tenant Name       | single line text                                                                                                                                     | Name of the company / organization                                                                                                                                                                                                                                                                                                                                 |
+| Logo              | image                                                                                                                                                | Tenant logo. Used to render logo in email tenant header                                                                                                                                                                                                                                                                                                            |
+| Tenant colors     | 6 digit color code                                                                                                                                   | Tenant color settings are mainly used while designing templates. Primary tenant color is used in button, header and footer border in tenant email template. If you don't provide any of the colors for the tenant, SuprSend will assume you want to use the default values, so color settings will automatically be set to the color settings of `default` tenant. |
+| Social Links      | URL                                                                                                                                                  | URLs of social media accounts of the tenant It is used to render social media logos in tenant email footer. if the link is not passed, that logo will not be shown in the footer.                                                                                                                                                                                  |
+| Custom Properties | JSON                                                                                                                                                 | Custom properties associated with the tenant. The option to add custom properties is currently not available on the dashboard but you can update it using backend SDK or APIs                                                                                                                                                                                      |
 
-You can use [HTTP API](/reference/brand-overview) or manage brands using one of our backend SDKs:
+You can use [HTTP API](/reference/brand-overview) or manage tenants using one of our backend SDKs:
 
-1. [Update brand using python SDK](/docs/brands-python)
-2. [Update brand using node SDK](/docs/node-brands)
-3. [Update brand using java SDK](/docs/brands-java)
-4. [Update brand using go SDK](/docs/brands-api-go)
+1. [Update ](/docs/brands-python)
 
-## Using brand components in templates
+   tenant
 
-### 1. Ready-to-use brand components in email
+   [ using python SDK](/docs/brands-python)
 
-You can use brand component in email to add ready-to-use header, footer and buttons in your email template. Brand component automatically uses brand logo, social links and primary color to style the email template. You'll find the brand component in right side content menu in email editor.
+2. [Update ](/docs/node-brands)
+
+   tenant
+
+   [ using node SDK](/docs/node-brands)
+
+3. [Update ](/docs/brands-java)
+
+   tenant
+
+   [ using java SDK](/docs/brands-java)
+
+4. [Update ](/docs/brands-api-go)
+
+   tenant
+
+   [ using go SDK](/docs/brands-api-go)
+
+## Using Tenant Components in Templates
+
+### 1. Ready-to-use tenant components in email
+
+You can use tenant component in email to add ready-to-use header, footer and buttons in your email template. Tenant component automatically uses tenant logo, social links and primary color to style the email template. You'll find the tenant component in right side content menu in email editor.
 
 ![](/images/docs/2b5cba1-image.png)
 
-You can add brand component and change block type to switch between header, footer and buttons
+You can add tenant component and change block type to switch between header, footer and buttons
 
 ![](/images/docs/9bb5a1b-image.png)
 
 You can change the component using standard customization options like padding, background color etc. to best suit your email template.
 
-### 2. Use brand variable for all channels
+### 2. Use Tenant Variable for all Channels
 
-You can add brand variables in all channel templates as `$brand.<property>`. For example, if you have to add brand\_name in your template, you can add it as `$brand.brand_name`. Also, when you type `{`, brand variable will automatically come up in auto-suggestions for your to add in the template
+You can add tenant variables in all channel templates as `$tenant.<property>`. For example, if you have to add tenant\_name in your template, you can add it as `$tenant.tenant_name`. Also, when you type `{`, tenant variable will automatically come up in auto-suggestions for your to add in the template
 
 ![](/images/docs/9d494a1-small-Screenshot_2023-05-09_at_10.17.27_PM.png)
 
-## Triggering notification for your brand
+## Triggering notification for your Tenant
 
-After adding the brand variables in your template, you can add brand\_id in your workflow or event trigger to trigger notification for that brand. This will replace brand variables with the properties of that brand at run time.
+After adding the tenant variables in your template, you can add tenant\_id in your workflow or event trigger to trigger notification for that tenant. This will replace tenant variables with the properties of that tenant at run time.
 
-### 1. Adding brand\_id in workflow trigger
+### 1. Adding tenant\_id in workflow trigger
 
 <CodeGroup>
   ```python python
@@ -82,8 +99,8 @@ After adding the brand variables in your template, you can add brand\_id in your
   # Prepare Workflow body
   workflow_body = {...}   
 
-  # Add brand_id in workflow instance
-  wf = Workflow(body=workflow_body, brand_id='_brand_id')
+  # Add tenant_id in workflow instance
+  wf = Workflow(body=workflow_body, tenant_id='_tenant_id')
 
   # Trigger workflow
   response = supr_client.trigger_workflow(wf)
@@ -121,7 +138,7 @@ After adding the brand variables in your template, you can add brand\_id in your
   ```
 </CodeGroup>
 
-### 2. Adding brand\_id in event trigger
+### 2. Adding tenant\_id in event trigger
 
 <CodeGroup>
   ```python python
@@ -136,8 +153,8 @@ After adding the brand variables in your template, you can add brand\_id in your
     "key2":"value2"
   } 
 
-  # Add brand_id in event instance
-  event = Event(distinct_id=distinct_id, event_name=event_name, properties=properties, brand_id='_brand_id_')
+  # Add tenant_id in event instance
+  event = Event(distinct_id=distinct_id, event_name=event_name, properties=properties, tenant_id='_tenant_id_')
 
   # Track event
   response = supr_client.track_event(event)
@@ -182,25 +199,30 @@ After adding the brand variables in your template, you can add brand\_id in your
   ```
 </CodeGroup>
 
-### Possible customizations at brand level
+### Possible customizations at Tenant Level
 
-* **Custom Template Designs for Each Brand** - You can create unique template designs for each brand using brand-specific properties. Refer to the [above section](/docs/brands#using-brand-components-in-templates) for details on how to implement this.
-* **Route Brand messages from their own vendors** - You can direct messages through a brand's designated vendors by configuring [tenant vendors](/docs/tenant-vendor) on the vendor settings page. Messages will be sent via the vendor associated with the brand\_id provided in the trigger. If no tenant vendor is set, the system will use the default vendor settings.
-* **Tenant level preference setting**: Tenants can control what notifications should be sent to their associated users and the their default preference setting. It can be used for cases where admin wants to control the notifications that their teammates receive or when you are sending notifications to multiple tenant's users and tenant wants to control the notifications their users receive, on which channels and at what frequency. [Read more about tenant preferences here](/docs/brand-preference).
+* **Custom Template Designs for Each Tenant**
+
+   \- You can create unique template designs for each tenant using tenant-specific properties. Refer to the 
+
+  [above section](/docs/brands#using-brand-components-in-templates)
+
+   for details on how to implement this.
+
+* **Route Tenant messages from their own vendors**
+
+   \- You can direct messages through a tenant's designated vendors by configuring 
+
+  [tenant vendors](/docs/tenant-vendor)
+
+   on the vendor settings page. Messages will be sent via the vendor associated with the tenant_id provided in the trigger. If no tenant vendor is set, the system will use the default vendor settings.
+
+* **Tenant level preference setting**
+
+  : Tenants can control what notifications should be sent to their associated users and the their default preference setting. It can be used for cases where admin wants to control the notifications that their teammates receive or when you are sending notifications to multiple tenant's users and tenant wants to control the notifications their users receive, on which channels and at what frequency. 
+
+  [Read more about tenant preferences here](/docs/brand-preference)
+
+  .
 
 ***
-
-* [Table of Contents](#)
-
-* * [Creating / Updating Brand on SuprSend Platform](#creating--updating-brand-on-suprsend-platform)
-
-  * [Using brand components in templates](#using-brand-components-in-templates)
-
-    * [1. Ready-to-use brand components in email](#1-ready-to-use-brand-components-in-email)
-    * [2. Use brand variable for all channels](#2-use-brand-variable-for-all-channels)
-
-  * [Triggering notification for your brand](#triggering-notification-for-your-brand)
-
-    * [1. Adding brand\_id in workflow trigger](#1-adding-brand_id-in-workflow-trigger)
-    * [2. Adding brand\_id in event trigger](#2-adding-brand_id-in-event-trigger)
-    * [Possible customizations at brand level](#possible-customizations-at-brand-level)
