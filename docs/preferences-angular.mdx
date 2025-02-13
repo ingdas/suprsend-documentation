@@ -3,7 +3,13 @@ title: "Angular"
 description: "This section describes how to integrate user preferences functionality in Angular Applications."
 ---
 
-[Suggest Edits](/edit/preferences-angular)
+<Warning>
+  **Preferences changes in @suprsend/web-sdk version >=2.0.0**
+
+
+
+  In `@suprsend/web-sdk@2.0.0` we have revamped SDK. The whole structure of preferences have been changed from SDK side. Please upgrade to newer versions. Old version of documentation for preference is available [here](https://docs.suprsend.com/v1.2.1/docs/angular).
+</Warning>
 
 This document will cover the methods to integrate [User Preferences](/docs/preferences) in your Angular Applications. Your users will be able to specify their notification preferences using this page. With SuprSend, the user can set preferences at 3 levels - **communication channel**, **notification category**, and **selected channels inside a category**. We'll cover methods to read and update data at all 3 levels.
 
@@ -16,8 +22,11 @@ All the data points and functions are same as Javascript application
 ## Pre-requisites
 
 * [Integrate Javascript SDK](/docs/integrate-javascript-sdk)
+
 * [Identify user on login](/docs/javascript-create-user#how-suprsend-identifies-a-user) and [reset on logout](/docs/javascript-create-user#step-2--call-reset-to-clear-user-data-on-log-out) to ensure that preference changes are tagged to the correct user
+
 * [Configure notification categories](/docs/preferences#creating--updating-notification-categories) on SuprSend dashboard
+
 * [Understanding of the preference data structure and methods](/docs/preferences-javascript)
 
 ## Integration
@@ -47,45 +56,48 @@ There will be 3 components: preference, channel-level-preferences, and category-
   ```
 </CodeGroup>
 
-### Step 1. Get Preference data
+<Steps>
+  <Step title="Get Preference data">
+    After adding the component, call ***suprsend.user.preferences.get\_preferences()*** method to get the preferences data for the already identified user. This method is used to get full user preferences data from the SuprSend. This method should be called first before any update methods. Calling this method will make an API call and returns a preference response, which you can store in your instance property ***preferenceData*** if there is no error.
+  </Step>
 
-After adding the component, call ***suprsend.user.preferences.get\_preferences()*** method to get the preferences data for the already identified user. This method is used to get full user preferences data from the SuprSend. This method should be called first before any update methods. Calling this method will make an API call and returns a preference response, which you can store in your instance property ***preferenceData*** if there is no error.
+  <Step title="Configure Event Listeners">
+    After calling ***get\_preferences***, call these 2 event listeners
 
-### Step 2. Configure Event Listeners
+    1. [preferences\_updated](/docs/preferences-javascript#preferences_updated) - This event is fired when you get a successful response after calling `get_preferences` method. In the callback, you will get the latest preference data as a parameter. You can use this data to update the latest preference data in the existing instance property ***preferenceData*** for the component to render.
 
-After calling ***get\_preferences***, call these 2 event listeners
+    2. [preferences\_error](/docs/preferences-javascript#preferences_error) - When there are validation errors or API errors SDK will fire ***preferences\_error*** event. In the callback, you will then get error-related information as a parameter.
 
-1. ***[preferences\_updated](/docs/preferences-javascript#preferences_updated)*** - This event is fired when you get a successful response after calling `get_preferences` method. In the callback, you will get the latest preference data as a parameter. You can use this data to update the latest preference data in the existing instance property ***preferenceData*** for the component to render.
-2. ***[preferences\_error](/docs/preferences-javascript#preferences_error)*** - When there are validation errors or API errors SDK will fire ***preferences\_error*** event. In the callback, you will then get error-related information as a parameter.
+    <CodeGroup>
+      ```typescript preference.component.ts
+      @Component({...})
+      export class PreferenceComponent implements OnInit {
+        preferencesData: any = null;
 
-<CodeGroup>
-  ```typescript preference.component.ts
-  @Component({...})
-  export class PreferenceComponent implements OnInit {
-    preferencesData: any = null;
+        ngOnInit(): void {
+          suprsend.user.preferences.get_preferences().then((resp) => {
+            if (resp.error) {
+              console.log(resp.message);
+            } else {
+              this.preferencesData = resp;
+            }
+          });
+      		
+      		// listen for update in preferences data
+          suprsend.emitter.on('preferences_updated', (preferenceData) => {
+            this.preferencesData = { ...preferenceData };
+          });
 
-    ngOnInit(): void {
-      suprsend.user.preferences.get_preferences().then((resp) => {
-        if (resp.error) {
-          console.log(resp.message);
-        } else {
-          this.preferencesData = resp;
+          // listen for errors
+          suprsend.emitter.on('preferences_error', (error) => {
+            console.log('ERROR:', error);
+          });
         }
-      });
-  		
-  		// listen for update in preferences data
-      suprsend.emitter.on('preferences_updated', (preferenceData) => {
-        this.preferencesData = { ...preferenceData };
-      });
-
-      // listen for errors
-      suprsend.emitter.on('preferences_error', (error) => {
-        console.log('ERROR:', error);
-      });
-    }
-  }
-  ```
-</CodeGroup>
+      }
+      ```
+    </CodeGroup>
+  </Step>
+</Steps>
 
 ## Show Preference data on the UI
 
@@ -97,7 +109,7 @@ Preferences data is of 2 types:
   <img src="/images/docs/e8980ca-image.png" />
 </Frame>
 
-2. [Channel Preferences](/docs/angular#show-channel-level-preference-section-on-the-ui) - User can set preferences at overall channel level from this section.
+1. [Channel Preferences](/docs/angular#show-channel-level-preference-section-on-the-ui) - User can set preferences at overall channel level from this section.
 
 <Frame caption="Channel Preference">
   <img src="/images/docs/b28f0a2-image.png" />
@@ -128,7 +140,9 @@ Our Main component ***preference*** has 2 child components one for each type of 
 In category-level preferences, you'll have to fetch the data from 3 parts:
 
 * **Section** - to show sections like "Product Updates" in below example
+
 * **Category** - to show categories and their overall status like "Refunds" in below example
+
 * **CategoryChannel** - to show communication channels inside the category and their status
 
 ![](/images/docs/3b8ee51-image.png)
@@ -136,12 +150,14 @@ In category-level preferences, you'll have to fetch the data from 3 parts:
 Below are the steps to render category preference UI:
 
 1. Loop through the property ***preferenceData.sections*** for showing sections, show sub-categories inside each section, and show subcategory's channels inside each sub-category.
+
 2. Add a ***switch*** button next to each sub-category for opting in and out of the category. Add ***checkbox*** components in sub-category channels for opting in and out of category-channel. You can use any third-party npm package to import these components or design your own component.
+
 3. To update category preference on the click of the switch button, call ***update\_category\_preference*** method and if no error is received in response, update the latest data in the instance property. For preference state `opt-in` set the switch state as **on** and **off** for the `opt-out` state.
 
 ![](/images/docs/1742b8c-image.png)
 
-4. To update category-channel preference on the click of checkbox next to each channel, call the ***update\_channel\_preference\_in\_category*** method. Update the latest data in the instance property if no error is received in response. For preference state `opt-in` set the checkbox state as **checked** and **unchecked** for the `opt-out` state.
+1. To update category-channel preference on the click of checkbox next to each channel, call the ***update\_channel\_preference\_in\_category*** method. Update the latest data in the instance property if no error is received in response. For preference state `opt-in` set the checkbox state as **checked** and **unchecked** for the `opt-out` state.
 
 ![](/images/docs/a0cf6ad-image.png)
 
@@ -258,7 +274,9 @@ Below are the steps to render category preference UI:
 Below are the steps to render channel preference UI:
 
 1. Loop through the property ***preferenceData.channel\_preferences*** for showing channels and for every channel item we will show an option to select preference using radio buttons.
+
 2. Add a **radio** button next, against channel level options for switching from `all` to `required` preference in channel.
+
 3. To update channel preference on the click of the radio button, call ***update\_overall\_channel\_preference*** method, and if no error is received in response, update the latest data in the state.
 
 ![](/images/docs/5574d6f-channel-update_1.png)
@@ -378,24 +396,3 @@ Below are the steps to render channel preference UI:
 You can refer to our [angular-example](https://github.com/suprsend/angular-example) GitHub repository to get check the full code.
 
 ***
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-
-  * [Integration](#integration)
-
-  * [Read Preferences data](#read-preferences-data)
-
-    * [Step 1. Get Preference data](#step-1-get-preference-data)
-    * [Step 2. Configure Event Listeners](#step-2-configure-event-listeners)
-
-  * [Show Preference data on the UI](#show-preference-data-on-the-ui)
-
-    * [Code block to Render Header and Blank state](#code-block-to-render-header-and-blank-state)
-    * [Show Category level Preference section on the UI](#show-category-level-preference-section-on-the-ui)
-    * [Code block to Render Category section](#code-block-to-render-category-section)
-    * [Show Channel level Preference section on the UI](#show-channel-level-preference-section-on-the-ui)
-    * [Code block to Render Channel section](#code-block-to-render-channel-section)
-
-  * [Example Code to Render Full Preference Page](#example-code-to-render-full-preference-page)

@@ -3,21 +3,20 @@ title: "Send and Track Events"
 description: "This document will cover the method to send event to Suprsend platform"
 ---
 
-[Suggest Edits](/edit/python-send-event-data)
-
 You can follow the steps mentioned in the documentation below or refer to our quick code recipe
 
-🦉
-
-Send and Track events using python SDK
-
-Open Recipe
+<Card title="Send and Track events using python SDK" icon="bolt">
+  Read the recipe
+</Card>
 
 ## Pre-requisites
 
 1. [Integrate Python SDK](/docs/python-sdk)
+
 2. [Create User Profile](/docs/python-create-user-profile)
+
 3. [Create Template on SuprSend platform](/docs/templates) - if you want to trigger workflow by passing the event
+
 4. [Create Workflow on SuprSend Platform](/docs/design-workflow) - if you want to trigger workflow by passing the event
 
 ## Create Workflow on SuprSend Platform
@@ -62,6 +61,8 @@ You can send event to Suprsend platform by using the `supr_client.track_event` m
 | `idempotency_key` | unique key in the request call for [idempotent requests](/docs/python-send-event-data#idempotent-requests)                                          | string     | *optional*  |
 
 <Warning>
+  **Event naming guidelines**
+
   When you create an Event or a property, please ensure that the Event Name or Property Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
 </Warning>
 
@@ -74,7 +75,9 @@ To make an idempotent request, pass `idempotency_key` in the event instance. Ide
 Here are some common approaches for assigning idempotency keys:
 
 * **Generate a random UUID** for each request.
+
 * **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like `user147-new-comment-1687437670`
+
 * **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
 
 ### Sample Code
@@ -106,6 +109,8 @@ Here are some common approaches for assigning idempotency keys:
 </CodeGroup>
 
 <Warning>
+  **Note:**
+
   Event\_name in Track event method should exactly match the Event name added in Workflow configurations
 </Warning>
 
@@ -114,6 +119,7 @@ Here are some common approaches for assigning idempotency keys:
 To add one or more Attachments to a Notification (viz. Email), you can just append the filepath of attachment to the event instance.
 
 * Call `event.add_attachment()` for each file with an accessible URL.
+
 * Ensure that file\_path is a publicly accessible URL. Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
 
 Refer below example for adding attachment in event call
@@ -200,7 +206,9 @@ Use `.append()` on bulk\_events instance to add however-many-records to call in 
 ### How SuprSend Processes the bulk API request
 
 * On calling `bulk_ins.trigger()`, the SDK internally makes one-or-more Callable-chunks.
+
 * Each callable-chunk contains a subset of records, the subset calculation is based on each record's bytes-size and max allowed chunk-size, chunk-length etc.
+
 * For each callable-chunk SDK makes an HTTP call to SuprSend to register the request.
 
 ## Add file attachment in bulk API (for email)
@@ -208,6 +216,7 @@ Use `.append()` on bulk\_events instance to add however-many-records to call in 
 Similar to single API call, you can add file attachment to bulk API by appending the attachment filepath to each event instance in bulk API call.
 
 * Call `event.add_attachment()` for each file with an accessible URL. Ensure that file\_path is a publicly accessible URL.
+
 * Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
 
 Refer below example for adding attachment in bulk API call
@@ -245,7 +254,7 @@ Refer below example for adding attachment in bulk API call
   Please add public accessible URL only as attachment file otherwise it will throw an error `404 not found` and workflow will not be triggered
 </Warning>
 
-## Response
+### Response
 
 Response is an instance of `suprsend.BulkResponse` class
 
@@ -281,24 +290,3 @@ Response is an instance of `suprsend.BulkResponse` class
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-
-  * [Create Workflow on SuprSend Platform](#create-workflow-on-suprsend-platform)
-
-  * [Send Event](#send-event)
-
-    * [Idempotent requests](#idempotent-requests)
-    * [Sample Code](#sample-code)
-
-  * [Add file attachment in event (for email)](#add-file-attachment-in-event-for-email)
-    * [Response](#response)
-
-  * [Bulk API for multiple event requests](#bulk-api-for-multiple-event-requests)
-    * [How SuprSend Processes the bulk API request](#how-suprsend-processes-the-bulk-api-request)
-
-  * [Add file attachment in bulk API (for email)](#add-file-attachment-in-bulk-api-for-email)
-
-  * [Response](#response-1)

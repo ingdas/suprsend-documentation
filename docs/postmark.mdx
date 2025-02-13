@@ -3,40 +3,47 @@ title: "Postmark"
 description: "https://postmarkapp.com/"
 ---
 
-[Suggest Edits](/edit/postmark)
-
 This section is a step by step guide to select Postmark as your email service provider You can use use your existing Postmark account to integrate, or create a new account from [here](https://account.postmarkapp.com/sign_up)
 
 ## Postmark integration on SuprSend account
 
-**Step 1**: On the SuprSend dashboard, follow the steps as below:
+<Steps>
+  <Step title="On the SuprSend dashboard, follow the steps as below:">
+    1. Select **Vendors** from the left panel
 
-1. Select **Vendors** from the left panel
-2. Select **Email** as the channel from the list
-3. Select the communication category from the list - **System**, **Transactional**, **Promotional**
-4. Select **Postmark** from the list of Vendors
+    2. Select **Email** as the channel from the list
 
-![](/images/docs/6c4ab1f-postmark_steps.jpeg)
+    3. Select the communication category from the list - **System**, **Transactional**, **Promotional**
 
-**Step 2**: On the **settings** page, enter the details.
+    4. Select **Postmark** from the list of Vendors
 
-![](/images/docs/9c838be-Screenshot_2024-03-30_at_12.38.11_AM.png)
+    ![](/images/docs/6c4ab1f-postmark_steps.jpeg)
+  </Step>
 
-| Form Field             | Description                                                                                                                                                                                                                                                                 |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Nickname               | You can give any name which may help you to identify this account easily                                                                                                                                                                                                    |
-| Server Token           | You will get this server token from your Postmark account. This is a mandatory field. SuprSend will use this token to send mails from your Postmark account. Check [below section](/docs/postmark#how-to-get-a-server-token-from-postmark) on how to get your Server Token. |
-| Account Token          | Account token is used by postmark for account level API access. These tokens cannot be used to access individual server data. It's a non-mandatory field to send emails.                                                                                                    |
-| From Name              | Default 'From Name' that email will go from. You can override this in the individual template.*eg. SuprSend*                                                                                                                                                                |
-| From Email             | From email for Postmark has to be a verified email by postmark . Check [below section](/docs/postmark#how-to-verify-email-and-whitelist-domain-on-postmark) on how to verify your email or enable domain whitelisting on Postmark.                                          |
-| Reply Email            | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. [\[email protected\]](/cdn-cgi/l/email-protection#85f6f0f5f5eaf7f1c5f6f0f5f7f6e0ebe1abe6eae8)*                                                             |
-| Price per notification | This is the amount you pay per email notification to Postmark. It helps us to calculate, estimate and optimise your cost spent on notifications.                                                                                                                            |
+  <Step title="On the settings page, enter the details.">
+    ![](/images/docs/9c838be-Screenshot_2024-03-30_at_12.38.11_AM.png)
+
+    | Form Field             | Description                                                                                                                                                                                                                                                                 |
+    | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | Nickname               | You can give any name which may help you to identify this account easily                                                                                                                                                                                                    |
+    | Server Token           | You will get this server token from your Postmark account. This is a mandatory field. SuprSend will use this token to send mails from your Postmark account. Check [below section](/docs/postmark#how-to-get-a-server-token-from-postmark) on how to get your Server Token. |
+    | Account Token          | Account token is used by postmark for account level API access. These tokens cannot be used to access individual server data. It's a non-mandatory field to send emails.                                                                                                    |
+    | From Name              | Default 'From Name' that email will go from. You can override this in the individual template.*eg. SuprSend*                                                                                                                                                                |
+    | From Email             | From email for Postmark has to be a verified email by postmark . Check [below section](/docs/postmark#how-to-verify-email-and-whitelist-domain-on-postmark) on how to verify your email or enable domain whitelisting on Postmark.                                          |
+    | Reply Email            | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. [\[email protected\]](/cdn-cgi/l/email-protection#85f6f0f5f5eaf7f1c5f6f0f5f7f6e0ebe1abe6eae8)*                                                             |
+    | Price per notification | This is the amount you pay per email notification to Postmark. It helps us to calculate, estimate and optimise your cost spent on notifications.                                                                                                                            |
+    |                        |                                                                                                                                                                                                                                                                             |
+  </Step>
+</Steps>
 
 ## How to get a server token from Postmark
 
 1. Login to your Postmark account
+
 2. Go to [servers](https://account.postmarkapp.com/servers) section and select your email server
+
 3. Go to section API Tokens
+
 4. Copy the already generated API token or generate a new token.
 
 ![](/images/docs/3964d3b-Screenshot_2024-03-30_at_1.01.53_AM.png)
@@ -46,7 +53,9 @@ This section is a step by step guide to select Postmark as your email service pr
 Email signature verification is an important step without which Postmark does not allow to send emails from the email added in Postmark account. You can add multiple emails by verifying them individually on Postmark or verify all the emails with your email domain. To do this, follow the steps below:
 
 1. Go to Postmark -> [Sender Signatures](https://account.postmarkapp.com/signature_domains) section
+
 2. Add your email, Postmark will send an email for verifying the added email address, complete the verification
+
 3. Alternatively you can also whitelist all the email adresses in your email domain by adding a DKIM DNS record
 
 ![](/images/docs/8acd875-Screenshot_2024-03-30_at_1.21.10_AM.png)
@@ -59,24 +68,10 @@ SuprSend uses webhooks to update notification statuses on delivery, user actions
 
 ![](/images/docs/23d0698-Screenshot_2024-03-30_at_1.32.21_AM.png)
 
-2. On **Add webhook**, settings page, add **[https://hub.suprsend.com/webhook/postmark/](https://hub.suprsend.com/webhook/postmark/)** in webhook URL section and enable all events on Postmark.
+1. On **Add webhook**, settings page, add [https://hub.suprsend.com/webhook/postmark/](https://hub.suprsend.com/webhook/postmark/) in webhook URL section and enable all events on Postmark.
 
 ![](/images/docs/19a5ffa-Screenshot_2024-03-30_at_1.36.14_AM.png)
 
 Yay! you are all set to use Postmark on SuprSend 🎉.
 
 ***
-
-What’s Next
-
-Create a template and create workflow to start sending emails with your Postmark account.
-
-* [Email Template](/docs/email)
-* [Create Workflow](https://docs.suprsend.com/docs/design-workflow)
-
-* [Table of Contents](#)
-
-* * [Postmark integration on SuprSend account](#postmark-integration-on-suprsend-account)
-  * [How to get a server token from Postmark](#how-to-get-a-server-token-from-postmark)
-  * [How to verify email and whitelist domain on Postmark](#how-to-verify-email-and-whitelist-domain-on-postmark)
-  * [Configuring Open/Click tracking for emails on Postmark](#configuring-openclick-tracking-for-emails-on-postmark)

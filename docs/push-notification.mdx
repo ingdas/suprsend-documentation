@@ -1,9 +1,7 @@
 ---
 title: "Android Push Template"
-description: "Suggest Edits"
+description: "This section is a step-by-step guide on how to design and publish android push notification template."
 ---
-
-This section is a step-by-step guide on how to design and publish android push notification template.
 
 ## Design Template
 
@@ -37,7 +35,10 @@ You can design template with a simple form editor tool. You can add variables wi
 | Custom key-value pair | key-value pair   | You can use this field to send custom key-value pairs to users' device. This is generally used for storing and retrieving data for caching, app metadata, or user settings. You can combine it with silent notification if the purpose is to update data in user's applications without notifying them. Both key and value is passed as string in the notification payload. For example, if you are passing this `json: {"foo":1, "bar:1}`. It will be passed as `"json": "{\"foo\":1,\"bar\":1}"` in the payload. You can add variables in both key and value to programatically pass custom data based on your event or workflow input. **Please note that your app’s backend must be able to process custom key-value pairs for the data payload to function properly.** |
 
 <Info>
+  **Required - Supported SDK version for app icon and sound:**
+
   * App icon functionality is supported in Android native and react native version 0.1.8 and above.
+
   * Custom Sound is supported in Android native and react native version 2.2.0 and above.
 
   If you are using an older SDK version, please upgrade to the latest SDK version
@@ -48,56 +49,66 @@ You can design template with a simple form editor tool. You can add variables wi
 To show a small app icon in your notification, you'll have to add a small icon in the drawable folder of application modules. You can either use a vector drawable or a png image. We recommend naming this file as `ic_suprsend_app_icon`
 
 <Info>
+  **Generate icon images with alpha transparency:**
+
+
   Note that Android only uses the alpha channel for the icon. It will display monochrome in the status bar but an accent color can be applied to the left side the notification itself.
 </Info>
 
-### Option A. Adding a vector drawable
+<Accordion title="Option A. Adding a vector drawable" defaultOpen={false}>
+  You can add a vector drawable icon to the default drawable folder of your application module(androidApp/src/main/res/drawable/). Check out a [sample vector drawable link](https://github.com/suprsend/suprsend-android-sdk/blob/main/androidApp/src/main/res/drawable/ic_alarm.xml).
+</Accordion>
 
-You can add a vector drawable icon to the default drawable folder of your application module(androidApp/src/main/res/drawable/). Check out a [sample vector drawable link](https://github.com/suprsend/suprsend-android-sdk/blob/main/androidApp/src/main/res/drawable/ic_alarm.xml).
+<Accordion title="Option B. Adding a png icon for small icon" defaultOpen={false}>
+  You can add a icon in .png format. To render this png icon as a small icon in your push notification, you will have to create icons of below sizes and place them in their respective folders. Refer below table:
 
-### Option B. Adding a png icon for small icon
+  | Density (dp) | Size (px) |
+  | ------------ | --------- |
+  | MDPI         | 24x24     |
+  | HDPI         | 36x36     |
+  | XHDPI        | 48x48     |
+  | XXHDPI       | 72x72     |
+  | XXXHDPI      | 96x96     |
 
-You can add a icon in .png format. To render this png icon as a small icon in your push notification, you will have to create icons of below sizes and place them in their respective folders. Refer below table:
+  Follow below steps to add icons in .png format
 
-| Density (dp) | Size (px) |
-| ------------ | --------- |
-| MDPI         | 24x24     |
-| HDPI         | 36x36     |
-| XHDPI        | 48x48     |
-| XXHDPI       | 72x72     |
-| XXXHDPI      | 96x96     |
+  <Steps>
+    <Step title="Step 1. Generate icon">
+      **Option A. Using Android Asset Studio *(Recommended)***
 
-Follow below steps to add icons in .png format
+      To quickly generate small icons with the correct settings, you can use [Android Asset Studio](https://romannurik.github.io/AndroidAssetStudio/icons-notification.html#source.type=clipart\&source.clipart=ac_unit\&source.space.trim=1\&source.space.pad=0\&name=ic_suprsend_app_icon).
 
-#### Step 1. Generate icon
 
-**Option A. Using Android Asset Studio *(Recommended)***
 
-To quickly generate small icons with the correct settings, you can use [Android Asset Studio](https://romannurik.github.io/AndroidAssetStudio/icons-notification.html#source.type=clipart\&source.clipart=ac_unit\&source.space.trim=1\&source.space.pad=0\&name=ic_suprsend_app_icon).
+      **Option B. Manually create icons**
 
-**Option B. Manually create icons**
+      If you prefer to create your own icons, you must make your icons for all sizes and make the small ones in white with a transparent background.
+    </Step>
 
-If you prefer to create your own icons, you must make your icons for all sizes and make the small ones in white with a transparent background.
+    <Step title="Step 2. Create project paths">
+      Make sure the following paths exist in your **App -> `main`** folder, create any folders you are missing. Place images of each size in their respective folders.
 
-#### Step 2. Create project paths
+      | SDK            | File path                                                                                                                                                                                                                                             |
+      | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+      | Android Native | res/drawable-mdpi/ (24x24) res/drawable-hdpi/ (36x36) res/drawable-xhdpi/ (48x48) res/drawable-xxhdpi/ (72x72) res/drawable-xxxhdpi/ (96x96)                                                                                                          |
+      | React Native   | android/app/src/main/res/drawable-mdpi/ (24x24) android/app/src/main/res/drawable-hdpi/ (36x36) android/app/src/main/res/drawable-xhdpi/ (48x48) android/app/src/main/res/drawable-xxhdpi/ (72x72) android/app/src/main/res/drawable-xxxhdpi/ (96x96) |
 
-Make sure the following paths exist in your **App -> `main`** folder, create any folders you are missing. Place images of each size in their respective folders.
+      Your project should look similar to this depending on your SDK. [Sample png drawable link](https://github.com/suprsend/suprsend-android-sdk/tree/main/androidApp/src/main/res)
 
-| SDK            | File path                                                                                                                                                                                                                                             |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Android Native | res/drawable-mdpi/ (24x24) res/drawable-hdpi/ (36x36) res/drawable-xhdpi/ (48x48) res/drawable-xxhdpi/ (72x72) res/drawable-xxxhdpi/ (96x96)                                                                                                          |
-| React Native   | android/app/src/main/res/drawable-mdpi/ (24x24) android/app/src/main/res/drawable-hdpi/ (36x36) android/app/src/main/res/drawable-xhdpi/ (48x48) android/app/src/main/res/drawable-xxhdpi/ (72x72) android/app/src/main/res/drawable-xxxhdpi/ (96x96) |
+      ![](/images/docs/a1392cc-Frame_57_2.png)
 
-Your project should look similar to this depending on your SDK. [Sample png drawable link](https://github.com/suprsend/suprsend-android-sdk/tree/main/androidApp/src/main/res)
+      <Warning>
+        **Troubleshooting Icons Not Showing:**
 
-![](/images/docs/a1392cc-Frame_57_2.png)
+        * If you see the default SuprSend bell icon even after adding app icon in your template, you did not add all icon sizes. Please add all icons sizes and correct paths.
 
-<Warning>
-  * If you see the default SuprSend bell icon even after adding app icon in your template, you did not add all icon sizes. Please add all icons sizes and correct paths.
-  * If you see a solid square, you set the image to the correct path, but the image does not have alpha transparency. For more help, try using images from this [Android Asset Studio clipart](http://romannurik.github.io/AndroidAssetStudio/icons-notification.html#source.type=clipart\&source.clipart=access_alarm\&source.space.trim=1\&source.space.pad=0\&name=ic_suprsend_app_icon).
-</Warning>
+        * If you see a solid square, you set the image to the correct path, but the image does not have alpha transparency. For more help, try using images from this [Android Asset Studio clipart](http://romannurik.github.io/AndroidAssetStudio/icons-notification.html#source.type=clipart\&source.clipart=access_alarm\&source.space.trim=1\&source.space.pad=0\&name=ic_suprsend_app_icon).
+      </Warning>
+    </Step>
+  </Steps>
+</Accordion>
 
-## How to add a custom sound file in your android project?
+### How to add a custom sound file in your android project?
 
 From Android O onwards, notification sound became a property of notification channel and is only set at the time of new [category creation](https://developer.android.com/develop/ui/views/notifications/channels) (Notification channel is identified as [notification category](/docs/notification-category) in SuprSend). This means that for a user when you first time send the notification in a particular category, the sound is set for that category and even if you change the sound in your template, the sound in that category will not change. The updated sound will play for the user either if you send notification in a new category or user uninstalls and reinstalls the app.
 
@@ -120,10 +131,16 @@ To change the notification sound you will have to add the sound file to the raw 
 ![](/images/docs/470248c-sound_file.png)
 
 <Warning>
+  **Sound is set at channel level for android version >= 8.0:**
+
+
+
   From Android O onwards (\~95% of the android users), notification sound became a property of notification channel and is only set at the time of new [category creation](https://developer.android.com/develop/ui/views/notifications/channels). So, the new sound set at template will only change for users if
 
   * you are sending the notification in a new [notification category](/docs/notification-category)
+
   * user is installing the app for the first time or getting notification in that category for the first time
+
   * user has uninstalled and reinstalled the app
 </Warning>
 
@@ -131,66 +148,81 @@ To change the notification sound you will have to add the sound file to the raw 
 
 There will always be the case where you would be required to add dynamic content to a template, so as to personalise it for your users. To achieve this, you can add variables in the template, which will be replaced with the dynamic content at the time of sending push. To send actual values to replace variables at the time of communication trigger, use one of our frontend or backend SDKs. Here is a step by step guide on how to add dynamic content in android push:
 
-### Step 1: Declaring Variables in the global 'Variables' button:
+<Steps>
+  <Step title="Declaring Variables in the global 'Variables' button:">
+    If you are at this stage, it is assumed that you have declared the variables along with sample values in the global **Mock data** button. To see how to declare variables before using them in designing templates, refer to [this section in the Templates documentation](/docs/templates#adding-dynamic-content).
+  </Step>
 
-If you are at this stage, it is assumed that you have declared the variables along with sample values in the global **Mock data** button. To see how to declare variables before using them in designing templates, refer to [this section in the Templates documentation](/docs/templates#adding-dynamic-content).
+  <Step title="Using variables in the templates:">
+    Once the variables are declared, you can use them while designing the android push template. We support `handlebars` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: `**{{variable_name}}**`
 
-### Step 2: Using variables in the templates:
 
-Once the variables are declared, you can use them while designing the android push template. We support `handlebars` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: `**{{variable_name}}**`
 
-If you have declared the variables in the global 'Variables' button, then they will come as auto-suggestions when you type a curly bracket `{`. This will remove the chances of error like variable mismatch at the time of template rendering.
+    If you have declared the variables in the global 'Variables' button, then they will come as auto-suggestions when you type a curly bracket `{`. This will remove the chances of error like variable mismatch at the time of template rendering.
 
-Note that you will be able to enter a variable name even when you have not declared it inside the 'Variables' button. To manually enter the variable name, follow the [handlerbars guide here](https://handlebarsjs.com/guide/#what-is-handlebars).
 
-Below are some examples of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the 'Templates' section:
 
-<CodeGroup>
-  ```json json
-  {
-    "array": [
+    Note that you will be able to enter a variable name even when you have not declared it inside the 'Variables' button. To manually enter the variable name, follow the [handlerbars guide here](https://handlebarsjs.com/guide/#what-is-handlebars).
+
+
+
+    Below are some examples of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the 'Templates' section:
+
+    <CodeGroup>
+      ```json json
       {
-        "product_name": "Aldo Sling Bag",
-        "product_price": "3,950.00"
-      },
-      {
-        "product_name": "Clarles & Keith Women Slipper, Biege, 38UK",
-        "product_price": "2,549.00"
-      },
-      {
-        "product_name": "RayBan Sunglasses",
-        "product_price": "7,899.00"
+        "array": [
+          {
+            "product_name": "Aldo Sling Bag",
+            "product_price": "3,950.00"
+          },
+          {
+            "product_name": "Clarles & Keith Women Slipper, Biege, 38UK",
+            "product_price": "2,549.00"
+          },
+          {
+            "product_name": "RayBan Sunglasses",
+            "product_price": "7,899.00"
+          }
+        ],
+        "event": {
+          "location": {
+            "city": "Bangalore",
+            "state": "KA"
+          },
+          "order_id": "11200123",
+          "first_name": "Nikita"
+        },
+        "product_page": "https://www.suprsend.com"
       }
-    ],
-    "event": {
-      "location": {
-        "city": "Bangalore",
-        "state": "KA"
-      },
-      "order_id": "11200123",
-      "first_name": "Nikita"
-    },
-    "product_page": "https://www.suprsend.com"
-  }
-  ```
-</CodeGroup>
+      ```
+    </CodeGroup>
 
-1. To enter a nested variable, enter in the format `{{var1.var2.var3}}`. Eg. to refer to city in the example above, you need to enter `{{event.location.city}}`
-2. To refer to an array element, enter in format `{{var1.[_index_].var2}}. Eg. to refer to `product\_name`of the first element of the array`array`, enter `\{\{array.\[0].product\_name}}\`
-3. If you have any space in the variable name, enclose it in square bracket `{{event.[first name]}}`
+    1. To enter a nested variable, enter in the format `{{var1.var2.var3}}`. Eg. to refer to city in the example above, you need to enter `{{event.location.city}}`
 
-You will be able to see the sample values in the Preview section, as well as in the Live version when you publish a draft. If you cannot see your variable being rendered with the sample value, check one of the following:
+    2. To refer to an array element, enter in format `{{var1.[_index_].var2}}. Eg. to refer to `product\_name`of the first element of the array`array`, enter `\{\{array.\[0].product\_name}}\`
 
-1. Make sure you have entered the variable name and the sample value in the **Variables** button.
-2. Make sure you have entered the correct variable name in the template, as per the `handlebars` guideline.
+    3. If you have any space in the variable name, enclose it in square bracket `{{event.[first name]}}`
 
-![](/images/docs/340affd-Screenshot_2021-11-20_at_6.54.59_PM.png "Screenshot 2021-11-20 at 6.54.59 PM.png")
+    You will be able to see the sample values in the Preview section, as well as in the Live version when you publish a draft. If you cannot see your variable being rendered with the sample value, check one of the following:
 
-<Warning>
-  At the time of sending communication, if there is a variable present in the template whose value is not rendered due to mismatch or missing, SuprSend will simply discard the template and not send that particular notification to your user.
+    * Make sure you have entered the variable name and the sample value in the **Variables** button.
 
-  Please note that the rest of the templates will be sent. Eg. if there is an error in rendering Android Push template, but email template is successfully rendered, Android Push notification will not be triggered, but email notification will be triggered by SuprSend.
-</Warning>
+    * Make sure you have entered the correct variable name in the template, as per the `handlebars` guideline.
+
+    ![](/images/docs/340affd-Screenshot_2021-11-20_at_6.54.59_PM.png "Screenshot 2021-11-20 at 6.54.59 PM.png")
+
+    <Warning>
+      **What happens if there is variable mismatch at the time of sending?**
+
+
+
+      At the time of sending communication, if there is a variable present in the template whose value is not rendered due to mismatch or missing, SuprSend will simply discard the template and not send that particular notification to your user.
+
+      Please note that the rest of the templates will be sent. Eg. if there is an error in rendering Android Push template, but email template is successfully rendered, Android Push notification will not be triggered, but email notification will be triggered by SuprSend.
+    </Warning>
+  </Step>
+</Steps>
 
 ## Image Optimisations
 
@@ -205,31 +237,3 @@ If there is a very large image in the "Banner Image" field, SuprSend will reduce
 Your users might be on different network, namely wifi, 4G, 3G, 2G. And therefore, depending on your user's network we optimise the image size. This improves the push notification delivery for users whose network is not very fast.
 
 ***
-
-What’s Next
-
-See how to integrate your FCM tokens to start sending android push to your users.
-
-* [Android](/docs/mobile-app-sdk)
-
-* [Table of Contents](#)
-
-* * [Design Template](#design-template)
-
-  * [Android Push Notification Fields Description](#android-push-notification-fields-description)
-
-  * [Android Push - Advanced Configurations (*Optional*)](#android-push---advanced-configurations-optional)
-
-  * [How to change the small icon for a notification?](#how-to-change-the-small-icon-for-a-notification)
-
-    * [Option A. Adding a vector drawable](#option-a-adding-a-vector-drawable)
-    * [Option B. Adding a png icon for small icon](#option-b-adding-a-png-icon-for-small-icon)
-
-  * [How to add a custom sound file in your android project?](#how-to-add-a-custom-sound-file-in-your-android-project)
-
-  * [Adding Dynamic Content in Android Push](#adding-dynamic-content-in-android-push)
-
-    * [Step 1: Declaring Variables in the global 'Variables' button:](#step-1-declaring-variables-in-the-global-variables-button)
-    * [Step 2: Using variables in the templates:](#step-2-using-variables-in-the-templates)
-
-  * [Image Optimisations](#image-optimisations)

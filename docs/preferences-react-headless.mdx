@@ -3,7 +3,9 @@ title: "React"
 description: "This section describes how to integrate user preferences functionality in React Applications using separate headless preference component"
 ---
 
-[Suggest Edits](/edit/preferences-react-headless)
+<Warning>
+  **End of Support for @suprsend/react-preferences-headless: Migrate to @suprsend/react**
+</Warning>
 
 This document will cover the methods to integrate [User Preferences](/docs/preferences) into your websites. Your users will be able to specify their notification preferences using this page. With SuprSend, the user can set preferences at 3 levels - **communication channel**, **notification category**, and **selected channels inside a category**. We'll cover methods to read and update data at all 3 levels.
 
@@ -14,6 +16,7 @@ We'll also give an example code to add to our pre-defined UI. This is how a typi
 ## Pre-requisites
 
 * [Configure notification categories](/docs/preferences#creating--updating-notification-categories) on SuprSend dashboard
+
 * Understanding the [javascript sdk](/docs/preferences-javascript) documentation as this SDK is a wrapper around the Javascript preference service. Most of the concepts are the same.
 
 ## Installation
@@ -56,13 +59,13 @@ Wrap your Preference component in this provider and pass mandatory props. All th
   ```
 </CodeGroup>
 
-**workspaceKey**: You will get this key in SuprSend Dashboard inside *Settings > API Keys*.
+**`workspaceKey`**: You will get this key in SuprSend Dashboard inside *Settings > API Keys*.
 
-**distinctID**: Pass the distinct\_id of the user for which you want to modify preferences. Make sure that user is already present in SuprSend.
+**`distinctID`**: Pass the distinct\_id of the user for which you want to modify preferences. Make sure that user is already present in SuprSend.
 
-**accessToken**: This will be the JWT token of the distinct\_id which you need to be generated in your backend and provided to the frontend through API. More details about this are available [here](/docs/react-headless#generating-accesstoken).
+**`accessToken`**: This will be the JWT token of the distinct\_id which you need to be generated in your backend and provided to the frontend through API. More details about this are available [here](/docs/react-headless#generating-accesstoken).
 
-**tenantID**: This is an optional prop. If you don't provide tenantID, preferences will be changed to default tenant. If you provide tenantID then preferences will be provided tenant specific only.
+**`tenantID`**: This is an optional prop. If you don't provide tenantID, preferences will be changed to default tenant. If you provide tenantID then preferences will be provided tenant specific only.
 
 ### usePreferences
 
@@ -227,18 +230,3 @@ To authenticate preference APIs to SuprSend, accessToken needs to be provided to
 If the token is expired you have to make api call to your service and provide a new JWT token to **SuprSendPreferenceProvider** as **accessToken** prop.
 
 ***
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-
-  * [Installation](#installation)
-
-  * [Integration](#integration)
-
-    * [SuprSendPreferenceProvider](#suprsendpreferenceprovider)
-    * [usePreferences](#usepreferences)
-    * [useUpdatePreferences](#useupdatepreferences)
-    * [usePreferenceEvent](#usepreferenceevent)
-
-  * [Generating accessToken](#generating-accesstoken)

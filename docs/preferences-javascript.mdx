@@ -3,21 +3,21 @@ title: "Javascript"
 description: "This section describes how to integrate user preferences functionality in websites."
 ---
 
-[Suggest Edits](/edit/preferences-javascript)
-
 This document will cover the methods to integrate [User Preferences](/docs/preferences) in your websites. Your users will be able to specify their notification preferences using this page. With SuprSend, user can set preferences at 3 levels - **communication channel**, **notification category** and **selected channels inside a category**. We'll cover methods to read and update data at all 3 levels.
 
 We'll also give an example code to add our pre-defined UI. This is how a typical preference page will look like
 
 ![](/images/docs/bfca7a0-User_Preference_Page.png)
 
-# Pre-requisites
+## Pre-requisites
 
 * [Integrate Javascript SDK](/docs/integrate-javascript-sdk)
+
 * [Identify user on login](/docs/javascript-create-user#how-suprsend-identifies-a-user) and [reset on logout](/docs/javascript-create-user#step-2--call-reset-to-clear-user-data-on-log-out) to ensure that preference changes are tagged to the correct user
+
 * [Configure notification categories](/docs/preferences#creating--updating-notification-categories) on SuprSend dashboard
 
-# Integration
+## Integration
 
 All preference methods and properties are available under ***suprsend.user.preference*** instance. Here's a reference of all the properties and methods available in this instance:
 
@@ -28,31 +28,34 @@ All preference methods and properties are available under ***suprsend.user.prefe
 ### Methods
 
 1. [get\_preferences](/docs/preferences-javascript#get_preferences) - get full user preferences data from the SuprSend
+
 2. [update\_category\_preference](/docs/preferences-javascript#update_category_preference) - method to update overall category preference when user opts out and opts in the category using category level switch.
 
 ![](/images/docs/3fb9ea2-update_category.png)
 
-3. [update\_channel\_preference\_in\_category](/docs/preferences-javascript#update_channel_preference_in_category) - method to update channel preference inside a category when user opts out and opts in a channel inside the category.
+1. [update\_channel\_preference\_in\_category](/docs/preferences-javascript#update_channel_preference_in_category) - method to update channel preference inside a category when user opts out and opts in a channel inside the category.
 
 ![](/images/docs/f6806e6-channel-category-update.png)
 
-4. [update\_overall\_channel\_preference](/docs/preferences-javascript#update_overall_channel_preference) - method to update overall channel preference for instance if user wants to receive only important notifications on SMS.
+1. [update\_overall\_channel\_preference](/docs/preferences-javascript#update_overall_channel_preference) - method to update overall channel preference for instance if user wants to receive only important notifications on SMS.
 
 ![](/images/docs/9491874-channel-update.png)
 
 ### Event Listeners
 
 1. [preferences\_updated](/docs/preferences-javascript#preferences_updated) - You'll get this event as soon as preference changes are updated. Response will return return the updated preference data object which you can use to update your UI.
+
 2. [preferences\_error](/docs/preferences-javascript#preferences_error) - This error event is fired when there are errors in API requests or implementation.
 
 ### Enums
 
 1. [PreferenceOptions](/docs/preferences-javascript#preferenceoptions) - Enum to read and update **category preference** and **channel preference in category**
+
 2. [ChannelLevelPreferenceOptions](/docs/preferences-javascript#channellevelpreferenceoptions) - Enum to read and update overall **channel preference**
 
-# Properties
+## Properties
 
-## data property
+### data property
 
 This is a property on the preferences class that has full user preferences object. The data will be set after the successful execution of the ***get\_preferences*** method.
 
@@ -63,12 +66,14 @@ Preference Page contains 2 sections:
 To update category level preferences, you'll have to fetch the data from 3 sections
 
 * [Section](/docs/preferences-javascript#1-sections) - to show sections like "**Product Updates**" in below example
+
 * [Category](/docs/preferences-javascript#2-categories-sections---sub-categories) - to show categories and their overall status like "**Refunds**" in below example
+
 * [CategoryChannel](/docs/preferences-javascript#3-category-channels-sections---sub-categories---channels) - to show communication channels inside the category and their status
 
 ![](/images/docs/6001b46-section.png)
 
-2. [Overall Channel-level preference](/docs/preferences-javascript#4-overall-channel-preferences) - You can fetch this data from ChannelPreference section
+1. [Overall Channel-level preference](/docs/preferences-javascript#4-overall-channel-preferences) - You can fetch this data from ChannelPreference section
 
 ![](/images/docs/79d71ba-image.png)
 
@@ -112,7 +117,11 @@ We have to loop through the **data** property and create UI accordingly. This is
   ```
 </CodeGroup>
 
-### Sample data
+
+
+**Sample data:**
+
+
 
 <CodeGroup>
   ```javascript javascript
@@ -277,7 +286,9 @@ Added as sections -> sub-categories on notification category page. This is the a
 | is\_editable | boolean           | Indicates if the preference switch button is disabled or not. If its value is false then the preference setting for that category can't be edited                                                                            |
 | channels     | array of objects  | [dataset of all categorychannel ](/docs/preferences-javascript#3-category-channels-sections---sub-categories---channels)to be shown below the sub-category. Loop through it to show checkboxes under every subcategory item. |
 
-#### Sample data
+**Sample data:**
+
+
 
 <CodeGroup>
   ```javascript javascript
@@ -336,7 +347,9 @@ This contains a list of channels, channel preference status and whether it's edi
 | preference   | PreferenceOptions | This key indicates if the channel's preference switch is on or off. Get **OPT\_IN** when the switch is on and **OPT\_OUT** when the switch is off |
 | is\_editable | boolean           | Indicates if the preference checkbox is disabled or not. If its value is false then the preference setting for that channel can't be edited       |
 
-#### Sample data
+#### Sample data:
+
+
 
 <CodeGroup>
   ```javascript javascript
@@ -387,7 +400,7 @@ This indicates channel-level user preferences. It's a list of all channel-level 
 | channel        | string  | name of the channel to be shown on UI. the same key will be used as id of the channel while updating the preference.                                                                                                                                                                                                                                                           |
 | is\_restricted | boolean | This key indicates the restriction level of channel. If restricted, notification will only be sent in the category where this channel is added as mandatory in [notification category settings](/docs/preferences#creating--updating-notification-categories). ***True*** means ***Required*** radio button is selected. ***False*** means ***All*** radio button is selected. |
 
-#### Sample data
+#### Sample data:
 
 <CodeGroup>
   ```javascript javascript
@@ -406,15 +419,16 @@ This indicates channel-level user preferences. It's a list of all channel-level 
   ```
 </CodeGroup>
 
-# Methods
+## Methods
 
-## get\_preferences()
+### **`get_preferences()`**
 
 This method is used to get full user preferences data from the SuprSend. This method should be called first before any update methods. Calling this method will make an API call and set preference response in an instance property ***data*** so you can access data using ***suprsend.user.preferences.data***
 
 **Parameters**:
 
 * **brand\_id** (optional) - used to get preference wrt to that brand
+
 * **show\_opt\_out\_channels** (optional): Always pass this flag as true. If false, all categories channels will be removed if category level preference is turned off.
 
 **Returns**: Promise which resolves to PreferenceData(on success) or PreferenceErrorData(on reject)
@@ -431,7 +445,7 @@ This method is used to get full user preferences data from the SuprSend. This me
   ```
 </CodeGroup>
 
-## update\_category\_preference()
+### **`update_category_preference()`**
 
 Calling this method will opt-in/opt-out users from that category. When the category is editable and the switch is toggled you can call this method.
 
@@ -492,7 +506,7 @@ Calling this method will opt-in/opt-out users from that category. When the categ
   ```
 </CodeGroup>
 
-## update\_channel\_preference\_in\_category()
+### **`update_channel_preference_in_category()`**
 
 Calling this method will opt-in/opt-out users from that category-level channel. When the category's channel checkbox is editable and the user clicks on the checkbox you can call this method.
 
@@ -556,7 +570,7 @@ Calling this method will opt-in/opt-out users from that category-level channel. 
   ```
 </CodeGroup>
 
-## update\_overall\_channel\_preference()
+### **`update_overall_channel_preference()`**
 
 This method updated the channel-level preference of the user.
 
@@ -609,11 +623,11 @@ This method updated the channel-level preference of the user.
   ```
 </CodeGroup>
 
-# Event Listeners
+## Event Listeners
 
 These event listeners can be handled once on your preference page to listen to events emitted by all methods.
 
-## preferences\_updated
+### **`preferences_updated`**
 
 Update operations can be interdependent, so SDK will send a ***preference\_updated*** event when there is an update in preferences data after calling updating preference methods. The data you get in the callback is different from the response object which you get after calling update preferences methods, so you have to get the latest preference data and update UI in both cases. On your preference page, listen to this event, and whenever it's fired, get an updated preference data object in callback so that you can update your UI.
 
@@ -625,17 +639,22 @@ Update operations can be interdependent, so SDK will send a ***preference\_updat
   ```
 </CodeGroup>
 
-## preferences\_error
+### **`preferences_error`**
 
 This error event is fired when there are errors in API requests or implementation.
 
 Following are some of the errors thrown by SDK:
 
 * The mandatory parameter is missing.
+
 * The invalid parameter is provided. For example, passing values other than **PreferenceOptions.OPT\_IN** and **PreferenceOptions.OPT\_OUT** in **preferences** parameter of **update\_category\_preference** method.
+
 * Calling any update methods before successful completion of the **get\_preferences** method.
+
 * Updating values that are not editable.
+
 * The object you are updating like category or channel is not found in the preferences tree. ie... invalid id is provided while updating.
+
 * when an API request is not successful for any reason.
 
 When code is implemented properly, except for API errors most of these above validation errors won't come.
@@ -660,9 +679,9 @@ When code is implemented properly, except for API errors most of these above val
   ```
 </CodeGroup>
 
-# Enums
+## Enums
 
-## PreferenceOptions
+### PreferenceOptions
 
 This enum has 2 values ***OPT\_IN*** and ***OPT\_OUT***. You can send this as a preference parameter for ***update\_category\_preference*** and ***update\_channel\_preference\_in\_category*** and can also be used to check if a value in the preference key of the subcategory or subcategory's channel is opt-in or opt-out.
 
@@ -689,7 +708,7 @@ This enum has 2 values ***OPT\_IN*** and ***OPT\_OUT***. You can send this as a 
   ```
 </CodeGroup>
 
-## ChannelLevelPreferenceOptions
+### ChannelLevelPreferenceOptions
 
 This enum has 2 values ***ALL*** and ***REQUIRED***. You can send this as a preference parameter for ***update\_overall\_channel\_preference*** and can also be used to check if a value in the preference key of the channel\_preference item is all or required.
 
@@ -717,35 +736,3 @@ This enum has 2 values ***ALL*** and ***REQUIRED***. You can send this as a pref
 </CodeGroup>
 
 ***
-
-What’s Next
-
-After creating the preference page inside your website, add preference page link in your brand settings to add it in your notifications
-
-* [Adding hosted preference page link in notifications](https://docs.suprsend.com/docs/overview-preference-page#adding-hosted-preference-page-link-in-notifications)
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-
-  * [Integration](#integration)
-
-  * [Properties](#properties-1)
-    * [data property](#data-property)
-
-  * [Methods](#methods-1)
-
-    * [get\_preferences()](#get_preferences)
-    * [update\_category\_preference()](#update_category_preference)
-    * [update\_channel\_preference\_in\_category()](#update_channel_preference_in_category)
-    * [update\_overall\_channel\_preference()](#update_overall_channel_preference)
-
-  * [Event Listeners](#event-listeners-1)
-
-    * [preferences\_updated](#preferences_updated)
-    * [preferences\_error](#preferences_error)
-
-  * [Enums](#enums-1)
-
-    * [PreferenceOptions](#preferenceoptions)
-    * [ChannelLevelPreferenceOptions](#channellevelpreferenceoptions)

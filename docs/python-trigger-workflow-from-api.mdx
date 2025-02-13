@@ -3,13 +3,11 @@ title: "Trigger Workflow from API"
 description: "Guide to configure and trigger workflow from API"
 ---
 
-[Suggest Edits](/edit/python-trigger-workflow-from-api)
-
 It is a unified API to trigger workflow and doesn't require user creation before hand to trigger notification. Recommended for platforms transitioning their existing notifications to SuprSend. If you are using our frontend SDKs to configure notifications and passing events and user properties from third-party data platforms like Segment, then [event-based trigger](/docs/python-send-event-data) would be a better choice.
 
-<Info>
-  Available in SDK version >= v0.11.0.
-</Info>
+<Note>
+  📘 Available in SDK version >= v0.11.0.
+</Note>
 
 ## Payload Schema
 
@@ -88,9 +86,9 @@ Recipients in workflow call is an array of `distinct_ids` or recipient objects. 
   ```
 </CodeGroup>
 
-<Info>
-  We recommend you to use [lists](/docs/python-lists) and [broadcasts](/docs/python-broadcast) to send notifications to a user list larger than 1000 users. This approach allows for bulk processing within SuprSend, resulting in significantly faster delivery compared to individual workflow calls. Sending individual workflows to a large set of users may introduce delays in your notification queue and is not an optimized way of handling bulk trigger.
-</Info>
+<Note>
+  📘 We recommend you to use [lists](/docs/python-lists) and [broadcasts](/docs/python-broadcast) to send notifications to a user list larger than 1000 users. This approach allows for bulk processing within SuprSend, resulting in significantly faster delivery compared to individual workflow calls. Sending individual workflows to a large set of users may introduce delays in your notification queue and is not an optimized way of handling bulk trigger.
+</Note>
 
 ### Identifying recipients inline
 
@@ -281,7 +279,9 @@ For usecases where you want to send notifications to your enterprise customers' 
 SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives and processes a request with an idempotency\_key, it will skip processing requests with same `idempotency_key` for next 24 hours. Idempotency key should be uniquely generated for each request (max 255 characters allowed). Spaces in start and end of the key will be trimmed. Here are some common approaches for generating idempotency keys:
 
 * **Generate a random UUID** for each request.
+
 * **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like `user147-new-comment-1687437670`
+
 * **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
 
 ### Response structure
@@ -503,6 +503,8 @@ For configuring a workflow from backend, you can pass following properties in yo
 | **`idempotency_key`**       | unique key in the request call for [idempotent requests](/docs/python-trigger-workflow-from-api#idempotent-requests)                                                                                                                                                                                                                    | *string*                                                                                                                                                                  | *Optional*  |
 
 <Check>
+  **+CountryCode Required for SMS and Whatsapp:**
+
   For setting `$sms` and `$whatsapp`, `+<countrycode>` is mandatory to send along with phone number. Eg: +1 for US
 </Check>
 
@@ -602,22 +604,3 @@ Response is an instance of `suprsend.BulkResponse` class
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Payload Schema](#payload-schema)
-
-    * [Sending notification to multiple recipients](#sending-notification-to-multiple-recipients)
-    * [Identifying recipients inline](#identifying-recipients-inline)
-    * [Sending cross-user notifications](#sending-cross-user-notifications)
-    * [Sending notification to anonymous user](#sending-notification-to-anonymous-user)
-    * [Multi-tenant notifications](#multi-tenant-notifications)
-    * [Idempotent requests](#idempotent-requests)
-    * [Response structure](#response-structure)
-
-  * [Bulk API for triggering multiple workflows](#bulk-api-for-triggering-multiple-workflows)
-    * [Response](#response)
-
-  * [Add file attachment in email](#add-file-attachment-in-email)
-
-  * [Dynamic workflow trigger](#dynamic-workflow-trigger)

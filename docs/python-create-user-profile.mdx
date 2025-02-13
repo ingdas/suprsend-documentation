@@ -3,15 +3,11 @@ title: "Create User Profile"
 description: "This document will cover the methods to create a user and set channel preferences"
 ---
 
-[Suggest Edits](/edit/python-create-user-profile)
-
 You can follow the steps mentioned in the documentation below or refer to our quick code recipe
 
-🦉
-
-Create User using python SDK
-
-Open Recipe
+<Card title="Create User using python SDK" icon="bolt">
+  Read the recipe
+</Card>
 
 ## Pre-requisites
 
@@ -42,200 +38,205 @@ Communication Channel Preference decides whether a user will receive communicati
 Especially for event based workflow triggers, where you just pass the user's `distinct_id` and the communication channels are picked from user profile
 
 <Info>
+  **Set Channel Preference for event based workflows:**
+
+
   In event based workflows, since you only pass user's `distinct_id` in your track event call, you'll have to add channel preference first in user profile first before making the call.
 </Info>
 
-### 1. Add User Channels
+<Steps>
+  <Step title="Add User Channels">
+    Use `user.add_*` method(s) to add user channels in a profile
 
-Use `user.add_*` method(s) to add user channels in a profile
+    <CodeGroup>
+      ```python python
+      # Add channel details to user-instance. Call relevant add_* methods
 
-<CodeGroup>
-  ```python python
-  # Add channel details to user-instance. Call relevant add_* methods
+      user.add_email("[email protected]") # - To add Email
 
-  user.add_email("[email protected]") # - To add Email
+      user.add_sms("+15555555555") # - To add SMS
 
-  user.add_sms("+15555555555") # - To add SMS
+      user.add_whatsapp("+15555555555") # - To add Whatsapp
 
-  user.add_whatsapp("+15555555555") # - To add Whatsapp
+      user.add_androidpush("__android_push_fcm_token__") # - by default, token is assumed to be fcm-token
 
-  user.add_androidpush("__android_push_fcm_token__") # - by default, token is assumed to be fcm-token
+      # You can set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
+      user.add_androidpush("__android_push_xiaomi_token__", provider="xiaomi")
 
-  # You can set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
-  user.add_androidpush("__android_push_xiaomi_token__", provider="xiaomi")
+      user.add_iospush("__iospush_token__")
 
-  user.add_iospush("__iospush_token__")
+      # - To add Slack using email
+      user.add_slack(
+        {
+          "email": "[email protected]",
+          "access_token": "xoxb-XXXXXXXX"
+        })  
 
-  # - To add Slack using email
-  user.add_slack(
-    {
-      "email": "[email protected]",
-      "access_token": "xoxb-XXXXXXXX"
-    })  
+      # - To add Slack if slack member_id is known
+      user.add_slack(
+        {
+          "user_id": "U03XXXXXXXX",
+          "access_token": "xoxb-XXXXXXXX"
+        })
 
-  # - To add Slack if slack member_id is known
-  user.add_slack(
-    {
-      "user_id": "U03XXXXXXXX",
-      "access_token": "xoxb-XXXXXXXX"
-    })
+      # - To add Slack channel
+      user.add_slack(
+        {
+          "channel_id": "CXXXXXXXX",
+          "access_token": "xoxb-XXXXXXXX"
+        })
 
-  # - To add Slack channel
-  user.add_slack(
-    {
-      "channel_id": "CXXXXXXXX",
-      "access_token": "xoxb-XXXXXXXX"
-    })
+      # - To add Slack incoming webhook
+      user.add_slack(
+        {
+          "incoming_webhook": {
+            "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
+          }
+        })
 
-  # - To add Slack incoming webhook
-  user.add_slack(
-    {
-      "incoming_webhook": {
-        "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
-      }
-    })
+      # - To add MS teams user or channel using conversation_id
+      user.add_ms_teams(
+        {
+      		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
+      		"service_url": "https://smba.trafficmanager.net/amer",
+      		"conversation_id": "19:c1524d7c-a06f-456f-8abe-xxxx"
+        })
 
-  # - To add MS teams user or channel using conversation_id
-  user.add_ms_teams(
-    {
-  		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
-  		"service_url": "https://smba.trafficmanager.net/amer",
-  		"conversation_id": "19:c1524d7c-a06f-456f-8abe-xxxx"
-    })
+      # - To add MS teams user using user_id
+      user.add_ms_teams(
+        {
+      		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
+      		"service_url": "https://smba.trafficmanager.net/amer",
+      		"user_id": "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
+        })
 
-  # - To add MS teams user using user_id
-  user.add_ms_teams(
-    {
-  		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
-  		"service_url": "https://smba.trafficmanager.net/amer",
-  		"user_id": "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
-    })
+      # - To add MS teams using incoming webhook
+      user.add_ms_teams(
+        {
+          "incoming_webhook": {
+            "url": "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
+          }
+        })
 
-  # - To add MS teams using incoming webhook
-  user.add_ms_teams(
-    {
-      "incoming_webhook": {
-        "url": "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
-      }
-    })
+      # After setting the channel details on user-instance, call save()
+      response = user.save()
+      print(response)
+      ```
+    </CodeGroup>
+  </Step>
 
-  # After setting the channel details on user-instance, call save()
-  response = user.save()
-  print(response)
-  ```
-</CodeGroup>
+  <Step title="Remove User Channels">
+    Use `user.remove_*` method(s) to remove channels from a user profile
 
-### 2. Remove User Channels
+    <CodeGroup>
+      ```python python
+      # Remove channel details from user-instance. Call relevant remove_* methods
 
-Use `user.remove_*` method(s) to remove channels from a user profile
+      user.remove_email("[email protected]") # - To remove Email
 
-<CodeGroup>
-  ```python python
-  # Remove channel details from user-instance. Call relevant remove_* methods
+      user.remove_sms("+15555555555") # - To remove SMS
 
-  user.remove_email("[email protected]") # - To remove Email
+      user.remove_whatsapp("+15555555555") # - To remove Whatsapp
 
-  user.remove_sms("+15555555555") # - To remove SMS
+      user.remove_androidpush("__android_push_fcm_token__") # - by default, token is assumed to be fcm-token
 
-  user.remove_whatsapp("+15555555555") # - To remove Whatsapp
+      # You can set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
+      user.remove_androidpush("__android_push_xiaomi_token__", provider="xiaomi")
 
-  user.remove_androidpush("__android_push_fcm_token__") # - by default, token is assumed to be fcm-token
+      user.remove_iospush("__iospush_token__")
 
-  # You can set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
-  user.remove_androidpush("__android_push_xiaomi_token__", provider="xiaomi")
+      # - To remove Slack email
+      user.remove_slack(
+        {
+          "email": "[email protected]",
+          "access_token": "xoxb-XXXXXXXX"
+        })  
 
-  user.remove_iospush("__iospush_token__")
+      # - To remove Slack if slack member_id is known
+      user.remove_slack(
+        {
+          "user_id": "U03XXXXXXXX",
+          "access_token": "xoxb-XXXXXXXX"
+        })
 
-  # - To remove Slack email
-  user.remove_slack(
-    {
-      "email": "[email protected]",
-      "access_token": "xoxb-XXXXXXXX"
-    })  
+      # - To remove Slack channel
+      user.remove_slack(
+        {
+          "channel_id": "CXXXXXXXX",
+          "access_token": "xoxb-XXXXXXXX"
+        })
 
-  # - To remove Slack if slack member_id is known
-  user.remove_slack(
-    {
-      "user_id": "U03XXXXXXXX",
-      "access_token": "xoxb-XXXXXXXX"
-    })
+      # - To remove Slack incoming webhook
+      user.remove_slack(
+        {
+          "incoming_webhook": {
+            "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
+          }
+        })
 
-  # - To remove Slack channel
-  user.remove_slack(
-    {
-      "channel_id": "CXXXXXXXX",
-      "access_token": "xoxb-XXXXXXXX"
-    })
+      # - To add MS teams user or channel using conversation_id
+      user.remove_ms_teams(
+        {
+      		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
+      		"service_url": "https://smba.trafficmanager.net/amer",
+      		"conversation_id": "19:c1524d7c-a06f-456f-8abe-xxxx"
+        })
 
-  # - To remove Slack incoming webhook
-  user.remove_slack(
-    {
-      "incoming_webhook": {
-        "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
-      }
-    })
+      # - To add MS teams user using user_id
+      user.remove_ms_teams(
+        {
+      		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
+      		"service_url": "https://smba.trafficmanager.net/amer",
+      		"user_id": "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
+        })
 
-  # - To add MS teams user or channel using conversation_id
-  user.remove_ms_teams(
-    {
-  		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
-  		"service_url": "https://smba.trafficmanager.net/amer",
-  		"conversation_id": "19:c1524d7c-a06f-456f-8abe-xxxx"
-    })
+      # - To add MS teams using incoming webhook
+      user.remove_ms_teams(
+        {
+          "incoming_webhook": {
+            "url": "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
+          }
+        })
 
-  # - To add MS teams user using user_id
-  user.remove_ms_teams(
-    {
-  		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
-  		"service_url": "https://smba.trafficmanager.net/amer",
-  		"user_id": "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
-    })
+      # After setting the channel details on user-instance, call save()
+      response = user.save()
+      print(response)
+      ```
+    </CodeGroup>
+  </Step>
 
-  # - To add MS teams using incoming webhook
-  user.remove_ms_teams(
-    {
-      "incoming_webhook": {
-        "url": "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
-      }
-    })
+  <Step title="Remove User Channels in bulk">
+    If you need to delete/unset all emails (or any other channel) of a user, you can call `user.unset()` method on the user instance. The method accepts the channel key/s (a single key or list of keys)
 
-  # After setting the channel details on user-instance, call save()
-  response = user.save()
-  print(response)
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```python python
+      # --- To delete all emails associated with user
+      user.unset("$email")
+      response = user.save()
+      print(response)
 
-### 3. Remove User Channels in bulk
+      # what value to pass to unset channels
+      # for email:                $email
+      # for whatsapp:             $whatsapp
+      # for SMS:                  $sms
+      # for androidpush tokens:   $androidpush
+      # for iospush tokens:       $iospush
+      # for webpush tokens:       $webpush
+      # for slack:                $slack
+      # for ms_teams:             $ms_teams
 
-If you need to delete/unset all emails (or any other channel) of a user, you can call `user.unset()` method on the user instance. The method accepts the channel key/s (a single key or list of keys)
+      # --- multiple channels can also be deleted in one call by passing argument as a list
+      user.unset(["$email", "$sms", "$whatsapp"])
+      response = user.save()
+      print(response)
+      ```
+    </CodeGroup>
 
-<CodeGroup>
-  ```python python
-  # --- To delete all emails associated with user
-  user.unset("$email")
-  response = user.save()
-  print(response)
-
-  # what value to pass to unset channels
-  # for email:                $email
-  # for whatsapp:             $whatsapp
-  # for SMS:                  $sms
-  # for androidpush tokens:   $androidpush
-  # for iospush tokens:       $iospush
-  # for webpush tokens:       $webpush
-  # for slack:                $slack
-  # for ms_teams:             $ms_teams
-
-  # --- multiple channels can also be deleted in one call by passing argument as a list
-  user.unset(["$email", "$sms", "$whatsapp"])
-  response = user.save()
-  print(response)
-  ```
-</CodeGroup>
-
-<Warning>
-  After calling `add_*/remove_*/unset` methods, don't forget to call `user.save()`. On call of save(), SDK sends the request to SuprSend platform to update the User Profile.
-</Warning>
+    <Warning>
+      After calling `add_*/remove_*/unset` methods, don't forget to call `user.save()`. On call of save(), SDK sends the request to SuprSend platform to update the User Profile.
+    </Warning>
+  </Step>
+</Steps>
 
 ## Add Preferences in User Profile
 
@@ -309,13 +310,19 @@ Use `.append()` on bulk\_users instance to add however-many-records to call in b
 </CodeGroup>
 
 <Warning>
+  **Bulk API supported in SDK version 0.2.0 and above:**
+
+
+
   Bulk API is supported in SuprSend python-sdk version 0.2.0 and above. If you are using an older version, please upgrade to the latest SDK version.
 </Warning>
 
 ### How SuprSend Processes the bulk API request
 
 * On calling `bulk_ins.save()`, the SDK internally makes one-or-more Callable-chunks.
+
 * Each callable-chunk contains a subset of records, the subset calculation is based on each record's bytes-size and max allowed chunk-size, chunk-length etc.
+
 * For each callable-chunk SDK makes an HTTP call to SuprSend to register the request.
 
 ### Response
@@ -357,193 +364,158 @@ Response is an instance of `suprsend.BulkResponse` class
 
 You can use SuprSend Python SDK to set advanced user properties, which will help in creating a user profile. You can use these properties to create user cohorts on SuprSend's platform with future releases.
 
-### 1. Set
+<AccordionGroup>
+  <Accordion title="Set" defaultOpen={false}>
+    Set is used to set the custom user property or properties. The given name and value will be assigned to the user, overwriting an existing property with the same name if present. It can take key as first param, value as second param for setting single user property or object for setting multiple user properties.
 
-Set is used to set the custom user property or properties. The given name and value will be assigned to the user, overwriting an existing property with the same name if present. It can take key as first param, value as second param for setting single user property or object for setting multiple user properties.
+    <CodeGroup>
+      ```python python
+      from suprsend import Suprsend
+      supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
 
-<CodeGroup>
-  ```python python
-  from suprsend import Suprsend
-  supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
+      distinct_id = "__uniq_user_identifier__"
+      u1 = supr_client.user.get_instance(distinct_id)
+      u1.set("key", "value")  # for single property
+      u1.set(properties)      # for multiple properties where properties is a dict()
 
-  distinct_id = "__uniq_user_identifier__"
-  u1 = supr_client.user.get_instance(distinct_id)
-  u1.set("key", "value")  # for single property
-  u1.set(properties)      # for multiple properties where properties is a dict()
+      # set single property using key and value
+      u1.set("name", "user")
+      # set multiple/nested properties using dictionary
+      u1.set({
+        "prop1": "val1", 
+        "prop2": ["one", "two", "three"], 
+        "number": 20
+      })
+      ```
+    </CodeGroup>
 
-  # set single property using key and value
-  u1.set("name", "user")
-  # set multiple/nested properties using dictionary
-  u1.set({
-    "prop1": "val1", 
-    "prop2": ["one", "two", "three"], 
-    "number": 20
-  })
-  ```
-</CodeGroup>
+    | Parameters | Type              | Description                                                                                                                                                                                                                                                                                 |
+    | ---------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | **arg1**   | string/dictionary | *Mandatory* This param will be string in case where only single property needs to be created/updated. It will be a dictionary in cases where complex objects need to be set in user properties, like multiple properties, arrays, nested properties etc. Should not start with `$` or `ss_` |
+    | **arg2**   | any               | *Optional* This will be value that will be attached to key property. Not required in cases where first param is a dictionary.                                                                                                                                                               |
 
-| Parameters | Type              | Description                                                                                                                                                                                                                                                                                 |
-| ---------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **arg1**   | string/dictionary | *Mandatory* This param will be string in case where only single property needs to be created/updated. It will be a dictionary in cases where complex objects need to be set in user properties, like multiple properties, arrays, nested properties etc. Should not start with `$` or `ss_` |
-| **arg2**   | any               | *Optional* This will be value that will be attached to key property. Not required in cases where first param is a dictionary.                                                                                                                                                               |
+    <Warning>
+      When you create a key, please ensure that the Key Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
+    </Warning>
+  </Accordion>
 
-<Warning>
-  When you create a key, please ensure that the Key Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
-</Warning>
+  <Accordion title="Set Once" defaultOpen={false}>
+    Works just like `user.set`, except it will not overwrite existing property values. This is useful for properties like *First login date*
 
-### 2. Set Once
+    <CodeGroup>
+      ```python python
+      from suprsend import Suprsend
+      supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
 
-Works just like `user.set`, except it will not overwrite existing property values. This is useful for properties like *First login date*
+      distinct_id = "__uniq_user_identifier__"
+      u1 = supr_client.user.get_instance(distinct_id)
+      u1.set_once(key, value)  # for single property
+      u1.set_once(properties)  # for multiple properties
 
-<CodeGroup>
-  ```python python
-  from suprsend import Suprsend
-  supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
+      # For setting once a single property:
+      u1.set_once("first_login", "2021-11-02")
 
-  distinct_id = "__uniq_user_identifier__"
-  u1 = supr_client.user.get_instance(distinct_id)
-  u1.set_once(key, value)  # for single property
-  u1.set_once(properties)  # for multiple properties
+      # For setting once multiple properties
+      u1.set_once({"first_login" : "2021-11-02", "DOB" : "1991-10-02"})
+      ```
+    </CodeGroup>
+  </Accordion>
 
-  # For setting once a single property:
-  u1.set_once("first_login", "2021-11-02")
+  <Accordion title="Increment" defaultOpen={false}>
+    Add the given amount to an existing property on the user. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
 
-  # For setting once multiple properties
-  u1.set_once({"first_login" : "2021-11-02", "DOB" : "1991-10-02"})
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```python python
+      from suprsend import Suprsend
+      supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
 
-### 3. Increment
+      distinct_id = "__uniq_user_identifier__"
+      u1 = supr_client.user.get_instance(distinct_id)
+      u1.increment(key, value)  # for single property
+      u1.increment(property_obj)  # for multiple properties
 
-Add the given amount to an existing property on the user. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
+      # For incrementing a single property:
+      u1.increment("login_count", 1)
 
-<CodeGroup>
-  ```python python
-  from suprsend import Suprsend
-  supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
+      # For incrementing multiple properties:
+      u1.increment({"login_count" : 1, "order_count" : 1})
+      ```
+    </CodeGroup>
+  </Accordion>
 
-  distinct_id = "__uniq_user_identifier__"
-  u1 = supr_client.user.get_instance(distinct_id)
-  u1.increment(key, value)  # for single property
-  u1.increment(property_obj)  # for multiple properties
+  <Accordion title="Append" defaultOpen={false}>
+    This method will append a value to the list for a given property.
 
-  # For incrementing a single property:
-  u1.increment("login_count", 1)
+    <CodeGroup>
+      ```python python
+      from suprsend import Suprsend
+      supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
 
-  # For incrementing multiple properties:
-  u1.increment({"login_count" : 1, "order_count" : 1})
-  ```
-</CodeGroup>
+      distinct_id = "__uniq_user_identifier__"
+      u1 = supr_client.user.get_instance(distinct_id)
+      u1.append(key, value)  # for single property
+      u1.append(properties)  # for multiple properties
 
-### 4. Append
+      # For appending a single property:
+      u1.append("wishlist", "iphone12")
 
-This method will append a value to the list for a given property.
+      # For appending multiple properties:
+      u1.append({"wishlist" : "iphone12", "wishlist" : "Apple airpods"})
+      ```
+    </CodeGroup>
 
-<CodeGroup>
-  ```python python
-  from suprsend import Suprsend
-  supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
+    ###
+  </Accordion>
 
-  distinct_id = "__uniq_user_identifier__"
-  u1 = supr_client.user.get_instance(distinct_id)
-  u1.append(key, value)  # for single property
-  u1.append(properties)  # for multiple properties
+  <Accordion title="Remove" defaultOpen={false}>
+    This method will remove a value from the list for a given property.
 
-  # For appending a single property:
-  u1.append("wishlist", "iphone12")
+    <CodeGroup>
+      ```python python
+      from suprsend import Suprsend
+      supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
 
-  # For appending multiple properties:
-  u1.append({"wishlist" : "iphone12", "wishlist" : "Apple airpods"})
-  ```
-</CodeGroup>
+      distinct_id = "__uniq_user_identifier__"
+      u1 = supr_client.user.get_instance(distinct_id)
+      u1.remove(key, value)  # for single property
+      u1.remove(properties)  # for multiple properties
 
-### 5. Remove
+      # For removing a single property:
+      u1.remove("wishlist", "iphone12")
 
-This method will remove a value from the list for a given property.
+      # For removing multiple properties:
+      u1.remove({"wishlist" : "iphone12", "wishlist": "Apple airpods"})
+      ```
+    </CodeGroup>
+  </Accordion>
 
-<CodeGroup>
-  ```python python
-  from suprsend import Suprsend
-  supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
+  <Accordion title="Unset" defaultOpen={false}>
+    This will remove a property permanently from user properties.
 
-  distinct_id = "__uniq_user_identifier__"
-  u1 = supr_client.user.get_instance(distinct_id)
-  u1.remove(key, value)  # for single property
-  u1.remove(properties)  # for multiple properties
+    <CodeGroup>
+      ```python python
 
-  # For removing a single property:
-  u1.remove("wishlist", "iphone12")
+      from suprsend import Suprsend
+      supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
 
-  # For removing multiple properties:
-  u1.remove({"wishlist" : "iphone12", "wishlist": "Apple airpods"})
-  ```
-</CodeGroup>
+      distinct_id = "__uniq_user_identifier__"
+      u1 = supr_client.user.get_instance(distinct_id)
+      u1.unset(key)  # for single property
+      u1.unset(property_list)  # for multiple properties
 
-### 6. Unset
+      # For unsetting a single property:
+      u1.unset("wishlist")
 
-This will remove a property permanently from user properties.
+      # For unsetting multiple properties:
+      u1.unset(["wishlist", "cart"])
+      ```
+    </CodeGroup>
 
-<CodeGroup>
-  ```python python
-
-  from suprsend import Suprsend
-  supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
-
-  distinct_id = "__uniq_user_identifier__"
-  u1 = supr_client.user.get_instance(distinct_id)
-  u1.unset(key)  # for single property
-  u1.unset(property_list)  # for multiple properties
-
-  # For unsetting a single property:
-  u1.unset("wishlist")
-
-  # For unsetting multiple properties:
-  u1.unset(["wishlist", "cart"])
-  ```
-</CodeGroup>
-
-| Parameters         | Type           | Description                                                       |
-| ------------------ | -------------- | ----------------------------------------------------------------- |
-| **key**            | string         | This property provided will be deleted from user properties       |
-| **property\_list** | array\[string] | If list is given all properties included in list will be removed. |
+    | Parameters         | Type           | Description                                                       |
+    | ------------------ | -------------- | ----------------------------------------------------------------- |
+    | **key**            | string         | This property provided will be deleted from user properties       |
+    | **property\_list** | array\[string] | If list is given all properties included in list will be removed. |
+  </Accordion>
+</AccordionGroup>
 
 ***
-
-What’s Next
-
-Once channels are set in user profile, just add user's `distinct_id` in send event or workflow trigger call and all the user channels will automatically be fetched from user profile
-
-* [Send and Track Events](/docs/python-send-event-data)
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-
-  * [How Suprsend identifies a user](#how-suprsend-identifies-a-user)
-
-  * [Step 1 : Create a new user](#step-1--create-a-new-user)
-
-  * [Step 2: Set Communication Channel preferences](#step-2-set-communication-channel-preferences)
-
-    * [1. Add User Channels](#1-add-user-channels)
-    * [2. Remove User Channels](#2-remove-user-channels)
-    * [3. Remove User Channels in bulk](#3-remove-user-channels-in-bulk)
-
-  * [Add Preferences in User Profile](#add-preferences-in-user-profile)
-    * [Set Preferred language](#set-preferred-language)
-
-  * [Response](#response)
-
-  * [Bulk API for handling multiple user profiles](#bulk-api-for-handling-multiple-user-profiles)
-
-    * [How SuprSend Processes the bulk API request](#how-suprsend-processes-the-bulk-api-request)
-    * [Response](#response-1)
-
-  * [Advanced Configuration - Set User Properties](#advanced-configuration---set-user-properties)
-
-    * [1. Set](#1-set)
-    * [2. Set Once](#2-set-once)
-    * [3. Increment](#3-increment)
-    * [4. Append](#4-append)
-    * [5. Remove](#5-remove)
-    * [6. Unset](#6-unset)
