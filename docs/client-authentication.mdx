@@ -3,8 +3,6 @@ title: "Overview"
 description: "This document describe about authenticating client SDK's to use SuprSend features."
 ---
 
-[Suggest Edits](/edit/client-authentication)
-
 <Info>
   Many of our mobile SDK's are under revamp stage. These SDK's still use workspace key and workspace secret authentication.
 </Info>
@@ -33,11 +31,15 @@ You can use any of the above format. This key will be used as secret to generate
 
 This should be created on your backend application only. You will need to sign the JWT token with the signing key from above step and expose this JWT token to your Frontend application.
 
-**JWT Algorithm:** ES256
+* **JWT Algorithm:**
 
-**JWT Secret:** Signing key in PEM format generated in step1. If you are using Base64 format, it should be converted in to PEM format.
+   ES256
 
-**JWT Payload:**
+* **JWT Secret:**
+
+   Signing key in PEM format generated in step1. If you are using Base64 format, it should be converted in to PEM format.
+
+* **JWT Payload:**
 
 <CodeGroup>
   ```json Payload
@@ -96,12 +98,3 @@ To handle cases of token expiry our client SDK's have **Refresh User Token callb
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Enhanced Security Mode with Signed User Token](#enhanced-security-mode-with-signed-user-token)
-
-    * [1. Generate Signing Key](#1-generate-signing-key)
-    * [2. Creating Signed User JWT Token](#2-creating-signed-user-jwt-token)
-    * [3. Using signed user token in client](#3-using-signed-user-token-in-client)
-    * [Token Expiry handling](#token-expiry-handling)

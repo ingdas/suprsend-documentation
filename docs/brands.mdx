@@ -19,9 +19,13 @@ You can create a new tenant by clicking on "New Tenant" button.
 
 This will open a form to add **`tenant id`** and **`tenant name`**. Add the required fields and click on **`Create tenant`**
 
-**Tenant id** is a unique identifier for your tenant and can't be changed once the tenant is created. You'll have to pass tenant\_id in your workflow / event calls to render tenant level customization in your templates. (if no tenant\_id is passed, default tenant properties are picked). So, add a tenant\_id which is unique and easily identifiable for you.
+* **Tenant id**
 
-**Tenant name** can be your customer company / organization name
+   is a unique identifier for your tenant and can't be changed once the tenant is created. You'll have to pass tenant_id in your workflow / event calls to render tenant level customization in your templates. (if no tenant_id is passed, default tenant properties are picked). So, add a tenant_id which is unique and easily identifiable for you.
+
+* **Tenant name**
+
+   can be your customer company / organization name
 
 ![](/images/docs/44b6a8b-create_brand.png)
 
@@ -42,29 +46,13 @@ Here are the form fields and its description
 
 You can use [HTTP API](/reference/brand-overview) or manage tenants using one of our backend SDKs:
 
-1. [Update ](/docs/brands-python)
+1. [Update tenant using python SDK](/docs/brands-python)
 
-   tenant
+2. [Update tenant using node SDK](/docs/node-brands)
 
-   [ using python SDK](/docs/brands-python)
+3. [Update tenant using java SDK](/docs/brands-java)
 
-2. [Update ](/docs/node-brands)
-
-   tenant
-
-   [ using node SDK](/docs/node-brands)
-
-3. [Update ](/docs/brands-java)
-
-   tenant
-
-   [ using java SDK](/docs/brands-java)
-
-4. [Update ](/docs/brands-api-go)
-
-   tenant
-
-   [ using go SDK](/docs/brands-api-go)
+4. [Update tenant using go SDK](/docs/brands-api-go)
 
 ## Using Tenant Components in Templates
 
@@ -203,23 +191,23 @@ After adding the tenant variables in your template, you can add tenant\_id in yo
 
 * **Custom Template Designs for Each Tenant**
 
-   \- You can create unique template designs for each tenant using tenant-specific properties. Refer to the 
+  \- You can create unique template designs for each tenant using tenant-specific properties. Refer to the
 
   [above section](/docs/brands#using-brand-components-in-templates)
 
-   for details on how to implement this.
+  for details on how to implement this.
 
 * **Route Tenant messages from their own vendors**
 
-   \- You can direct messages through a tenant's designated vendors by configuring 
+  \- You can direct messages through a tenant's designated vendors by configuring
 
   [tenant vendors](/docs/tenant-vendor)
 
-   on the vendor settings page. Messages will be sent via the vendor associated with the tenant_id provided in the trigger. If no tenant vendor is set, the system will use the default vendor settings.
+  on the vendor settings page. Messages will be sent via the vendor associated with the tenant_id provided in the trigger. If no tenant vendor is set, the system will use the default vendor settings.
 
 * **Tenant level preference setting**
 
-  : Tenants can control what notifications should be sent to their associated users and the their default preference setting. It can be used for cases where admin wants to control the notifications that their teammates receive or when you are sending notifications to multiple tenant's users and tenant wants to control the notifications their users receive, on which channels and at what frequency. 
+  : Tenants can control what notifications should be sent to their associated users and the their default preference setting. It can be used for cases where admin wants to control the notifications that their teammates receive or when you are sending notifications to multiple tenant's users and tenant wants to control the notifications their users receive, on which channels and at what frequency.
 
   [Read more about tenant preferences here](/docs/brand-preference)
 

@@ -3,8 +3,6 @@ title: "Overview"
 description: "Learn how to design multi-channel and multi-stakeholder workflows"
 ---
 
-[Suggest Edits](/edit/design-workflow)
-
 ## Prerequisites
 
 [Understanding the basics of workflows](/docs/workflows)
@@ -29,9 +27,21 @@ It is the first step of your workflow and contains information about the event t
 
 ![](/images/docs/982e348-image.png)
 
-* `event name` - Name of the event defined in the workflow trigger.
-* `properties` - Properties should have data corresponding to variables added in the template content or data required to render dynamic fields in workflow nodes like override channels, dynamic delay windows, etc.
-* `distinct_id`- Unique identifier of the user who performs the event and needs to be notified. You can also [override recipient](/docs/override-recipient-list) to notify other users who have not performed the event. For instance, notify the document owner of the new comments added by a commentor or inform the finance team when a new expense ticket is raised.
+* `event name`
+
+   \- Name of the event defined in the workflow trigger.
+
+* `properties`
+
+   \- Properties should have data corresponding to variables added in the template content or data required to render dynamic fields in workflow nodes like override channels, dynamic delay windows, etc.
+
+* `distinct_id`
+
+  \- Unique identifier of the user who performs the event and needs to be notified. You can also 
+
+  [override recipient](/docs/override-recipient-list)
+
+   to notify other users who have not performed the event. For instance, notify the document owner of the new comments added by a commentor or inform the finance team when a new expense ticket is raised.
 
 You can trigger events using one of our SDKs or directly integrate with your CDP platforms, like Segment, where you currently track your events.
 
@@ -39,9 +49,13 @@ You can trigger events using one of our SDKs or directly integrate with your CDP
 
 Functions are logical steps in your workflow. We currently support the following functions:
 
-1. [Delay](/docs/delay): wait for a time before proceeding to the next node.
+1. [Delay](/docs/delay)
 
-2. [Batch](/docs/batching-digest): aggregate multiple triggers into a single batch and send a single consolidated notification.
+   : wait for a time before proceeding to the next node.
+
+2. [Batch](/docs/batching-digest)
+
+   : aggregate multiple triggers into a single batch and send a single consolidated notification.
 
 3. Time Window: send notification in a given time schedule.
 
@@ -51,7 +65,9 @@ We are adding more functions to support the complex notification usecases. Have 
 
 Branches split the workflow execution into parallel flows. We currently support the following branch:
 
-1. [Wait Until](/docs/wait-until): wait until a condition is met or a specific time interval is reached.
+1. [Wait Until](/docs/wait-until)
+
+   : wait until a condition is met or a specific time interval is reached.
 
 ### 4. Delivery Nodes
 
@@ -102,32 +118,3 @@ Once cloned, your workflow will appear as a draft in your chosen destination. Yo
 ![](https://files.readme.io/fe58c04-workflow_clone.gif)
 
 ***
-
-What’s Next
-
-Next, start building your notification by adding relevant nodes to the workflow
-
-* [Delay](/docs/delay)
-* [Batch](/docs/batch)
-* [Delivery - Single Channel](/docs/delivery-single-channel)
-* [Delivery - Multi-Channel](/docs/delivery-multi-channel)
-* [Smart Channel Routing](/docs/smart-delivery)
-* [Wait Until](/docs/wait-until)
-
-* [Table of Contents](#)
-
-* * [Prerequisites](#prerequisites)
-
-  * [Creating a new workflow](#creating-a-new-workflow)
-
-  * [Designing workflow](#designing-workflow)
-
-    * [1. Trigger Node](#1-trigger-node)
-    * [2. Function Nodes](#2-function-nodes)
-    * [3. Branch Nodes](#3-branch-nodes)
-    * [4. Delivery Nodes](#4-delivery-nodes)
-    * [Workflow Settings](#workflow-settings)
-    * [Change Node name and Description](#change-node-name-and-description)
-    * [Delete Node](#delete-node)
-
-  * [Cloning a workflow](#cloning-a-workflow)

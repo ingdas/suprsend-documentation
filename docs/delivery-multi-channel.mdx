@@ -3,8 +3,6 @@ title: "Delivery - Multi-Channel"
 description: "Learn how to use single multi-channel delivery in workflow"
 ---
 
-[Suggest Edits](/edit/delivery-multi-channel)
-
 Delivery nodes are the final send nodes, delivering final notification to the end user. You can use multi-channel delivery node to notify users on multiple channels at once. If you want to send multi-channel notifications, we recommend using [smart channel routing](/docs/smart-delivery) to ensure that notifications are delivered sequentially on multiple channels rather than bombarding users on all channels at once.
 
 ![](/images/docs/234e716-image.png)
@@ -16,9 +14,40 @@ The content of the notification is designed with [templates](/docs/templates). I
 Delivery node is successfully executed if all of the below checks hold true:
 
 1. The channel should be published and live in the template. For WhatsApp and SMS (Indian vendors), templates become live upon approval by the respective provider.
-2. Vendor Configuration is available for the channel. For all out-of-app channels, you need to create an account with the respective [channel provider](/docs/vendors) and add the configuration in the vendor form on SuprSend dashboard. Inbox is an internal offering by SuprSend and doesn't need any third party integration. [Refer Integration guide](/docs/inbox-overview) to setup Inbox Channel.
-3. Channel information should be available in user profile and channel status should be active. Template channels not available in user profile are skipped for delivery. A set channel becomes inactive in case the channel is `removed` or `unset` using [SDK or API](/docs/users#via-sdk) or it is marked inactive by SuprSend.
-4. User preference is `opt-in` for the given channel and notification category (defined in workflow settings). You can check user preference status using [get user preference API](/reference/get-user-preferences-single-category).
+
+2. Vendor Configuration is available for the channel. For all out-of-app channels, you need to create an account with the respective 
+
+   [channel provider](/docs/vendors)
+
+    and add the configuration in the vendor form on SuprSend dashboard. Inbox is an internal offering by SuprSend and doesn't need any third party integration. 
+
+   [Refer Integration guide](/docs/inbox-overview)
+
+    to setup Inbox Channel.
+
+3. Channel information should be available in user profile and channel status should be active. Template channels not available in user profile are skipped for delivery. A set channel becomes inactive in case the channel is 
+
+   `removed`
+
+    or 
+
+   `unset`
+
+    using 
+
+   [SDK or API](/docs/users#via-sdk)
+
+    or it is marked inactive by SuprSend.
+
+4. User preference is 
+
+   `opt-in`
+
+    for the given channel and notification category (defined in workflow settings). You can check user preference status using 
+
+   [get user preference API](/reference/get-user-preferences-single-category)
+
+   .
 
 <Info>
   SuprSend marks the user channel identity inactive for email and whatsapp in case of hard errors from vendor end, such as bounced email addresses, unregistered whatsapp numbers. This is done to safeguard your email domain authority or whatsapp rating if you continue to send notifications to users who have reported or marked your email or messages as spam. Additionally, this helps in whatsapp cost saving, as vendor charges for every processed request. Inactive marking period by SuprSend is 15 days for whatsapp and 90 days for email.
@@ -54,8 +83,15 @@ The expected channel value in the array is:
 
 You can add channel array as a [JQ-expression](https://jqlang.github.io/jq/manual/). So, in case your channel values do not match with the one mentioned in the above table, you can transform it using the JQ-expression. Below are some examples of how to add duration key in JQ format:
 
-1. General format for duration key at parent level is `.channels`
-2. If channel is a nested event property key like shown below, enter it in the format `.user.channels`.
+1. General format for duration key at parent level is 
+
+   `.channels`
+
+2. If channel is a nested event property key like shown below, enter it in the format 
+
+   `.user.channels`
+
+   .
 
 <CodeGroup>
   ```json json
@@ -86,16 +122,3 @@ Success metric can be any event which defines the target user activity you aim t
 In the context of multi-channel delivery, the success metric is utilized solely to track conversion numbers for display in workflow analytics. However, in the case of [smart channel routing](/docs/smart-delivery), the same success metric serves to halt delivery on further channels once the success metric is achieved.
 
 ***
-
-What’s Next
-
-Once configured, go ahead and trigger your workflow
-
-* [Trigger Workflow](/docs/trigger-workflow)
-
-* [Table of Contents](#)
-
-* * [How the delivery node is executed?](#how-the-delivery-node-is-executed)
-  * [Selecting channels for multi-channel delivery](#selecting-channels-for-multi-channel-delivery)
-    * [Override Channels](#override-channels)
-  * [Success Metric](#success-metric)

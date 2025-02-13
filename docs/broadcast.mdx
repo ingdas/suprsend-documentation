@@ -3,8 +3,6 @@ title: "Broadcast"
 description: "Send alerts to a list of users with broadcast"
 ---
 
-[Suggest Edits](/edit/broadcast)
-
 With broadcast, you can send notifications to a large list of users with high throughput and low latency. You can use this to schedule campaigns or send important announcements that is relevant for a large group of users. Best used for cases when you want your messages to be delivered instantly like stock market alerts.
 
 ## Pre-requisites
@@ -22,8 +20,11 @@ Once you have the list ready, you can trigger broadcast using one of the followi
 This is the most flexible way of sending broadcast to a list. Use it when you regularly trigger a specific message to bulk users, like reminders or community updates like news. You can use [API](/reference/broadcast-overview) or update it using backend SDK
 
 1. [Trigger broadcast using python SDK](/docs/python-broadcast)
+
 2. [Trigger broadcast using node SDK](/docs/node-broadcast)
+
 3. [Trigger broadcast using Java SDK](/docs/broadcast-java)
+
 4. [Trigger broadcast using Go SDK](/docs/broadcast-go)
 
 ### 2. From UI
@@ -34,7 +35,7 @@ You can schedule broadcast on a list from the dashboard by clicking on "**Run Br
 
 ![](/images/docs/f750339-Screenshot_2023-08-20_at_11.00.22_PM.png)
 
-This will open the broadcast form. Fill in the relevant information and click on "**Trigger one-time broadcast**"
+This will open the broadcast form. Fill in the relevant information and click on **`Trigger one-time broadcast`**
 
 | Field                 | Obligation  | Description                                                                                                                                                                                                                                                                                                                                                                                  |
 | --------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -45,15 +46,6 @@ This will open the broadcast form. Fill in the relevant information and click on
 | Variable data         | *Optional*  | Add variables JSON here if you have variables in your template.                                                                                                                                                                                                                                                                                                                              |
 | When                  | *Optional*  | - **Immediately** will trigger the broadcast instantly on the click of the button - Choose **After Delay** or **Scheduled time** if you want to schedule broadcast for later time. **After delay** is relative time difference from the instant of button click and **Scheduled time** is for defining absolute datetime of trigger                                                          |
 
-Once, you click on "**Trigger one-time broadcast**" button, it will ask for a confirmation. This is just to ensure that a bulk campaigns is not triggered by mistake. Click on "**Confirm**" to trigger the broadcast. You can check the notification status on Logs page.
+Once, you click on **`Trigger one-time broadcast `**&#x62;utton, it will ask for a confirmation. This is just to ensure that a bulk campaigns is not triggered by mistake. Click on **`Confirm`** to trigger the broadcast. You can check the notification status on Logs page.
 
 ***
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-
-  * [Triggering Broadcast](#triggering-broadcast)
-
-    * [1. Programmatically using SDK / API](#1-programmatically-using-sdk--api)
-    * [2. From UI](#2-from-ui)
