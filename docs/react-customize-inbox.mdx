@@ -3,7 +3,13 @@ title: "Customize Inbox"
 description: "How to change the default inbox theme"
 ---
 
-[Suggest Edits](/edit/react-customize-inbox)
+<Warning>
+  **End of Support for @suprsend/react-inbox: Migrate to @suprsend/react:**
+
+
+
+  > Development of the [@suprsend/react-inbox](https://github.com/suprsend/suprsend-react-inbox) SDK has been discontinued in favour of the new [@suprsend/react](https://docs.suprsend.com/docs/inapp-feed-1) SDK. Please refer the [migration guide](https://docs.suprsend.com/docs/migration-guide) for instructions on transitioning to the new SDK.
+</Warning>
 
 The inbox component is highly customizable. For most parts in Inbox, we also support custom components using render props. This is how the default inbox looks like with its components marked in order.
 
@@ -511,7 +517,7 @@ If you add a URL or deep-link in action URL or buttons, the default handling is 
 
 ## Customizing Inbox Popup Position
 
-Popup position w\.r.t bell icon can be adjusted using the **popperPosition** property. The default position is bottom ie.., the inbox notifications popup list will be shown bottom of the bell icon.
+Popup position w.r.t bell icon can be adjusted using the **popperPosition** property. The default position is bottom ie.., the inbox notifications popup list will be shown bottom of the bell icon.
 
 <CodeGroup>
   ```typescript Type
@@ -687,52 +693,3 @@ You can show your own custom component instead.
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Customizing Theme](#customizing-theme)
-
-  * [Customizing Bell Icon](#customizing-bell-icon)
-
-  * [Customizing Badge (Counter)](#customizing-badge-counter)
-
-  * [Customizing Header](#customizing-header)
-    * [Adding custom Header component](#adding-custom-header-component)
-
-  * [Customizing Tabs](#customizing-tabs)
-    * [Customizing Tab Badge (Counter)](#customizing-tab-badge-counter)
-
-  * [Customizing Notification Card](#customizing-notification-card)
-
-    * [Background (Container)](#background-container)
-    * [Header Text](#header-text)
-    * [Body Text](#body-text)
-    * [Unread Dot](#unread-dot)
-    * [SubText](#subtext)
-    * [Action Buttons](#action-buttons)
-    * [Action Button Custom Click Handlers](#action-button-custom-click-handlers)
-    * [Avatar](#avatar)
-    * [Expires Text](#expires-text)
-    * [Pinned Text](#pinned-text)
-    * [Pinned Icon](#pinned-icon)
-    * [Actions Menu](#actions-menu)
-
-  * [Custom Notification Card Component](#custom-notification-card-component)
-
-  * [Set Custom Click Handler](#set-custom-click-handler)
-
-  * [Customizing Inbox Popup Position](#customizing-inbox-popup-position)
-
-  * [Customizing Toast](#customizing-toast)
-
-    * [Show / Hide Toast](#show--hide-toast)
-    * [Change Toast Position](#change-toast-position)
-    * [Change Toast Duration](#change-toast-duration)
-    * [Change Toast Notifications Limit](#change-toast-notifications-limit)
-    * [Custom Toast Content Component](#custom-toast-content-component)
-    * [Customize Toast Style](#customize-toast-style)
-
-  * [Customizing Empty Inbox screen](#customizing-empty-inbox-screen)
-
-    * [Customize Existing Empty Screen Style](#customize-existing-empty-screen-style)
-    * [Custom Empty Screen Component](#custom-empty-screen-component)

@@ -3,11 +3,10 @@ title: "Create User Profile"
 description: "This document will cover the methods to create a user and set communication channel preferences along with push notification token"
 ---
 
-[Suggest Edits](/edit/react-native-create-user)
-
 ## Pre-requisites
 
 1. [Integrate react native SDK in android application](/docs/integrate-react-native-sdk-android)
+
 2. [Integrate react native SDK in iOS application](/docs/integrate-react-native-sdk-ios)
 
 ## How Suprsend identifies a user
@@ -16,85 +15,89 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
 
 **Please note:** you cannot change a user's id once it has been set, so we recommend you use a non-transient id like a primary key rather than a phone number or email address.
 
-## Step 1 : Create/Identify a new user
+<Steps>
+  <Step title="Create/Identify a new user">
+    You can identify a user using `suprsend.identify()` method.
 
-You can identify a user using `suprsend.identify()` method.
+    Call this method as soon as you know the identity of user, that is after login authentication. If you don't call this method, user will be identified using distinct\_id (uuid) that sdk generates internally.
 
-Call this method as soon as you know the identity of user, that is after login authentication. If you don't call this method, user will be identified using distinct\_id (uuid) that sdk generates internally.
+    When you call this method, we internally create an event called **$user\_login**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
 
-When you call this method, we internally create an event called **$user\_login**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
+    <CodeGroup>
+      ```javascript javascript
+      suprsend.identify(distinct_id);
 
-<CodeGroup>
-  ```javascript javascript
-  suprsend.identify(distinct_id);
+      //Sample Values
+      suprsend.identify("291eaa13-62f5-4d52-b2dd");
+      suprsend.identify("[email protected]");
+      ```
+    </CodeGroup>
 
-  //Sample Values
-  suprsend.identify("291eaa13-62f5-4d52-b2dd");
-  suprsend.identify("[email protected]");
-  ```
-</CodeGroup>
+    | Parameters       | Type                      | Description                                                                         |
+    | ---------------- | ------------------------- | ----------------------------------------------------------------------------------- |
+    | **distinct\_id** | int, bigint, string, UUID | *mandatory* Unique identifier for a user across devices or between multiple logins. |
+  </Step>
 
-| Parameters       | Type                      | Description                                                                         |
-| ---------------- | ------------------------- | ----------------------------------------------------------------------------------- |
-| **distinct\_id** | int, bigint, string, UUID | *mandatory* Unique identifier for a user across devices or between multiple logins. |
+  <Step title="Call reset to clear user data on log out">
+    As soon as the user logs out, call `suprsend.reset()` method to clear data attributed to a user. This will generate a new random `distinct_id` and clear all super properties. This allows you to handle multiple users on a single device.
 
-## Step 2 : Call reset to clear user data on log out
+    When you call this method, we internally create an event called **$user\_logout**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
 
-As soon as the user logs out, call `suprsend.reset()` method to clear data attributed to a user. This will generate a new random `distinct_id` and clear all super properties. This allows you to handle multiple users on a single device.
+    <CodeGroup>
+      ```javascript javascript
+      suprsend.reset();
+      ```
+    </CodeGroup>
 
-When you call this method, we internally create an event called **$user\_logout**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
+    <Warning>
+      Don't forget to call reset on user logout. If not called, user id will not reset and multiple tokens and channels will get added to the user\_id who logged in first on the device.
+    </Warning>
+  </Step>
 
-<CodeGroup>
-  ```javascript javascript
-  suprsend.reset();
-  ```
-</CodeGroup>
+  <Step title="Set Communication Channel preferences">
+    You can send communication channel details of a user to the SuprSend SDK. We will store the channel details in the user profile. This will allow us to send communications to a user on the channels available for that user whenever there is any communication trigger.
 
-<Warning>
-  Don't forget to call reset on user logout. If not called, user id will not reset and multiple tokens and channels will get added to the user\_id who logged in first on the device.
-</Warning>
+    <Steps>
+      <Step title="Add User Channels">
+        You can add SMS, Email and Whatsapp channel information by using below methods. You can call this on signup, or whenever a user provides the above channel information.
 
-## Step 3: Set Communication Channel preferences
+        <CodeGroup>
+          ```javascript javascript
+          suprsend.user.setEmail("[email protected]");  // To add Email
 
-You can send communication channel details of a user to the SuprSend SDK. We will store the channel details in the user profile. This will allow us to send communications to a user on the channels available for that user whenever there is any communication trigger.
+          suprsend.user.setSms("+91XXXXXXXXXX");  // To add SMS
 
-### 1. Add User Channels
+          suprsend.user.setWhatsApp("+91XXXXXXXXXX"); // To add Whatsapp
+          ```
+        </CodeGroup>
 
-You can add SMS, Email and Whatsapp channel information by using below methods. You can call this on signup, or whenever a user provides the above channel information.
+        Android Push and iOS Push token will automatically be set at the time of user login. All you have to do is to integrate the push notification service in your application
 
-<CodeGroup>
-  ```javascript javascript
-  suprsend.user.setEmail("[email protected]");  // To add Email
+        [Android Push Integration guide](/docs/react-native-firebase-fcm-push-integration)
 
-  suprsend.user.setSms("+91XXXXXXXXXX");  // To add SMS
+        [iOS Push Integration guide](/docs/react-native-apns-push)
 
-  suprsend.user.setWhatsApp("+91XXXXXXXXXX"); // To add Whatsapp
-  ```
-</CodeGroup>
+        <Warning>
+          Make sure you are sending the country code when you are calling communication methods for SMS and Whatsapp.
+        </Warning>
+      </Step>
 
-Android Push and iOS Push token will automatically be set at the time of user login. All you have to do is to integrate the push notification service in your application
+      <Step title="Remove User Channels">
+        You can remove SMS, Email and Whatsapp channel information by using below methods. You can call this when a user updates his channel information. You need not call this when a user unsubscribes from a particular channel notification, as that will be handled in user preferences.
 
-[Android Push Integration guide](/docs/react-native-firebase-fcm-push-integration)
+        <CodeGroup>
+          ```javascript javascript
+          suprsend.user.unSetEmail("[email protected]");  // To remove Email
 
-[iOS Push Integration guide](/docs/react-native-apns-push)
+          suprsend.user.unSetSms("+91XXXXXXXXXX");  // To remove SMS
 
-<Warning>
-  Make sure you are sending the country code when you are calling communication methods for SMS and Whatsapp.
-</Warning>
-
-### 2. Remove User Channels
-
-You can remove SMS, Email and Whatsapp channel information by using below methods. You can call this when a user updates his channel information. You need not call this when a user unsubscribes from a particular channel notification, as that will be handled in user preferences.
-
-<CodeGroup>
-  ```javascript javascript
-  suprsend.user.unSetEmail("[email protected]");  // To remove Email
-
-  suprsend.user.unSetSms("+91XXXXXXXXXX");  // To remove SMS
-
-  suprsend.user.unSetWhatsApp("+91XXXXXXXXXX"); // To remove Whatsapp
-  ```
-</CodeGroup>
+          suprsend.user.unSetWhatsApp("+91XXXXXXXXXX"); // To remove Whatsapp
+          ```
+        </CodeGroup>
+      </Step>
+    </Steps>
+  </Step>
+</Steps>
 
 ## Advanced Configuration - Set User Properties
 
@@ -102,146 +105,118 @@ You can remove SMS, Email and Whatsapp channel information by using below method
 
 You can use SuprSend SDK to set advanced user properties, which will help in creating a user profile. You can use these properties to create user cohorts on SuprSend's platform with future releases.
 
-### 1. Set
+<AccordionGroup>
+  <Accordion title="Set" defaultOpen={false}>
+    Set is used to set the custom user property or properties. The given name and value will be assigned to the user, overwriting an existing property with the same name if present. It can take key as first param, value as second param for setting single user property or object for setting multiple user properties.
 
-Set is used to set the custom user property or properties. The given name and value will be assigned to the user, overwriting an existing property with the same name if present. It can take key as first param, value as second param for setting single user property or object for setting multiple user properties.
+    <CodeGroup>
+      ```javascript javascript
+      suprsend.user.set(key, value);  // for single property
+      suprsend.user.set(property_obj);  // for multiple properties
 
-<CodeGroup>
-  ```javascript javascript
-  suprsend.user.set(key, value);  // for single property
-  suprsend.user.set(property_obj);  // for multiple properties
+      // Sample values for setting single property:
+      suprsend.user.set("name", "john doe");
 
-  // Sample values for setting single property:
-  suprsend.user.set("name", "john doe");
+      // Sample values for setting multiple properties:
+      suprsend.user.set({"name" :  "john doe", "age" : "27"});
+      ```
+    </CodeGroup>
 
-  // Sample values for setting multiple properties:
-  suprsend.user.set({"name" :  "john doe", "age" : "27"});
-  ```
-</CodeGroup>
+    | Parameters     | Type   | Description                                                                                        |
+    | -------------- | ------ | -------------------------------------------------------------------------------------------------- |
+    | **key**        | string | *Mandatory* This is property key that will be attached to user. Should not start with `$` or `ss_` |
+    | **value**      | any    | *Optional* This will be value that will be attached to key property.                               |
+    | **JSONObject** | object | *Optional* This is used in case of setting multiple user properties.                               |
 
-| Parameters     | Type   | Description                                                                                        |
-| -------------- | ------ | -------------------------------------------------------------------------------------------------- |
-| **key**        | string | *Mandatory* This is property key that will be attached to user. Should not start with `$` or `ss_` |
-| **value**      | any    | *Optional* This will be value that will be attached to key property.                               |
-| **JSONObject** | object | *Optional* This is used in case of setting multiple user properties.                               |
+    <Warning>
+      When you create a key, please ensure that the Key Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
+    </Warning>
+  </Accordion>
 
-<Warning>
-  When you create a key, please ensure that the Key Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
-</Warning>
+  <Accordion title="Set Once" defaultOpen={false}>
+    Works just like `user.set`, except it will not overwrite existing property values. This is useful for properties like *First login date*
 
-### 2. Set Once
+    <CodeGroup>
+      ```javascript javascript
+      suprsend.user.setOnce(key, value);  // for single property
+      suprsend.user.setOnce(properties);  // for multiple properties
 
-Works just like `user.set`, except it will not overwrite existing property values. This is useful for properties like *First login date*
+      // Sample values for setting once a single property:
+      suprsend.user.setOnce("first_login", "2021-11-02");
 
-<CodeGroup>
-  ```javascript javascript
-  suprsend.user.setOnce(key, value);  // for single property
-  suprsend.user.setOnce(properties);  // for multiple properties
+      // Sample values for setting once multiple properties:
+      suprsend.user.setOnce({"first_login" : "2021-11-02", "DOB" : "1991-10-02"});
+      ```
+    </CodeGroup>
+  </Accordion>
 
-  // Sample values for setting once a single property:
-  suprsend.user.setOnce("first_login", "2021-11-02");
+  <Accordion title="Increment" defaultOpen={false}>
+    Add the given amount to an existing property on the user. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
 
-  // Sample values for setting once multiple properties:
-  suprsend.user.setOnce({"first_login" : "2021-11-02", "DOB" : "1991-10-02"});
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```javascript javascript
+      suprsend.user.increment(key, value);  // for single property
+      suprsend.user.increment(property_obj);  // for multiple properties
 
-### 3. Increment
+      // Sample values for incrementing a single property:
+      suprsend.user.increment("login_count", 1);
 
-Add the given amount to an existing property on the user. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
+      // Sample values for incrementing multiple properties:
+      suprsend.user.increment({"login_count" : 1, "order_count" : 1});
+      ```
+    </CodeGroup>
+  </Accordion>
 
-<CodeGroup>
-  ```javascript javascript
-  suprsend.user.increment(key, value);  // for single property
-  suprsend.user.increment(property_obj);  // for multiple properties
+  <Accordion title="Append" defaultOpen={false}>
+    This method will append a value to the list for a given property.
 
-  // Sample values for incrementing a single property:
-  suprsend.user.increment("login_count", 1);
+    <CodeGroup>
+      ```javascript javascript
+      suprsend.user.append(key, value);  // for single property
+      suprsend.user.append(property_obj);  // for multiple properties
 
-  // Sample values for incrementing multiple properties:
-  suprsend.user.increment({"login_count" : 1, "order_count" : 1});
-  ```
-</CodeGroup>
+      // Sample values for appending a single property:
+      suprsend.user.append("wishlist", "iphone12");
 
-### 4. Append
+      // Sample values for appending multiple properties:
+      suprsend.user.append({"wishlist" : "iphone12", "wishlist" : "Apple airpods"});
+      ```
+    </CodeGroup>
+  </Accordion>
 
-This method will append a value to the list for a given property.
+  <Accordion title="Remove" defaultOpen={false}>
+    This method will remove a value from the list for a given property.
 
-<CodeGroup>
-  ```javascript javascript
-  suprsend.user.append(key, value);  // for single property
-  suprsend.user.append(property_obj);  // for multiple properties
+    <CodeGroup>
+      ```javascript javascript
+      suprsend.user.remove(key, value);  // for single property
+      suprsend.user.remove(property_obj);  // for multiple properties
 
-  // Sample values for appending a single property:
-  suprsend.user.append("wishlist", "iphone12");
+      // Sample values for removing a single property:
+      suprsend.user.remove("wishlist", "iphone12");
 
-  // Sample values for appending multiple properties:
-  suprsend.user.append({"wishlist" : "iphone12", "wishlist" : "Apple airpods"});
-  ```
-</CodeGroup>
+      // Sample values for removing multiple properties:
+      suprsend.user.remove({"wishlist" : "iphone12", "wishlist": "Apple airpods"});
+      ```
+    </CodeGroup>
+  </Accordion>
 
-### 5. Remove
+  <Accordion title="Unset" defaultOpen={false}>
+    This will remove a property permanently from user properties.
 
-This method will remove a value from the list for a given property.
+    <CodeGroup>
+      ```javascript javascript
+      suprsend.user.unSet(key);  // for single property
+      suprsend.user.unSet(property_list);  // for multiple properties
 
-<CodeGroup>
-  ```javascript javascript
-  suprsend.user.remove(key, value);  // for single property
-  suprsend.user.remove(property_obj);  // for multiple properties
+      // Sample values for unsetting a single property:
+      suprsend.user.unSet("wishlist");
 
-  // Sample values for removing a single property:
-  suprsend.user.remove("wishlist", "iphone12");
-
-  // Sample values for removing multiple properties:
-  suprsend.user.remove({"wishlist" : "iphone12", "wishlist": "Apple airpods"});
-  ```
-</CodeGroup>
-
-### 6. Unset
-
-This will remove a property permanently from user properties.
-
-<CodeGroup>
-  ```javascript javascript
-  suprsend.user.unSet(key);  // for single property
-  suprsend.user.unSet(property_list);  // for multiple properties
-
-  // Sample values for unsetting a single property:
-  suprsend.user.unSet("wishlist");
-
-  // Sample values for unsetting multiple properties:
-  suprsend.user.unSet(["wishlist", "cart"]);
-  ```
-</CodeGroup>
+      // Sample values for unsetting multiple properties:
+      suprsend.user.unSet(["wishlist", "cart"]);
+      ```
+    </CodeGroup>
+  </Accordion>
+</AccordionGroup>
 
 ***
-
-What’s Next
-
-Once the user info is set, you can send events from your SDK by passing user `distinct_id` and trigger notification from the SuprSend platform
-
-* [Send and Track Events](/docs/react-native-send-event-data)
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-
-  * [How Suprsend identifies a user](#how-suprsend-identifies-a-user)
-
-  * [Step 1 : Create/Identify a new user](#step-1--createidentify-a-new-user)
-
-  * [Step 2 : Call reset to clear user data on log out](#step-2--call-reset-to-clear-user-data-on-log-out)
-
-  * [Step 3: Set Communication Channel preferences](#step-3-set-communication-channel-preferences)
-
-    * [1. Add User Channels](#1-add-user-channels)
-    * [2. Remove User Channels](#2-remove-user-channels)
-
-  * [Advanced Configuration - Set User Properties](#advanced-configuration---set-user-properties)
-
-    * [1. Set](#1-set)
-    * [2. Set Once](#2-set-once)
-    * [3. Increment](#3-increment)
-    * [4. Append](#4-append)
-    * [5. Remove](#5-remove)
-    * [6. Unset](#6-unset)
