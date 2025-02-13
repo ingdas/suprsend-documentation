@@ -3,8 +3,6 @@ title: "Trigger Workflow"
 description: "Learn how to trigger multi-channel, multi-tenant workflows in SuprSend"
 ---
 
-[Suggest Edits](/edit/trigger-workflow)
-
 You can trigger workflows designed on SuprSend dashboard via making a [direct call](/docs/trigger-workflow#triggering-workflow-via-api) to `workflows.trigger` endpoint or via [event trigger](/docs/trigger-workflow#event-based-trigger). In SuprSend, we refer events as user-initiated actions, such as social media interactions, or system-generated events like pending payments. User needs to be created beforehand for event based triggers.
 
 [Direct API trigger](/docs/trigger-workflow#triggering-workflow-via-api) is a straightforward way to get started, as you can include recipient channel information directly in the API call and doesn't require prior user creation to initiate the notification.
@@ -594,14 +592,61 @@ Here's a step-by-step guide on how to send notifications using google sheets:
 
 ### Steps to setup notification trigger in google sheets
 
-1. Create a template group on SuprSend account. All the static content can be designed on the template, and all the variable data defined within \{\{...}} will be passed from the Google Sheet at the time of trigger.
+1. Create a template group on SuprSend account. All the static content can be designed on the template, and all the variable data defined within {{...}} will be passed from the Google Sheet at the time of trigger.
 
 2. Create a google sheet with following data. Each row in the sheet corresponds to one recipient.
 
-   1. **`distinct_id` column** - this is the unique identifier of the user who needs to be notified.
-   2. **Dynamic data columns** - you need to create one column each for the dynamic data (aka variables) in your template. Note that variable names are case sensitive. If this is the template content `Hi {{name}}, your {{Event}} is scheduled at {{Schedule}}. See you there.`, you'll have to create a column for each template variable - `name`, `Event`, and `schedule` in your sheet.
-   3. **User Channels columns** - Next, create columns for user channel details. These channel columns are necessary to pass channel information that may not be present in the user profile. It's always a good practice to include channel information if you're unsure of its presence in the user profile. You can pass channels as `WA` for whatsapp, `Email` for email and `SMS` for SMS. For Whatsapp and SMS, you need to enter country code infront of the mobile number as `+917123xxxxxx`
-   4. **`SuprSend Status` column** - Fill the value `TBT` in rows for which you want to trigger the notification. Once, the notification is triggered, the status changes to `OK`
+   1. **`distinct_id` column**
+
+       \- this is the unique identifier of the user who needs to be notified.
+
+   2. **Dynamic data columns**
+
+       \- you need to create one column each for the dynamic data (aka variables) in your template. Note that variable names are case sensitive. If this is the template content 
+
+      `Hi {{name}}, your {{Event}} is scheduled at {{Schedule}}. See you there.`
+
+      , you'll have to create a column for each template variable - 
+
+      `name`
+
+      , 
+
+      `Event`
+
+      , and 
+
+      `schedule`
+
+       in your sheet.
+
+   3. **User Channels columns**
+
+       \- Next, create columns for user channel details. These channel columns are necessary to pass channel information that may not be present in the user profile. It's always a good practice to include channel information if you're unsure of its presence in the user profile. You can pass channels as 
+
+      `WA`
+
+       for whatsapp, 
+
+      `Email`
+
+       for email and 
+
+      `SMS`
+
+       for SMS. For Whatsapp and SMS, you need to enter country code infront of the mobile number as 
+
+      `+917123xxxxxx`
+
+   4. **`SuprSend Status` column**
+
+       \- Fill the value 
+
+      `TBT`
+
+       in rows for which you want to trigger the notification. Once, the notification is triggered, the status changes to 
+
+      `OK`
 
 ![](/images/docs/6408ef6-image.png)
 
@@ -609,11 +654,19 @@ Here's a step-by-step guide on how to send notifications using google sheets:
   Google Sheet doesn't allow to start a field with **`+`**. To enter in + format, use string function: `="+917123xxxxxx"`
 </Info>
 
-3. In the Navbar of Google Sheets, go to *Extensions* and select ***Apps Script***
+
+
+1. In the Navbar of Google Sheets, go to 
+
+   *Extensions*
+
+    and select 
+
+   ***Apps Script***
 
 ![](/images/docs/2aa0141-Screenshot_2022-02-01_at_10.51.37_AM.png "Screenshot 2022-02-01 at 10.51.37 AM.png")
 
-4. It will open Apps Script in a new tab. Remove the default information present in the editor, and copy-paste the following in the editor.
+1. It will open Apps Script in a new tab. Remove the default information present in the editor, and copy-paste the following in the editor.
 
 <CodeGroup>
   ```json json
@@ -790,33 +843,28 @@ You'll find following information to be added in your script from SuprSend dashb
 | `Workflow Name` | Give a name to identify your workflow. It'll help you locate the sent workflow on the workflow listing page. You can see the notification performance on **Workflow -> Analytics** page.        |
 | `category`      | Provide notification category. We recommend using promotional sub-category for sending engagement notifications. You can read more [Notification Categories here](/docs/notification-settings). |
 
-5. Save the Script, and close the tab. **Reload** your Google Sheets, and you will find a new option named "SuprSend" in the navigation bar. On clicking it, you will see the option to "Trigger SuprSend Workflow". On triggering, the script will pick up all the rows which have value **`TBT`** in the column name "SuprSend Status", and will make an API call to SuprSend. For the successful API call, the status will change to `OK`.
+1. Save the Script, and close the tab. 
+
+   **Reload**
+
+    your Google Sheets, and you will find a new option named "SuprSend" in the navigation bar. On clicking it, you will see the option to "Trigger SuprSend Workflow". On triggering, the script will pick up all the rows which have value 
+
+   **`TBT`**
+
+    in the column name "SuprSend Status", and will make an API call to SuprSend. For the successful API call, the status will change to 
+
+   `OK`
+
+   .
 
 ![](/images/docs/17410e4-Screenshot_2022-02-01_at_11.12.09_AM.png "Screenshot 2022-02-01 at 11.12.09 AM.png")
 
-6. You can check the status of your notification trigger on the **Logs** page.
+1. You can check the status of your notification trigger on the 
+
+   **Logs**
+
+    page.
 
 ![](/images/docs/4db6a17-image.png)
 
 ***
-
-What’s Next
-
-Check out logs to see the status of your triggered workflow. You can refer to the error guide to debug log errors.
-
-* [Logging](/docs/logging)
-* [Error Guides](/docs/error-guides)
-
-* [Table of Contents](#)
-
-* * [Triggering workflow via API](#triggering-workflow-via-api)
-
-    * [Sample Payload](#sample-payload)
-    * [Identifying recipients inline](#identifying-recipients-inline)
-    * [Sending notification to multiple recipients](#sending-notification-to-multiple-recipients)
-    * [Sending cross-user notifications](#sending-cross-user-notifications)
-
-  * [Event based trigger](#event-based-trigger)
-
-  * [Triggering workflow using google sheets](#triggering-workflow-using-google-sheets)
-    * [Steps to setup notification trigger in google sheets](#steps-to-setup-notification-trigger-in-google-sheets)

@@ -1,9 +1,7 @@
 ---
 title: "Twilio"
-description: "Suggest Edits"
+description: "This section is a step-by-step guide to select Twilio as your SMS service provider."
 ---
-
-This section is a step-by-step guide to select Twilio as your SMS service provider.
 
 ## Pre-Requisites
 
@@ -16,8 +14,11 @@ You'll need Twilio account to complete this tutorial. You can use your existing 
 On the SuprSend dashboard, follow the steps as below:
 
 1. Select Vendors from the left panel
+
 2. Select 'SMS' as the channel from the list
+
 3. Select the communication type from the list - System, Transactional, Promotional
+
 4. Select 'Twilio' from the list of Vendors
 
 ![](/images/docs/da94ef6-Twilio_vendor_page_1.png)
@@ -36,31 +37,43 @@ On the SuprSend dashboard, follow the steps as below:
 
 Login to Twilio account and follow the below steps:
 
-1. Open **"Account"** menu from your top right side panel
-2. Click on **"API keys & tokens"** button.
+<Steps>
+  <Step title="Open &#x22;Account&#x22; menu from your top right side panel">
 
-![](/images/docs/38a5a8a-Twilio_dashboard.png)
+  </Step>
 
-3. You'll find the **"Account SID"** and **"Auth token"** in the Auth Tokens section.
+  <Step title="Click on &#x22;API keys & tokens&#x22; button.">
+    ![](/images/docs/38a5a8a-Twilio_dashboard.png)
+  </Step>
 
-![](/images/docs/4341cf2-Twilio_API_keys.png)
+  <Step title="You'll find the &#x22;Account SID&#x22; and &#x22;Auth token&#x22; in the Auth Tokens section.">
+    ![](/images/docs/4341cf2-Twilio_API_keys.png)
 
-<Check>
-  Please note that you can only send to verified mobile numbers (referred as verified caller IDs) using Twilio account test credentials. You can add verified caller IDs from [here](https://console.twilio.com/us1/develop/phone-numbers/manage/verified)
-</Check>
+    <Check>
+      **Verify phone numbers for sending through test credentials** 👍
 
-### How to get Messaging service SID from your Twilio account
+      Please note that you can only send to verified mobile numbers (referred as verified caller IDs) using Twilio account test credentials. You can add verified caller IDs from [here](https://console.twilio.com/us1/develop/phone-numbers/manage/verified)
+    </Check>
+  </Step>
+</Steps>
+
+## How to get Messaging service SID from your Twilio account
 
 To send messages through Twilio acccount, we need a Twilio messaging service with phone number attached to it. Twilio Messaging service is a pool of sender phone numbers having the same features and configurations. It helps in 2 major use cases,
 
-1. **Sending to candidate's around different geographical regions**. For example - if you want to send to both US and Indian numbers, you can add one sender number for US and one sender mobile number for India in the same messaging service and twilio will automatically choose the number belonging to the nearest region to send to your end users
-2. **Managing the scale of your notifications**. In case of high message volumes, twilio distributes your outbound messaging traffic evenly across the phone numbers in your Messaging Service so that the delivery doesn't get affected
+1. **Sending to candidate's around different geographical regions**
+
+   . For example - if you want to send to both US and Indian numbers, you can add one sender number for US and one sender mobile number for India in the same messaging service and twilio will automatically choose the number belonging to the nearest region to send to your end users
+
+2. **Managing the scale of your notifications**
+
+   . In case of high message volumes, twilio distributes your outbound messaging traffic evenly across the phone numbers in your Messaging Service so that the delivery doesn't get affected
 
 You can refer to Twilio's excellent [documentation on messaging service](https://www.twilio.com/docs/messaging/services) to know more about it
 
 To get a messaging service SID, you'll have to purchase a twilio phone number and add it to a messaging service
 
-### How to purchase a twilio phone number
+## How to purchase a twilio phone number
 
 Navigate to the "[Phone Numbers](https://console.twilio.com/us1/develop/phone-numbers)" page of the Twilio console. Then, click on "**Buy a Number**" from left side *# Phone Numbers* menu.
 
@@ -69,9 +82,13 @@ Navigate to the "[Phone Numbers](https://console.twilio.com/us1/develop/phone-nu
 On "Buy a Number" page:
 
 1. Select the relevant country
+
 2. Check the "SMS" box in capabilities section to filter for numbers with SMS capability
+
 3. Click on "Search". This will load the list of available numbers with SMS capability in your region and the price of each number listed in a table.
+
 4. Select whichever available number appeals to you. Click on "Buy" button next to the mobile number to buy that number.
+
 5. This will open a modal, scroll down and click on "Buy +1 xxx ..." button and then select, "Setup number." This will load a phone number configuration page. We don't need to change anything for this tutorial.
 
 If you are new to Twilio, your trial account is initially funded with enough money to purchase a phone number, so you won't have any expenses while completing this guide.
@@ -86,29 +103,19 @@ Now that we have a phone number, we need to create a Twilio Messaging Service th
 
 On "Messaging Services" page:
 
-1. Click on "Create Messaging Service" button
+<Steps>
+  <Step title="Click on &#x22;Create Messaging Service&#x22; button">
+    ![](/images/docs/8810e38-Twilio_messaging_service.png)
+  </Step>
 
-![](/images/docs/8810e38-Twilio_messaging_service.png)
+  <Step title="Enter the value of two fields: &#x22;Friendly Name,&#x22; and &#x22;Use Case&#x22;.">
+    1. Let's use "SuprSend SMS service" for "Friendly name"
 
-2. This will open "Messaging Service Setup". Enter the value of two fields: "Friendly Name," and "Use Case".
+    2. There are several "Use Case" options. For this tutorial, we can select "Notify my users". Next, click "Create Messaging Service"
 
-   1. Let's use "SuprSend SMS service" for "Friendly name"
-   2. There are several "Use Case" options. For this tutorial, we can select "Notify my users". Next, click "Create Messaging Service"
-
-![](/images/docs/c482a83-Screenshot_2022-08-21_at_9.30.47_PM.png)
-
-3. The next step is to add the number that we have bought to this messaging service
-4. Once the number is added, Click on "Set up integration"
-
-![](https://files.readme.io/d81eb01-twilio_add_number.gif)
-
-5. On "Integration" page, scroll down to add "Callback URL". Add SuprSend webhook URL here to track delivery reports on SuprSend dashboard:
-   1. Webhook URL - `https://hub.suprsend.com/webhook/twilio/sms`
-
-![](/images/docs/f2f5f51-Add_callback_URL.png)
-
-6. Then Click on "Complete Messaging Service Setup" to complete the setup
-7. Copy the SID value and add it in Twilio Vendor page
+    ![](/images/docs/c482a83-Screenshot_2022-08-21_at_9.30.47_PM.png)
+  </Step>
+</Steps>
 
 ![](/images/docs/6bb711c-image_96.png)
 
@@ -123,23 +130,3 @@ By default SuprSend Webhook URL is configured in Twilio. This will help you to t
 </Warning>
 
 ***
-
-What’s Next
-
-Create SMS template and add a workflow to start sending your SMS notifications
-
-* [SMS Template](/docs/sms-template)
-* [Create Workflow](https://docs.suprsend.com/docs/design-workflow)
-
-* [Table of Contents](#)
-
-* * [Pre-Requisites](#pre-requisites)
-
-  * [Twilio integration on SuprSend account](#twilio-integration-on-suprsend-account)
-
-    * [How to get Account SID and Auth token from your Twilio account](#how-to-get-account-sid-and-auth-token-from-your-twilio-account)
-    * [How to get Messaging service SID from your Twilio account](#how-to-get-messaging-service-sid-from-your-twilio-account)
-    * [How to purchase a twilio phone number](#how-to-purchase-a-twilio-phone-number)
-    * [Twilio messaging service](#twilio-messaging-service)
-
-  * [Setting Callback URL in Twilio Account](#setting-callback-url-in-twilio-account)
