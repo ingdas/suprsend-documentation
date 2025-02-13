@@ -3,8 +3,6 @@ title: "Brands API"
 description: "Guide to create / update brands using go SDK"
 ---
 
-[Suggest Edits](/edit/brands-api-go)
-
 Brands are used for personalizing communication on behalf of some other entity/organization.
 
 In SuprSend, Brands are workspace level entity. By default, SuprSend creates a brand with `brand_id="default"` (representing your organization) in each of your workspaces. You can create more brands using one of our backend SDKs.
@@ -123,22 +121,3 @@ By default `limit=20` . Value for limit must be \< 1000
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Data structure of Brand:](#data-structure-of-brand)
-
-  * [Field Description:](#field-description)
-
-    * [brand\_id (\*mandatory)](#brand_id-mandatory)
-    * [brand\_name (\*mandatory)](#brand_name-mandatory)
-    * [logo (optional)](#logo-optional)
-    * [brand colors viz. primary\_color, secondary\_color, tertiary\_color (optional)](#brand-colors-viz-primary_color-secondary_color-tertiary_color-optional)
-    * [social\_links: (optional)](#social_links-optional)
-    * [properties:](#properties)
-
-  * [Accessing Brand using go](#accessing-brand-using-go)
-
-    * [1. Upsert brand (Create a new Brand OR Update an existing Brand)](#1-upsert-brand-create-a-new-brand-or-update-an-existing-brand)
-    * [2. Get brand data](#2-get-brand-data)
-    * [3. Brands list api](#3-brands-list-api)

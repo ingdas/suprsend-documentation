@@ -3,8 +3,6 @@ title: "Tenant Preference"
 description: "Learn how to manage preferences for your tenants and its users"
 ---
 
-[Suggest Edits](/edit/brand-preference)
-
 Tenants represents a segment that user belongs to. It can be organizations, teams within an organization, subsidiary companies or different product lines in the same business. If you're a B2B application or a multi-tenant SaaS product, you can use tenant preferences to allow company admins to set preference for their internal team or allow your customers to set default preferences for their users.
 
 ## Company setting preference for tenants
@@ -35,15 +33,15 @@ You can simply trigger tenant workflow by passing `tenant_id` in your workflow t
 
 When a workflow is triggered, preference is evaluated for recipient and tenant before send node. Notification is sent in categories and channels where both tenant and user preferences are `opt_in`.
 
-### Evaluating Recipient preferences
+### -  Evaluating Recipient preferences
 
 If recipient preferences are not set in a category, default tenant preference is picked. Once user preference is set in a category, any changes in the default preference of existing categories will not effect recipient preferences.
 
-### Resolving preference conflicts
+### -  Resolving preference conflicts
 
 The order of precedence is always user > tenant > org (set in notification category settings). However, if company turns off notifications in a category or channel for a tenant, user will not get notification in that category even if they have kept their preference `ON` in that category in the past.
 
-### Debugging preference evaluation in workflow runs
+### -  Debugging preference evaluation in workflow runs
 
 User preferences can change over time and when checking a workflow run, you need to know what was user's preferences at that time. You can view this using the step-by-step debugger in [workflow executions](https://app.suprsend.com/en/demo/logs/executions/?last_n_minutes=1440).
 
@@ -52,25 +50,3 @@ User preferences can change over time and when checking a workflow run, you need
 You can also track when user updated their preference by filtering on `Subscriber preference update` in [request logs](https://app.suprsend.com/en/demo/logs/api/?last_n_minutes=1440).
 
 ***
-
-What’s Next
-
-Add Preference Page in your application
-
-* [Table of Contents](#)
-
-* * [Company setting preference for tenants](#company-setting-preference-for-tenants)
-
-  * [Per-tenant default preference](#per-tenant-default-preference)
-
-  * [Controlling preference UI for users](#controlling-preference-ui-for-users)
-
-  * [Collecting preference from tenant users](#collecting-preference-from-tenant-users)
-
-  * [Triggering tenant workflows](#triggering-tenant-workflows)
-
-  * [Tenant level preference evaluation](#tenant-level-preference-evaluation)
-
-    * [Evaluating Recipient preferences](#evaluating-recipient-preferences)
-    * [Resolving preference conflicts](#resolving-preference-conflicts)
-    * [Debugging preference evaluation in workflow runs](#debugging-preference-evaluation-in-workflow-runs)
