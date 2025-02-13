@@ -3,14 +3,19 @@ title: "Send and Track Events"
 description: "This document will cover the method to send event to Suprsend platform"
 ---
 
-[Suggest Edits](/edit/go-send-event-data)
-
 ## Pre-requisites
 
 1. [Integrate Go SDK](/docs/integrate-go-sdk)
+
 2. [Create User Profile](/docs/go-create-user-profile)
-3. [Create Template on SuprSend platform](/docs/templates) - if you want to trigger workflow by passing the event
-4. [Create Workflow on SuprSend Platform](/docs/design-workflow) - if you want to trigger workflow by passing the event
+
+3. [Create Template on SuprSend platform](/docs/templates)
+
+    \- if you want to trigger workflow by passing the event
+
+4. [Create Workflow on SuprSend Platform](/docs/design-workflow)
+
+    \- if you want to trigger workflow by passing the event
 
 ## Create Workflow on SuprSend Platform
 
@@ -140,11 +145,17 @@ Use `.Append()` on bulk\_events instance to add however-many-records to call in 
 
 ### How SuprSend Processes the bulk API request
 
-* On calling `bulkIns.Trigger()`, the SDK internally makes one-or-more Callable-chunks.
+* On calling 
+
+  `bulkIns.Trigger()`
+
+  , the SDK internally makes one-or-more Callable-chunks.
+
 * Each callable-chunk contains a subset of records, the subset calculation is based on each record's bytes-size and max allowed chunk-size, chunk-length etc.
+
 * For each callable-chunk SDK makes an HTTP call to SuprSend to register the request.
 
-## Response
+### Response
 
 Response is an instance of `suprsend.BulkResponse` type
 
@@ -179,19 +190,3 @@ Response is an instance of `suprsend.BulkResponse` type
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-
-  * [Create Workflow on SuprSend Platform](#create-workflow-on-suprsend-platform)
-
-  * [Send Event](#send-event)
-
-    * [Sample Code](#sample-code)
-    * [Response](#response)
-
-  * [Bulk API for multiple event requests](#bulk-api-for-multiple-event-requests)
-    * [How SuprSend Processes the bulk API request](#how-suprsend-processes-the-bulk-api-request)
-
-  * [Response](#response-1)

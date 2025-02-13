@@ -3,13 +3,11 @@ title: "Trigger Workflow from API"
 description: "Guide to configure and trigger workflow using go SDK"
 ---
 
-[Suggest Edits](/edit/go-trigger-workflow-from-api)
-
 It is a unified API to trigger workflow and doesn't require user creation before hand to trigger notification. Recommended for platforms transitioning their existing notifications to SuprSend. If you are using our frontend SDKs to configure notifications and passing events and user properties from third-party data platforms like Segment, then [event-based trigger](/docs/go-send-event-data) would be a better choice.
 
-<Info>
+<Check>
   Available in SDK version >= v0.5.1.
-</Info>
+</Check>
 
 ## Payload Schema
 
@@ -109,9 +107,9 @@ Recipients in workflow call is an array of `distinct_ids` or recipient objects. 
   ```
 </CodeGroup>
 
-<Info>
+<Note>
   We recommend you to use [lists](/docs/lists) and [broadcasts](/docs/broadcast) to send notifications to a user list larger than 1000 users. This approach allows for bulk processing within SuprSend, resulting in significantly faster delivery compared to individual workflow calls. Sending individual workflows to a large set of users may introduce delays in your notification queue and is not an optimized way of handling bulk trigger.
-</Info>
+</Note>
 
 ### Identifying recipients inline
 
@@ -141,7 +139,7 @@ This is how the complete recipient object with look like
 | $timezone                               | string                    | to set recipient's timezone. Used to send notification in user's local timezone. You can pass timezone in [IANA (TZ identifier)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) format.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | \*                                      | key-value pair            | You can pass other user properties to render dynamic template content in key-value pair as `"user_prop1":"value1"` . Extra properties will be set in subscriber profile (as subscriber properties) which can then be used in the template as `$recipient.<property>`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
-#### Add User Communication Channel
+### Add User Communication Channel
 
 <CodeGroup>
   ```json json
@@ -296,7 +294,7 @@ You can send notifications to anonymous users by passing ` "is_transient": true`
 
 ### Multi-tenant notifications
 
-For usecases where you want to send notifications to your enterprise customers' end users, pass the `tenant_id` in your workflow instance. You can use this to dynamically manage [tenant level notification customizations](/docs/brands). This includes the ability to customize template design or content and route notifications via tenant vendors.
+For use-cases where you want to send notifications to your enterprise customers' end users, pass the `tenant_id` in your workflow instance. You can use this to dynamically manage [tenant level notification customizations](/docs/brands). This includes the ability to customize template design or content and route notifications via tenant vendors.
 
 <CodeGroup>
   ```go go
@@ -341,11 +339,21 @@ For usecases where you want to send notifications to your enterprise customers' 
 
 SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives and processes a request with an idempotency\_key, it will skip processing requests with same `idempotency_key` for next 24 hours. Idempotency key should be uniquely generated for each request (max 255 characters allowed). Spaces in start and end of the key will be trimmed. Here are some common approaches for generating idempotency keys:
 
-* **Generate a random UUID** for each request.
-* **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like `user147-new-comment-1687437670`
-* **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
+* **Generate a random UUID**
 
-### Response structure
+   for each request.
+
+* **Construct the idempotency key by combining relevant information about the request**
+
+  . This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like 
+
+  `user147-new-comment-1687437670`
+
+* **Request-specific Identifier**
+
+  : If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
+
+**Response Structure**
 
 <CodeGroup>
   ```json json
@@ -650,22 +658,3 @@ Response is an instance of `suprsend.BulkResponse` type
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Payload Schema](#payload-schema)
-
-    * [Sending notification to multiple recipients](#sending-notification-to-multiple-recipients)
-    * [Identifying recipients inline](#identifying-recipients-inline)
-    * [Sending cross-user notifications](#sending-cross-user-notifications)
-    * [Sending notification to anonymous user](#sending-notification-to-anonymous-user)
-    * [Multi-tenant notifications](#multi-tenant-notifications)
-    * [Idempotent requests](#idempotent-requests)
-    * [Response structure](#response-structure)
-
-  * [Bulk API for triggering multiple workflows](#bulk-api-for-triggering-multiple-workflows)
-    * [Response](#response)
-
-  * [Add file attachment in email](#add-file-attachment-in-email)
-
-  * [Dynamic workflow trigger](#dynamic-workflow-trigger)

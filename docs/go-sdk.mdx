@@ -3,8 +3,6 @@ title: "Go SDK"
 description: "Integration for sending notifications via Go SDK"
 ---
 
-[Suggest Edits](/edit/go-sdk)
-
 ## Overview
 
 With SuprSend Go SDK, you can trigger Communication from your backend Go stack. Before moving into the intricacies of how to trigger a communication, we first need to understand how SuprSend sends communications to the end users. This is what a typical communication flow will look like
@@ -35,31 +33,46 @@ Communications are made up of multiple components - trigger, end users, vendors,
 
 **Trigger** initiates the workflow. There are two ways in which you can trigger a workflow:
 
-1. [**From API**](/docs/trigger-workflow#triggering-workflow-via-api): Configure all the workflow components (users, template name, business logic etc) including the business logic in an API payload and trigger workflow through API.
-2. [**Event-based trigger**](/docs/trigger-workflow#event-based-trigger): where you [design the workflow on Suprsend platform](/docs/design-workflow) and pass event from API as a trigger point.
+1. [**From API**](/docs/trigger-workflow#triggering-workflow-via-api)
+
+   : Configure all the workflow components (users, template name, business logic etc) including the business logic in an API payload and trigger workflow through API.
+
+2. [**Event-based trigger**](/docs/trigger-workflow#event-based-trigger)
+
+   : where you 
+
+   [design the workflow on Suprsend platform](/docs/design-workflow)
+
+    and pass event from API as a trigger point.
 
 For most usecases, **event-based triggers** are recommended as most of the workflow elements are not tied to the code, and can be easily modified through SuprSend dashboard without changing anything in the code.
 
 ## What is covered in this documentation
 
-In this documentation , we'll cover:
+In the upcoming documentation , we'll be covering:
 
-1. How to [integrate Go SDK](/docs/integrate-go-sdk)
-2. How to [create User profile](/docs/go-create-user-profile) and add user channel preferences to it
-3. How to [send and track events](/docs/go-send-event-data) for triggering event based workflows
-4. How to [Trigger a workflow from backend API](/docs/go-trigger-workflow-from-api)
-5. How to [add / update brands](/docs/brands-api-go)
+1. How to 
+
+   [integrate Go SDK](/docs/integrate-go-sdk)
+
+2. How to 
+
+   [create User profile](/docs/go-create-user-profile)
+
+    and add user channel preferences to it
+
+3. How to 
+
+   [send and track events](/docs/go-send-event-data)
+
+    for triggering event based workflows
+
+4. How to 
+
+   [Trigger a workflow from backend API](/docs/go-trigger-workflow-from-api)
+
+5. How to 
+
+   [add / update brands](/docs/brands-api-go)
 
 ***
-
-* [Table of Contents](#)
-
-* * [Overview](#overview)
-
-    * [1. Template](#1)
-    * [2. Users](#2)
-    * [3. Vendors](#3)
-    * [4. Workflow](#4)
-    * [5. Trigger](#5-trigger)
-
-  * [What is covered in this documentation](#what-is-covered-in-this-documentation)
