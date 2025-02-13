@@ -3,8 +3,6 @@ title: "Error Guides"
 description: "Types of errors and their resolutions"
 ---
 
-[Suggest Edits](/edit/error-guides)
-
 ## Prerequisite
 
 [Understanding the data structure of logs](/docs/logging#data-structure-of-logs)
@@ -13,17 +11,41 @@ description: "Types of errors and their resolutions"
 
 Errors can essentially occur at 4 stages when triggering a notification:
 
-* **[API Errors](/docs/error-guides#api-errors)**: These errors occur at API level
+* [API Errors](/docs/error-guides#api-errors)
 
-* **[Workflow is not processed](/docs/error-guides#workflow-not-processed)**: SuprSend could not process the workflow due to issues in the workflow or event payload such as the user's `distinct_id` is not found in the SuprSend database or missing template information.
+  : These errors occur at API level
+
+* [Workflow is not processed](/docs/error-guides#workflow-not-processed)
+
+  : SuprSend could not process the workflow due to issues in the workflow or event payload such as the user's 
+
+  `distinct_id`
+
+   is not found in the SuprSend database or missing template information.
 
 ![](/images/docs/731605c-image.png)
 
-* **Workflow processed, but notification for one or more channels is not triggered by SuprSend**: This type of error occurs from template rendering failures or incorrect/missing channel information in the user profile. Refer [section below](/docs/error-guides#notification-not-triggered-by-suprsend) to debug these errors.
+* **Workflow processed, but notification for one or more channels is not triggered by SuprSend**
+
+  : This type of error occurs from template rendering failures or incorrect/missing channel information in the user profile. Refer 
+
+  [section below](/docs/error-guides#notification-not-triggered-by-suprsend)
+
+   to debug these errors.
 
 ![](/images/docs/8c7445f-image.png)
 
-* **Vendor didn't accept the sent request or returned delivery failure error**: In such cases, you'll see `Trigger failed` or `Failure by Vendor` status in the third step of the logs. These errors are passed by the vendor when SuprSend initiates a send call to the vendor. Hover over the 'i' icon to view the error message. For detailed troubleshooting, refer to the individual vendor guides.
+* **Vendor didn't accept the sent request or returned delivery failure error**
+
+  : In such cases, you'll see 
+
+  `Trigger failed`
+
+   or 
+
+  `Failure by Vendor`
+
+   status in the third step of the logs. These errors are passed by the vendor when SuprSend initiates a send call to the vendor. Hover over the 'i' icon to view the error message. For detailed troubleshooting, refer to the individual vendor guides.
 
 ![](/images/docs/aa1d49e-image.png)
 
@@ -36,9 +58,9 @@ This can happen for two major reasons:
 | **2 API requests have the same idempotency key.** SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives more than one request with the same idempotency\_key in a 24 hour window, it will only process the first request and skip all other requests. Know more about idempotency key [here](/docs/python-trigger-workflow-from-api#idempotent-requests). | Try passing another idempotency key in your workflow or event payload.                                                                                                                                               |
 | **If workflow is triggered via event and there is no active workflow associated with that event.**                                                                                                                                                                                                                                                                                                                                 | Check if there is an active workflow created on SuprSend dashboard with the given event name. If not, [Refer documentation](/docs/sending-workflow-from-suprsend-platform) to create workflow on SuprSend dashboard. |
 
-<Info>
+<Note>
   If your error isn't covered above, reach out to us on [Slack community](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw) or via email: [\[email protected\]](/cdn-cgi/l/email-protection#384b4d4848574a4c784b4d484a4b5d565c165b5755)
-</Info>
+</Note>
 
 ## Workflow not processed
 
@@ -102,42 +124,34 @@ Broadcast logs are visible inside broadcast tab on logs page.
 | **`SubscriberList Broadcast API: <channel>: template rendering failed error: "<variable_key>" not defined in [object Object]`**           | Certain variables with `variable_key` exist in the template but not part of broadcast data or user properties if you are using `$user` variable in the template.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | **SubscriberList Broadcast API: template: broadcast applicable live channels: \[channel\_list], but no respective user channels present** | User profile doesn't have any active channel from the channels available in template group. This could happen for 2 reasons: - User doesn't have that channel set in their profile. If the workflow is triggered via event, user's channel is derived from the existing user profile. [Create user profile via API or one of our SDKs](/docs/users#creating-user-profile-on-suprsend). - All identities for that channel are `inactive` in user profile. Channel can be marked inactive using `unset` or `remove` function via [SDK or API](/docs/users#via-sdk). SuprSend also marks the channel identity inactive for email and whatsapp in case of hard errors from vendor end, such as bounced email addresses, unregistered whatsapp numbers. This is done to safeguard your email domain authority or whatsapp rating if you continue to send notifications to users who have reported or marked your email or messages as spam. Additionally, this helps in whatsapp cost saving, as vendor charges for every processed request. Inactive marking period by SuprSend is 15 days for whatsapp and 90 days for email. |
 
-## Other questions asked on community
+## Frequently Asked Questions:
 
-1. **I triggered an event but it doesn't appear in dashboard logs?**
+<AccordionGroup>
+  <Accordion title="I triggered an event but it doesn't appear in dashboard logs?" defaultOpen={false}>
+    We currently do not track individual event trigger currently unless it's associated with a workflow. If you don't see an event trigger in logs, check if there are active workflows linked to that event on SuprSend dashboard. Another reason could be if you are using idempotency key and 2 requests have the same idempotency key. SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives another request with the same idempotency\_key in a 24 hour span, it will skip processing those requests. Know more about idempotency key [here](/docs/python-trigger-workflow-from-api#idempotent-requests).
+  </Accordion>
 
-We currently do not track individual event trigger currently unless it's associated with a workflow. If you don't see an event trigger in logs, check if there are active workflows linked to that event on SuprSend dashboard. Another reason could be if you are using idempotency key and 2 requests have the same idempotency key. SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives another request with the same idempotency\_key in a 24 hour span, it will skip processing those requests. Know more about idempotency key [here](/docs/python-trigger-workflow-from-api#idempotent-requests).
+  <Accordion title="I added channels to the user profile, but they are not reflected in subscriber profile on SuprSend dashboard?" defaultOpen={false}>
+    Check the format of value passed in user channels. Channel will not be updated in profile if the format is incorrect. Supported format for each channel:
 
-2. **I added channels to the user profile, but they are not reflected in subscriber profile on SuprSend dashboard?**
+    * SMS, Whatsapp - 
 
-Check the format of value passed in user channels. Channel will not be updated in profile if the format is incorrect. Supported format for each channel:
+      `+15555555555`
 
-* SMS, Whatsapp - `+15555555555` (country code is mandatory)
-* Email - `[email protected]`
-* [Refer here](/docs/python-create-user-profile#1-add-user-channels) for other channel formats.
+       (country code is mandatory)
 
-<Info>
+    * Email - 
+
+      `[email protected]`
+
+    * [Refer here](/docs/python-create-user-profile#1-add-user-channels)
+
+       for other channel formats.
+  </Accordion>
+</AccordionGroup>
+
+<Note>
   If you are facing an issue which is not covered above, reach out to us on [Slack community](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#/shared-invite/email) or via email: [\[email protected\]](/cdn-cgi/l/email-protection#11626461617e6365516264616362747f753f727e7c)
-</Info>
+</Note>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Prerequisite](#prerequisite)
-
-  * [Error stages](#error-stages)
-
-  * [API errors](#api-errors)
-
-  * [Workflow not processed](#workflow-not-processed)
-
-    * [Workflow errors](#workflow-errors)
-    * [Broadcast errors](#broadcast-errors)
-
-  * [Notification not triggered by SuprSend](#notification-not-triggered-by-suprsend)
-
-    * [Workflow errors](#workflow-errors-1)
-    * [Broadcast errors](#broadcast-errors-1)
-
-  * [Other questions asked on community](#other-questions-asked-on-community)
