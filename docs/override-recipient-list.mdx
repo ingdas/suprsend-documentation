@@ -3,8 +3,6 @@ title: "Override Recipient"
 description: "Learn what override recipient setting in trigger node"
 ---
 
-[Suggest Edits](/edit/override-recipient-list)
-
 The "recipient" refers to either a single user or a group of users who will be receiving a notification. By default, the user who initiates the event (specified by the `distinct_id` parameter in the track event call) will be considered the recipient.
 
 ![](/images/docs/ea1201c-image.png)
@@ -34,6 +32,7 @@ To handle such cases, you can override the default recipient with another identi
 You can add recipient as a [JQ-expression](https://stedolan.github.io/jq/manual/#TypesandValues). Below are some examples of how to enter recipients in the workflow:
 
 1. To enter an array of recipients, something like `"recipients": ["recipient1","recipient2","recipient3"]`, enter in the format `.recipients[]`. It would send the notification to all the recipients in the array.
+
 2. If the recipient is a nested event property key like shown below, enter it in the format `.recipient.id`.
 
 ```
@@ -45,7 +44,7 @@ properties = {
 }
 ```
 
-3. In the below array object example, if you want to send notifications to all the admins of an organization, enter the format `.organization.admins[].user_id`.
+1. In the below array object example, if you want to send notifications to all the admins of an organization, enter the format `.organization.admins[].user_id`.
 
 ```
 properties = {
@@ -75,9 +74,3 @@ properties = {
 ```
 
 ***
-
-What’s Next
-
-Once configured, go ahead and trigger your workflow
-
-* [Trigger Workflow](/docs/trigger-workflow)
