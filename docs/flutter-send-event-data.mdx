@@ -3,17 +3,23 @@ title: "Send and Track Events"
 description: "This document will cover the method to send event to Suprsend platform"
 ---
 
-[Suggest Edits](/edit/flutter-send-event-data)
-
 In this section, we'll cover how to send events to the Suprsend platform for both iOS and Android application
 
 ## Pre-requisites
 
 1. [Integrate Flutter SDK in android application](/docs/integrate-flutter-sdk-android)
+
 2. [Integrate Flutter SDK in iOS application](/docs/integrate-flutter-sdk-ios)
+
 3. [Create User Profile](/docs/flutter-create-user)
-4. [Create Template on SuprSend platform](/docs/templates) - if you want to trigger workflow by passing the event
-5. [Create Workflow on SuprSend Platform](/docs/design-workflow) - if you want to trigger workflow by passing the event
+
+4. [Create Template on SuprSend platform](/docs/templates)
+
+    \- if you want to trigger workflow by passing the event
+
+5. [Create Workflow on SuprSend Platform](/docs/design-workflow)
+
+    \- if you want to trigger workflow by passing the event
 
 ## Create Workflow on SuprSend Platform
 
@@ -66,52 +72,54 @@ There are some system events tracked by SuprSend SDK by default. These are some 
 
 Super properties are data that are always sent with events data. These super properties will be sent in each event after calling this method. Super properties will be stored in local storage, and will persist across invocations of app.
 
-#### Set Super Property
+<AccordionGroup>
+  <Accordion title="Set Super Property" defaultOpen={false}>
+    There are some super properties that SuprSend SDK will send by default. Developer can set custom super properties as well with `suprsend.setSuperProperties()` method
 
-There are some super properties that SuprSend SDK will send by default. Developer can set custom super properties as well with `suprsend.setSuperProperties()` method
+    <CodeGroup>
+      ```javascript Dart
+      suprsend.setSuperProperties(property_obj);
 
-<CodeGroup>
-  ```javascript Dart
-  suprsend.setSuperProperties(property_obj);
+      //setting single super property
+      suprsend.setSuperProperties({"Location": "San Francisco, CA"}); 
 
-  //setting single super property
-  suprsend.setSuperProperties({"Location": "San Francisco, CA"}); 
+      // setting multiple super properties
+      suprsend.setSuperProperties({"Location": "San Francisco, CA","Zipcode": 940167});
+      ```
+    </CodeGroup>
 
-  // setting multiple super properties
-  suprsend.setSuperProperties({"Location": "San Francisco, CA","Zipcode": 940167});
-  ```
-</CodeGroup>
+    Default Super properties tracked by SuprSend SDK:
 
-Default Super properties tracked by SuprSend SDK:
+    | Super Property        | Description                                  | Sample Value     |
+    | --------------------- | -------------------------------------------- | ---------------- |
+    | $app\_version\_string | Version of your app                          | 0.0.1            |
+    | $app\_build\_number   | Build number of your app                     | 2                |
+    | $os                   | Operating system of the user                 | android          |
+    | $manufacturer         | Manufacturer of the user's device            | OnePlus          |
+    | $brand                | Brand of the user's device                   | OnePlus          |
+    | $model                | Model of the user's device                   | GM1901           |
+    | $deviceId             | Device id                                    | 89eead05a0150146 |
+    | $ss\_sdk\_version     | SuprSend SDK version                         | 0.1.31           |
+    | $network              | Network on which the user is                 | wifi             |
+    | $connected            | Whether the user is connected to the network | true             |
+  </Accordion>
 
-| Super Property        | Description                                  | Sample Value     |
-| --------------------- | -------------------------------------------- | ---------------- |
-| $app\_version\_string | Version of your app                          | 0.0.1            |
-| $app\_build\_number   | Build number of your app                     | 2                |
-| $os                   | Operating system of the user                 | android          |
-| $manufacturer         | Manufacturer of the user's device            | OnePlus          |
-| $brand                | Brand of the user's device                   | OnePlus          |
-| $model                | Model of the user's device                   | GM1901           |
-| $deviceId             | Device id                                    | 89eead05a0150146 |
-| $ss\_sdk\_version     | SuprSend SDK version                         | 0.1.31           |
-| $network              | Network on which the user is                 | wifi             |
-| $connected            | Whether the user is connected to the network | true             |
+  <Accordion title="Unset Super Property" defaultOpen={false}>
+    There are unset custom super properties with `suprsend.unSetSuperProperty()` method. This method will stop calling that property with every event trigger.
 
-#### Unset Super Property
+    <CodeGroup>
+      ```javascript Dart
+      suprsend.unSetSuperProperty(key);
 
-There are unset custom super properties with `suprsend.unSetSuperProperty()` method. This method will stop calling that property with every event trigger.
+      //unsetting single super property
+      suprsend.unSetSuperProperty({"Location"}); 
 
-<CodeGroup>
-  ```javascript Dart
-  suprsend.unSetSuperProperty(key);
-
-  //unsetting single super property
-  suprsend.unSetSuperProperty({"Location"}); 
-
-  // unsetting multiple super properties
-  suprsend.unSetSuperProperty({"Location","Pincode"});
-  ```
-</CodeGroup>
+      // unsetting multiple super properties
+      suprsend.unSetSuperProperty({"Location","Pincode"});
+      ```
+    </CodeGroup>
+  </Accordion>
+</AccordionGroup>
 
 ### 2. Flush Events
 
@@ -126,17 +134,3 @@ All the system tracked events are flushed immediately
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-
-  * [Create Workflow on SuprSend Platform](#create-workflow-on-suprsend-platform)
-
-  * [Sending Events to SuprSend](#sending-events-to-suprsend)
-    * [System Events tracked by SuprSend](#system-events-tracked-by-suprsend)
-
-  * [Advanced Concepts](#advanced-concepts)
-
-    * [1. Super Properties](#1-super-properties)
-    * [2. Flush Events](#2-flush-events)

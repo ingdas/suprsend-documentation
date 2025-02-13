@@ -3,8 +3,6 @@ title: "Overview"
 description: "Setup Guide to Suprsend's Flutter SDK for Android Applications"
 ---
 
-[Suggest Edits](/edit/flutter)
-
 ## Overview
 
 This document contains SDK setup process for both Android devices. Further, we'll cover basic and advanced methods to track user properties, events and push tokens from frontend clients. With the help of this SDK, you will be able to send Communication directly from your app, and render push notifications on both android devices.
@@ -37,32 +35,50 @@ Communications are made up of 5 major components - templates, vendors, end users
 
 **Trigger** initiates the workflow. There are two ways in which you can trigger a workflow:
 
-1. [**From API**](/docs/trigger-workflow#triggering-workflow-via-api): Configure all the workflow components (users, template name, business logic etc) including the business logic in an API payload and trigger workflow through API.
-2. [**Event-based trigger**](/docs/trigger-workflow#event-based-trigger): where you [design the workflow on Suprsend platform](/docs/design-workflow) and pass event from API as a trigger point.
+1. [**From API**](/docs/trigger-workflow#triggering-workflow-via-api)
+
+   : Configure all the workflow components (users, template name, business logic etc) including the business logic in an API payload and trigger workflow through API.
+
+2. [**Event-based trigger**](/docs/trigger-workflow#event-based-trigger)
+
+   : where you 
+
+   [design the workflow on Suprsend platform](/docs/design-workflow)
+
+    and pass event from API as a trigger point.
 
 For most usecases, **event-based triggers** are recommended as most of the workflow elements are not tied to the code, and can be easily modified through SuprSend dashboard without changing anything in the code.
 
 ## What is covered next in this documentation
 
-In this documentation , we'll cover:
+In the upcoming documentation, we'll be covering:
 
-1. How to [integrate flutter SDK in android application](/docs/integrate-flutter-sdk-android)
-2. How to [integrate flutter SDK in iOS application](/docs/integrate-flutter-sdk-ios)
-3. How to [create User profile](/docs/flutter-create-user) and add user channel preferences to it
-4. How to [send and track events](/docs/flutter-send-event-data) for triggering event based workflows
-5. How to [render android push notification using firebase](/docs/flutter-firebase-fcm-push-integration)
-6. How to [render iOS push notification using apns](/docs/flutter-apns-push)
+1. How to 
+
+   [integrate flutter SDK in android application](/docs/integrate-flutter-sdk-android)
+
+2. How to 
+
+   [integrate flutter SDK in iOS application](/docs/integrate-flutter-sdk-ios)
+
+3. How to 
+
+   [create User profile](/docs/flutter-create-user)
+
+    and add user channel preferences to it
+
+4. How to 
+
+   [send and track events](/docs/flutter-send-event-data)
+
+    for triggering event based workflows
+
+5. How to 
+
+   [render android push notification using firebase](/docs/flutter-firebase-fcm-push-integration)
+
+6. How to 
+
+   [render iOS push notification using apns](/docs/flutter-apns-push)
 
 ***
-
-* [Table of Contents](#)
-
-* * [Overview](#overview)
-
-    * [1. Template](#1)
-    * [2. Users](#2)
-    * [3. Vendors](#3)
-    * [4. Workflow](#4)
-    * [5. Trigger](#5-trigger)
-
-  * [What is covered next in this documentation](#what-is-covered-next-in-this-documentation)
