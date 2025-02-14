@@ -7,6 +7,7 @@ description: "Suggest Edits"
   We have changed the web SDK authentication from workspace key-secret to public key and JWT based authentication. This is done to improve security in frontend applications.
 
   * Refer the v1 SDK [documentation](/v1.2.1/docs/javascript-sdk)
+
   * For migrating to v2, follow this [guide](/docs/js-migration-from-v1)
 </Info>
 
@@ -48,7 +49,7 @@ Create suprSendClient instance and use same instance to access all the methods o
 
 ### 2. Authenticate user
 
-Authenticate user so that all the actions performed after authenticating will be w\.r.t that user. This is mandatory step and need to be called before using any other method. This is usually performed after successful login and on reload of page to re-authenticate user.
+Authenticate user so that all the actions performed after authenticating will be w.r.t that user. This is mandatory step and need to be called before using any other method. This is usually performed after successful login and on reload of page to re-authenticate user.
 
 <CodeGroup>
   ```typescript syntax
@@ -130,7 +131,9 @@ Almost all the methods in this SDK return response type `Promise<ApiResponse>`
   * [Integration](#integration)
 
     * [1. Create Client](#1-create-client)
+
     * [2. Authenticate user](#2-authenticate-user)
+
     * [3. Reset user](#3-reset-user)
 
   * [Response Structure](#response-structure)
