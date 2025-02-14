@@ -3,32 +3,32 @@ title: "Flutter (Headless)"
 description: "SuprSend SDK for Flutter applications for integrating inbox functionality using flutter hooks"
 ---
 
-[Suggest Edits](/edit/inbox-flutter)
-
 SuprSend uses flutter hooks to provide inbox functionality in flutter applications.
 
 ## Installation
 
-#### Step-1: Project’s pubspec.yaml changes
+<Steps>
+  <Step title="Project’s pubspec.yaml changes">
+    Add the following line of code inside dependencies in the `pubspec.yaml` file under the dependencies section
 
-Add the following line of code inside dependencies in the `pubspec.yaml` file under the dependencies section
+    <CodeGroup>
+      ```yaml pubspec.yaml
+      dependencies:
+        flutter:
+        	sdk: flutter
+        suprsend_flutter_inbox: "^0.0.1"
+      ```
+    </CodeGroup>
+  </Step>
 
-<CodeGroup>
-  ```yaml pubspec.yaml
-  dependencies:
-    flutter:
-    	sdk: flutter
-    suprsend_flutter_inbox: "^0.0.1"
-  ```
-</CodeGroup>
-
-#### Step-2: Run `flutter pub get` in the terminal
-
-<CodeGroup>
-  ```shell Bash
-  $ flutter pub get
-  ```
-</CodeGroup>
+  <Step title="Run flutter pub get in the terminal">
+    <CodeGroup>
+      ```shell Bash
+      $ flutter pub get
+      ```
+    </CodeGroup>
+  </Step>
+</Steps>
 
 ## Initialization
 
@@ -127,15 +127,3 @@ This hook provides a notifications list, unSeenCount, markClicked, and markAllSe
 Example implementation can be found here: [https://github.com/suprsend/suprsend-flutter-sdk/blob/main/example/lib/main.dart](https://github.com/suprsend/suprsend-flutter-sdk/blob/main/example/lib/main.dart)
 
 ***
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-
-  * [Initialization](#initialization)
-
-  * [Adding SuprSend Inbox component](#adding-suprsend-inbox-component)
-
-    * [useBell hook](#usebell-hook)
-    * [useNotifications hook](#usenotifications-hook)
-    * [Example Implementation](#example-implementation)

@@ -3,87 +3,102 @@ title: "Integrate Flutter SDK - Android"
 description: "This document will cover SDK installation and initialization steps for your Android application"
 ---
 
-[Suggest Edits](/edit/integrate-flutter-sdk-android)
-
 ## Installation
 
-**Step 1: Open your Flutter project’s pubspec.yaml file**
+<Steps>
+  <Step title="Open your Flutter project’s pubspec.yaml file">
+    Add following line of code inside dependencies in pubspec.yaml file
 
-Add following line of code inside dependencies in pubspec.yaml file
+    <CodeGroup>
+      ```yaml pubsec.yaml
+      dependencies:
+        flutter:
+        	sdk: flutter
+        suprsend_flutter_sdk: "^2.2.0"
+      ```
+    </CodeGroup>
+  </Step>
 
-<CodeGroup>
-  ```yaml pubsec.yaml
-  dependencies:
-    flutter:
-    	sdk: flutter
-    suprsend_flutter_sdk: "^2.2.0"
-  ```
-</CodeGroup>
+  <Step title="Run flutter pub get in the terminal">
 
-**Step 2: Run `flutter pub get` in the terminal**
 
-<CodeGroup>
-  ```shell shell
-  flutter pub get
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```shell shell
+      flutter pub get
+      ```
+    </CodeGroup>
 
-<Warning>
-  In case you face compilation errors or warnings, please perform the following troubleshooting steps:
+    <Warning>
+      **Troubleshooting notes**
 
-  * Ensure mavenCentral is present under repositories in project's build.gradle
-  * Perform gradle sync
-</Warning>
+
+
+      In case you face compilation errors or warnings, please perform the following troubleshooting steps:
+
+      * Ensure mavenCentral is present under repositories in project's build.gradle
+
+      * Perform gradle sync
+    </Warning>
+  </Step>
+</Steps>
 
 ## Initialization
 
-**Step 1: To integrate SuprSend in your Android app, you will need to initialize the suprsend flutter sdk in your MainApplication class.**
+<Steps>
+  <Step title="Initialize Suprsend Flutter SDK">
+    To integrate SuprSend in your Android app, you will need to initialize the suprsend flutter sdk in your MainApplication class.
 
-**Note**: **SSApi.init** should only be called in Application class, not inside Activity class ie.. **MainActivity.kt**. If your project does not have an Application class, you'll have to create it manually and register it in the AndroidManifest.
+    <Note>
+      **Note**: **SSApi.init** should only be called in Application class, not inside Activity class ie.. **MainActivity.kt**. If your project does not have an Application class, you'll have to create it manually and register it in the AndroidManifest.
+    </Note>
 
-Example: If you create a new Application class called [MainApplication.kt](https://github.com/suprsend/suprsend-flutter-sdk/blob/main/example/android/app/src/main/kotlin/com/suprsend/suprsend_flutter_sdk_example/SuprsendFlutterPluginTestApplication.kt) in your source package, go to your AndroidManifest file and enter the path of the class in the tag like this:
+    Example: If you create a new Application class called [MainApplication.kt](https://github.com/suprsend/suprsend-flutter-sdk/blob/main/example/android/app/src/main/kotlin/com/suprsend/suprsend_flutter_sdk_example/SuprsendFlutterPluginTestApplication.kt) in your source package, go to your AndroidManifest file and enter the path of the class in the tag like this:
 
-<CodeGroup>
-  ```xml AndroidManifest.xml
-  <application
-     ...
-     android:name=".<path-to-application-class>"
-     ...
-     >
-  ```
-</CodeGroup>
 
-<CodeGroup>
-  ```kotlin MainApplication.kt
-  import android.app.Application
-  import app.suprsend.SSApi; // import sdk
 
-  class MainApplication : Application(){
-    
-    override fun onCreate() {
-      
-     SSApi.init(this, WORKSPACE KEY, WORKSPACE SECRET) // Important! without this, SDK will not work
-     SSApi.initXiaomi(this, xiaomi_app_id, xiaomi_api_key) // Optional. Add this if you want to support Xiaomi notifications framework
-      
-     super.onCreate()
-    }
-  }
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```xml AndroidManifest.xml
+      <application
+         ...
+         android:name=".<path-to-application-class>"
+         ...
+         >
+      ```
+    </CodeGroup>
 
-Replace **WORKSPACE KEY** and **WORKSPACE SECRET** with your workspace values. You will get both the tokens from [Suprsend dashboard](https://app.suprsend.com/) (***Settings page -> "API keys"*** section). For more details, check the [documentation on 'Workspaces'](/docs/workspace).
+    <CodeGroup>
+      ```kotlin MainApplication.kt
+      import android.app.Application
+      import app.suprsend.SSApi; // import sdk
 
-![](/images/docs/d60fec2-Frame_58_1.png)
+      class MainApplication : Application(){
+        
+        override fun onCreate() {
+          
+         SSApi.init(this, WORKSPACE KEY, WORKSPACE SECRET) // Important! without this, SDK will not work
+         SSApi.initXiaomi(this, xiaomi_app_id, xiaomi_api_key) // Optional. Add this if you want to support Xiaomi notifications framework
+          
+         super.onCreate()
+        }
+      }
+      ```
+    </CodeGroup>
 
-**Step 2: Import SuprSend SDK in your client side code**
+    Replace **WORKSPACE KEY** and **WORKSPACE SECRET** with your workspace values. You will get both the tokens from [Suprsend dashboard](https://app.suprsend.com/) (***Settings page -> "API keys"*** section). For more details, check the [documentation on 'Workspaces'](/docs/workspace).
 
-To call suprsend events, you'll need to import suprsend SDK in your dart file Go back to the flutter folder and follow below steps:
+    ![](/images/docs/d60fec2-Frame_58_1.png)
+  </Step>
 
-<CodeGroup>
-  ```javascript Main.dart
-  import 'package:suprsend_flutter_sdk/suprsend.dart';
-  ```
-</CodeGroup>
+  <Step title="Import SuprSend SDK in your client side code">
+    To call suprsend events, you'll need to import suprsend SDK in your dart file Go back to the flutter folder and follow below steps:
+
+    <CodeGroup>
+      ```javascript Main.dart
+      import 'package:suprsend_flutter_sdk/suprsend.dart';
+      ```
+    </CodeGroup>
+  </Step>
+</Steps>
 
 ## Logging
 
@@ -102,9 +117,3 @@ By default the logs of SuprSend SDK are disabled. We recommend you to enable the
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-  * [Initialization](#initialization)
-  * [Logging](#logging)

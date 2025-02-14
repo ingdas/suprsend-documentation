@@ -3,24 +3,37 @@ title: "React"
 description: "React SDK to integrate Inbox, Toast notification functionality for React websites"
 ---
 
-[Suggest Edits](/edit/inbox-react)
+<Warning>
+  **End of Support for @suprsend/react-inbox: Migrate to @suprsend/react :**
+
+
+
+  > Development of the [@suprsend/react-inbox](https://github.com/suprsend/suprsend-react-inbox) SDK has been discontinued in favour of the new [@suprsend/react](https://docs.suprsend.com/docs/inapp-feed-1) SDK. Please refer the [migration guide](https://docs.suprsend.com/docs/migration-guide) for instructions on transitioning to the new SDK.
+</Warning>
 
 Integrating SuprSend Inbox channel in React websites can be done in two ways:
 
 * **SuprSendInbox** component which comes with UI and customizing props.
+
 * **SuprSendProvider** headless component and hooks, incase you want to totally take control of UI. (example: Full page notifications).
 
 This document will cover the methods to integrate Suprsend SDK in your React applications using **SuprSendInbox**. Adding this SDK to your app will introduce a bell icon where all the inbox notifications can be viewed. A typical inbox, toast message will look like this.
 
-**Stage 1.** Bell icon count and toast message as soon as the notification is delivered
+<Steps>
+  <Step title="Stage-1 ">
+    Bell icon count and toast message as soon as the notification is delivered
 
-![](/images/docs/259b66b-image.png)
+    ![](/images/docs/259b66b-image.png)
+  </Step>
 
-**Stage 2.** Inbox view after clicking on the bell icon
+  <Step title="Stage-2">
+    Inbox view after clicking on the bell icon
 
-![](/images/docs/9bdbeae-image.png)
+    ![](/images/docs/9bdbeae-image.png)
 
-You can also customize your inbox based on simple [customization options](/docs/react-customize-inbox) available in our SDK
+    You can also customize your inbox based on simple [customization options](/docs/react-customize-inbox) available in our SDK
+  </Step>
+</Steps>
 
 ## Installation
 
@@ -38,9 +51,13 @@ You can install SuprSend inbox SDK using npm/yarn
 
 ## Integration
 
-<Info>
-  From v3.2.0 you have to add `react-toastify` css file in your code if you are using toast notifications as shown in below code snippet.
-</Info>
+<Note>
+  **Migrating to v3.x.x**&#x20;
+
+
+
+  > From v3.2.0 you have to add `react-toastify` css file in your code if you are using toast notifications as shown in below code snippet.
+</Note>
 
 After installing, Import the component in your code and use it as given below. Replace the variables with actual values.
 
@@ -84,14 +101,3 @@ We use [react-toastify](https://github.com/fkhadra/react-toastify) internally to
 | pagination   | boolean (Optional)   | By default infinite scroll will be enabled to get older notifications on scroll. It can be disabled by passing false.                        |
 
 ***
-
-What’s Next
-
-You'll be able to integrate our standard inbox view by following this documentation, check out our next section for customizing the inbox
-
-* [Customize React Inbox](https://docs.suprsend.com/docs/react-customize-inbox)
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-  * [Integration](#integration)

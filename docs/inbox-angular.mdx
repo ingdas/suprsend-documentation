@@ -5,31 +5,27 @@ description: "Angular SDK to integrate Inbox, toast notification functionality f
 
 This document will cover the methods to integrate SuprSend SDK in your Angular applications. Adding this SDK to your app will introduce a bell icon where all the inbox notifications can be viewed. A typical inbox, toast message will look like this.
 
-**Stage 1.** Bell icon count and toast message as soon as the notification is delivered
+<Steps>
+  <Step title="Bell icon count and toast message as soon as the notification is delivered">
 
-![](/images/docs/259b66b-image.png)
 
-**Stage 2.** Inbox view after clicking on the bell icon
+    ![](/images/docs/259b66b-image.png)
+  </Step>
 
-![](/images/docs/9bdbeae-image.png)
+  <Step title="Inbox view after clicking on the bell icon">
+    ![](/images/docs/9bdbeae-image.png)
 
-You can also customize your inbox by passing specific props provided by SDK.
+    You can also customize your inbox by passing specific props provided by SDK.
+  </Step>
+</Steps>
 
 You can integrate SuprSend inbox in 2 ways:
 
-* Using 
+* Using [In-built UI component](https://docs.suprsend.com/docs/inbox-angular#using-dropin-inbox-component) provided by SuprSend. It has many css customisations to change default components styles.
 
-  [In-built UI component](https://docs.suprsend.com/docs/inbox-angular#using-dropin-inbox-component)
+* Using methods provided by SuprSend and building your own UI for inbox ie., [headless implementation](https://docs.suprsend.com/docs/inapp-feed).
 
-   provided by SuprSend. It has many css customisations to change default components styles.
-
-* Using methods provided by SuprSend and building your own UI for inbox ie., 
-
-  [headless implementation](https://docs.suprsend.com/docs/inapp-feed)
-
-  .
-
-## Using DropIn Inbox component
+## Using DropIn Inbox Component
 
 ### Installation
 
@@ -56,8 +52,8 @@ You can use [embeddable inbox](/docs/embeddable-inbox) provided by SuprSend in a
     </CodeGroup>
   </Step>
 
-  <Step title="Import the SDK in your code and initialize it.">
-    Replace **`workspaceKey`**, **`distinctId`**, **`subscriberId`** with your values. Make sure you don't call **`initSuprSendInbox`** multiple times which may create issues.
+  <Step title="Import the SDK in your code and initialize it. ">
+    Replace **workspaceKey**, **distinctId**, **subscriberId** with your values. Make sure you don't call **initSuprSendInbox** multiple times which may create issues.
 
     <CodeGroup>
       ```javascript test.component.ts
@@ -88,14 +84,10 @@ You can use [embeddable inbox](/docs/embeddable-inbox) provided by SuprSend in a
     </CodeGroup>
   </Step>
 
-  <Step title="Manually add the SDK">
+  <Step title="typeDefs need to be added manually to support typescript">
     This SDK is written in Javascript so typeDefs need to be added manually to support typescript type-check strict configuration. Below is just one way to add typeDef in angular. You can choose other ways as well.
 
-    * Create 
-
-      **types/index.d.ts**
-
-       inside app directory.
+    * Create **types/index.d.ts** inside app directory.
 
     * Declare the module and methods. If you add other customization properties add them here.
 
@@ -112,7 +104,7 @@ You can use [embeddable inbox](/docs/embeddable-inbox) provided by SuprSend in a
             ): void;
           }
           ```
-        </CodeGroup>In **tsconfig.app.json** file add type file in **compilerOptions.typeRoots** key.    <CodeGroup>
+        </CodeGroup>iii. In **tsconfig.app.json** file add type file in **compilerOptions.typeRoots** key.    <CodeGroup>
           ```json tsconfig.app.json
           {
             "extends": "./tsconfig.json",
@@ -126,19 +118,17 @@ You can use [embeddable inbox](/docs/embeddable-inbox) provided by SuprSend in a
           ```
         </CodeGroup>
 
-    1. Create 
-
-       **types/index.d.ts**
-
-        inside app directory.
+    1. Create **types/index.d.ts** inside app directory.
 
     2. Declare the module and methods. If you add other customization properties add them here.
 
-    ###
+    ##
   </Step>
 </Steps>
 
-### Customization
+###
+
+1. Customization
 
 All the options and styles supported by embeddable inbox can be used to customize in angular as well. Please refer [customization doc](/docs/embeddable-inbox#customising-inbox)
 
@@ -147,13 +137,3 @@ All the options and styles supported by embeddable inbox can be used to customiz
 You can refer example application to integrate the inbox and toast functionality: [https://github.com/suprsend/angular-example](https://github.com/suprsend/angular-example/blob/master/src/app/dashboard/dashboard.component.ts)
 
 ***
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-
-  * [Integration](#integration)
-
-  * [Customization](#customization)
-
-    * [Example Implementation](#example-implementation)

@@ -3,76 +3,111 @@ title: "iOS Integration"
 description: "This document will cover integration steps for iOS side of your ReactNative application."
 ---
 
-[Suggest Edits](/edit/integrate-react-native-sdk-ios)
-
 ## Installation
 
-**Step 1:** Install Package.
+<Steps>
+  <Step title="Install Package.">
+    <CodeGroup>
+      ```javascript npm
+      npm install @suprsend/react-native-sdk@latest
+      ```
 
-<CodeGroup>
-  ```javascript npm
-  npm install @suprsend/react-native-sdk@latest
-  ```
+      ```javascript yarn
+      yarn add @suprsend/react-native-sdk@latest
+      ```
+    </CodeGroup>
 
-  ```javascript yarn
-  yarn add @suprsend/react-native-sdk@latest
-  ```
-</CodeGroup>
 
-**NOTE:** If you are upgrading the SDK version, run `pod update` inside **ios** folder.
 
-**Step 2: Adding Swift support and Bridge header**
+    **NOTE:** If you are upgrading the SDK version, run `pod update` inside **ios** folder.
+  </Step>
 
-ReactNative iOS side is in Objective-C and our native iOS SDK is written in Swift language so its mandatory to add Swift support in your project. You can skip this step if you already have swift language support in your project.
+  <Step title="Adding Swift support and Bridge header">
+    ReactNative iOS side is in Objective-C and our native iOS SDK is written in Swift language so its mandatory to add Swift support in your project.&#x20;
 
-1. Open **xcodeworkspace** file inside iOS folder. This will open Xcode.
-2. Add Swift file to project like shown below.
 
-![2880](/images/docs/2dadcb0-Screenshot_2022-05-19_at_5.47.31_PM.png "Screenshot 2022-05-19 at 5.47.31 PM.png")
 
-3. Select **Swift File** and click on **Next** button.
-4. Now give a suitable name to your file and click **Create**.
-5. After that popup will be shown asking to configure Objective-C bridge header. Click on **Create Bridge Header**.
+    You can skip this step if you already have swift language support in your project.
 
-![](/images/docs/4e4d8ea-Screenshot_2022-05-19_at_6.02.20_PM.png "Screenshot 2022-05-19 at 6.02.20 PM.png")
+    <Steps>
+      <Step title="Open xcodeworkspace file inside iOS folder. This will open Xcode.">
 
-Thats it! your React native iOS project can now understand code written in Swift language.
+      </Step>
 
-**Step 3:** Inside **PodFile** change iOS platform version to 13 or greater if it's less than 13.
+      <Step title="Add Swift file to project like shown below.">
+        ![2880](/images/docs/2dadcb0-Screenshot_2022-05-19_at_5.47.31_PM.png "Screenshot 2022-05-19 at 5.47.31 PM.png")
+      </Step>
 
-<CodeGroup>
-  ```ruby PodFile
-  platform :ios, '13.0' // this version has to be 13 or greater
-  ```
-</CodeGroup>
+      <Step title="Select Swift File and click on Next button.">
 
-**Step 4:** Run `pod install` from inside iOS folder.
+      </Step>
 
-**Step 5:** SuprSend SDK needs an iOS deployment target of 11 or above, update the target as given in below image if needed.
+      <Step title="Now give a suitable name to your file and click Create.">
 
-![](/images/docs/18650ad-Screenshot_2022-07-27_at_12.36.03_PM.png "Screenshot 2022-07-27 at 12.36.03 PM.png")
+      </Step>
+
+      <Step title="After that popup will be shown asking to configure Objective-C bridge header.">
+
+      </Step>
+
+      <Step title="Click on Create Bridge Header.">
+
+      </Step>
+    </Steps>
+
+    Thats it! your React native iOS project can now understand code written in Swift language.
+  </Step>
+
+  <Step title="Inside PodFile change iOS platform version to 13 or greater if it's less than 13.">
+    <CodeGroup>
+      ```ruby PodFile
+      platform :ios, '13.0' // this version has to be 13 or greater
+      ```
+    </CodeGroup>
+
+
+  </Step>
+
+  <Step title="Run pod install from inside iOS folder.">
+    ```
+    pod install
+    ```
+  </Step>
+
+  <Step title="Update the Target">
+    SuprSend SDK needs an iOS deployment target of 11 or above, update the target as given in below image if needed.
+
+    ![](/images/docs/18650ad-Screenshot_2022-07-27_at_12.36.03_PM.png "Screenshot 2022-07-27 at 12.36.03 PM.png")
+  </Step>
+</Steps>
 
 ## Initialization
 
-**Step 1:** In **AppDelegate.m** add the below code inside `didFinishLaunchingWithOptions` method, just before returning YES like below.
+<Steps>
+  <Step title="In AppDelegate.m add the below code inside">
+    In **AppDelegate.m** add the below code inside `didFinishLaunchingWithOptions` method, just before returning YES like below.
 
-<CodeGroup>
-  ```objectivec AppDelegate.m
-  #import <UserNotifications/UserNotifications.h> //add this, needed as sdk internally depends on this package
-  #import <SuprSendSdk/SuprSendSdk-Swift.h> //add this
+    <CodeGroup>
+      ```objectivec AppDelegate.m
+      #import <UserNotifications/UserNotifications.h> //add this, needed as sdk internally depends on this package
+      #import <SuprSendSdk/SuprSendSdk-Swift.h> //add this
 
-  ...
+      ...
 
-  - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-  {
-    ...
-    SuprSendSDKConfiguration* configuration = [[SuprSendSDKConfiguration alloc] initWithKey:@workspace_key secret:@workspace_secret baseUrl:nil]; // add this line
-    [SuprSend.shared configureWithConfiguration:configuration launchOptions:launchOptions]; // add this line
-    return YES;
-  ```
-</CodeGroup>
+      - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+      {
+        ...
+        SuprSendSDKConfiguration* configuration = [[SuprSendSDKConfiguration alloc] initWithKey:@workspace_key secret:@workspace_secret baseUrl:nil]; // add this line
+        [SuprSend.shared configureWithConfiguration:configuration launchOptions:launchOptions]; // add this line
+        return YES;
+      ```
+    </CodeGroup>
+  </Step>
 
-Replace **workspace\_key** and **workspace\_secret** with your workspace values. You will get both the tokens from **Settings -> API keys** in [SuprSend dashboard](https://app.suprsend.com/).
+  <Step title="Replace workspace_key and workspace_secret">
+    Replace the **`workspace_key`** and **`workspace_secret`** with your workspace values. You will get both the tokens from **Settings -> API keys** in [SuprSend dashboard](https://app.suprsend.com/).
+  </Step>
+</Steps>
 
 ## Logging
 
@@ -93,9 +128,3 @@ By default the logs of SuprSend SDK are disabled. You can enable the logs just i
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-  * [Initialization](#initialization)
-  * [Logging](#logging)

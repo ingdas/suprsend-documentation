@@ -70,17 +70,9 @@ Your duration key variable can be computed to either:
 
 * A relative duration unit, which can be
 
-  * an integer like 
+  * an integer like `50`, considered as duration in seconds.
 
-    `50`
-
-    , considered as duration in seconds.
-
-  * an interval string defined as 
-
-    `**d **h **m **s`
-
-    , where d = day, h = hour, m = minutes and s = seconds
+  * an interval string defined as `**d **h **m **s`, where d = day, h = hour, m = minutes and s = seconds
 
 #### Show Expiry timer
 
@@ -104,9 +96,15 @@ There will always be the case where you would require to add dynamic content to 
 
     If you have declared the variables in the global 'Mock data' button, then they will come as auto-suggestions when you type a curly bracket `{`. This will remove the chances of errors like variable mismatch at the time of template rendering.
 
-    Note that you will be able to enter a variable name even when you have not declared it inside the 'Variables' button. To manually enter the variable name, follow the [handlerbarsjs guide here](https://handlebarsjs.com/guide/#what-is-handlebars).
+    Note that you will be able to enter a variable name even when you have not declared it inside the 'Variables' button.&#x20;
+
+    To manually enter the variable name, follow the [handlerbarsjs guide here](https://handlebarsjs.com/guide/#what-is-handlebars).
+
+
 
     Below is an example of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the 'Templates' section:
+
+
 
     <CodeGroup>
       ```json json
@@ -138,49 +136,35 @@ There will always be the case where you would require to add dynamic content to 
       ```
     </CodeGroup>
 
-    1. To enter a nested variable, enter in the format 
+    <Steps>
+      <Step title="Enter a nested variable">
+        To enter a nested variable, enter in the format `{{var1.var2.var3}}`. Eg. to refer to city in the example above, you need to enter `{{event.location.city}}`
+      </Step>
 
-       `{{var1.var2.var3}}`
+      <Step title="Refer to an array element">
+        To refer to an array element, enter in format `{{var1.[*index*].var2}}. Eg. to refer to `product\_name`of the first element of the array`array, enter `` {{array.[0].product_name}}` ``
+      </Step>
 
-       . Eg. to refer to city in the example above, you need to enter 
+      <Step title="Step 3">
+        If you have any space in the variable name, enclose it in square bracket `{{event.[first name]}}`
+      </Step>
+    </Steps>
 
-       `{{event.location.city}}`
+    You will be able to see the sample values in the Preview section, as well as in the Live version when you publish a draft.&#x20;
 
-    2. To refer to an array element, enter in format 
+    If you cannot see your variable being rendered with the sample value, check one of the following:
 
-       `{{var1.[*index*].var2}}. Eg. to refer to `
+    1. Make sure you have entered the variable name and the sample value in the **Variables** button.
 
-       product_name
-
-       `of the first element of the array`
-
-       array
-
-       `, enter `
-
-       \{{array.[0].product_name}}`
-
-    3. If you have any space in the variable name, enclose it in square bracket 
-
-       `{{event.[first name]}}`
-
-    You will be able to see the sample values in the Preview section, as well as in the Live version when you publish a draft. If you cannot see your variable being rendered with the sample value, check one of the following:
-
-    1. Make sure you have entered the variable name and the sample value in the 
-
-       **Variables**
-
-        button.
-
-    2. Make sure you have entered the correct variable name in the template, as per the 
-
-       `handlebarsjs`
-
-        guideline.
+    2. Make sure you have entered the correct variable name in the template, as per the `handlebarsjs` guideline.
 
     ![](/images/docs/da63a3b-Screenshot_2022-06-20_at_8.48.24_AM.png "Screenshot 2022-06-20 at 8.48.24 AM.png")
 
     <Warning>
+      **What happens if there is variable mismatch at the time of sending?**
+
+
+
       At the time of sending communication, if there is a variable present in the template whose value is not rendered due to mismatch or missing, SuprSend will simply discard the template and not send that particular notification to your user.
 
       Please note that the rest of the templates will be sent. Eg. if there is an error in rendering Android Push template, but email template is successfully rendered, Android Push notification will not be triggered, but email notification will be triggered by SuprSend.
@@ -192,37 +176,19 @@ There will always be the case where you would require to add dynamic content to 
 
 Here's a breakdown of which form fields to use for different types of notifications:
 
-* **Tags**
+* **Tags** act as filters to create Inbox tabs, a useful way to organize notifications. For instance, LinkedIn uses tabs to separate mentions and reactions to your posts in distinct tabs. You can use tabs to differentiate regular updates from more relevant ones. A generic example of tabs for a SAAS application could be `All, Product releases and Upcoming events`. Learn how to implement tabs in notification [here](/docs/multi-tabs).
 
-   act as filters to create Inbox tabs, a useful way to organize notifications. For instance, LinkedIn uses tabs to separate mentions and reactions to your posts in distinct tabs. You can use tabs to differentiate regular updates from more relevant ones. A generic example of tabs for a SAAS application could be 
-
-  `All, Product releases and Upcoming events`
-
-  . Learn how to implement tabs in notification 
-
-  [here](/docs/multi-tabs)
-
-  .
-
-* [Expiry](/docs/in-app-inbox-template#expiry)
-
-  : It's a good practice to add expiry of 15 days or more to all notifications except long lived notifications to maintain clean user inbox. A shorter expiry duration can be set for notifications valid for a limited time, such as webinars and upcoming events.
-  You can also show 
-
-  [expiry timer](/docs/in-app-inbox-template#show-expiry-timer)
-
-   to prompt action urgency. For instance, when you need users to respond to feedback within three days or for events with impending registration closures. The color change of the expiry timer based on remaining time is an effective way to convey urgency.
-
-<Warning>
-  **What happens if there is variable mismatch at the time of sending?**
+* [Expiry](/docs/in-app-inbox-template#expiry): It's a good practice to add expiry of 15 days or more to all notifications except long lived notifications to maintain clean user inbox. A shorter expiry duration can be set for notifications valid for a limited time, such as webinars and upcoming events.
 
 
 
-  Avoid adding expiry to long-lived notifications that users might want to reference later, like product updates or blog posts.
-</Warning>
 
-* [Pinning](/docs/in-app-inbox-template#pin-notification)
+  You can also show [expiry timer](/docs/in-app-inbox-template#show-expiry-timer) to prompt action urgency. For instance, when you need users to respond to feedback within three days or for events with impending registration closures. The color change of the expiry timer based on remaining time is an effective way to convey urgency.
 
-   is used for notifications that should always show on top until user reads it or completes related action. Examples include compliance-related actions, system updates, or urgent releases requiring app version update. Always combine it with expiry otherwise the notification will always be pinned in user's inbox until they archive it.
+<Note>
+  📘 Avoid adding expiry to long-lived notifications that users might want to reference later, like product updates or blog posts.
+</Note>
+
+* [Pinning](/docs/in-app-inbox-template#pin-notification) is used for notifications that should always show on top until user reads it or completes related action. Examples include compliance-related actions, system updates, or urgent releases requiring app version update. Always combine it with expiry otherwise the notification will always be pinned in user's inbox until they archive it.
 
 ***

@@ -3,8 +3,6 @@ title: "Invoke Workflow"
 description: "Trigger another workflow as a step in running workflow."
 ---
 
-[Suggest Edits](/edit/invoke-workflow)
-
 Use this node to trigger a workflow from within another workflow. It is typically used when the recipient list or data context changes between workflow steps. A common example is escalation workflows, where if a team member doesn't take action, the workflow escalates to notify their manager.
 
 The payload for the triggered workflow is dynamically computed using data from the current workflow run. All fields support variables in [JSONNET](https://jsonnet.org/ref/language.html) format.
@@ -18,11 +16,12 @@ The payload for the triggered workflow is dynamically computed using data from t
 Recipient refers to the recipient of the target workflow. It can be:
 
 * The current workflow's **recipient** or **actor**
+
 * Any key from the node's **input data**, including data added or modified during the workflow run (e.g., from fetch or webhook nodes).
 
-<Info>
-  Please note Data modifications after a batch or digest node will not affect the invoke node's variables, which means `$batched...` variables will not be available in this node's input.
-</Info>
+<Note>
+  📘 Please note Data modifications after a batch or digest node will not affect the invoke node's variables, which means `$batched...` variables will not be available in this node's input.
+</Note>
 
 You can refer to input data variables in JSONNET format, prefixed by `data` key. The same format is followed for adding variable in actor and data field as well. Following data types are available in workflow:
 
@@ -38,6 +37,7 @@ You can refer to input data variables in JSONNET format, prefixed by `data` key.
 The actor defines the user who performed the action in the target workflow. It can be:
 
 * The current workflow's **actor** or **recipient**.
+
 * Any key from the node's **input data**, referred in the same format as in the [recipient](/docs/invoke-workflow#recipient) field.
 
 ### Data
@@ -45,6 +45,7 @@ The actor defines the user who performed the action in the target workflow. It c
 This defines the data context for the target workflow, which is used to render templates and workflow variables. By default, data from the current workflow run is passed.
 
 * To exclude the current workflow data, uncheck the `Append current workflow execution data` option.
+
 * Additional data can be provided in the data JSON field, using the node's input data in JSONNET format, referred in the same format as in the [recipient](/docs/invoke-workflow#recipient) field.
 
 #### Merge Strategy
@@ -52,11 +53,3 @@ This defines the data context for the target workflow, which is used to render t
 We use a shallow merge strategy to combine extra input data (defined in data JSON field) with the current workflow execution data. If the same key exists in both, the value from data JSON field will override the value in existing workflow data.
 
 ***
-
-* [Table of Contents](#)
-
-* * [Constructing Workflow Payload](#constructing-workflow-payload)
-
-    * [Recipient](#recipient)
-    * [Actor](#actor)
-    * [Data](#data)
