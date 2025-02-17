@@ -3,23 +3,23 @@ title: "Notification Category"
 description: "Learn what notification categories mean and how you can use it for user preferences"
 ---
 
-[Suggest Edits](/edit/notification-category)
-
 Notification Categories are the category your workflow belongs to. It is used for following purposes:
 
 * **Defining notification latency**: We maintain separate notification queues for different notification category to ensure that marketing and promotional notifications doesn't delay system or time-sensitive notifications.
-* **[Setting category-level preferences](/docs/preferences) per-user and tenant**: You can create sub-categories for different type of notifications and give your users option to set their notification preferences at category level.
+
+* [Setting category-level preferences](/docs/preferences) **per-user and tenant**: You can create sub-categories for different type of notifications and give your users option to set their notification preferences at category level.
+
 * **Setting category-level rules or limits**: For example, you can set a rule that all notifications in promotional category should only be sent between 10 am - 5 pm or the max notifications in the category should not exceed 100k per day.
 
 ## Top-level Categories
 
 SuprSend has 3 broad notification categories - [System](/docs/notification-categories#system), [Transactional](/docs/notification-categories#transactional) and [Promotional](/docs/notification-categories#promotional). Notifications rules and latency settings are defined at these top level categories. You can create further [sub-categories](/docs/notification-categories#creating-sub-categories-for-preference-management) in each of these categories to power [user preferences](/docs/preferences).
 
-### System
+### -  System
 
 System notifications are the ones that are essential for your users to use your website and can't be unsubscribed by the users. These notifications are considered most time-sensitive and given the highest priority in notification send queues. Some examples are - OTP, Forgot Password and Verification emails.
 
-### Transactional
+### -  Transactional
 
 Transactional notifications are the ones that are sent in response to some user transaction or action on your platform. By default, users are subscribed to transactional notifications and not allowed to unsubscribe as they have initiated them at the first place. However, some of the transactional notifications are not so critical and can be unsubscribed as per user's wish (eg. Post likes/ comments). You can set which transactional notifications are critical and should not be allowed to unsubscribe by setting the default preference as `cant unsubscribe`.
 
@@ -30,10 +30,10 @@ Some examples are - Delivery updates, Payment Confirmation, booking confirmation
 As a company, you should make sure that you use strategies like [batching](/docs/batching-digest) & [channel routing](/docs/smart-delivery), so that users do not feel bombarded with transactional notifications. Also, you can cleverly use transactional communications to up-sell, cross-sell, collect feedback, or bring your user back to your platform. Channel providers do not block transactional communications generally, and consider your users to be implicitly agreeing to these notifications, hence transactional communications should be used judiciously.
 
 <Info>
-  Sending notifications that are not related to user transaction but are very personal to user's profile and interests, like recommended products, cart abandoned, etc could be inferred as transactional, depending on indicators like whether user is subscribed to receive them, or the way content is designed.
+  📘 Sending notifications that are not related to user transaction but are very personal to user's profile and interests, like recommended products, cart abandoned, etc could be inferred as transactional, depending on indicators like whether user is subscribed to receive them, or the way content is designed.
 </Info>
 
-### Promotional
+### -   Promotional
 
 Promotional notifications are the ones that are sent out to users to increase sales, promote products, or bring users back to your platform without user doing any interaction in the first place. These communications are generally sent in bulk, consuming a significant portion of the communication pipeline. That's why they are given the least priority in notification queue. You should always send your bulk messages and broadcasts in promotional category so that it doesn't impact the latency of your system and transactional notifications.
 
@@ -43,11 +43,12 @@ Some channel providers often require explicit users permission to send these com
 
 ## Creating sub-categories for preference management
 
-You can create notification categories from **[Developers -> Notification categories](https://app.suprsend.com/en/staging/developers/preference-categories)** page. All sub-categories are created in the 3 [top level categories](/docs/notification-categories#top-level-categories) mentioned above. Notification rules and latency priority are inherited from the top level category. [Preference](/docs/preferences) settings are defined at each sub-category level. Top level categories are not shown on the preference page.
+You can create notification categories from [Developers -> Notification categories](https://app.suprsend.com/en/staging/developers/preference-categories) page. All sub-categories are created in the 3 [top level categories](/docs/notification-categories#top-level-categories) mentioned above. Notification rules and latency priority are inherited from the top level category. [Preference](/docs/preferences) settings are defined at each sub-category level. Top level categories are not shown on the preference page.
 
 Every category can have sections and sub-categories. User preferences are controlled at the sub-category level.
 
 * **Sub-category** is what end users will see on their preference page.
+
 * **Sections** are used to group related sub-categories on the preference page, facilitating easier navigation and organization on the preference page.
 
 For instance, in the below example, **Quote Approval** and **Forecast** are sub-categories and **Quotes** is the section in which these sub-categories are grouped.
@@ -69,7 +70,9 @@ Add name and description for the category and **"Save Changes"**. You'll see the
 Sub-Category default preferences vary based on the category that you are adding in.
 
 * System category default preference is set to **"Can't Unsubscribe"** with **"All"** user channels set as mandatory. Users will not be allowed to update preferences in this category as system notifications are critical notifications and should always be sent to the user.
+
 * Transactional category default preference is set to **"Can't Unsubscribe"**. We recommend selecting at least one mandatory channel for the transactional category since users should receive notifications on at least one channel corresponding to a transaction. However, you are free to set any default preference in this category.
+
 * Promotional category default preference is set to **ON**. This means that the user will receive notification in this category by default. You can't set this category to **Can't Unsubscribe** as users should always be able to opt-out of marketing-related notifications.
 
 You can update sub-category in any category by clicking on the **"+Sub-Category"** button in that category.
@@ -87,6 +90,10 @@ You can update sub-category in any category by clicking on the **"+Sub-Category"
 Click on "Save Changes" to save the sub-category. You'll see the updated sub-category inside the section and edit it later by clicking on the pencil icon against that category.
 
 <Warning>
+  **Avoid Changing sub-category name:**
+
+
+
   Changing category name updates the category slug. So, make sure to not change sub-category name once you have configured it in your workflows or if it is absolutely necessary to change the name, change it in all backend and front workflows otherwise the workflows will start failing.
 </Warning>
 
@@ -113,21 +120,3 @@ You can copy sub-category slug by clicking on sub-category name on the category 
 ![](/images/docs/5d5cebe-image.png)
 
 ***
-
-* [Table of Contents](#)
-
-* * [Top-level Categories](#top-level-categories)
-
-    * [System](#system)
-    * [Transactional](#transactional)
-    * [Promotional](#promotional)
-
-  * [Creating sub-categories for preference management](#creating-sub-categories-for-preference-management)
-
-    * [Updating Section](#updating-section)
-    * [Updating Sub-Category](#updating-sub-category)
-    * [Preview Changes](#preview-changes)
-    * [Publish Changes](#publish-changes)
-    * [Clone Categories to production workspace](#clone-categories-to-production-workspace)
-
-  * [Triggering notification for a sub-category](#triggering-notification-for-a-sub-category)

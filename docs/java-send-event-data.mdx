@@ -3,13 +3,14 @@ title: "Send and Track Events"
 description: "This document will cover the method to send event to Suprsend platform"
 ---
 
-[Suggest Edits](/edit/java-send-event-data)
-
 ## Pre-requisites
 
 1. [Integrate Java SDK](/docs/integrate-java-sdk)
+
 2. [Create User Profile](/docs/java-create-user-profile)
+
 3. [Create Template on SuprSend platform](/docs/templates) - if you want to trigger workflow by passing the event
+
 4. [Create Workflow on SuprSend Platform](/docs/design-workflow) - if you want to trigger workflow by passing the event
 
 ## Create Workflow on SuprSend Platform
@@ -134,7 +135,9 @@ To make an idempotent request, pass `idempotency_key` as the **4th parameter in 
 Here are some common approaches for assigning idempotency keys:
 
 * **Generate a random UUID** for each request.
+
 * **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like user147-new-comment-1687437670
+
 * **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
 
 ## Add file attachment in event (for email)
@@ -142,6 +145,7 @@ Here are some common approaches for assigning idempotency keys:
 To add one or more Attachments to a Notification (viz. Email), you can just append the filepath of attachment to the event instance.
 
 * Call `event.addAttachment()` for each file with an accessible URL.
+
 * Ensure that file\_path is a publicly accessible URL. Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
 
 Refer below example for adding attachment in event call
@@ -253,7 +257,9 @@ Use `.append()` on bulk\_events instance to add however-many-records to call in 
 ### How SuprSend Processes the bulk API request
 
 * On calling `bulkIns.trigger()`, the SDK internally makes one-or-more Callable-chunks.
+
 * Each callable-chunk contains a subset of records, the subset calculation is based on each record's bytes-size and max allowed chunk-size, chunk-length etc.
+
 * For each callable-chunk SDK makes an HTTP call to SuprSend to register the request.
 
 ## Add file attachment in bulk API (for email)
@@ -261,6 +267,7 @@ Use `.append()` on bulk\_events instance to add however-many-records to call in 
 Similar to single API call, you can add file attachment to bulk API by appending the attachment filepath to each event instance in bulk API call.
 
 * Call `event.addAttachment()` for each file with an accessible URL. Ensure that file\_path is a publicly accessible URL.
+
 * Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
 
 Refer below example for adding attachment in bulk API call
@@ -309,7 +316,7 @@ Refer below example for adding attachment in bulk API call
   Please add public accessible URL only as attachment file otherwise it will throw an error `404 not found` and workflow will not be triggered
 </Warning>
 
-## Response
+**Response:**
 
 Response is an instance of `suprsend.BulkResponse` class
 
@@ -327,17 +334,3 @@ Response is an instance of `suprsend.BulkResponse` class
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-  * [Create Workflow on SuprSend Platform](#create-workflow-on-suprsend-platform)
-  * [Send Event](#send-event)
-  * [Trigger events for custom brand](#trigger-events-for-custom-brand)
-  * [Idempotent Requests](#idempotent-requests)
-  * [Add file attachment in event (for email)](#add-file-attachment-in-event-for-email)
-    * [Response](#response)
-  * [Bulk API for multiple event requests](#bulk-api-for-multiple-event-requests)
-    * [How SuprSend Processes the bulk API request](#how-suprsend-processes-the-bulk-api-request)
-  * [Add file attachment in bulk API (for email)](#add-file-attachment-in-bulk-api-for-email)
-  * [Response](#response-1)

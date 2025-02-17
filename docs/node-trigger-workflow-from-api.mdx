@@ -6,7 +6,7 @@ description: "Suggest Edits"
 It is a unified API to trigger workflow and doesn't require user creation before hand to trigger notification. Recommended for platforms transitioning their existing notifications to SuprSend. If you are using our frontend SDKs to configure notifications and passing events and user properties from third-party data platforms like Segment, then [event-based trigger](/docs/node-send-event-data) would be a better choice.
 
 <Info>
-  Available in SDK version >= 1.10.0
+  📘 Available in SDK version >= 1.10.0
 </Info>
 
 ## Sample Payload
@@ -58,7 +58,7 @@ It is a unified API to trigger workflow and doesn't require user creation before
 | recipients\[].$preferred\_language                                                       | string                             | to set recipient's preferred language. This is to support localization in notification content. You can pass the language in `ISO 639-1 2-letter` format. [Refer all language codes here](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) .                                      |
 | recipients\[].$timezone                                                                  | string                             | to set recipient's timezone. Used to send notification in user's local timezone. You can pass timezone in [IANA (TZ identifier)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) format.                                                                                                            |
 
-### Response
+**Response:**
 
 Once your request is accepted, you can check the status of your request in the [SuprSend Logs](https://app.suprsend.com/en/staging/log).
 
@@ -273,7 +273,9 @@ For cases where you want to send notifications to your enterprise customers end 
 SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives and processes a request with an idempotency\_key, it will skip processing requests with same `idempotency_key` for next 24 hours. Idempotency key should be uniquely generated for each request (max 255 characters allowed). Spaces in start and end of the key will be trimmed. Here are some common approaches for generating idempotency keys:
 
 * **Generate a random UUID** for each request.
+
 * **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like `user147-new-comment-1687437670`
+
 * **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
 
 <CodeGroup>
@@ -303,8 +305,6 @@ Bulk API allows you to send multiple workflow requests in a single call. Use `.a
   response.then(res => console.log("response", res));
   ```
 </CodeGroup>
-
-### Response
 
 <CodeGroup>
   ```json json
@@ -506,7 +506,7 @@ Bulk API allows you to send multiple workflow requests in a single call. There i
   ```
 </CodeGroup>
 
-#### Response
+**Response:**
 
 <CodeGroup>
   ```javascript javascript
@@ -541,19 +541,3 @@ Bulk API allows you to send multiple workflow requests in a single call. There i
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Sample Payload](#sample-payload)
-    * [Response](#response)
-  * [Sending notification to multiple users](#sending-notification-to-multiple-users)
-  * [Identifying recipients inline](#identifying-recipients-inline)
-    * [Communication Channels of recipient](#communication-channels-of-recipient)
-  * [Sending cross-user notifications](#sending-cross-user-notifications)
-  * [Sending notification to anonymous user](#sending-notification-to-anonymous-user)
-  * [Multi-tenant notifications](#multi-tenant-notifications)
-  * [Idempotent requests](#idempotent-requests)
-  * [Bulk API for triggering multiple workflows](#bulk-api-for-triggering-multiple-workflows)
-    * [Response](#response-1)
-  * [Add attachment (in email)](#add-attachment-in-email)
-  * [Dynamic workflow trigger](#dynamic-workflow-trigger)

@@ -3,8 +3,6 @@ title: "Lists"
 description: "Methods to create and manage lists using go SDK"
 ---
 
-[Suggest Edits](/edit/lists-go)
-
 List methods lets you manage a list and subscribers in that list. You can then send bulk messages to all the subscribers in the list with a single API call.
 
 ## Create list
@@ -119,71 +117,73 @@ List methods lets you manage a list and subscribers in that list. You can then s
 
 In case you want to refresh list with a new set of users completely, you can replace users by creating a draft version of the list and updating users in it.
 
-### 1. Start Sync to create draft version of the list
+<Steps>
+  <Step title="Start Sync to create draft version of the list">
+    This method will create a draft version of the list where you can add the new set of users to replace users.
 
-This method will create a draft version of the list where you can add the new set of users to replace users.
+    <CodeGroup>
+      ```go go
+      // start sync
+      newVersion, err := suprClient.SubscriberLists.StartSync(ctx, "users-with-prepaid-vouchers-1")
+      if err != nil {
+        log.Fatalln(err)
+      }
+      log.Println("start sync resp: ", newVersion)
 
-<CodeGroup>
-  ```go go
-  // start sync
-  newVersion, err := suprClient.SubscriberLists.StartSync(ctx, "users-with-prepaid-vouchers-1")
-  if err != nil {
-    log.Fatalln(err)
-  }
-  log.Println("start sync resp: ", newVersion)
+      versionId := newVersion.VersionId
+      ```
+    </CodeGroup>
+  </Step>
 
-  versionId := newVersion.VersionId
-  ```
-</CodeGroup>
+  <Step title="Add Subscribers to draft list">
+    You can use this method to add subscribers to List draft version created in Step 1. You'll get `version_id` in start sync response.
 
-### 2. Add Subscribers to draft list
+    <CodeGroup>
+      ```go go
+      // ================= Add users to a draft list (with versionId)
+      addDistinctIds := []string{"id-399999", "id-399998"}
+      addResponse, err := suprClient.SubscriberLists.AddToVersion(ctx, "users-with-prepaid-vouchers-1", versionId, addDistinctIds)
+      if err != nil {
+        log.Fatalln(err)
+      }
+      log.Println("add to version resp:", addResponse)
+      ```
+    </CodeGroup>
+  </Step>
 
-You can use this method to add subscribers to List draft version created in Step 1. You'll get `version_id` in start sync response.
+  <Step title="Remove Subscribers from draft list">
+    You can use this method to remove subscribers from List draft version created in Step 1. You'll get `version_id` in start sync response.
 
-<CodeGroup>
-  ```go go
-  // ================= Add users to a draft list (with versionId)
-  addDistinctIds := []string{"id-399999", "id-399998"}
-  addResponse, err := suprClient.SubscriberLists.AddToVersion(ctx, "users-with-prepaid-vouchers-1", versionId, addDistinctIds)
-  if err != nil {
-    log.Fatalln(err)
-  }
-  log.Println("add to version resp:", addResponse)
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```go go
+      // ================= remove users from a list
+      removeDistinctIds := []string{"distinct_id_1", "distinct_id_2"}
+      removeResponse, err := suprClient.SubscriberLists.RemoveFromVersion(ctx, "users-with-prepaid-vouchers-1", versionId, removeDistinctIds)
+      if err != nil {
+        log.Fatalln(err)
+      }
+      log.Println("remove from version resp: ", removeResponse)
+      ```
+    </CodeGroup>
+  </Step>
 
-### 3. Remove Subscribers from draft list
+  <Step title="Finish Sync to make the draft version live">
+    Once your subscribers are updated in the list, use this method to finish sync and make the draft version updated in above steps live.
 
-You can use this method to remove subscribers from List draft version created in Step 1. You'll get `version_id` in start sync response.
+    <CodeGroup>
+      ```go go
+      // finish sync
+      finishSyncResp, err := suprClient.SubscriberLists.FinishSync(ctx, "users-with-prepaid-vouchers-1", versionId)
+      if err != nil {
+        log.Fatalln(err)
+      }
+      log.Println("finish sync resp: ", finishSyncResp)
+      ```
+    </CodeGroup>
+  </Step>
+</Steps>
 
-<CodeGroup>
-  ```go go
-  // ================= remove users from a list
-  removeDistinctIds := []string{"distinct_id_1", "distinct_id_2"}
-  removeResponse, err := suprClient.SubscriberLists.RemoveFromVersion(ctx, "users-with-prepaid-vouchers-1", versionId, removeDistinctIds)
-  if err != nil {
-    log.Fatalln(err)
-  }
-  log.Println("remove from version resp: ", removeResponse)
-  ```
-</CodeGroup>
-
-### 4. Finish Sync to make the draft version live
-
-Once your subscribers are updated in the list, use this method to finish sync and make the draft version updated in above steps live.
-
-<CodeGroup>
-  ```go go
-  // finish sync
-  finishSyncResp, err := suprClient.SubscriberLists.FinishSync(ctx, "users-with-prepaid-vouchers-1", versionId)
-  if err != nil {
-    log.Fatalln(err)
-  }
-  log.Println("finish sync resp: ", finishSyncResp)
-  ```
-</CodeGroup>
-
-### Delete Draft list
+## Delete Draft list
 
 You can also delete draft list if it's created by mistake.
 
@@ -198,25 +198,3 @@ You can also delete draft list if it's created by mistake.
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Create list](#create-list)
-
-  * [Get list details](#get-list-details)
-
-  * [Get list of lists](#get-list-of-lists)
-
-  * [Add subscribers to list](#add-subscribers-to-list)
-
-  * [Remove subscribers from list](#remove-subscribers-from-list)
-
-  * [Delete list](#delete-list)
-
-  * [Replace users from the list](#replace-users-from-the-list)
-
-    * [1. Start Sync to create draft version of the list](#1-start-sync-to-create-draft-version-of-the-list)
-    * [2. Add Subscribers to draft list](#2-add-subscribers-to-draft-list)
-    * [3. Remove Subscribers from draft list](#3-remove-subscribers-from-draft-list)
-    * [4. Finish Sync to make the draft version live](#4-finish-sync-to-make-the-draft-version-live)
-    * [Delete Draft list](#delete-draft-list)

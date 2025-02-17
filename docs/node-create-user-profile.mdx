@@ -3,8 +3,6 @@ title: "Create User Profile"
 description: "This document will cover the methods to update user information like properties and channels"
 ---
 
-[Suggest Edits](/edit/node-create-user-profile)
-
 ## Create user
 
 `distinct_id` is needed to create/update user profile in SuprSend. This ID will be unique throughout workspace.
@@ -20,7 +18,7 @@ description: "This document will cover the methods to update user information li
   ```
 </CodeGroup>
 
-## Response
+**Response:**
 
 When you call `user.save()`, on any of user methods, SDK internally makes an API call to SuprSend, and you'll receive a response indicating the acceptance / failure status.
 
@@ -39,164 +37,170 @@ When you call `user.save()`, on any of user methods, SDK internally makes an API
 
 Communication Channel Preference decides whether a user will receive communication on a particular channel or not. Setting Channel preferences means that whenever you are triggering a workflow, the communication will be sent on the channels set in user profile (given that the template for that channel is present in the template group).
 
-<Info>
+<Check>
+  **📘 Mandatory step for event based workflows:**
+
+
+
   In event based workflows, since you only pass user's `distinct_id` in your track event call, you'll have to add channel preference first in user profile before making the call, as channels info is picked from user profile.
-</Info>
+</Check>
 
-### Add User Channels
+<AccordionGroup>
+  <Accordion title="Add User Channels" defaultOpen={false}>
+    Use `user.add_*` method(s) to add user channels.
 
-Use `user.add_*` method(s) to add user channels.
+    <CodeGroup>
+      ```javascript javascript
+      user.add_email("[email protected]") // add Email
 
-<CodeGroup>
-  ```javascript javascript
-  user.add_email("[email protected]") // add Email
+      user.add_sms("+15555555555") // add SMS
 
-  user.add_sms("+15555555555") // add SMS
+      user.add_whatsapp("+15555555555") // add Whatsapp
 
-  user.add_whatsapp("+15555555555") // add Whatsapp
+      user.add_androidpush("__android_push_fcm_token__") // add fcm push token
 
-  user.add_androidpush("__android_push_fcm_token__") // add fcm push token
+      // // set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
+      user.add_androidpush("__android_push_xiaomi_token__", provider)
 
-  // // set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
-  user.add_androidpush("__android_push_xiaomi_token__", provider)
+      user.add_iospush("__iospush_token__") // add apns push token
 
-  user.add_iospush("__iospush_token__") // add apns push token
+      // add Slack using email
+      user.add_slack({
+        email: "[email protected]",
+        access_token: "xoxb-XXXXXXXX"
+      }); 
 
-  // add Slack using email
-  user.add_slack({
-    email: "[email protected]",
-    access_token: "xoxb-XXXXXXXX"
-  }); 
+      // add Slack if slack member_id is known
+      user.add_slack({
+        user_id: "U03XXXXXXXX",
+        access_token: "xoxb-XXXXXXXX"
+      });
 
-  // add Slack if slack member_id is known
-  user.add_slack({
-    user_id: "U03XXXXXXXX",
-    access_token: "xoxb-XXXXXXXX"
-  });
+      // add Slack channel
+      user.add_slack({
+        channel_id: "CXXXXXXXX",
+        access_token: "xoxb-XXXXXXXX"
+      });
 
-  // add Slack channel
-  user.add_slack({
-    channel_id: "CXXXXXXXX",
-    access_token: "xoxb-XXXXXXXX"
-  });
+      // add Slack incoming webhook
+      user.add_slack({
+        incoming_webhook: {
+          url: "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
+        }
+      });
 
-  // add Slack incoming webhook
-  user.add_slack({
-    incoming_webhook: {
-      url: "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
-    }
-  });
+      // add MS teams user or channel using conversation_id
+      user.add_ms_teams({
+        tenant_id: "c1981ab2-9aaf-xxxx-xxxx",
+        service_url: "https://smba.trafficmanager.net/amer",
+        conversation_id: "19:c1524d7c-a06f-456f-8abe-xxxx"
+      });
 
-  // add MS teams user or channel using conversation_id
-  user.add_ms_teams({
-    tenant_id: "c1981ab2-9aaf-xxxx-xxxx",
-    service_url: "https://smba.trafficmanager.net/amer",
-    conversation_id: "19:c1524d7c-a06f-456f-8abe-xxxx"
-  });
+      // add MS teams user using user_id
+      user.add_ms_teams({
+        tenant_id: "c1981ab2-9aaf-xxxx-xxxx",
+        service_url: "https://smba.trafficmanager.net/amer",
+        user_id: "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
+      });
 
-  // add MS teams user using user_id
-  user.add_ms_teams({
-    tenant_id: "c1981ab2-9aaf-xxxx-xxxx",
-    service_url: "https://smba.trafficmanager.net/amer",
-    user_id: "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
-  });
+      // add MS teams using incoming webhook
+      user.add_ms_teams({
+        incoming_webhook: {
+          url: "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
+        }
+      });
+      ```
+    </CodeGroup>
+  </Accordion>
 
-  // add MS teams using incoming webhook
-  user.add_ms_teams({
-    incoming_webhook: {
-      url: "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
-    }
-  });
-  ```
-</CodeGroup>
+  <Accordion title="Remove User Channels" defaultOpen={false}>
+    Use `user.remove_*` method(s) to remove user channels. These methods will detach provided value from the user profile in specified channel.
 
-### Remove User Channels
+    <CodeGroup>
+      ```javascript javascript
+      user.remove_email("[email protected]") // remove Email
 
-Use `user.remove_*` method(s) to remove user channels. These methods will detach provided value from the user profile in specified channel.
+      user.remove_sms("+15555555555") // remove SMS
 
-<CodeGroup>
-  ```javascript javascript
-  user.remove_email("[email protected]") // remove Email
+      user.remove_whatsapp("+15555555555") // remove Whatsapp
 
-  user.remove_sms("+15555555555") // remove SMS
+      user.remove_androidpush("__android_push_fcm_token__") // remove fcm push token
 
-  user.remove_whatsapp("+15555555555") // remove Whatsapp
+      // set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
+      user.remove_androidpush("__android_push_token__", provider)
 
-  user.remove_androidpush("__android_push_fcm_token__") // remove fcm push token
+      user.remove_iospush("__iospush_token__") // remove apns push token
 
-  // set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
-  user.remove_androidpush("__android_push_token__", provider)
+      // remove Slack email
+      user.remove_slack({
+        email: "[email protected]",
+        access_token: "xoxb-XXXXXXXX"
+      });  
 
-  user.remove_iospush("__iospush_token__") // remove apns push token
+      // remove Slack if slack member_id is known
+      user.remove_slack({
+        user_id: "U03XXXXXXXX",
+        access_token: "xoxb-XXXXXXXX"
+      });
 
-  // remove Slack email
-  user.remove_slack({
-    email: "[email protected]",
-    access_token: "xoxb-XXXXXXXX"
-  });  
+      // remove Slack channel
+      user.remove_slack({
+        channel_id: "CXXXXXXXX",
+        access_token: "xoxb-XXXXXXXX"
+      });
 
-  // remove Slack if slack member_id is known
-  user.remove_slack({
-    user_id: "U03XXXXXXXX",
-    access_token: "xoxb-XXXXXXXX"
-  });
+      // remove Slack incoming webhook
+      user.remove_slack({
+        incoming_webhook: {
+          url: "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
+        }
+      });
 
-  // remove Slack channel
-  user.remove_slack({
-    channel_id: "CXXXXXXXX",
-    access_token: "xoxb-XXXXXXXX"
-  });
+      // remove MS teams user or channel using conversation_id
+      user.remove_ms_teams({
+        tenant_id: "c1981ab2-9aaf-xxxx-xxxx",
+        service_url: "https://smba.trafficmanager.net/amer",
+        conversation_id: "19:c1524d7c-a06f-456f-8abe-xxxx"
+      });
 
-  // remove Slack incoming webhook
-  user.remove_slack({
-    incoming_webhook: {
-      url: "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
-    }
-  });
+      // remove MS teams user using user_id
+      user.remove_ms_teams({
+        tenant_id: "c1981ab2-9aaf-xxxx-xxxx",
+        service_url: "https://smba.trafficmanager.net/amer",
+        user_id: "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
+      });
 
-  // remove MS teams user or channel using conversation_id
-  user.remove_ms_teams({
-    tenant_id: "c1981ab2-9aaf-xxxx-xxxx",
-    service_url: "https://smba.trafficmanager.net/amer",
-    conversation_id: "19:c1524d7c-a06f-456f-8abe-xxxx"
-  });
+      // remove MS teams using incoming webhook
+      user.remove_ms_teams({
+        incoming_webhook: {
+          url: "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
+        }
+      });
+      ```
+    </CodeGroup>
+  </Accordion>
 
-  // remove MS teams user using user_id
-  user.remove_ms_teams({
-    tenant_id: "c1981ab2-9aaf-xxxx-xxxx",
-    service_url: "https://smba.trafficmanager.net/amer",
-    user_id: "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
-  });
+  <Accordion title="Remove User Channels in bulk" defaultOpen={false}>
+    This method will delete/unset all values in specified channel for user (ex: remove all emails attached to user).
 
-  // remove MS teams using incoming webhook
-  user.remove_ms_teams({
-    incoming_webhook: {
-      url: "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
-    }
-  });
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```javascript javascript
+      user.unset("$email")
+      user.unset(["$email", "$sms", "$whatsapp"])
 
-### Remove User Channels in bulk
-
-This method will delete/unset all values in specified channel for user (ex: remove all emails attached to user).
-
-<CodeGroup>
-  ```javascript javascript
-  user.unset("$email")
-  user.unset(["$email", "$sms", "$whatsapp"])
-
-  // what value to pass to unset channels
-  // for email:                $email
-  // for whatsapp:             $whatsapp
-  // for SMS:                  $sms
-  // for androidpush tokens:   $androidpush
-  // for iospush tokens:       $iospush
-  // for webpush tokens:       $webpush
-  // for slack:                $slack
-  // for ms_teams:             $ms_teams
-  ```
-</CodeGroup>
+      // what value to pass to unset channels
+      // for email:                $email
+      // for whatsapp:             $whatsapp
+      // for SMS:                  $sms
+      // for androidpush tokens:   $androidpush
+      // for iospush tokens:       $iospush
+      // for webpush tokens:       $webpush
+      // for slack:                $slack
+      // for ms_teams:             $ms_teams
+      ```
+    </CodeGroup>
+  </Accordion>
+</AccordionGroup>
 
 ## Bulk API for updating multiple user profiles
 
@@ -246,176 +250,146 @@ To update multiple user profiles use Bulk API. There isn't any limit on number-o
 
 ## Other user methods
 
-### Set preferred language
+<AccordionGroup>
+  <Accordion title="Set preferred language" defaultOpen={false}>
+    If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
 
-If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
+    <CodeGroup>
+      ```javascript javascript
+      user.set_preferred_language("en")
+      ```
+    </CodeGroup>
+  </Accordion>
 
-<CodeGroup>
-  ```javascript javascript
-  user.set_preferred_language("en")
-  ```
-</CodeGroup>
+  <Accordion title="Set preferred timezone" defaultOpen={false}>
+    You can set timezone of user using this method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab).
 
-### Set preferred timezone
+    <CodeGroup>
+      ```javascript javascript
+      user.set_timezone("America/Los_Angeles")
+      ```
+    </CodeGroup>
+  </Accordion>
 
-You can set timezone of user using this method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab).
+  <Accordion title="Set" defaultOpen={false}>
+    Set is used to set the custom user property or properties. The given key and value will be assigned to the user, overwriting an existing property with the same key if present.
 
-<CodeGroup>
-  ```javascript javascript
-  user.set_timezone("America/Los_Angeles")
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```javascript javascript
+      user.set(key, value);
+      user.set({ key1: value1, key2: value2 });
+      ```
 
-### Set
+      ```javascript Example
+      user.set("name", "user")
 
-Set is used to set the custom user property or properties. The given key and value will be assigned to the user, overwriting an existing property with the same key if present.
+      user.set({
+        "prop1": "val1", 
+        "prop2": ["one", "two", "three"], 
+        "number": 20
+      })
+      ```
+    </CodeGroup>
 
-<CodeGroup>
-  ```javascript javascript
-  user.set(key, value);
-  user.set({ key1: value1, key2: value2 });
-  ```
+    | Parameters | type                                       |
+    | ---------- | ------------------------------------------ |
+    | key        | string (shouldn't start with `ss_` or `$`) |
+    | value      | any                                        |
+  </Accordion>
 
-  ```javascript Example
-  user.set("name", "user")
+  <Accordion title="Set Once" defaultOpen={false}>
+    Works just like `user.set`, except it will not override already existing property values. This is useful for properties like first\_login\_date.
 
-  user.set({
-    "prop1": "val1", 
-    "prop2": ["one", "two", "three"], 
-    "number": 20
-  })
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```javascript JavaScript
+      user.set_once(key, value);
+      user.set_once({ key1: value1, key2: value2 });
+      ```
 
-| Parameters | type                                       |
-| ---------- | ------------------------------------------ |
-| key        | string (shouldn't start with `ss_` or `$`) |
-| value      | any                                        |
+      ```javascript Example
+      user.set_once("first_login", "2021-11-02")
 
-### Set Once
+      user.set_once({"first_login" : "2021-11-02", "DOB" : "1991-10-02"})
+      ```
+    </CodeGroup>
+  </Accordion>
 
-Works just like `user.set`, except it will not override already existing property values. This is useful for properties like first\_login\_date.
+  <Accordion title="Append" defaultOpen={false}>
+    This method will append a value to the list for a given property.
 
-<CodeGroup>
-  ```javascript JavaScript
-  user.set_once(key, value);
-  user.set_once({ key1: value1, key2: value2 });
-  ```
+    <CodeGroup>
+      ```javascript javascript
+      user.append(key, value);
+      user.append({ key1: value1, key2: value2 });
+      ```
 
-  ```javascript Example
-  user.set_once("first_login", "2021-11-02")
+      ```javascript Example
+      user.append("wishlist", "iphone12")
 
-  user.set_once({"first_login" : "2021-11-02", "DOB" : "1991-10-02"})
-  ```
-</CodeGroup>
+      user.append({"wishlist" : "iphone12"})
+      ```
+    </CodeGroup>
+  </Accordion>
 
-### Append
+  <Accordion title="Remove" defaultOpen={false}>
+    This method will remove a value from the list for a given property.
 
-This method will append a value to the list for a given property.
+    <CodeGroup>
+      ```javascript javascript
+      user.remove(key, value);
+      user.remove({ key1: value1, key2: value2 });
+      ```
 
-<CodeGroup>
-  ```javascript javascript
-  user.append(key, value);
-  user.append({ key1: value1, key2: value2 });
-  ```
+      ```javascript Example
+      user.remove("wishlist", "iphone12")
 
-  ```javascript Example
-  user.append("wishlist", "iphone12")
+      user.remove({"wishlist" : "iphone12"})
+      ```
+    </CodeGroup>
+  </Accordion>
 
-  user.append({"wishlist" : "iphone12"})
-  ```
-</CodeGroup>
+  <Accordion title="Increment" defaultOpen={false}>
+    Add the given number to an existing property on the user. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
 
-### Remove
+    <CodeGroup>
+      ```javascript javascript
+      user.increment(key, value)
+      user.increment({ key1: value1, key2: value2 })
+      ```
 
-This method will remove a value from the list for a given property.
+      ```javascript Example
+      user.increment("login_count", 1)
 
-<CodeGroup>
-  ```javascript javascript
-  user.remove(key, value);
-  user.remove({ key1: value1, key2: value2 });
-  ```
+      user.increment({"login_count" : 1, "order_count" : 1})
+      ```
+    </CodeGroup>
 
-  ```javascript Example
-  user.remove("wishlist", "iphone12")
+    | Parameters | type                                       |
+    | ---------- | ------------------------------------------ |
+    | key        | string (shouldn't start with `ss_` or `$`) |
+    | value      | number (+ or -)                            |
+  </Accordion>
 
-  user.remove({"wishlist" : "iphone12"})
-  ```
-</CodeGroup>
+  <Accordion title="Unset" defaultOpen={false}>
+    This will remove a property permanently from user properties.
 
-### Increment
+    <CodeGroup>
+      ```javascript javascript
+      user.unset(key);
+      user.unset([key1, key2]);
+      ```
 
-Add the given number to an existing property on the user. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
+      ```javascript Example
+      user.unset("wishlist")
 
-<CodeGroup>
-  ```javascript javascript
-  user.increment(key, value)
-  user.increment({ key1: value1, key2: value2 })
-  ```
+      user.unset(["wishlist", "cart"])
+      ```
+    </CodeGroup>
 
-  ```javascript Example
-  user.increment("login_count", 1)
-
-  user.increment({"login_count" : 1, "order_count" : 1})
-  ```
-</CodeGroup>
-
-| Parameters | type                                       |
-| ---------- | ------------------------------------------ |
-| key        | string (shouldn't start with `ss_` or `$`) |
-| value      | number (+ or -)                            |
-
-### Unset
-
-This will remove a property permanently from user properties.
-
-<CodeGroup>
-  ```javascript javascript
-  user.unset(key);
-  user.unset([key1, key2]);
-  ```
-
-  ```javascript Example
-  user.unset("wishlist")
-
-  user.unset(["wishlist", "cart"])
-  ```
-</CodeGroup>
-
-| Parameters | type                                                           |
-| ---------- | -------------------------------------------------------------- |
-| keys       | string or array of strings (shouldn't start with `ss_` or `$`) |
+    | Parameters | type                                                           |
+    | ---------- | -------------------------------------------------------------- |
+    | keys       | string or array of strings (shouldn't start with `ss_` or `$`) |
+  </Accordion>
+</AccordionGroup>
 
 ***
-
-What’s Next
-
-After setting user channels send events which trigger workflow to get notifications
-
-* [Send and Track Events](/docs/node-send-event-data)
-
-* [Table of Contents](#)
-
-* * [Create user](#create-user)
-
-  * [Response](#response)
-
-  * [Communication channel methods](#communication-channel-methods)
-
-    * [Add User Channels](#add-user-channels)
-    * [Remove User Channels](#remove-user-channels)
-    * [Remove User Channels in bulk](#remove-user-channels-in-bulk)
-
-  * [Bulk API for updating multiple user profiles](#bulk-api-for-updating-multiple-user-profiles)
-    * [Bulk Response](#bulk-response)
-
-  * [Other user methods](#other-user-methods)
-
-    * [Set preferred language](#set-preferred-language)
-    * [Set preferred timezone](#set-preferred-timezone)
-    * [Set](#set)
-    * [Set Once](#set-once)
-    * [Append](#append)
-    * [Remove](#remove)
-    * [Increment](#increment)
-    * [Unset](#unset)

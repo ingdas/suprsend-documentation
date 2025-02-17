@@ -3,8 +3,6 @@ title: "Overview"
 description: "A guide to SuprSend notification logs and how to navigate and troubleshoot log errors"
 ---
 
-[Suggest Edits](/edit/logging)
-
 SuprSend provides real-time notification logs of sent notifications for quick debugging and auditing. Navigate to the [Logs tab](https://app.suprsend.com/en/production/logs/) on the SuprSend dashboard to access notification logs.
 
 ![](/images/docs/745014e-image.png)
@@ -13,11 +11,17 @@ SuprSend provides real-time notification logs of sent notifications for quick de
 
 Every workflow request generates a common entry in the log, allowing developers to gain a holistic view of notifications sent across all channels. You can expand the log to track the entire notification flow of each channel, from request to user delivery and engagement (open, seen, and click).
 
-<Info>
+<Note>
+  **📘 Set Callback URL in vendor account:**
+
+
+
+
+
   To track notification failure, delivery, seen and click response in your logs, configure SuprSend tracking URL `https://hub.suprsend.com/webhook/*` in your vendor dashboard. This enables SuprSend to get delivery and failure response from your vendor and show the same in dashboard logs. You'll find details of the callback URL in individual [vendor integration](/docs/vendors) documentation.
 
   You can also configure your [outbound webhook](/docs/webhook) to get the normalized vendor response back to your application.
-</Info>
+</Note>
 
 Notification log conveys all necessary information in a summarized view for easy debugging:
 
@@ -62,6 +66,10 @@ You can see notification status in real-time as they are being sent by expanding
 | MS Teams    | yes                                | yes       | -    | -         | -                    |
 
 <Check>
+  **👍 Set Callback URL in vendor account:**
+
+
+
   To track notification status post-trigger, like trigger failure, delivery, seen and click response in your logs, configure SuprSend tracking URL `https://hub.suprsend.com/webhook/*` in your vendor portal. You'll find details of the callback URL in respective [vendor integration documentation](/docs/vendors).
 </Check>
 
@@ -102,24 +110,3 @@ Date-time filter allows you to filter logs for a given time period. By default, 
 You can also get easy reference of workflow logs on subscriber details page. This can be used for user level auditing and compliance checks, allowing you to reference all notifications sent to a user within a specified time period. You can also access subscriber specific logs directly on logs page by filtering on `distinct_id`.
 
 ***
-
-What’s Next
-
-Check error guides for debugging workflow and broadcast failures.
-
-* [Error Guides](/docs/error-guides)
-
-* [Table of Contents](#)
-
-* * [Data structure of logs](#data-structure-of-logs)
-
-    * [Notification Status](#notification-status)
-    * [Notification Statuses tracked per channel](#notification-statuses-tracked-per-channel)
-    * [Getting Logs and Notification status back to your database](#getting-logs-and-notification-status-back-to-your-database)
-
-  * [Trouble debugging? Reach out to Support](#trouble-debugging-reach-out-to-support)
-
-  * [Filtering Logs](#filtering-logs)
-    * [Date-time filter](#date-time-filter)
-
-  * [Subscriber logs](#subscriber-logs)

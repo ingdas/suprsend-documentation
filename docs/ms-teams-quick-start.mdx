@@ -3,8 +3,6 @@ title: "Microsoft Teams"
 description: "This is a quick setup guide to start sending MS Teams notifications with SuprSend."
 ---
 
-[Suggest Edits](/edit/ms-teams-quick-start)
-
 ### 1. Create SuprSend account
 
 Simply [signup](https://auth.suprsend.com/sign-up) on SuprSend to create your account. If you already have your company account setup, ask your admin to invite you to the team.
@@ -15,16 +13,18 @@ To activate MS Teams Integration, you'll have to [create a Teams App](/docs/micr
 
 ### 3. Test directly in Staging workspace
 
-<Info>
-  Since, Teams channel need the app integration beforehand for testing, you can only test it in Staging Workspace.
-</Info>
+<Note>
+  📘 Since, Teams channel need the app integration beforehand for testing, you can only test it in Staging Workspace.&#x20;
+</Note>
 
 #### Different workspaces and their usage
 
 You'll see 3 workspaces in your SuprSend account: Sandbox, Staging and Production. Workspaces can be switched from top navigation bar.
 
 * **Sandbox** is setup for quick testing with sample workflow, a sample user with your registered email and pre-configured channels (email, SMS, whatsapp, Inbox) for quick testing. It's ideal for quick exploration and testing and is available for limited period.
+
 * **Staging** is your development workspace. You'll do all your iterations and testing in this workspace before pushing it to production.
+
 * **Production** workspace is where you'll configure your live notifications and sync your actual product users. We do not recommend making changes directly in your production workspace. It will safeguard you from accidentally sending a test notification to your production users.
 
 ### 4. Create a workflow
@@ -38,16 +38,21 @@ To design a workflow, you need:
 1. **A Trigger point** - Trigger initiates the workflow. You can initiate it
 
    * [Using the direct workflow API](/docs/trigger-workflow#triggering-workflow-via-api), where you can include recipient channel information, preferences, and actor details directly in the trigger.
+
    * [By emitting an event](/docs/trigger-workflow#event-based-trigger): You can trigger these events from your frontend application or from your backend systems, depending on the usecase. (note: the recipient needs to be pre-created for event-based triggers).
 
 2. **Delivery node** - Delivery nodes represent the channels where users will receive notifications. You can use [multi-channel](/docs/delivery-multi-channel) nodes to send messages across multiple channels, though it’s generally better to use [smart channel routing](/docs/smart-delivery) to notify users sequentially rather than bombarding them on all channels at once.
 
-* **Template** in delivery node contains the content of the notification. You can add both static and dynamic content sourced from user properties or trigger payloads. You can choose to edit in markdown or JSONNET format. For simple text messages, use markdown (add variables in handlebars format as `{{var}}`) and for complex adaptive card designs, you can use [JSONNET](https://jsonnet.org/ref/language.html) editor. Variables can be added as `data.var` or `data["$batched_events"][0].var` for batched alerts in JSONNET editor.\
+* **Template** in delivery node contains the content of the notification. You can add both static and dynamic content sourced from user properties or trigger payloads. You can choose to edit in markdown or JSONNET format. For simple text messages, use markdown (add variables in handlebars format as `{{var}}`) and for complex adaptive card designs, you can use [JSONNET](https://jsonnet.org/ref/language.html) editor. Variables can be added as `data.var` or `data["$batched_events"][0].var` for batched alerts in JSONNET editor.
+
+
+
+
   Ensure to publish the template before using it in a workflow. [Learn how to design MS Teams template here](/docs/ms-teams-template).
 
 ![](https://files.readme.io/e5b9db7-template_edit.gif)
 
-3. **Functional nodes (Optional)** - These are the logic nodes in the workflow. You can use it to add delay, batch multiple notifications in a summary or add conditional branches in the workflow. [Check out all workflow nodes here.](/docs/delay)
+1. **Functional nodes (Optional)** - These are the logic nodes in the workflow. You can use it to add delay, batch multiple notifications in a summary or add conditional branches in the workflow. [Check out all workflow nodes here.](/docs/delay)
 
 ### 5. Trigger the workflow
 
@@ -56,13 +61,14 @@ You can trigger a test workflow directly from dashboard by clicking on **"Test"*
 To trigger a workflow, you need:
 
 1. **Recipient** - End user who would be notified in the workflow run. Recipient is uniquely identified by `distinct_id` within SuprSend and must have the relevant channel identity set in their profile. You can define recipient inline in case of API based trigger or [create user profile](/docs/users#creating-user-profile-on-suprsend) first for event based trigger.
+
 2. **Data or Event Properties** - This will be used to render dynamic content in the template (added in template mock) or variables in the workflow configuration.
 
 We'll be triggering the workflow with direct API trigger for quick testing. You can [check all trigger methods here.](/docs/trigger-workflow)
 
 #### Sample Payload for API based trigger
 
-You can get workspace key, secret or API key for trigger from [Settings tab -> API keys ](https://app.suprsend.com/en/sandbox/developers/api-keys). Here, we are defining MS teams channel inline using `conversation_id` and `tenant_id`. Refer this doc on how to get conversation\_id and tenant\_id for your teams account. Service URL will change depending on your region. Example service URL - `https://smba.trafficmanager.net/apac`
+You can get workspace key, secret or API key for trigger from [Settings tab -> API keys ](https://app.suprsend.com/en/sandbox/developers/api-keys). Here, we are defining MS teams channel inline using `conversation_id` and `tenant_id`. Refer this doc on how to get conversation\_id and tenant\_id for your teams account. Service URL will change depending on your region. Example service URL - [`https://smba.trafficmanager.net/apac`](https://smba.trafficmanager.net/apac)
 
 <CodeGroup>
   ```curl curl
@@ -285,21 +291,11 @@ Follow this [go live checklist](/docs/go-live-checklist) to setup things in prod
 ### What's next?
 
 * **Invite other team members** - You can invite other collaborators from your team to your SuprSend account from [Account Settings -> Teams page.](https://app.suprsend.com/en/account-settings/team)
+
 * Go through our [best practices](/docs/best-practices) to design the right notification experience for your users.
+
 * Check out [workflow documentation ](/docs/design-workflow)to learn how to design advanced notification usecases.
+
 * For deeper integration with SuprSend, check out the [core concepts](/docs/templates) and learn more about our flagship features - [In-app Inbox](/docs/inbox-overview) and [Preferences](/docs/preferences) to deliver a delightful user experience.
 
 ***
-
-* [Table of Contents](#)
-
-* * [1. Create SuprSend account](#1-create-suprsend-account)
-  * [2. Create MS Teams App](#2-create-ms-teams-app)
-  * [3. Test directly in Staging workspace](#3-test-directly-in-staging-workspace)
-    * [Different workspaces and their usage](#different-workspaces-and-their-usage)
-  * [4. Create a workflow](#4-create-a-workflow)
-  * [5. Trigger the workflow](#5-trigger-the-workflow)
-    * [Sample Payload for API based trigger](#sample-payload-for-api-based-trigger)
-  * [6. Check logs to see the status of your sent notification](#6-check-logs-to-see-the-status-of-your-sent-notification)
-  * [7. Push to Production](#7-push-to-production)
-  * [What's next?](#whats-next)

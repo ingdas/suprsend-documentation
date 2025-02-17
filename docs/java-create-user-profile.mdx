@@ -419,6 +419,8 @@ Response is an instance of `suprsend.BulkResponse` class
 
 You can use SuprSend Python SDK to set advanced user properties, which will help in creating a user profile. You can use these properties to create user cohorts on SuprSend's platform with future releases.
 
+
+
 <AccordionGroup>
   <Accordion title="Set" defaultOpen={false}>
     Set is used to set the custom user property or properties. The given name and value will be assigned to the user, overwriting an existing property with the same name if present. It can take key as first param, value as second param for setting single user property or object for setting multiple user properties.
@@ -458,8 +460,113 @@ You can use SuprSend Python SDK to set advanced user properties, which will help
     Works just like `user.set`, except it will not overwrite existing property values. This is useful for properties like *First login date*
 
     ```
+    from suprsend import Suprsend
+    supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
+
+    distinct_id = "__uniq_user_identifier__"
+    u1 = supr_client.user.get_instance(distinct_id)
+    u1.set_once(key, value)  # for single property
+    u1.set_once(properties)  # for multiple properties
+
+    # For setting once a single property:
+    u1.set_once("first_login", "2021-11-02")
+
+    # For setting once multiple properties
+    u1.set_once({"first_login" : "2021-11-02", "DOB" : "1991-10-02"})
+    ```
+  </Accordion>
+
+  <Accordion title="Increment" defaultOpen={false}>
+    Add the given amount to an existing property on the user. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
+
+    ```
+    from suprsend import Suprsend
+    supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
+
+    distinct_id = "__uniq_user_identifier__"
+    u1 = supr_client.user.get_instance(distinct_id)
+    u1.increment(key, value)  # for single property
+    u1.increment(property_obj)  # for multiple properties
+
+    # For incrementing a single property:
+    u1.increment("login_count", 1)
+
+    # For incrementing multiple properties:
+    u1.increment({"login_count" : 1, "order_count" : 1})
+    ```
+
+
+  </Accordion>
+
+  <Accordion title="Append" defaultOpen={false}>
+    This method will append a value to the list for a given property.
+
+    ```
+    from suprsend import Suprsend
+    supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
+
+    distinct_id = "__uniq_user_identifier__"
+    u1 = supr_client.user.get_instance(distinct_id)
+    u1.append(key, value)  # for single property
+    u1.append(properties)  # for multiple properties
+
+    # For appending a single property:
+    u1.append("wishlist", "iphone12")
+
+    # For appending multiple properties:
+    u1.append({"wishlist" : "iphone12", "wishlist" : "Apple airpods"})
+    ```
+
+
+  </Accordion>
+
+  <Accordion title="Remove" defaultOpen={false}>
+    This method will remove a value from the list for a given property.
+
+    ```python
+    from suprsend import Suprsend
+    supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
+
+    distinct_id = "__uniq_user_identifier__"
+    u1 = supr_client.user.get_instance(distinct_id)
+    u1.remove(key, value)  # for single property
+    u1.remove(properties)  # for multiple properties
+
+    # For removing a single property:
+    u1.remove("wishlist", "iphone12")
+
+    # For removing multiple properties:
+    u1.remove({"wishlist" : "iphone12", "wishlist": "Apple airpods"})
+    ```
+
+
+  </Accordion>
+
+  <Accordion title="Unset" defaultOpen={false}>
+    This will remove a property permanently from user properties.
+
+    ```python
+
+    from suprsend import Suprsend
+    supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
+
+    distinct_id = "__uniq_user_identifier__"
+    u1 = supr_client.user.get_instance(distinct_id)
+    u1.unset(key)  # for single property
+    u1.unset(property_list)  # for multiple properties
+
+    # For unsetting a single property:
+    u1.unset("wishlist")
+
+    # For unsetting multiple properties:
+    u1.unset(["wishlist", "cart"])
     ```
   </Accordion>
 </AccordionGroup>
+
+| Parameters         | Type           | Description                                                        |
+| ------------------ | -------------- | ------------------------------------------------------------------ |
+| **key**            | string         | This property provided will be deleted from user properties        |
+| **property\_list** | array\[string] |  If list is given all properties included in list will be removed. |
 
 ***

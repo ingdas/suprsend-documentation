@@ -1,9 +1,10 @@
 ---
 title: "Javascript SDK"
-description: "Suggest Edits"
 ---
 
 <Info>
+  📘 **Upgrading major version of SDK:**
+
   We have changed the web SDK authentication from workspace key-secret to public key and JWT based authentication. This is done to improve security in frontend applications.
 
   * Refer the v1 SDK [documentation](/v1.2.1/docs/javascript-sdk)
@@ -13,9 +14,11 @@ description: "Suggest Edits"
 
 This is the client javascript SDK used to integrate SuprSend features like Webpush, Preferences in javascript websites like React, Next.js, Angular, Vue.js etc.
 
-**NPM link:** [https://www.npmjs.com/package/@suprsend/web-sdk](https://www.npmjs.com/package/@suprsend/web-sdk)
+<CardGroup cols="2">
+  <Card title="NPM Link" href="https://www.npmjs.com/package/@suprsend/web-sdk" />
 
-**Github link:** [https://github.com/suprsend/suprsend-web-sdk](https://github.com/suprsend/suprsend-web-sdk)
+  <Card title="GitHub Link" href="https://github.com/suprsend/suprsend-web-sdk" />
+</CardGroup>
 
 ## Installation
 
@@ -47,7 +50,7 @@ Create suprSendClient instance and use same instance to access all the methods o
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | publicApiKey\* | This is public Key used to authenticate api calls to SuprSend. Get it in SuprSend dashboard **ApiKeys -> Public Keys** section |
 
-### 2. Authenticate user
+### 2. Authenticate User
 
 Authenticate user so that all the actions performed after authenticating will be w.r.t that user. This is mandatory step and need to be called before using any other method. This is usually performed after successful login and on reload of page to re-authenticate user.
 
@@ -123,17 +126,3 @@ Almost all the methods in this SDK return response type `Promise<ApiResponse>`
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-
-  * [Integration](#integration)
-
-    * [1. Create Client](#1-create-client)
-
-    * [2. Authenticate user](#2-authenticate-user)
-
-    * [3. Reset user](#3-reset-user)
-
-  * [Response Structure](#response-structure)

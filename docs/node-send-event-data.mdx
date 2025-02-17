@@ -3,8 +3,6 @@ title: "Send and Track Events"
 description: "This document will cover the method to send event to SuprSend."
 ---
 
-[Suggest Edits](/edit/node-send-event-data)
-
 ## Create Workflow on SuprSend Dashboard
 
 For Event based workflow trigger, you'll have to [create the workflow on SuprSend Dashboard](/docs/design-workflow). After creating workflow you can copy `Event Name` field in Trigger Node of that published workflow and use it trigger that workflow by send track event using this guide.
@@ -73,10 +71,12 @@ To make an idempotent request, pass idempotency\_key in the event instance. idem
 Here are some common approaches for assigning idempotency keys:
 
 * **Generate a random UUID** for each request.
+
 * **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like `user147-new-comment-1687437670`
+
 * **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
 
-### Response
+**Response:**
 
 <CodeGroup>
   ```javascript javascript
@@ -147,17 +147,3 @@ To add one or more attachments to a notification (viz. Email), call `add_attachm
 </Warning>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Create Workflow on SuprSend Dashboard](#create-workflow-on-suprsend-dashboard)
-
-  * [Send Event](#send-event)
-
-    * [Idempotent requests](#idempotent-requests)
-    * [Response](#response)
-
-  * [Trigger multiple events in bulk](#trigger-multiple-events-in-bulk)
-    * [Bulk Response](#bulk-response)
-
-  * [Add file attachment (for email)](#add-file-attachment-for-email)
