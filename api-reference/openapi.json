@@ -4553,6 +4553,62 @@ paths:
                 Result:
                   value: '{_error_response_}'
       deprecated: false
+  /event/trigger/adding-email-attachment/:
+    post:
+      summary: Adding Email Attachment (event)
+      operationId: adding-email-attachment-event
+      description: "You can add attachment as properties->\"$attachments\". Attachments can be passed as base-64 file (allowed size limit for base-64 file < 50KB) or directly as the media URL.\n\n```json\n// adding base-64 file (supported limit < 50KB)\n\n{\n  \"properties\": {\n    \"$attachments\":[\n      {\n        \"filename\": \"billing.pdf\",\n        \"contentType\": \"application/pdf\",\n        \"data\": \"Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh\" // this is base64 encoded content\n      }\n    ]\n  }\n} \n\n\n// adding URL directly (no limit on the file size)\n\n{\n  \"properties\": {\n    \"$attachments\": [\n      { \n        \"filename\": \"Bitcoin-whitepaper.pdf\", // optional. if not present, filename will be picked from the url\n        \"url\": \"https://bitcoincore.org/bitcoin.pdf\", \n        \"ignore_if_error\": true/false\n      }\n    ]\n  }\n} \n\n```"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              required:
+                - distinct_id
+                - event
+                - properties
+                - brand_id
+                - $idempotency_key
+              properties:
+                distinct_id:
+                  type: string
+                  description: distinct_id of recipient who should receive the notification
+                  default: distinct_id
+                event:
+                  type: string
+                  description: string identifier for the event like product_purchased
+                  default: _event_name_
+                properties:
+                  type: string
+                  description: a dictionary representing event attributes like first_name. Event properties can be used to pass template variables in case of event based trigger
+                  default: '{ "$attachments":[ { "filename":"Bitcoin-whitepaper.pdf", "url":"https://bitcoincore.org/bitcoin.pdf", "ignore_if_error":true } ] }'
+                  format: json
+                brand_id:
+                    type: string
+                    description: string identifier of the brand this event is associated with
+                idempotency_key:
+                    type: string
+                    description: Idempotency key (valid for 24hours)
+      responses:
+        '202':
+          description: '202'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{_error_response_}'
+      deprecated: false
+
 x-readme:
   headers: []
   explorer-enabled: true
