@@ -4368,6 +4368,177 @@ paths:
                         type: object
                         properties: {}
       deprecated: false                           
+  /{workspace_key}/trigger/adding-email-attachment/:
+    post:
+      summary: Adding Email Attachment
+      operationId: adding-email-attachment
+      description: "You can add attachment as ```data->\"$attachments\"```. Attachments can be passed as             base-64 file (allowed size limit for base-64 file < 50KB) or directly as the media              URL.\n\n```json\n// adding base-64 file (supported limit < 50KB)\n\n{\n  \"data\": {\n    \"$attachments\":[\n      {\n        \"filename\": \"billing.pdf\",\n        \"contentType\": \"application/pdf\",\n        \"data\": \"Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh\" // this is base64 encoded content\n      }\n    ]\n  }\n} \n\n\n// adding URL directly (no limit on the file size)\n\n{\n  \"data\": {\n    \"$attachments\": [\n      { \n        \"filename\": \"Bitcoin-whitepaper.pdf\", // optional. if not present, filename will be picked from the url\n        \"url\": \"https://bitcoincore.org/bitcoin.pdf\", \n        \"ignore_if_error\": true/false\n      }\n    ]\n  }\n} \n\n```"
+      parameters:
+        - name: workspace_key
+          in: path
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - template
+                - notification_category
+                - users
+              properties:
+                name:
+                  type: string
+                  description: Unique name of the workflow. The workflow name should be easily identifiable for your reference at a later stage. You can see workflow-related analytics on the workflow page (how many notifications were sent, delivered, clicked or interacted).
+                  default: _workflow_name_
+                template:
+                  type: string
+                  description: Unique slug name of the template created on SuprSend dashboard. You can get this by clicking on the clipboard icon next to the Template name on SuprSend templates page.
+                  default: _template_slug_
+                notification_category:
+                  type: string
+                  description: Category in which your notification belongs. You can understand more about them in the 'Notification Category' documentation
+                  default: transactional
+                users:
+                  type: array
+                  description: Array object of target users.
+                  items:
+                    properties:
+                      distinct_id:
+                        type: string
+                        description: unique identifier of the user
+                        default: _distinct_id_
+                      $channels:
+                        type: array
+                        description: 'send notification on selected channels in user profile. Following channel keys can be used: email, sms, whatsapp, androidpush, iospush, slack, webpush'   
+                        default: []
+                        items:
+                          type: string
+                      $email:
+                        type: array
+                        description: To trigger notification on a particular email
+                        default: []
+                        items:
+                          type: string
+                      $sms:
+                        type: array
+                        description: Send SMS on a particular number.
+                        default: []
+                        items:
+                          type: string
+                      $whatsapp:
+                        type: array
+                        description: Send Whatsapp on a particular number.
+                        default: []
+                        items:
+                          type: string
+                      $androidpush:
+                        type: array
+                        description: Send androidpush on the given push token
+                        items:
+                          properties:
+                            token:
+                              type: string
+                              description: Androidpush token
+                              default: __android_push_token__
+                            provider:
+                              type: string
+                              description: vendor delivering the push notification
+                              default: fcm
+                            device_id:
+                              type: string
+                              description: unique identifier of user's device. This is used to avoid sending duplicate push notification on the user's device
+                          required:
+                            - token
+                            - provider
+                          type: object
+                      $iospush:
+                        type: array
+                        description: Send iOSpush on the given push token
+                        items:
+                          properties:
+                            token:
+                              type: string
+                              description: iOSpush token
+                              default: __ios_push_token__
+                            provider:
+                              type: string
+                              description: vendor delivering the push notification
+                              default: apns
+                            device_id:
+                              type: string
+                              description: unique identifier of user's device. This is used to avoid sending duplicate push notification on the same device
+                          required:
+                            - token
+                            - provider
+                          type: object
+                      $slack:
+                        type: string
+                        description: 'Send Slack on a particular channel in user''s profile. Use one of the methods to add slack token - 1. slack using email: {"email": "user@example.com", "access_token": "xoxb-XXXXXXXX"} ------ 2. slack using member_id: {"user_id": "U/WXXXXXXXX", "access_token": "xoxb-XXXXXXXX"} ------- 3. slack channel: {"channel": "CXXXXXXXX", "access_token": "xoxb-XXXXXXXX"} -------- 4. slack incoming webhook: {"incoming_webhook": { "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"}}'
+                        format: json
+                    required:
+                      - distinct_id
+                    type: object
+                data:
+                  type: string
+                  description: Mock data to replace the template variables.
+                  default: '{ "$attachments":[ { "filename":"Bitcoin-whitepaper.pdf", "url":"https://bitcoincore.org/bitcoin.pdf", "ignore_if_error":true } ] }'
+                  format: json
+                delivery:
+                  type: object
+                  description: delivery instructions for the workflow. You can set [Smart Delivery](https://docs.suprsend.com/docs/smart-delivery) preference by setting "smart":true
+                  properties:
+                    smart:
+                      type: boolean
+                      description: You can enable smart delivery by setting "smart":True
+                      default: false
+                    success:
+                      type: string
+                      description: Measure that defines the success of this notification. You can set notification status like delivery, interaction or custom success event
+                      default: seen
+                    time_to_live:
+                      type: string
+                      description: Time window for triggering notifications in case of smart delivery. notification on each channel will be sent with time-interval of [time_to_live / (number_of_channels - 1)] apart. Format - XXdXXhXXmXXs or if its number (n) then delay is in seconds (n)
+                    mandatory_channels:
+                      type: array
+                      description: 'Channels on which notification has to be sent immediately in case of smart delivery. Following channel keys can be used: email, sms, whatsapp, androidpush, iospush, slack, webpush'
+                      items:
+                        type: string
+                delay:
+                  type: string
+                  description: Workflow will be halted for the time mentioned in delay, and become active once the delay period is over. Format - `XXdXXhXXmXXs` or if its number (n) then delay is in seconds (n)
+                trigger_at:
+                  type: string
+                  description: Trigger workflow on a specific date-time. Format - date string in ISO 8601 eg. "2022-08-27T20:14:51.643Z"
+                  format: date
+                brand_id:
+                  type: string
+                  description: string identifier of the brand this workflow is associated with
+                $idempotency_key:
+                  type: string
+                  description: Idempotency_key (valid for 24hrs)
+      responses:
+        '202':
+          description: '202'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{_error_response_}'
+      deprecated: false
 x-readme:
   headers: []
   explorer-enabled: true
