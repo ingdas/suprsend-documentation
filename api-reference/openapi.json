@@ -41,9 +41,9 @@ paths:
                   description: a dictionary representing event attributes like `first_name`. Event properties can be used to pass template variables in case of event based trigger
                   default: '{}'
                   format: json
-                brand_id:
+                tenant_id:
                   type: string
-                  description: string identifier of the brand this event is associated with
+                  description: string identifier of the tenant this event is associated with
                 $idempotency_key:
                   type: string
                   description: Idempotency key (valid for 24hours)
@@ -76,15 +76,15 @@ paths:
                 Result:
                   value: '{_error_response_}'
       deprecated: false
-  /v1/brand/{brand_id}:
+  /v1/tenant/{tenant_id}:
     post:
-      summary: Create / Update Brands
-      description: API to create a new Brand OR update an existing Brand
-      operationId: create-brands
+      summary: Create / Update Tenants
+      description: API to create a new Tenant OR update an existing Tenant
+      operationId: create-tenants
       parameters:
-        - name: brand_id
+        - name: tenant_id
           in: path
-          description: unique identifier of the brand that you want to create / update
+          description: unique identifier of the tenant that you want to create / update
           schema:
             type: string
           required: true
@@ -98,66 +98,66 @@ paths:
             schema:
               type: object
               required:
-                - brand_name
+                - tenant_name
               properties:
-                brand_name:
+                tenant_name:
                   type: string
-                  description: Name of the brand. You can add company / organization name here
-                  default: Awesome Brand
+                  description: Name of the tenant. You can add company / organization name here
+                  default: Awesome Tenant
                 logo:
                   type: string
-                  description: URL of the brand logo
+                  description: URL of the tenant logo
                   default: https://ik.imagekit.io/l0quatz6utm/suprsend/staging/media/suprsend-only-logo_c8aa27faef118418e8c5bd7b31a1cafc74e09200.png
                 primary_color:
                   type: string
-                  description: Primary color of the brand - used for designing brand template. If you don't provide any of the colors for the brand, SuprSend will assume you want to use the default values, so color settings will automatically be set to the color settings of default brand.
+                  description: Primary color of the tenant - used for designing tenant template. If you don't provide any of the colors for the tenant, SuprSend will assume you want to use the default values, so color settings will automatically be set to the color settings of default tenant.
                   default: '#ff0000'
                 secondary_color:
                   type: string
-                  description: Secondary color of the brand - not used for designing the default templates. You can however add this property and use it in your templates
+                  description: Secondary color of the tenant - not used for designing the default templates. You can however add this property and use it in your templates
                   default: '#00ff00'
                 tertiary_color:
                   type: string
-                  description: Tertiary color of the brand - not used for designing the default templates. You can however add this property and use it in your templates
+                  description: Tertiary color of the tenant - not used for designing the default templates. You can however add this property and use it in your templates
                   default: '#0000ff'
                 preference_page_url:
                   type: string
-                  description: Link of the hosted preference page inside the brand product
+                  description: Link of the hosted preference page inside the tenant product
                 social_links:
                   type: object
-                  description: urls of social media accounts of the brand. If you really want to remove any social link, you must set its value="" (instead of null)
+                  description: urls of social media accounts of the tenant. If you really want to remove any social link, you must set its value="" (instead of null)
                   properties:
                     website:
                       type: string
-                      description: link of brand website. While updating a social link, if you want to remove the link, you must the value="" (instead of null)
+                      description: link of tenant website. While updating a social link, if you want to remove the link, you must the value="" (instead of null)
                       default: https://suprsend.com
                     facebook:
                       type: string
-                      description: brand facebook page link
+                      description: tenant facebook page link
                     linkedin:
                       type: string
-                      description: brand linkedin page link
+                      description: tenant linkedin page link
                     twitter:
                       type: string
-                      description: brand twitter page link
+                      description: tenant twitter page link
                     instagram:
                       type: string
-                      description: brand instagram page link
+                      description: tenant instagram page link
                     medium:
                       type: string
-                      description: brand medium page link
+                      description: tenant medium page link
                     discord:
                       type: string
-                      description: brand discord page link
+                      description: tenant discord page link
                     telegram:
                       type: string
-                      description: brand telegram page link
+                      description: tenant telegram page link
                     youtube:
                       type: string
-                      description: brand youtube page link
+                      description: tenant youtube page link
                 properties:
                   type: string
-                  description: 'Custom properties associated with the brand. Example value - `{"k1": "v1", "k2": 1.0}` <br> Update operation on properties works like upsert on 1st-level keys (i.e. if top-level key doesn''t already exist, then it will be added, otherwise its value will be replaced by the new value. All other key-value pairs will remain unchanged).'
+                  description: 'Custom properties associated with the tenant. Example value - `{"k1": "v1", "k2": 1.0}` <br> Update operation on properties works like upsert on 1st-level keys (i.e. if top-level key doesn''t already exist, then it will be added, otherwise its value will be replaced by the new value. All other key-value pairs will remain unchanged).'
                   format: json
       responses:
         '200':
@@ -182,13 +182,13 @@ paths:
                 properties: {}
       deprecated: false
     get:
-      summary: Get Brand data
-      description: API to get brand settings corresponding to a brand id
-      operationId: get-brand
+      summary: Get Tenant data
+      description: API to get tenant settings corresponding to a tenant id
+      operationId: get-tenant
       parameters:
-        - name: brand_id
+        - name: tenant_id
           in: path
-          description: unique identifier of the brand you want to get the details for
+          description: unique identifier of the tenant you want to get the details for
           schema:
             type: string
           required: true
@@ -214,11 +214,11 @@ paths:
                 type: object
                 properties: {}
       deprecated: false
-  /v1/brand/:
+  /v1/tenant/:
     get:
-      summary: Get Brand list
-      description: API to get the list of brands available in your workspace
-      operationId: get-brand-list
+      summary: Get Tenant list
+      description: API to get the list of tenants available in your workspace
+      operationId: get-tenant-list
       parameters:
         - name: limit
           in: query
@@ -228,7 +228,7 @@ paths:
             default: '20'
         - name: offset
           in: query
-          description: starting position of brand list
+          description: starting position of tenant list
           schema:
             type: string
             default: '0'
@@ -321,7 +321,7 @@ paths:
             default: '20'
         - name: offset
           in: query
-          description: starting position of brand list
+          description: starting position of tenant list
           schema:
             type: string
             default: '0'
@@ -548,9 +548,9 @@ paths:
                   type: string
                   description: Trigger workflow on a specific date-time. Format - date string in ISO 8601 eg. "2022-08-27T20:14:51.643Z"
                   format: date
-                brand_id:
+                tenant_id:
                   type: string
-                  description: string identifier of the brand this workflow is associated with
+                  description: string identifier of the tenant this workflow is associated with
                 $idempotency_key:
                   type: string
                   description: Idempotency_key (valid for 24hrs)
@@ -591,7 +591,7 @@ paths:
           required: true
         - name: tenant_id
           in: query
-          description: to fetch user preferences for a particular brand
+          description: to fetch user preferences for a particular tenant
           schema:
             type: string
         - name: show_opt_out_channels
@@ -755,9 +755,9 @@ paths:
                   type: string
                   description: Trigger broadcast on a specific date-time. Format - date string in ISO 8601 eg. "2022-08-27T20:14:51.643Z"
                   format: date
-                brand_id:
+                tenant_id:
                   type: string
-                  description: string identifier of the brand this broadcast is associated with
+                  description: string identifier of the tenant this broadcast is associated with
       responses:
         '202':
           description: '202'
@@ -791,7 +791,7 @@ paths:
           required: true
         - name: tenant_id
           in: query
-          description: to fetch user preferences for a particular brand
+          description: to fetch user preferences for a particular tenant
           schema:
             type: string
       responses:
@@ -829,7 +829,7 @@ paths:
           required: true
         - name: tenant_id
           in: query
-          description: to fetch user preferences for a particular brand
+          description: to fetch user preferences for a particular tenant
           schema:
             type: string
       requestBody:
@@ -888,7 +888,7 @@ paths:
           required: true
         - name: tenant_id
           in: query
-          description: to fetch user preferences for a particular brand
+          description: to fetch user preferences for a particular tenant
           schema:
             type: string
         - name: category_slug
@@ -934,15 +934,15 @@ paths:
                 type: object
                 properties: {}
       deprecated: false
-  /v1/brand/{brand_id}/category/{category_slug}/:
+  /v1/tenant/{tenant_id}/category/{category_slug}/:
     post:
-      summary: Update Brand Default Preference
-      description: API to update user default preferences for a brand
-      operationId: update-brand-default-preference
+      summary: Update Tenant Default Preference
+      description: API to update user default preferences for a tenant
+      operationId: update-tenant-default-preference
       parameters:
-        - name: brand_id
+        - name: tenant_id
           in: path
-          description: unique identifier of the brand you want to update default preferences for
+          description: unique identifier of the tenant you want to update default preferences for
           schema:
             type: string
           required: true
@@ -1040,7 +1040,7 @@ paths:
           required: true
         - name: tenant_id
           in: query
-          description: to fetch user preferences for a particular brand
+          description: to fetch user preferences for a particular tenant
           schema:
             type: string
         - name: category_slug
@@ -1077,15 +1077,15 @@ paths:
                 type: object
                 properties: {}
       deprecated: false
-  /v1/brand/{brand_id}/category/:
+  /v1/tenant/{tenant_id}/category/:
     get:
-      summary: Get Brand Default Preference
-      description: API to get Brand categories
-      operationId: get-brand-default-preference
+      summary: Get Tenant Default Preference
+      description: API to get Tenant categories
+      operationId: get-tenant-default-preference
       parameters:
-        - name: brand_id
+        - name: tenant_id
           in: path
-          description: unique identifier of the brand you want to get default preferences for
+          description: unique identifier of the tenant you want to get default preferences for
           schema:
             type: string
           required: true
@@ -2366,7 +2366,7 @@ paths:
                   format: json
                 tenant_id:
                   type: string
-                  description: string identifier of the brand/tenant this workflow is associated with. Used to trigger [multi-tenant](https://docs.suprsend.com/docs/tenant-workflows) notifications
+                  description: string identifier of the tenant/tenant this workflow is associated with. Used to trigger [multi-tenant](https://docs.suprsend.com/docs/tenant-workflows) notifications
                 $idempotency_key:
                   type: string
                   description: Idempotency_key (valid for 24hrs)
@@ -2406,7 +2406,7 @@ paths:
       parameters:
         - name: tenant_id
           in: query
-          description: to fetch user preferences for a particular brand
+          description: to fetch user preferences for a particular tenant
           schema:
             type: string
       requestBody:
@@ -2489,7 +2489,7 @@ paths:
       parameters:
         - name: tenant_id
           in: query
-          description: to fetch user preferences for a particular brand
+          description: to fetch user preferences for a particular tenant
           schema:
             type: string
       requestBody:
@@ -2552,7 +2552,7 @@ paths:
           required: true
         - name: tenant_id
           in: query
-          description: to fetch user preferences for a particular brand
+          description: to fetch user preferences for a particular tenant
           schema:
             type: string
         - name: show_opt_out_channels
@@ -3404,7 +3404,7 @@ paths:
       parameters:
         - name: tenant_id
           in: query
-          description: to fetch user preferences for a particular brand
+          description: to fetch user preferences for a particular tenant
           schema:
             type: string
         - name: object_type
@@ -3476,7 +3476,7 @@ paths:
           required: true
         - name: tenant_id
           in: query
-          description: to fetch user preferences for a particular brand
+          description: to fetch user preferences for a particular tenant
           schema:
             type: string
         - name: id
@@ -3540,7 +3540,7 @@ paths:
           required: true
         - name: tenant_id
           in: query
-          description: to fetch object preferences for a particular brand
+          description: to fetch object preferences for a particular tenant
           schema:
             type: string
         - name: id
@@ -3585,7 +3585,7 @@ paths:
           required: true
         - name: tenant_id
           in: query
-          description: to fetch object preferences for a particular brand
+          description: to fetch object preferences for a particular tenant
           schema:
             type: string
         - name: show_opt_out_channels
@@ -3636,7 +3636,7 @@ paths:
           required: true
         - name: tenant_id
           in: query
-          description: to fetch object preferences for a particular brand
+          description: to fetch object preferences for a particular tenant
           schema:
             type: string
         - name: show_opt_out_channels
@@ -3687,7 +3687,7 @@ paths:
           required: true
         - name: tenant_id
           in: query
-          description: to fetch object preferences for a particular brand
+          description: to fetch object preferences for a particular tenant
           schema:
             type: string
         - name: show_opt_out_channels
@@ -4160,7 +4160,7 @@ paths:
       parameters:
         - name: tenant_id
           in: path
-          description: unique identifier of the brand you want to get the details for
+          description: unique identifier of the tenant you want to get the details for
           schema:
             type: string
           required: true
@@ -4615,9 +4615,9 @@ paths:
                   type: string
                   description: Trigger workflow on a specific date-time. Format - date string in ISO 8601 eg. "2022-08-27T20:14:51.643Z"
                   format: date
-                brand_id:
+                tenant_id:
                   type: string
-                  description: string identifier of the brand this workflow is associated with
+                  description: string identifier of the tenant this workflow is associated with
                 $idempotency_key:
                   type: string
                   description: Idempotency_key (valid for 24hrs)
@@ -4654,7 +4654,7 @@ paths:
                 - distinct_id
                 - event
                 - properties
-                - brand_id
+                - tenant_id
                 - $idempotency_key
               properties:
                 distinct_id:
@@ -4670,9 +4670,9 @@ paths:
                   description: a dictionary representing event attributes like first_name. Event properties can be used to pass template variables in case of event based trigger
                   default: '{ "$attachments":[ { "filename":"Bitcoin-whitepaper.pdf", "url":"https://bitcoincore.org/bitcoin.pdf", "ignore_if_error":true } ] }'
                   format: json
-                brand_id:
+                tenant_id:
                     type: string
-                    description: string identifier of the brand this event is associated with
+                    description: string identifier of the tenant this event is associated with
                 idempotency_key:
                     type: string
                     description: Idempotency key (valid for 24hours)
