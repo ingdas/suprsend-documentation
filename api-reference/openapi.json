@@ -2924,6 +2924,93 @@ paths:
                 type: object
                 properties: {}
       deprecated: false
+    patch:
+      summary: Edit Object Profile
+      description: API to add / remove properties and communication channel from object profile
+      operationId: edit-object-profile
+      parameters:
+        - name: object_type
+          in: path
+          description: Used to group similar objects together. Give plural namespace like teams, organizations, and roles.
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: Unique identifier of the object in your system
+          required: true  
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                channel_preferences:
+                  type: array
+                  description: |
+                    You can use following operations to edit object profile. 
+                    - `$set` to add/update string, 
+                    - `$unset` to delete property/channel, 
+                    - `$append` to insert values in property/channel array, 
+                    - `$remove` to remove values from property/channel array.
+                  items:
+                    type: object
+                    properties:
+                      $append:
+                        type: object
+                        description: |
+                          Use this to add communication channels or update array properties in user profile. 
+                          Channels: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`
+                          Example: `{"$email":"user@example.com"}`
+                        additionalProperties:
+                          type: string
+                      $remove:
+                        type: object
+                        description: |
+                          Use this to remove communication channels or remove values from an array in user profile. 
+                          Channels: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`
+                          Example: `{"$email":"user@example.com"}`
+                        additionalProperties:
+                          type: string
+                      $set:
+                        type: object
+                        description: |
+                          Use this to set user properties like name, location, preferred language, etc.
+                          Example: `{"prop1":"val1","$preferred_language":"hi","$timezone":"America/New_York"}`
+                        additionalProperties:
+                          type: string
+                      $unset:
+                        type: array
+                        description: |
+                          Use this to delete channels or properties from user profile.
+                          Channels: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`
+                          Example: `["$sms", "$whatsapp", "prop1"]`
+                        items:
+                          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
   /v1/object/{object_type}/{id}/subscription/:
     post:
       summary: Add Subscription
