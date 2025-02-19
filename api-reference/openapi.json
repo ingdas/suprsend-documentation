@@ -509,7 +509,17 @@ paths:
                 data:
                   type: string
                   description: Mock data to replace the template variables.
-                  default: '{ "key": { "k1": "v1", "k2": "v2" } }'
+                  default: '{
+                              "data": {
+                                "$attachments": [
+                                  {
+                                    "filename": "billing.pdf",
+                                    "contentType": "application/pdf",
+                                    "data": "Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh" // this is base64 encoded content
+                                  }
+                                ]
+                              }
+                            }'
                   format: json
                 delivery:
                   type: object
@@ -544,6 +554,10 @@ paths:
                 $idempotency_key:
                   type: string
                   description: Idempotency_key (valid for 24hrs)
+                adding_email_attachment:
+                  type: string
+                  description: "You can add attachment as data->\"$attachments\". Attachments can be passed as the media URL or as base-64 file (allowed size limit for base-64 file < 50KB).\n\n```json\nadding base-64 file (supported limit < 50KB)\n\n{\n  \"data\": {\n    \"$attachments\":[\n      {\n        \"filename\": \"billing.pdf\",\n        \"contentType\": \"application/pdf\",\n        \"data\": \"Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh\" // this is base64 encoded content\n      }\n    ]\n  }\n} \n\n\n// adding URL directly (no limit on the file size)\n\n{\n  \"data\": {\n    \"$attachments\": [\n      { \n        \"filename\": \"Bitcoin-whitepaper.pdf\", // optional. if not present, filename will be picked from the url\n        \"url\": \"https://bitcoincore.org/bitcoin.pdf\", \n        \"ignore_if_error\": true/false\n      }\n    ]\n  }\n} \n\n```"
+                  format: json
       responses:
         '202':
           description: '202'
