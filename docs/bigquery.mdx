@@ -9,25 +9,13 @@ With this integration, you can directly send notifications on your 360 degree da
 
 To start syncing data from your Bigquery database, you need to add this integration on the connector page.
 
-1. Go to 
+1. Go to [SuprSend dashboard -> Settings -> Connectors](https://app.suprsend.com/en/staging/connectors) page. Here, you'll see the list of available connectors. If you have already setup any connectors in the past, you'll see a list of existing connectors. Click o&#x6E;**"+New Connector"**&#x62;utton to add the connector.
 
-   [SuprSend dashboard -> Settings -> Connectors](https://app.suprsend.com/en/staging/connectors)
+2. Click on BigQuery and add below information:
 
-    page. Here, you'll see the list of available connectors. If you have already setup any connectors in the past, you'll see a list of existing connectors. Click on
+   * **Name**- A name to uniquely qualify the connection as you'll see it in the connector list on your sync task. You can add the name of database here for easy identification.
 
-   **"+New Connector"**
-
-   button to add the connector.
-
-2. Click on Bigquery and add below information:
-
-   1. **Name**
-
-      \- A name to uniquely qualify the connection as you'll see it in the connector list on your sync task. You can add the name of database here for easy identification.
-
-   2. **Service account key json**
-
-      \- Steps to generate this are mentioned in the next section.
+   * **Service account key json**- Steps to generate this are mentioned in the next section.
 
 ![](/images/docs/151c7dd-image.png)
 
@@ -35,8 +23,6 @@ To start syncing data from your Bigquery database, you need to add this integrat
 
 <Steps>
   <Step title="Generating OAuth Client Key and Secret" stepNumber="1">
-
-
     <Steps>
       <Step title="Step 1">
         Go to the[Credentials](https://console.cloud.google.com/apis/credentials)page in the Google Cloud Platform console and click o&#x6E;**"+Create Credentials"**. Select OAuth client ID from the options list.
@@ -60,8 +46,6 @@ To start syncing data from your Bigquery database, you need to add this integrat
         Enter required details like App name, your email, developer contact information, authorized domain etc.
 
         ![](/images/docs/fd1f40b-Screenshot_2022-11-23_at_6.28.58_PM.png)
-
-
       </Step>
 
       <Step title="Step 5">
@@ -77,15 +61,7 @@ To start syncing data from your Bigquery database, you need to add this integrat
 
     <Steps>
       <Step title="Creating a role and granting permissions" stepNumber="1.1">
-        1. Go to the 
-
-           [Roles](https://console.cloud.google.com/iam-admin/roles)
-
-            section of Google Cloud platform dashboard and click on
-
-           **CREATE ROLE**
-
-           .
+        1. Go to the[Roles](https://console.cloud.google.com/iam-admin/roles)section of Google Cloud platform dashboard and click on**CREATE ROLE**.
 
         ![](/images/docs/1593c56-image.png)
 
@@ -93,13 +69,7 @@ To start syncing data from your Bigquery database, you need to add this integrat
 
         ![](/images/docs/f4c596c-Bifrost_role.jpg)
 
-        1. Click on 
-
-           **`ADD PERMISSIONS`**
-
-            
-
-           and add the following permissions
+        1. Click o&#x6E;**`ADD PERMISSIONS`**&#x61;nd add the following permissions
 
         > bigquery.datasets.get
         > bigquery.jobs.create
@@ -108,27 +78,15 @@ To start syncing data from your Bigquery database, you need to add this integrat
         > bigquery.tables.getData
         > bigquery.tables.list
 
-        1. Finally, click on 
-
-           **`CREATE`**
+        1. Finally, click o&#x6E;**`CREATE`**
       </Step>
 
       <Step title="Creating a service account and attaching a role to it" stepNumber="2">
-        1. Go to 
-
-           [Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts)
-
-            and select the project which has the dataset or the table that you want to use and Click on 
-
-           `CREATE SERVICE ACCOUNT`
-
-           .
+        1. Go to [Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts) and select the project which has the dataset or the table that you want to use and Click on`CREATE SERVICE ACCOUNT`.
 
         ![](/images/docs/5fd5659-image.png)
 
-        1. Fill in the Service Account details as shown below, and click on 
-
-           `CREATE AND CONTINUE`
+        1. Fill in the Service Account details as shown below, and click on`CREATE AND CONTINUE`
 
         ![](/images/docs/f032300-Screenshot_2022-11-29_at_11.11.49_AM.png)
 
@@ -136,45 +94,23 @@ To start syncing data from your Bigquery database, you need to add this integrat
 
         ![](/images/docs/14c0317-Screenshot_2022-11-29_at_11.13.18_AM.png)
 
-        1. Click on 
-
-           `Done`
-
-            to move to the list of service accounts.
+        1. Click on`Done`to move to the list of service accounts.
       </Step>
 
       <Step title="Creating and downloading the JSON key" stepNumber="3">
-        1. Click on the three dots icon under Actions in the service account that you just created and select 
-
-           **`Manage keys`**
-
-           , as shown below:
+        1. Click on the three dots icon under Actions in the service account that you just created and selec&#x74;**`Manage keys`**, as shown below:
 
         ![](/images/docs/772b9a7-Screenshot_2022-11-29_at_11.16.39_AM.png)
 
-        1. Click on
-
-           **`ADD KEY`**
-
-           , followed by Create new key, as shown:
+        1. Click o&#x6E;**`ADD KEY`**, followed by Create new key, as shown:
 
         ![](/images/docs/84ae3e5-Screenshot_2022-11-29_at_11.18.37_AM.png)
 
-        1. Select 
-
-           **`JSON `**
-
-           and click on
-
-           **`CREATE`**
+        1. Selec&#x74;**`JSON `**&#x61;nd click o&#x6E;**`CREATE`**
 
         ![](/images/docs/19d6cdb-Screenshot_2022-11-29_at_11.19.04_AM.png)
 
-        1. A 
-
-           `JSON`
-
-            file will be downloaded on your system. This file is required in your database integration form.
+        1. A`JSON`file will be downloaded on your system. This file is required in your database integration form.
       </Step>
     </Steps>
   </Step>

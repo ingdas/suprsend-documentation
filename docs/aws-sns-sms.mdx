@@ -3,10 +3,7 @@ title: "AWS SNS"
 description: "https://aws.amazon.com/sns/"
 ---
 
----
-title: "AWS SNS"
-description: "https://aws.amazon.com/sns/"
----This section is a step-by-step guide to setting up AWS SNS as your SMS service provider.
+This section is a step-by-step guide to setting up AWS SNS as your SMS service provider.
 
 ## Pre-Requisites
 
@@ -22,21 +19,9 @@ To send email through SNS, you need an IAM user (Access-Key-ID and Secret-Access
 
 * Create an IAM user (with Programmatic access).
 
-* Attach Policy 
+* Attach Policy`AmazonSNSFullAccess`to this user.
 
-  `AmazonSNSFullAccess`
-
-   to this user.
-
-* Copy and save the 
-
-  `Access-key-ID`
-
-   and 
-
-  `Secret-Access-Key`
-
-   securely. You'll need to add this information on SuprSend vendor integration page
+* Copy and save the`Access-key-ID`and`Secret-Access-Key`securely. You'll need to add this information on SuprSend vendor integration page
 
 An AWS SNS resource resides in a particular region. Make a note of which aws-region you are going to use for sending SMS. In this guide, we'll assume aws-region :`ap-south-1` for all illustrative purposes.
 
@@ -44,13 +29,9 @@ An AWS SNS resource resides in a particular region. Make a note of which aws-reg
 
 Before moving into configuration steps, here are a few other things to keep in mind:
 
-* **SNS Sandbox Mode:**
+* **SNS Sandbox Mode:**&#x49;f you are creating a new SNS account. Your account will be in SNS sandbox. AWS adds all new accounts in the SNS sandbox by default. In sandbox mode, you'll be able to send messages to only verified destination phone numbers. Once you're done testing, you can move out of the SNS sandbox. Refer next section for the steps to configure SNS sandbox and how to move your account out of it.
 
-   If you are creating a new SNS account. Your account will be in SNS sandbox. AWS adds all new accounts in the SNS sandbox by default. In sandbox mode, you'll be able to send messages to only verified destination phone numbers. Once you're done testing, you can move out of the SNS sandbox. Refer next section for the steps to configure SNS sandbox and how to move your account out of it.
-
-* **Delivery Tracking**
-
-  . We cannot currently track delivery for SMS sent through AWS SNS. This means that messages sent through SNS will always show on triggered state in logs.
+* **Delivery Tracking**. We cannot currently track delivery for SMS sent through AWS SNS. This means that messages sent through SNS will always show on triggered state in logs.
 
 Follow below Steps to add phone number and set tracking in your SNS account:
 
@@ -63,6 +44,10 @@ Follow below Steps to add phone number and set tracking in your SNS account:
     This will open pinpoint console. Click on **"Request Phone Number"** on this screen and provision a phone number from a country where SMS channel is enabled.
 
     <Info>
+      **Phone Number Registration required for USA numbers:**
+
+
+
       If you’re provisioning numbers from USA, you need to complete your phone number registration to send messages successfully across the USA. Read more about phone number registration [here](https://docs.aws.amazon.com/pinpoint/latest/userguide/settings-sms-tfn-register.html)
     </Info>
 
@@ -82,11 +67,7 @@ Follow below Steps to add phone number and set tracking in your SNS account:
 
     If the message is successful, we recommend you to exit sandbox before integrating with SuprSend.
 
-    * Click on 
-
-      **Exit SMS Sandbox**
-
-       from console.
+    * Click on **`Exit SMS Sandbox`** from console.
 
     ![](/images/docs/08e1306-image.png)
 
@@ -112,11 +93,11 @@ Follow below Steps to add phone number and set tracking in your SNS account:
 
     ![](/images/docs/27e8dfa-image.png)
 
-    Once configured, you’ll be able to see delivery logs of your sent messages on this console. You can also access it from cloudwatch console.
+    1. Once configured, you’ll be able to see delivery logs of your sent messages on this console. You can also access it from cloudwatch console.
 
     ![](/images/docs/5eb5497-image.png)
 
-    You’ll also be able to view message analytics on SNS console.
+    1. You’ll also be able to view message analytics on SNS console.
   </Step>
 </Steps>
 

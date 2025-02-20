@@ -1,8 +1,9 @@
 ---
 title: "Amazon SES"
+description: "This section is a step by step guide to select Amazon SES as your email service provider. "
 ---
 
-This section is a step by step guide to select Amazon SES as your email service provider. This guide assumes you have access to AWS console and have necessary permissions. If you don't have an AWS account, then you can [create here](https://aws.amazon.com/resources/create-account/).
+This guide assumes you have access to AWS console and have necessary permissions. If you don't have an AWS account, then you can [create here](https://aws.amazon.com/resources/create-account/).
 
 ## Amazon SES integration on SuprSend account
 
@@ -10,25 +11,13 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
 
 <Steps>
   <Step title="Create AWS IAM user" stepNumber="1">
-    To send email through SES, you need an IAM user (Access-Key-ID and Secret-Access-Key) with necessary permission. To ceate an IAM user, refer to this [documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html)
+    To send email through SES, you need an IAM user (Access-Key-ID and Secret-Access-Key) with necessary permission. To create an IAM user, refer to this [documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html)
 
     * Create an IAM user (with Programmatic access).
 
-    * Attach Policy
+    * Attach Policy`AmazonSESFullAccess `to this user.
 
-      `AmazonSESFullAccess`
-
-      to this user.
-
-    * Copy and save the
-
-      `Access-key-ID`
-
-      and
-
-      `Secret-Access-Key`
-
-      securely. You'll need to add this information on SuprSend vendor integration page
+    * Copy and save the `Access-key-ID`and`Secret-Access-Key`securely. You'll need to add this information on SuprSend vendor integration page
 
     An AWS SES resource resides in a particular region. Make a note of which aws-region you are going to use for sending emails. In this guide, we'll assume aws-region :`ap-south-1` for all illustrative purposes.
   </Step>
@@ -42,29 +31,13 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
 
     In SES console, go to `Configuration sets`
 
-    1. Click
+    1. Click`create set`button to create a new configuration-set
 
-       `create set`
+    2. Give it a name (e.g.`ses_suprsend_configset`)
 
-       button to create a new configuration-set
+    3. Select your Sending IP-pool (you can leave`default`if you don't have a dedicated-IP-pool).
 
-    2. Give it a name (e.g.
-
-       `ses_suprsend_configset`
-
-       )
-
-    3. Select your Sending IP-pool (you can leave
-
-       `default`
-
-       if you don't have a dedicated-IP-pool).
-
-    4. Click
-
-       `Create Set`
-
-       button.
+    4. Click`Create Set`button.
   </Step>
 
   <Step title="Manange Event destinations" stepNumber="4">
@@ -73,6 +46,8 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
     [**Creating Amazon SES event destinations**](https://docs.aws.amazon.com/ses/latest/dg/event-destinations-manage.html)
 
     [Setup SNS event destination for event Publishing](https://docs.aws.amazon.com/ses/latest/dg/event-publishing-add-event-destination-sns.html)
+
+
 
     <Accordion title="Steps to follow for setting up Event Destination and enable Event Tracking:" defaultOpen={false}>
       1. Go to
@@ -150,21 +125,9 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
   <Step title="Give SuprSend permission to Subscribe to SNS topic." stepNumber="5">
     Go to AWS SNS Console and open Topics list. Click on the topic that you created in the earlier step.
 
-    1. Click
+    1. Click`Edit`.
 
-       `Edit`
-
-       .
-
-    2. On the edit page, expand the
-
-       `Access Policy`
-
-       section. The policy looks something like below. You'll notice that the current policy gives
-
-       `sns:Publish`
-
-       permission to your SES account.
+    2. On the edit page, expand the`Access Policy`section. The policy looks something like below. You'll notice that the current policy gives`sns:Publish`permission to your SES account.
 
     <CodeGroup>
       ```json Amazon SNS Console
@@ -193,19 +156,7 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
       ```
     </CodeGroup>
 
-    1. Next you need to add a policy to give
-
-       `sns:Subscribe`
-
-       permission to SuprSend (Account: 924219879248). Add below json inside the
-
-       `Statement`
-
-       list: (replace the "
-
-       `Resource`
-
-       " value with your "Resource" value)
+    1. Next you need to add a policy to give`sns:Subscribe`permission to SuprSend (Account: 924219879248). Add below json inside the`Statement`list: (replace the "`Resource`" value with your "Resource" value)
 
     <CodeGroup>
       ```json Amazon SNS Console
@@ -257,11 +208,7 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
       ```
     </CodeGroup>
 
-    1. Click
-
-       `Save`
-
-       .
+    1. Click`Save`.
   </Step>
 
   <Step title="Fill Vendor settings page on Suprsend" stepNumber="6">
@@ -277,7 +224,7 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
 
     ![](/images/docs/b7074f4-SES.png)
 
-    On the Vendor Settings page, enter the details in the vendor form:
+    1. On the Vendor Settings page, enter the details in the vendor form:
 
     ![](/images/docs/82ef816-Screenshot_2022-08-25_at_6.28.31_PM.png)
   </Step>

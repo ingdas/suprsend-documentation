@@ -98,35 +98,17 @@ Note that this integration only publishes parquet files to your storage bucket. 
     This user will be needed to get the `access key id` and `secret`. To create user permission policy, On your [Amazon AWS IAM Management Console](https://console.aws.amazon.com/iam/) , select `Users Page`from the side bar. If you want to use an existing user, just assign the [permission created in step 2](/docs/amazon_s3#step-2-set-permission-policy-for-the-bucket) to your existing user.
 
     <Accordion title="You can create a new user by these steps" defaultOpen={false}>
-      1. On the user page, click on
+      1. On the user page, click o&#x6E;**"Add users"**
 
-         **"Add users"**
+      2. Add relevant user name, you can use this name for example:`s3-bucket-suprsend`
 
-      2. Add relevant user name, you can use this name for example:
-
-         `s3-bucket-suprsend`
-
-      3. Leave provide user access to the AWS Management Console unchecked and click on
-
-         **"Next: Permissions"**
+      3. Leave provide user access to the AWS Management Console unchecked and click o&#x6E;**"Next: Permissions"**
 
       4. Select Attach existing policies directly.
 
       5. Search for the policy created in step 2 and select it.
 
-      6. Click
-
-         **"Next: Tags"**
-
-         ->
-
-         **"Next:Review"**
-
-         ->
-
-         **"Create User"**
-
-         buttons
+      6. Click **"Next: Tags"** -> **"Next:Review"** -> **"Create User"** buttons.
 
       7. Continue to step 4 before closing the browser.
     </Accordion>
@@ -186,8 +168,6 @@ Note that this integration only publishes parquet files to your storage bucket. 
 
   <Step title="Enable Sync" stepNumber="6">
     Your S3 setup is now complete. Click on **`Enable sync`** to start data export. You can pause and resume your sync anytime you want. To Pause sync for certain data points, deselect the ones not needed from "Data Points to export" and save the changes.
-
-
 
     You can also disable your entire sync by disabling the `Enable sync` button, in which case we’ll stop the export. When you enable your sync again, we send all of your historical data as if you’re starting a new integration.
   </Step>

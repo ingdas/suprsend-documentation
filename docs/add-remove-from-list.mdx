@@ -18,13 +18,13 @@ List will only be created if the `Create list if it doesn't exist` setting is ON
 One common use-case of creating list dynamically is when you need to create different lists based on user topic subscription. For example, there are multiple events happening and you want to create a separate list for each event. List ID in such case can be `{{event_id}}_subscribers` and List name `{{event_name}} - subscribers`.
 
 <Warning>
-  Please note that list ID only supports following characters - \`a-z,0-9,-,\_\`. Ensure that list\_id variable resolves to a valid format; otherwise, list creation will fail.
+  Please note that list ID only supports following characters - \`a-z,0-9,-,\_\`. Ensure that list\_id variable resolves to a valid format; otherwise, list creation will fail. 🚧
 </Warning>
 
 ### Lists vs. Objects for Topic Subscriptions
 
-[Lists](/docs/lists) are ideal for one-time broadcasts to large user groups with high throughput (up to 1000 notifications/second). Example: Sending announcements or updates to all users subscribed to a particular event.
+* [Lists](/docs/lists) are ideal for one-time broadcasts to large user groups with high throughput (up to 1000 notifications/second). Example: Sending announcements or updates to all users subscribed to a particular event.
 
-[Objects](/docs/objects) are better for reusable topic subscriptions when additional workflows need to be triggered for the same subscribers. Example: Notifying team members or running nested workflows for hierarchical subscribers.
+* [Objects](/docs/objects) are better for reusable topic subscriptions when additional workflows need to be triggered for the same subscribers. Example: Notifying team members or running nested workflows for hierarchical subscribers.
 
 ***

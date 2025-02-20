@@ -1,8 +1,9 @@
 ---
 title: "Best Practices for API Keys Management"
+description: "SuprSend uses API keys to authenticate requests. "
 ---
 
-SuprSend uses API keys to authenticate requests. SuprSend provides 2 methods for authentication:
+SuprSend provides 2 methods for authentication:
 
 * [Workspace Key & Secret](/docs/best-practices-for-api-keys-management#1-workspace-key--secret)
 
@@ -18,21 +19,15 @@ The Workspace Key and Secret are pre-generated for every environment. You can ac
 
 1. Go to a workspace > Settings (left panel) > API Keys
 
-2. On API Keys page, you will find 
-
-   `Workspace Key`
-
-    and 
-
-   `Workspace Secret`
-
-   . Click on them to copy.
+2. On API Keys page, you will find`Workspace Key`and`Workspace Secret`. Click on them to copy.
 
 ![](/images/docs/9a0aa16-image.png)
 
 If you wish to rotate the Workspace Key & Secret, please contact us on [\[email protected\]](/cdn-cgi/l/email-protection#eb989e9b9b84999fab989e9b99988e858fc5888486)
 
-<Warning />
+<Warning>
+  🚧 Never share workspace secret with anyone including our support team
+</Warning>
 
 ## 2. API Keys
 
@@ -44,26 +39,24 @@ Use these steps to create an API key for your SuprSend account:
 
 1. Go to a workspace > Settings (left panel) > API Keys
 
-2. On API Keys page, click on 
-
-   `Generate Key`
+2. On API Keys page, click on`Generate Key`
 
 3. Enter a Name for the API key
 
 ![](/images/docs/bcc40c1-image.png)
 
-1. Select 
-
-   `Create and View`
-
-    and copy the token
+1. Select`Create and View`and copy the token
 
 ![](/images/docs/dcd6078-image.png)
 
 <Warning>
-  The token is only displayed once. Store the token somewhere secure that you can access when you make API requests.
+  🚧 The token is only displayed once. Store the token somewhere secure that you can access when you make API requests.
+
+
 
   Your API keys carry many privileges. Don't store them in publicly-accessible areas.
+
+
 
   After rotating tokens make sure you always use the new token.
 </Warning>
@@ -72,11 +65,7 @@ Use these steps to create an API key for your SuprSend account:
 
 As a security best practice, rotate tokens periodically.
 
-* To rotate an existing API key, select 
-
-  `Disable`
-
-   to disable the existing key and generate a new API key.
+* To rotate an existing API key, select`Disable`to disable the existing key and generate a new API key.
 
 ![](/images/docs/4926893-image.png)
 

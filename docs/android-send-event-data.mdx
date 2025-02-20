@@ -11,13 +11,9 @@ In this section, we'll cover how to send events to the Suprsend platform for bot
 
 2. [Create User Profile](/docs/android-create-user)
 
-3. [Create Template on SuprSend platform](/docs/templates)
+3. [Create Template on SuprSend platform](/docs/templates)- if you want to trigger workflow by passing the event
 
-   \- if you want to trigger workflow by passing the event
-
-4. [Create Workflow on SuprSend Platform](/docs/workflows)
-
-   \- if you want to trigger workflow by passing the event
+4. [Create Workflow on SuprSend Platform](/docs/workflows)- if you want to trigger workflow by passing the event
 
 ## Create Workflow on SuprSend Platform
 
@@ -47,6 +43,10 @@ You can send Events from your app to SuprSend platform by using `ssApi.track()` 
 </CodeGroup>
 
 <Warning>
+  **Naming Guideline:**
+
+
+
   When you create an Event or a property, please ensure that the Event Name or Property Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
 </Warning>
 
@@ -95,8 +95,6 @@ Super properties are data that are always sent with events data. These super pro
       })
       ```
     </CodeGroup>
-
-
 
     Default Super properties tracked by SuprSend SDK:
 

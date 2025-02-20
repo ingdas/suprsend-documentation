@@ -52,9 +52,19 @@ In SuprSend, Tenants are workspace level entity. By default, SuprSend creates a 
 | tenant colors (primary, secondary, tertiary) | tenant colors settings are mainly used while designing templates. If you don't provide any of the colors for the tenant, SuprSend will assume you want to use the default values, so color settings will automatically be set to the color settings of `default` tenant.                |
 | social\_links: (optional)                    | urls of social media accounts of the tenant                                                                                                                                                                                                                                             |
 
-<Warning>
-  While updating a social link, if you pass its value as null, then SuprSend will ignore it. If you really want to remove the value you must the value="" (instead of null) e.g. If you want to remove social\_link url for `facebook`, you must pass `facebook=""` \{ "social\_links": \{ "facebook": "" } }
-</Warning>
+<Tip>
+  While updating a social link, if you pass its value as null, then SuprSend will ignore it.&#x20;
+
+  If you really want to remove the value you must the value="" (instead of null)
+
+
+
+  Example:
+
+  &#x20;If you want to remove social\_link url for `facebook`, you must pass:&#x20;
+
+  `facebook=""` \{ "social\_links": \{ "facebook": "" } }
+</Tip>
 
 #### properties:
 
