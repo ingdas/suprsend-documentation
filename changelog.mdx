@@ -3,9 +3,60 @@ description: "SuprSend's Official Documentation for Updates "
 title: "Changelog"
 ---
 
-
-
 changelogs:
+
+
+
+
+
+<Update label="3 months ago" description="version 1.0">
+  ## New workflow node: Update User Profile
+
+  You can now update recipient or actor profiles directly within a workflow. This feature simplifies user profile management by enabling real-time updates as part of the workflow process.
+
+
+
+  If your have event-based system, where user profile changes are coming as events from your product or a third-party system, you don't need to convert it into user update APIs in your codebase. Simply send events to SuprSend, and let workflows handle user profile updates seamlessly.
+
+  ![](https://files.readme.io/f7bdefc09935b99e8d955213f0d7eab3c93701796aa6f9a6a8e96567ca8135cd-image.png)
+
+  ### Key use cases
+
+  1. **Event-based user profile updates**: Simply send events to SuprSend when user updates their profile in your product or when you are setting custom profile attributes as a side-effect of related action, for example, in a job board, change user's application status when employer shortlists the profile.
+
+  2. **Update user profile based on a workflow step**: Common use cases include fetching data during the workflow to update the user profile or updating the profile when a user successfully completes a step. For instance, during onboarding, update `%completion` in user profile when they complete a step.
+</Update>
+
+<Update label="3 months ago" description="version 1.0">
+  ## Update Object subscriptions within workflow
+
+  You can now dynamically update [object subscriptions](https://docs.suprsend.com/docs/subscriptions) directly within a workflow. This enhancement eliminates the need for separate API calls for object update, allowing you to manage everything seamlessly within workflows.
+
+
+
+  If you have event-based systems where all asset updates are coming in form of event from your product or third-party systems, you don't have to consume those events internally and write custom APIs to update individual assets (user, list, object) in SuprSend. Simply send events and let the workflow handle object subscriptions and user profile updates, making SuprSend truly a single API integration.
+
+  ![](https://files.readme.io/4b3b8685f7ba6cd7df826940fc680f6120a299e14c6ecb615c1fa30e05f9ae4e-image.png)
+
+  ### Example use case
+
+  When someone subscribes to a topic (like a tournament), add them as a subscriber to the corresponding tournament object. Later, just trigger tournament related events to SuprSend and the object will automatically fan out and send notification to all users subscribed to the topic.
+</Update>
+
+<Update label="3 months ago" description="version 1.0">
+  ## New workflow node: Add / Remove user in list
+
+  You can now dynamically update list users as part of workflow execution. This is a step toward creating user segments based on events or workflow progression, removing the need to call the List Update API separately.
+
+  ![](https://files.readme.io/4720092f5cccb662c8c9311b1116f30402cd39dfb3cb388151845efc8cd57584-image.png)
+
+
+  ### Key use cases
+
+  1. **Event-based segmentation**- When an event occurs, trigger notification to the user and simultaneously add them to a list for future updates. For example, when a user registers for an upcoming event or webinar, you can send them confirmation email and add them to a list to later send further updates related to the event.
+
+  2. **Workflow Step-based segmentation** - Another use case is dynamically adding or removing a user from the list when they complete a workflow step. For example, in a knowledge series designed to onboard new users, remove a user from the POC list once they complete onboarding.
+</Update>
 
 <Update label="3 months ago" description="version 1.0">
   ## Deletion APIs
@@ -24,8 +75,6 @@ changelogs:
 
   ![](https://files.readme.io/b6e2c61e42973d06c79e51a5cef440b61b6ab4c1325fd98cc8903a0ccf7dcdf1-image.png)
 
-
-
   Delete function just deletes the asset and their related data, including preferences. It doesn't have any effect on the historical workflows or broadcasts already executed. While calling the delete function, ensure no active workflows are running for the asset, else the execution will fail.
 </Update>
 
@@ -40,13 +89,7 @@ changelogs:
 
   * **Anonymous to Identified Transition**: Platforms often track user actions anonymously before sign-up or login. During this period, user actions are typically tracked under an anonymous ID.
 
-
-
-
     Upon sign-up, merge the anonymous profile into the newly created identifier to preserve historical data and
-
-
-
 
     Associate it with the identified user profile.
 </Update>
@@ -70,11 +113,7 @@ changelogs:
 
   We’re excited to introduce a powerful new capability in SuprSend: [Objects](https://docs.suprsend.com/docs/objects). Objects allow you to manage complex user relationship and notify user groups without identifying individual recipients in your trigger. Ideal for building scalable pub/sub and subscription alerting without having to maintain event to subscriber mapping in your database.&#x20;
 
-
-
   You can directly map [object-user subscription](https://docs.suprsend.com/docs/subscriptions) mapping in SuprSend and SuprSend can efficiently fan-out notifications to thousands of users simultaneously.
-
-
 
   ![](https://files.readme.io/76f305efa893498f97544909690354c70b6d547adc925ab11cf49ec5a65aa6a2-image.png)
 
@@ -82,26 +121,14 @@ changelogs:
 
   * **Send notifications to non-user entities like group emails, Slack channels, or shared inboxes** (e.g., a Notion feed). Ideal for SaaS applications sending account-level alerts (e.g., anomaly notifications) to shared channels. Objects can have it's own channels and preferences to handle this usecase.
 
-
-
-
   * **Group users by topic or subscription and send them alerts without having to call individual recipients in the trigger**. A good example could be SaaS applications managing notifications for end-users, where recipient relationships are coming from a different system, and notification triggers or notification calls are coming from a different system which doesn't have information of the users subscribed to that trigger.
 
-
-
-
   * **Maintain hierarchical user relationship with nested object subscription**. For example, sending announcements to all the entire team of customer while sending invoice related alerts to finance team. You can handle this by creating object for finance team and then adding it as subscriber to customer object.
-
-
 
   Objects can be easily tested from platform with all all object related actions available on SuprSend console. You can programatically manage objects from your codebase using [rest API calls](/reference/create-update-objects). Support for SDKs coming soon...
 
   If there's any usecase in object that you think is missing and needs to be solved, please reach out to our [support](mailto:support@suprsend.com).
-
-
 </Update>
-
-
 
 <Update label="4 months ago" description="version 1.0">
   ## Datetime comparators in workflow conditions
@@ -130,8 +157,6 @@ changelogs:
 
   To enhance security and transparency, we’ve introduced Audit Trail to help you monitor and track actions happening on your SuprSend console. You can use this to keep track of unwanted or malicious actions in your account.&#x20;
 
-
-
   This initial release logs critical account actions along with location and actor details (team member performing the action). You can also filter by team member (actor), specific action or timestamp.
 
   ![](https://files.readme.io/83548373b4b68f410793913d1114c5d54b9da2b62a59125ccac82d4c93c00b47-image.png)
@@ -158,8 +183,6 @@ changelogs:
   ## Sample Workflow Library
 
   With the growing number of workflow nodes, we understand that designing the optimal workflow logic can be tricky. That’s why we’ve built out a library of the most-requested, complex workflow samples to make things easier.&#x20;
-
-
 
   Now, when you create a new workflow, you can pick from these pre-built samples right within the platform. We’ll continue adding more samples over time—if you have specific use cases, feel free to share them with us at [product@suprsend.com](mailto:product@suprsend.com), and we’ll add them in the library!
 
@@ -190,7 +213,6 @@ changelogs:
   ## Subscriber Page Revamp
 
   We have revamped subscriber listing page to include relevant information upfront and also, added advanced filtering options on email, phone, active channels, channel count for an entity, and more.
-
 
   All filters are powered by auto-complete search and selectable options, providing you easy access to available filtering options.
 
@@ -281,8 +303,6 @@ changelogs:
 
   We are excited to announce significant improvements in our latest update, focusing on enhancing delivery tracking for iOS push notifications. Regardless of the application's state, you will now experience more reliable and precise delivery tracking.
 
-
-
   We have rolled out updates for all our major SDKs. To take full advantage of these improvements, please ensure that you update your dependencies promptly.
 
   * [iOS SDK](https://github.com/suprsend/SuprSend-iOS-SDK/releases/tag/1.0.3) - v1.0.3
@@ -311,11 +331,7 @@ changelogs:
 
   We’re excited to announce a powerful update to our Wait Until feature! You can now add multiple events and apply conditions on event properties within the Wait Until branch, allowing for more precise event filtering and targeting of the exact event required in your workflow.
 
-
-
   This is especially useful for scenarios where the same event triggers multiple workflows, and you want to exit or cancel a notification based on user actions.&#x20;
-
-
 
   For example, in a booking reminder workflow, if a user has multiple bookings, you can now match the booking ID of a cancellation event with the original event to ensure correct reminder gets canceled.
 
@@ -406,7 +422,6 @@ changelogs:
   ## New Email Integration: Mailjet
 
   On customer request, we've added **Mailjet** in our supported email vendor list. To send out emails through Mailjet, all you have to do is add your vendor credentials on SuprSend dashboard and you are good to go.
-
 
   Check out [vendor integration doc](/docs/mailjet) for setup details.
 </Update>
