@@ -23,35 +23,35 @@ All preference methods and properties are available under ***suprsend.user.prefe
 
 ### Properties
 
-1. [data](/docs/preferences-javascript#data-property) - The data set you'll need to populate the categories and channels on user's preference page
+* [data](/docs/preferences-javascript#data-property) - The data set you'll need to populate the categories and channels on user's preference page
 
 ### Methods
 
-1. [get\_preferences](/docs/preferences-javascript#get_preferences) - get full user preferences data from the SuprSend
+* [get\_preferences](/docs/preferences-javascript#get_preferences) - get full user preferences data from the SuprSend
 
-2. [update\_category\_preference](/docs/preferences-javascript#update_category_preference) - method to update overall category preference when user opts out and opts in the category using category level switch.
+* [update\_category\_preference](/docs/preferences-javascript#update_category_preference) - method to update overall category preference when user opts out and opts in the category using category level switch.
 
 ![](/images/docs/3fb9ea2-update_category.png)
 
-1. [update\_channel\_preference\_in\_category](/docs/preferences-javascript#update_channel_preference_in_category) - method to update channel preference inside a category when user opts out and opts in a channel inside the category.
+* [update\_channel\_preference\_in\_category](/docs/preferences-javascript#update_channel_preference_in_category) - method to update channel preference inside a category when user opts out and opts in a channel inside the category.
 
 ![](/images/docs/f6806e6-channel-category-update.png)
 
-1. [update\_overall\_channel\_preference](/docs/preferences-javascript#update_overall_channel_preference) - method to update overall channel preference for instance if user wants to receive only important notifications on SMS.
+* [update\_overall\_channel\_preference](/docs/preferences-javascript#update_overall_channel_preference) - method to update overall channel preference for instance if user wants to receive only important notifications on SMS.
 
 ![](/images/docs/9491874-channel-update.png)
 
 ### Event Listeners
 
-1. [preferences\_updated](/docs/preferences-javascript#preferences_updated) - You'll get this event as soon as preference changes are updated. Response will return return the updated preference data object which you can use to update your UI.
+* [preferences\_updated](/docs/preferences-javascript#preferences_updated) - You'll get this event as soon as preference changes are updated. Response will return return the updated preference data object which you can use to update your UI.
 
-2. [preferences\_error](/docs/preferences-javascript#preferences_error) - This error event is fired when there are errors in API requests or implementation.
+* [preferences\_error](/docs/preferences-javascript#preferences_error) - This error event is fired when there are errors in API requests or implementation.
 
 ### Enums
 
-1. [PreferenceOptions](/docs/preferences-javascript#preferenceoptions) - Enum to read and update **category preference** and **channel preference in category**
+* [PreferenceOptions](/docs/preferences-javascript#preferenceoptions) - Enum to read and update **category preference** and **channel preference in category**
 
-2. [ChannelLevelPreferenceOptions](/docs/preferences-javascript#channellevelpreferenceoptions) - Enum to read and update overall **channel preference**
+* [ChannelLevelPreferenceOptions](/docs/preferences-javascript#channellevelpreferenceoptions) - Enum to read and update overall **channel preference**
 
 ## Properties
 
@@ -117,11 +117,7 @@ We have to loop through the **data** property and create UI accordingly. This is
   ```
 </CodeGroup>
 
-
-
 **Sample data:**
-
-
 
 <CodeGroup>
   ```javascript javascript
@@ -288,8 +284,6 @@ Added as sections -> sub-categories on notification category page. This is the a
 
 **Sample data:**
 
-
-
 <CodeGroup>
   ```javascript javascript
   suprsend.user.preferences.data = {
@@ -348,8 +342,6 @@ This contains a list of channels, channel preference status and whether it's edi
 | is\_editable | boolean           | Indicates if the preference checkbox is disabled or not. If its value is false then the preference setting for that channel can't be edited       |
 
 #### Sample data:
-
-
 
 <CodeGroup>
   ```javascript javascript

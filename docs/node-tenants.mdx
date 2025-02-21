@@ -1,8 +1,9 @@
 ---
-title: "Tenants/Brands"
+title: "Tenants"
+description: "Tenants are used for personalizing communication on behalf of some other entity/organization. "
 ---
 
-Tenants are used for personalizing communication on behalf of some other entity/organization. In SuprSend, tenants are workspace level entities. By default, SuprSend creates a brand with `brand_id="default"` (representing your organization) in each of your workspaces. You can create more brands using one of our backend SDKs or from SuprSend Dashboard.
+In SuprSend, tenants are workspace level entities. By default, SuprSend creates a tenant with `tenant_id="default"` (representing your organization) in each of your workspaces. You can create more tenans using one of our backend SDKs or from SuprSend Dashboard.
 
 ## Tenant datastructure:
 
@@ -10,7 +11,7 @@ Tenants are used for personalizing communication on behalf of some other entity/
   ```json json
   {
     "tenant_id": "br-01",
-    "tenant_name": "Awesome Brand",
+    "tenant_name": "Awesome Tenant",
     "logo": "https://ik.imagekit.io/l0quatz6utm/suprsend/staging/media/suprsend-only-logo_c8aa27faef118418e8c5bd7b31a1cafc74e09200.png",
     "primary_color": "#ff0000",
     "secondary_color": "#00ff00",
@@ -43,6 +44,7 @@ Tenants are used for personalizing communication on behalf of some other entity/
 | colors (primary, secondary, tertiary) | used while designing templates. If not provided `default` tenant colour will be picked.                                                                                   |
 | social\_links                         | social links to your tenant. Pass `""` if you want to remove existing link.                                                                                               |
 | properties                            | Custom properties associated with the tenant. Update operation is upsert (new properties are added to existing one's and if key is already present, value is overridden). |
+|                                       |                                                                                                                                                                           |
 
 ## Tenant methods
 
@@ -75,8 +77,8 @@ This method will create a new tenant or update an existing tenant.
 
 <CodeGroup>
   ```javascript Javascript
-  const response = supr_client.brands.list();  // default limit 20
-  const response = supr_client.brands.list({limit:20, offset:0}); //  max limit 1000
+  const response = supr_client.tenants.list();  // default limit 20
+  const response = supr_client.tenants.list({limit:20, offset:0}); //  max limit 1000
   ```
 </CodeGroup>
 

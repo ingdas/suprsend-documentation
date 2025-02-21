@@ -11,41 +11,17 @@ description: "Types of errors and their resolutions"
 
 Errors can essentially occur at 4 stages when triggering a notification:
 
-* [API Errors](/docs/error-guides#api-errors)
+* [API Errors](/docs/error-guides#api-errors): These errors occur at API level
 
-  : These errors occur at API level
-
-* [Workflow is not processed](/docs/error-guides#workflow-not-processed)
-
-  : SuprSend could not process the workflow due to issues in the workflow or event payload such as the user's 
-
-  `distinct_id`
-
-   is not found in the SuprSend database or missing template information.
+* [Workflow is not processed](/docs/error-guides#workflow-not-processed): SuprSend could not process the workflow due to issues in the workflow or event payload such as the user's`distinct_id`is not found in the SuprSend database or missing template information.
 
 ![](/images/docs/731605c-image.png)
 
-* **Workflow processed, but notification for one or more channels is not triggered by SuprSend**
-
-  : This type of error occurs from template rendering failures or incorrect/missing channel information in the user profile. Refer 
-
-  [section below](/docs/error-guides#notification-not-triggered-by-suprsend)
-
-   to debug these errors.
+* **Workflow processed, but notification for one or more channels is not triggered by SuprSend**: This type of error occurs from template rendering failures or incorrect/missing channel information in the user profile. Refer[section below](/docs/error-guides#notification-not-triggered-by-suprsend)to debug these errors.
 
 ![](/images/docs/8c7445f-image.png)
 
-* **Vendor didn't accept the sent request or returned delivery failure error**
-
-  : In such cases, you'll see 
-
-  `Trigger failed`
-
-   or 
-
-  `Failure by Vendor`
-
-   status in the third step of the logs. These errors are passed by the vendor when SuprSend initiates a send call to the vendor. Hover over the 'i' icon to view the error message. For detailed troubleshooting, refer to the individual vendor guides.
+* **Vendor didn't accept the sent request or returned delivery failure error**: In such cases, you'll see`Trigger failed`or`Failure by Vendor`status in the third step of the logs. These errors are passed by the vendor when SuprSend initiates a send call to the vendor. Hover over the 'i' icon to view the error message. For detailed troubleshooting, refer to the individual vendor guides.
 
 ![](/images/docs/aa1d49e-image.png)
 
@@ -128,25 +104,33 @@ Broadcast logs are visible inside broadcast tab on logs page.
 
 <AccordionGroup>
   <Accordion title="I triggered an event but it doesn't appear in dashboard logs?" defaultOpen={false}>
-    We currently do not track individual event trigger currently unless it's associated with a workflow. If you don't see an event trigger in logs, check if there are active workflows linked to that event on SuprSend dashboard. Another reason could be if you are using idempotency key and 2 requests have the same idempotency key. SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives another request with the same idempotency\_key in a 24 hour span, it will skip processing those requests. Know more about idempotency key [here](/docs/python-trigger-workflow-from-api#idempotent-requests).
+    We currently do not track individual event trigger currently unless it's associated with a workflow. If you don't see an event trigger in logs, check if there are active workflows linked to that event on SuprSend dashboard.&#x20;
+
+
+
+    Another reason could be if you are using idempotency key and 2 requests have the same idempotency key. SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives another request with the same idempotency\_key in a 24 hour span, it will skip processing those requests.&#x20;
+
+
+
+    Know more about idempotency key [here](/docs/python-trigger-workflow-from-api#idempotent-requests).
   </Accordion>
 
   <Accordion title="I added channels to the user profile, but they are not reflected in subscriber profile on SuprSend dashboard?" defaultOpen={false}>
     Check the format of value passed in user channels. Channel will not be updated in profile if the format is incorrect. Supported format for each channel:
 
-    * SMS, Whatsapp - 
+    * SMS, Whatsapp -
 
       `+15555555555`
 
-       (country code is mandatory)
+      (country code is mandatory)
 
-    * Email - 
+    * Email -
 
       `[email protected]`
 
     * [Refer here](/docs/python-create-user-profile#1-add-user-channels)
 
-       for other channel formats.
+      for other channel formats.
   </Accordion>
 </AccordionGroup>
 

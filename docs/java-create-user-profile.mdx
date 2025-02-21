@@ -3,14 +3,6 @@ title: "Create User Profile"
 description: "This document will cover the methods to create a user and set channel preferences"
 ---
 
-You can follow the steps mentioned in the documentation below or refer to our quick code recipe
-
-🦉
-
-Create User using Java SDK
-
-Open Recipe
-
 ## Pre-requisites
 
 [Integrate Java SDK](/docs/integrate-java-sdk)
@@ -419,8 +411,6 @@ Response is an instance of `suprsend.BulkResponse` class
 
 You can use SuprSend Python SDK to set advanced user properties, which will help in creating a user profile. You can use these properties to create user cohorts on SuprSend's platform with future releases.
 
-
-
 <AccordionGroup>
   <Accordion title="Set" defaultOpen={false}>
     Set is used to set the custom user property or properties. The given name and value will be assigned to the user, overwriting an existing property with the same name if present. It can take key as first param, value as second param for setting single user property or object for setting multiple user properties.
@@ -494,8 +484,6 @@ You can use SuprSend Python SDK to set advanced user properties, which will help
     # For incrementing multiple properties:
     u1.increment({"login_count" : 1, "order_count" : 1})
     ```
-
-
   </Accordion>
 
   <Accordion title="Append" defaultOpen={false}>
@@ -516,8 +504,6 @@ You can use SuprSend Python SDK to set advanced user properties, which will help
     # For appending multiple properties:
     u1.append({"wishlist" : "iphone12", "wishlist" : "Apple airpods"})
     ```
-
-
   </Accordion>
 
   <Accordion title="Remove" defaultOpen={false}>
@@ -538,8 +524,6 @@ You can use SuprSend Python SDK to set advanced user properties, which will help
     # For removing multiple properties:
     u1.remove({"wishlist" : "iphone12", "wishlist": "Apple airpods"})
     ```
-
-
   </Accordion>
 
   <Accordion title="Unset" defaultOpen={false}>
@@ -564,9 +548,9 @@ You can use SuprSend Python SDK to set advanced user properties, which will help
   </Accordion>
 </AccordionGroup>
 
-| Parameters         | Type           | Description                                                        |
-| ------------------ | -------------- | ------------------------------------------------------------------ |
-| **key**            | string         | This property provided will be deleted from user properties        |
-| **property\_list** | array\[string] |  If list is given all properties included in list will be removed. |
+| Parameters         | Type           | Description                                                       |
+| ------------------ | -------------- | ----------------------------------------------------------------- |
+| **key**            | string         | This property provided will be deleted from user properties       |
+| **property\_list** | array\[string] | If list is given all properties included in list will be removed. |
 
 ***

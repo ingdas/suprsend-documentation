@@ -11,23 +11,11 @@ Also check our [best practices](/docs/best-practices) to design an effective not
 
 <Steps>
   <Step title="Configure Production Workspace (Vendor and API keys)" stepNumber="1">
-    * Add 
-
-      [vendor settings](/docs/vendors)
-
-       in your production workspace for the channels you plan to use for notifications.
+    * Add [vendor settings](/docs/vendors) in your production workspace for the channels you plan to use for notifications.
 
     * Set the API keys, workspace key, and secret for your production workspace in both client-side and server-side applications.
 
-    * For Inbox integration, update the Inbox secret in your server-side code to generate user 
-
-      [HMAC](/docs/hmac-authentication)
-
-       for the production environment. You can obtain this secret from the 
-
-      [Inbox vendor configuration page](https://app.suprsend.com/en/staging/vendors/inbox/suprsend-inbox?brand_id=default)
-
-       on the SuprSend dashboard.
+    * For Inbox integration, update the Inbox secret in your server-side code to generate user [HMAC](/docs/hmac-authentication) for the production environment. You can obtain this secret from the [Inbox vendor configuration page](https://app.suprsend.com/en/staging/vendors/inbox/suprsend-inbox?brand_id=default) on the SuprSend dashboard.
   </Step>
 
   <Step title="Setup Notification tracking" stepNumber="2">
@@ -36,7 +24,7 @@ Also check our [best practices](/docs/best-practices) to design an effective not
 
   <Step title="Sync users in your production workspace" stepNumber="3">
     <Warning>
-      only required if you are using event based workflow triggers
+      Only required if you are using event based workflow triggers
     </Warning>
 
     You can [setup user sync](/docs/users#creating-user-profile-on-suprsend) from your frontend application or via backend systems. The best way to keep user data updated at all times is to setup a sync when user profile is created or updated in your database.
@@ -47,17 +35,9 @@ Also check our [best practices](/docs/best-practices) to design an effective not
   <Step title="Thoroughly test your workflows in staging workspace" stepNumber="4">
     Test your workflow changes using test runner with actual trigger data to make sure that template content and workflow logic is working as expected. Some common issues to check:
 
-    * URLs and text with special characters should be enclosed in triple curly braces 
+    * URLs and text with special characters should be enclosed in triple curly braces`{{{...}}}`to avoid random text added in final template due to HTML character escaping.
 
-      `{{{...}}}`
-
-       to avoid random text added in final template due to HTML character escaping.
-
-    * Adding batch node in workflow also changes the output variables structure and the template should also be modified to include batched variables output. See how to add 
-
-      [batched variables in templates](/docs/batch#using-batch-variables-in-templates)
-
-      .
+    * Adding batch node in workflow also changes the output variables structure and the template should also be modified to include batched variables output. See how to add [batched variables in templates](/docs/batch#using-batch-variables-in-templates).
 
     * Remember to commit all template and workflow changes, as uncommitted edits will not be used when triggered from backend.
   </Step>

@@ -17,16 +17,6 @@ To send notifications on Microsoft Teams, you'll need to create a Teams bot. Thi
 
 In this documentation, we'll create an app to send direct messages to users or Team channels. Here's an overview of the steps required to integrate and notify on Microsoft teams:
 
-1.
-
-2. [Add teams bot configuration on SuprSend platform](/docs/microsoft-teams#step-2-add-teams-integration-on-suprsend) - SuprSend will use this configuration to route notifications via your Teams bot to the respective teams workspace.
-
-By following the above steps, your Teams integration will be setup. The next steps will be to
-
-1. [Update user or channel profile](/docs/microsoft-teams#step-3-update-teams-channel-in-user-profile) to send message
-
-2. [Create Microsoft Teams template ](/docs/ms-teams-template)and trigger workflowx
-
 <Steps>
   <Step title=" Create Teams App">
     You'll have to create a [Teams App](/docs/microsoft-teams#step-1-create-teams-app) to send notifications via SuprSend. User will have to add this App in their Teams workspace and channel to start getting notifications through the App. You can learn more about Apps [here](https://learn.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/teams-developer-portal).
@@ -123,8 +113,6 @@ By following the above steps, your Teams integration will be setup. The next ste
   <Step title="Update teams channel in user profile">
     The information required in the user profile is dependent on the type of message you are sending.
 
-
-
     <AccordionGroup>
       <Accordion title="Sending a direct message" defaultOpen={false}>
         To send a direct message to a user, add `tenant_id` , `service_url` of the tenant, and `conversation_id` or `user_id` corresponding to user personal chat.
@@ -182,11 +170,7 @@ By following the above steps, your Teams integration will be setup. The next ste
           ```
         </CodeGroup>
 
-
-
         **Getting tenant ID, user ID, conversation ID:**
-
-
 
         You'll get **tenant ID** from your developer azure portal.
 
@@ -217,8 +201,6 @@ By following the above steps, your Teams integration will be setup. The next ste
         ![](/images/docs/363ff8c-image.png)
 
         We recommend creating a separate user for identifying channels and not mix it in user profile. You can create a teams channel user with `distinct_id` as `channel_<channel_name>` so it's easy for you to remember and pass in your workflow calls whenever you want to send message on a teams channel.
-
-
 
         <CodeGroup>
           ```python python
@@ -296,8 +278,6 @@ By following the above steps, your Teams integration will be setup. The next ste
 
         **Get Incoming webhook for a teams channel:**
 
-
-
         To get incoming webhook, select **connectors** from channel -> more options.
 
         ![](/images/docs/f99ea8e-image.png)
@@ -356,8 +336,6 @@ By following the above steps, your Teams integration will be setup. The next ste
         The profile will be saved as `{"incoming_webhook": { "url": "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"}}`
       </Accordion>
     </AccordionGroup>
-
-
   </Step>
 
   <Step title="Create Teams template">

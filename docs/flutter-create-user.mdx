@@ -21,6 +21,8 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
   <Step title="Create/Identify a new user You can identify a user using suprsend.identify() method" stepNumber="1">
     Call this method as soon as you know the identity of user, that is after login authentication. If you don't call this method, user will be identified using distinct\_id (uuid) that sdk generates internally.
 
+
+
     When you call this method, we internally create an event called **$user\_login**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
 
     <CodeGroup>
@@ -42,7 +44,11 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
   <Step title="Call reset to clear user data on log out" stepNumber="2">
     As soon as the user logs out, call `suprsend.reset()` method to clear data attributed to a user. This will generate a new random `distinct_id` and clear all super properties. This allows you to handle multiple users on a single device.
 
+
+
     When you call this method, we internally create an event called **$user\_logout**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
+
+
 
     <CodeGroup>
       ```javascript Dart
@@ -57,8 +63,6 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
 
   <Step title="Set Communication Channel preferences" stepNumber="3">
     You can send communication channel details of a user to the SuprSend SDK. We will store the channel details in the user profile. This will allow us to send communications to a user on the channels available for that user whenever there is any communication trigger.
-
-
 
     <AccordionGroup>
       <Accordion title="Add User Channels" defaultOpen={false}>
@@ -97,8 +101,6 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
         </CodeGroup>
       </Accordion>
     </AccordionGroup>
-
-
   </Step>
 </Steps>
 

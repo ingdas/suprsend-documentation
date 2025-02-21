@@ -15,43 +15,23 @@ Delivery node is successfully executed if all of the below checks hold true:
 
 1. The channel should be published and live in the template. For WhatsApp and SMS (Indian vendors), templates become live upon approval by the respective provider.
 
-2. Vendor Configuration is available for the channel. For all out-of-app channels, you need to create an account with the respective 
+2. Vendor Configuration is available for the channel. For all out-of-app channels, you need to create an account with the respective [channel provider](/docs/vendors) and add the configuration in the vendor form on SuprSend dashboard. Inbox is an internal offering by SuprSend and doesn't need any third party integration. [Refer Integration guide](/docs/inbox-overview) to setup Inbox Channel.
 
-   [channel provider](/docs/vendors)
+3. Channel information should be available in user profile and channel status should be active. Template channels not available in user profile are skipped for delivery. A set channel becomes inactive in case the channel is`removed `or `unset`using [SDK or API](/docs/users#via-sdk) or it is marked inactive by SuprSend.
 
-    and add the configuration in the vendor form on SuprSend dashboard. Inbox is an internal offering by SuprSend and doesn't need any third party integration. 
+4. User preference is`opt-in `for the given channel and notification category (defined in workflow settings). You can check user preference status using [get user preference API](/reference/get-user-preferences-single-category).
 
-   [Refer Integration guide](/docs/inbox-overview)
+<Tip>
+  📘 SuprSend marks the user channel identity inactive for email and whatsapp in case of hard errors from vendor end, such as bounced email addresses, unregistered whatsapp numbers.&#x20;
 
-    to setup Inbox Channel.
 
-3. Channel information should be available in user profile and channel status should be active. Template channels not available in user profile are skipped for delivery. A set channel becomes inactive in case the channel is 
 
-   `removed`
+  This is done to safeguard your email domain authority or whatsapp rating if you continue to send notifications to users who have reported or marked your email or messages as spam.&#x20;
 
-    or 
 
-   `unset`
 
-    using 
-
-   [SDK or API](/docs/users#via-sdk)
-
-    or it is marked inactive by SuprSend.
-
-4. User preference is 
-
-   `opt-in`
-
-    for the given channel and notification category (defined in workflow settings). You can check user preference status using 
-
-   [get user preference API](/reference/get-user-preferences-single-category)
-
-   .
-
-<Info>
-  SuprSend marks the user channel identity inactive for email and whatsapp in case of hard errors from vendor end, such as bounced email addresses, unregistered whatsapp numbers. This is done to safeguard your email domain authority or whatsapp rating if you continue to send notifications to users who have reported or marked your email or messages as spam. Additionally, this helps in whatsapp cost saving, as vendor charges for every processed request. Inactive marking period by SuprSend is 15 days for whatsapp and 90 days for email.
-</Info>
+  Additionally, this helps in whatsapp cost saving, as vendor charges for every processed request. Inactive marking period by SuprSend is 15 days for whatsapp and 90 days for email.
+</Tip>
 
 ## Selecting channels for multi-channel delivery
 
@@ -83,15 +63,9 @@ The expected channel value in the array is:
 
 You can add channel array as a [JQ-expression](https://jqlang.github.io/jq/manual/). So, in case your channel values do not match with the one mentioned in the above table, you can transform it using the JQ-expression. Below are some examples of how to add duration key in JQ format:
 
-1. General format for duration key at parent level is 
+1. General format for duration key at parent level is`.channels`
 
-   `.channels`
-
-2. If channel is a nested event property key like shown below, enter it in the format 
-
-   `.user.channels`
-
-   .
+2. If channel is a nested event property key like shown below, enter it in the format`.user.channels`.
 
 <CodeGroup>
   ```json json
@@ -104,7 +78,7 @@ You can add channel array as a [JQ-expression](https://jqlang.github.io/jq/manua
 </CodeGroup>
 
 <Warning>
-  If both the selected channels and override channels key are set in the form, the system will prioritize the channel array defined in the override channels key, even if that channel is not included in the selected channel list.
+  🚧 If both the selected channels and override channels key are set in the form, the system will prioritize the channel array defined in the override channels key, even if that channel is not included in the selected channel list.
 </Warning>
 
 <Warning>

@@ -3,12 +3,6 @@ title: "Create User Profile"
 description: "This document will cover the methods to create a user and set channel preferences"
 ---
 
-You can follow the steps mentioned in the documentation below or refer to our quick code recipe
-
-<Card title="Create User using python SDK" icon="bolt">
-  Read the recipe
-</Card>
-
 ## Pre-requisites
 
 [Integrate Python SDK](/docs/python-sdk)
@@ -37,12 +31,11 @@ Communication Channel Preference decides whether a user will receive communicati
 
 Especially for event based workflow triggers, where you just pass the user's `distinct_id` and the communication channels are picked from user profile
 
-<Info>
+<Tip>
   **Set Channel Preference for event based workflows:**
 
-
   In event based workflows, since you only pass user's `distinct_id` in your track event call, you'll have to add channel preference first in user profile first before making the call.
-</Info>
+</Tip>
 
 <Steps>
   <Step title="Add User Channels">
@@ -258,7 +251,7 @@ If you want to send notification in user's preferred language, you can set it by
   ```
 </CodeGroup>
 
-## Response
+**Response:**
 
 When you call `user.save()`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance / failure status.
 

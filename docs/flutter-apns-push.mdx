@@ -6,6 +6,8 @@ description: "This document guides you to integrate apns push notification in fl
 <Warning>
   Starting from iOS version v1.0.0, we have introduced explicit push notification permission and option to add images in your notification. Also, introduced background mode for improved tracking of notification delivery.
 
+
+
   If you are using an iOS version older than v1.0.0 and upgrading to the new version. Please ensure to use the latest integration steps, especially for below methods:
 
   1. [Adding Background mode capability (point 3 of capablities)](/docs/flutter-apns-push#step-1-add-capabilities-in-ios-application)
@@ -17,33 +19,13 @@ description: "This document guides you to integrate apns push notification in fl
 
 <Steps>
   <Step title="Add capabilities in iOS application" stepNumber="1">
-    1. Inside Targets select 
+    1. Inside Targets select **signing and capabilities**
 
-       **signing and capabilities**
-
-    2. Click on 
-
-       **+capabilities**
-
-        and select 
-
-       **Push Notifications**
-
-        and 
-
-       **Background Modes**
+    2. Click on **+capabilities** and select **Push Notifications** and **Background Modes**
 
     ![](/images/docs/29bafbe-Screenshot_2022-05-19_at_5.48.52_PM.png "Screenshot 2022-05-19 at 5.48.52 PM.png")
 
-    1. In Background Modes, select 
-
-       **Remote Notifications**
-
-        option. We use background notifications to receive delivery reports when your app is in quit and background state. Refer 
-
-       [doc](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/pushing_background_updates_to_your_app)
-
-        to know more about background notification
+    1. In Background Modes, select **Remote Notifications** option. We use background notifications to receive delivery reports when your app is in quit and background state. Refer [doc](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/pushing_background_updates_to_your_app) to know more about background notification
 
     ![](/images/docs/75c5310-Screenshot_2022-09-27_at_1.48.11_PM.png)
   </Step>
@@ -99,7 +81,9 @@ description: "This document guides you to integrate apns push notification in fl
   </Step>
 
   <Step title="Enable sending and tracking of push notifications" stepNumber="4">
-    Receiving iOS APNS token sending to backend and listening for push notification and tracking user notification clicks can be done using the following snippet of code. Directly copy and paste it at end of the AppDelegate.swift file inside *AppDelegate* class
+    Receiving iOS APNS token sending to backend and listening for push notification and tracking user notification clicks can be done using the following snippet of code. Directly copy and paste it at end of the AppDelegate.swift file inside *AppDelegate* class.
+
+
 
     <CodeGroup>
       ```swift AppDelegate.swift
@@ -145,13 +129,9 @@ description: "This document guides you to integrate apns push notification in fl
     For better notification status (delivered, seen) tracking this step is needed.
 
     <Steps>
-      <Step title="In Xcode go to File > New > Target.">
+      <Step title="In Xcode go to File > New > Target." />
 
-      </Step>
-
-      <Step title="Select Notification Service Extension from the template list.">
-
-      </Step>
+      <Step title="Select Notification Service Extension from the template list." />
 
       <Step title="Name your Notification Service" stepNumber="3">
         Then in Next popup give it name to your notification service, select your team, select swift language and click finish.

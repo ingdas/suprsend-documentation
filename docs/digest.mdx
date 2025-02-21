@@ -13,37 +13,17 @@ Digest can be configured to be timezone-aware, ensuring that final notifications
 
 * When a workflow reaches the Digest node, it opens a batch until the next digest schedule is triggered. Unlike regular batching, the Digest node operates on a fixed schedule rather than being relative to when the first event is received. Consequently, the next steps following the Digest node will be executed at the fixed schedule, regardless of when triggers are received.
 
-* During the batch period, all events for the same recipient with the same workflow slug are accumulated. A unique batch is created for each recipient. When the digest schedule is reached, a single notification is sent for each batch. You can configure the number of events retained in the batch using the 
+* During the batch period, all events for the same recipient with the same workflow slug are accumulated. A unique batch is created for each recipient. When the digest schedule is reached, a single notification is sent for each batch. You can configure the number of events retained in the batch using the [retain items](/docs/digest#retain-items) setting. The digest output structure is similar to the batch output and templates can be edited in the same as you do for batched alerts. Refer to [Using Batch Variables in Templates](/docs/digest#using-digest-batch-variables-in-templates) for more details.
 
-  [retain items](/docs/digest#retain-items)
+* If no triggers are received within a given schedule or if the number of events is below the [minimum trigger count](/docs/digest#min-trigger-count), the workflow will exit without executing subsequent steps.
 
-   setting. The digest output structure is similar to the batch output and templates can be edited in the same as you do for batched alerts. Refer to 
+* **Example Scenario**: A workflow sends a summary of task status changes daily at 7:00 PM for a workflow management tool.In this case, the workflow will batch all triggers for 11 hours (until July 30, 7:00 PM Europe/London) and the email will be sent at the same time as soon as batch is closed.
 
-  [Using Batch Variables in Templates](/docs/digest#using-digest-batch-variables-in-templates)
+  * **Trigger**: When task status is changed (First task status change is received at Jul 30, 7:00 am UTC)
 
-   for more details.
+  * **Digest Schedule**: Daily at 7:00 pm (in recipient's timezone)
 
-* If no triggers are received within a given schedule or if the number of events is below the 
-
-  [minimum trigger count](/docs/digest#min-trigger-count)
-
-  , the workflow will exit without executing subsequent steps.
-
-* **Example Scenario**
-
-  : A workflow sends a summary of task status changes daily at 7:00 PM for a workflow management tool.In this case, the workflow will batch all triggers for 11 hours (until July 30, 7:00 PM Europe/London) and the email will be sent at the same time as soon as batch is closed.
-
-  * **Trigger**
-
-    : When task status is changed (First task status change is received at Jul 30, 7:00 am UTC)
-
-  * **Digest Schedule**
-
-    : Daily at 7:00 pm (in recipient's timezone)
-
-  * **Recipient’s Timezone**
-
-    : Europe/London (UTC+1).
+  * **Recipient’s Timezone**: Europe/London (UTC+1).
 
 In this case, the workflow will batch all triggers for 11 hours (until July 30, 7:00 PM Europe/London) and the email will be sent at the same time as soon as batch is closed.
 
@@ -59,19 +39,9 @@ You can add a [Fixed schedule](/docs/digest#fixed-schedule) or [Dynamic schedule
 
 Fixed schedule is same for all users and hardcoded in the workflow logic. It has 4 inputs:
 
-1. **Repeat every**
+1. **Repeat every**: Defines the recurrence of the digest, such as every 5 minutes, hourly, daily, etc. It is a combination interval (1,2,3 etc.) and frequency (daily, weekly, monthly, hourly and minutely). For example: you can set frequencies as:
 
-   : Defines the recurrence of the digest, such as every 5 minutes, hourly, daily, etc. It is a combination interval (1,2,3 etc.) and frequency (daily, weekly, monthly, hourly and minutely). For example: you can set frequencies as:
-
-   * every 5 minutes (here, interval is 
-
-     `5`
-
-      with 
-
-     `minutely`
-
-      frequency)
+   * every 5 minutes (here, interval is `5 `with `minutely `frequency)
 
    * every hour
 
@@ -83,49 +53,15 @@ Fixed schedule is same for all users and hardcoded in the workflow logic. It has
 
    * every month on selected days of the month (e.g., 1st, 3rd, and 5th Mondays of the month or 1st - 5th day of the month)
 
-2. **Time**
+2. **Time**: Specifies when the digest should be closed for daily, weekly or monthly frequency. The time is always in reference to the timezone selected.
 
-   : Specifies when the digest should be closed for daily, weekly or monthly frequency. The time is always in reference to the timezone selected.
+3. **Timezone**: Set the timezone for the Time specified. You can select **recipient's timezone**, which will be dynamically calculated for each recipient. You can set recipient timezone in user profile with`$timezone`key in HTTP API or`user.set_timezone()`method from your backend or Frontend SDKs. Timezones should be in [IANA (TZ identifier)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) format, such as `America/New_York`.
 
-3. **Timezone**
+4. **Starting from**: Defines the starting point for recurring schedule. For example, if starting from is`2024-07-17 17:00`and repeat every is set to daily at 4pm IST, first schedule will be 18th July 4pm IST. You can set a future starting point if you want the first digest to be sent later. Note that in this case, all triggers from when the workflow is activated until the first schedule after the "starting from" time will be included in the first digest. Referred to as`dtstart`in dynamic schedule expression.
 
-   : Set the timezone for the Time specified. You can select 
-
-   **recipient's timezone**
-
-   , which will be dynamically calculated for each recipient. You can set recipient timezone in user profile with 
-
-   `$timezone`
-
-    key in HTTP API or 
-
-   `user.set_timezone()`
-
-    method from your backend or Frontend SDKs. Timezones should be in 
-
-   [IANA (TZ identifier)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List)
-
-    format, such as 
-
-   `America/New_York`
-
-   .
-
-4. **Starting from**
-
-   : Defines the starting point for recurring schedule. For example, if starting from is 
-
-   `2024-07-17 17:00`
-
-    and repeat every is set to daily at 4pm IST, first schedule will be 18th July 4pm IST. You can set a future starting point if you want the first digest to be sent later. Note that in this case, all triggers from when the workflow is activated until the first schedule after the "starting from" time will be included in the first digest. Referred to as 
-
-   `dtstart`
-
-    in dynamic schedule expression.
-
-<Info>
-  If a recipient's timezone is not set, it will default to the account timezone specified in the [SuprSend dashboard -> Account settings](https://app.suprsend.com/en/account-settings/general). If no account timezone is set, UTC (Coordinated Universal Time) will be used as the final fallback.
-</Info>
+<Note>
+  📘 If a recipient's timezone is not set, it will default to the account timezone specified in the [SuprSend dashboard -> Account settings](https://app.suprsend.com/en/account-settings/general). If no account timezone is set, UTC (Coordinated Universal Time) will be used as the final fallback.
+</Note>
 
 ### Dynamic Schedule (Send Digest based on user preference)
 
@@ -230,27 +166,15 @@ Refer [workflow trigger methods](/docs/trigger-workflow) to see how dynamic data
 
 Batch output variable has 2 type of variables:
 
-1. `$batched_events`
+1. `$batched_events`array : All the event properties corresponding to a batched event is appended to this array and can be used in the template in the array format. The number of event properties returned here is limited by [retain batch events](/docs/batching-digest#retain-batch-events).
 
-    array : All the event properties corresponding to a batched event is appended to this array and can be used in the template in the array format. The number of event properties returned here is limited by 
+2. `$batched_event_count`: This count represents the number of events in a batch and is utilized to render the batch count in a template. For instance, you might send a message like,`Joe left 5 comments in the last 1 hour`where 5 corresponds to $batched\_event\_count.
 
-   [retain batch events](/docs/batching-digest#retain-batch-events)
+<Note>
+  📘 Please note that **Retain items** setting doesn't impact the count, it just limits the number of trigger data returned in `$batched_events` array.
+</Note>
 
-   .
-
-2. `$batched_event_count`
-
-   : This count represents the number of events in a batch and is utilized to render the batch count in a template. For instance, you might send a message like, 
-
-   `Joe left 5 comments in the last 1 hour`
-
-    where 5 corresponds to $batched_event_count.
-
-<Info>
-  Please note that **Retain items** setting doesn't impact the count, it just limits the number of trigger data returned in `$batched_events` array.
-</Info>
-
-Let's understand the batch variable structure with an example of task comments with below notification comtent.
+Let's understand the batch variable structure with an example of task comments with below notification content.
 
 ```
 3 comments are added on your task in last 1 hour.
@@ -439,23 +363,11 @@ Without transformation, digest output will look like this:
 
 We'll add 3 variables in data transform node
 
-* `comment_count`
+* `comment_count`: to get the count of all interactions where`interaction_type = comment`
 
-  : to get the count of all interactions where 
+* `like_count`: to get the count of all interactions where`interaction_type = like`
 
-  `interaction_type = comment`
-
-* `like_count`
-
-  : to get the count of all interactions where 
-
-  `interaction_type = like`
-
-* `all_comments`
-
-  : to fetch all array objects where 
-
-  `interaction type = comment`
+* `all_comments`: to fetch all array objects where`interaction type = comment`
 
 <CodeGroup>
   ```json JSONNET syntax to generate above variables
@@ -507,29 +419,13 @@ After data transform node, output variables will contain 3 additional keys gener
 
 ## Some Common Notification Usecases
 
-* **Sending immediate or digest notification based on user's preference**
+* **Sending immediate or digest notification based on user's preference**. You can store user preference schedule in their profile and use it in the digest node ->[dynamic schedule](/docs/digest#dynamic-schedule-send-digest-based-on-user-preference). To handle immediate alerts in the same flow, add a branch before the digest node to direct users based on their preference to the digest node. If you are using our preference module. You can create separate sub-categories, for immediate, daily or weekly frequency and create different workflows for each of these frequency.
 
-  . You can store user preference schedule in their profile and use it in the digest node -> 
+* **Deliver individual alerts to users throughout the day and provide a summary of all alerts at day’s end**. This ensures users have a consolidated view of any alerts they might have missed. Use the [minimum trigger count](/docs/digest#min-trigger-count) to prevent sending a digest if the total number of alerts is below a specified threshold, avoiding unnecessary notifications.
 
-  [dynamic schedule](/docs/digest#dynamic-schedule-send-digest-based-on-user-preference)
+* **Send recommendation or top stories at the end of the day**. Club with fetch node to fetch the latest recommendations before sending the digest.
 
-  . To handle immediate alerts in the same flow, add a branch before the digest node to direct users based on their preference to the digest node. If you are using our preference module. You can create separate sub-categories, for immediate, daily or weekly frequency and create different workflows for each of these frequency.
-
-* **Deliver individual alerts to users throughout the day and provide a summary of all alerts at day’s end**
-
-  . This ensures users have a consolidated view of any alerts they might have missed. Use the 
-
-  [minimum trigger count](/docs/digest#min-trigger-count)
-
-   to prevent sending a digest if the total number of alerts is below a specified threshold, avoiding unnecessary notifications.
-
-* **Send recommendation or top stories at the end of the day**
-
-  . Club with fetch node to fetch the latest recommendations before sending the digest.
-
-* **Send batched reminders for pending activities or courses**
-
-  . Update the list by removing completed tasks before the next reminder. Stop sending once a certain count of reminder is sent or all the activities are completed. You can add wait until node before digest to handle this usecase, where on every task completion, an event is triggered and those events are filtered out based on condition rather than going into digest.
+* **Send batched reminders for pending activities or courses**. Update the list by removing completed tasks before the next reminder. Stop sending once a certain count of reminder is sent or all the activities are completed. You can add wait until node before digest to handle this use-case, where on every task completion, an event is triggered and those events are filtered out based on condition rather than going into digest.
 
 ## Frequently asked questions
 

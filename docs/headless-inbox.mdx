@@ -3,12 +3,12 @@ title: "Headless Inbox"
 ---
 
 <Warning>
-  ## End of Support for `@suprsend/react-inbox`: Migrate to `@suprsend/react`
+  **End of Support for `@suprsend/react-inbox`: Migrate to `@suprsend/react`**
 
   > Development of the [@suprsend/react-inbox](https://github.com/suprsend/suprsend-react-inbox) SDK has been discontinued in favour of the new [@suprsend/react](https://docs.suprsend.com/docs/headless-feed) SDK. Please refer the [migration guide](https://docs.suprsend.com/docs/migration-guide) for instructions on transitioning to the new SDK.
 </Warning>
 
-This Headless Inbox can be used if you want more control on the UI of Inbox Notifications like showing notifications in Sidepanel or in Fullscreen etc.
+This Headless Inbox can be used if you want more control on the UI of Inbox Notifications like showing notifications in `Sidepanel` or in Fullscreen etc.
 
 ## Installation
 
@@ -22,13 +22,11 @@ This Headless Inbox can be used if you want more control on the UI of Inbox Noti
   ```
 </CodeGroup>
 
-
-
 ## Adding SuprSend Inbox component
 
 ### SuprSendProvider Component
 
-Enclose your notifications component in **SuprSendProvider**. SuprSend hooks can only be used in children of SuprSendProvider component.
+Enclose your notifications component in **`SuprSend Provider`**. SuprSend hooks can only be used in children of SuprSendProvider component.
 
 <CodeGroup>
   ```javascript Syntax
@@ -172,9 +170,7 @@ This hook is an event emitter, takes arguments event type and callback function(
 
 **Handled Event Names:**
 
-1. **new_notification**
-
-   : Called when the new notification occurs, can be used to show toast notification in your application.
+1. **new\_notification**: Called when the new notification occurs, can be used to show toast notification in your application.
 
 <CodeGroup>
   ```javascript Sample.js

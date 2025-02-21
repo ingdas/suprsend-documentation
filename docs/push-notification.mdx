@@ -5,9 +5,9 @@ description: "This section is a step-by-step guide on how to design and publish 
 
 ## Design Template
 
-You can design template with a simple form editor tool. You can add variables with `Handlebars` language. You can check how the message will look in the preview section on the right side. Once designed, you can save the push notification template by clicking on Save Draft. When you are ready, you can Publish Draft by providing a name to the version. This will become the Live version, and will be used whenever the associated workflow is triggered.
+You can design template with a simple form editor tool. You can add variables with `Handlebars` language. You can check how the message will look in the preview section on the right side. Once designed, you can save the push notification template by clicking on Save Draft.&#x20;
 
-![](/images/docs/7c43e80-Screenshot_2021-10-19_at_12.14.20_PM.png "Screenshot 2021-10-19 at 12.14.20 PM.png")
+When you are ready, you can Publish Draft by providing a name to the version. This will become the Live version, and will be used whenever the associated workflow is triggered.
 
 ## Android Push Notification Fields Description
 
@@ -34,7 +34,7 @@ You can design template with a simple form editor tool. You can add variables wi
 | Sound                 | Single line Text | Sound file name without extension or with extension. This is used to play custom sound on notification delivery. If left blank, the default notification sound of the device will be played. To set custom sound, you'll have to [add raw sound file](/docs/push-notification#how-to-add-a-custom-sound-file-in-your-android-project) in your android app folder                                                                                                                                                                                                                                                                                                                                                                                                            |
 | Custom key-value pair | key-value pair   | You can use this field to send custom key-value pairs to users' device. This is generally used for storing and retrieving data for caching, app metadata, or user settings. You can combine it with silent notification if the purpose is to update data in user's applications without notifying them. Both key and value is passed as string in the notification payload. For example, if you are passing this `json: {"foo":1, "bar:1}`. It will be passed as `"json": "{\"foo\":1,\"bar\":1}"` in the payload. You can add variables in both key and value to programatically pass custom data based on your event or workflow input. **Please note that your app’s backend must be able to process custom key-value pairs for the data payload to function properly.** |
 
-<Info>
+<Note>
   **Required - Supported SDK version for app icon and sound:**
 
   * App icon functionality is supported in Android native and react native version 0.1.8 and above.
@@ -42,18 +42,17 @@ You can design template with a simple form editor tool. You can add variables wi
   * Custom Sound is supported in Android native and react native version 2.2.0 and above.
 
   If you are using an older SDK version, please upgrade to the latest SDK version
-</Info>
+</Note>
 
 ## How to change the small icon for a notification?
 
 To show a small app icon in your notification, you'll have to add a small icon in the drawable folder of application modules. You can either use a vector drawable or a png image. We recommend naming this file as `ic_suprsend_app_icon`
 
-<Info>
+<Tip>
   **Generate icon images with alpha transparency:**
 
-
   Note that Android only uses the alpha channel for the icon. It will display monochrome in the status bar but an accent color can be applied to the left side the notification itself.
-</Info>
+</Tip>
 
 <Accordion title="Option A. Adding a vector drawable" defaultOpen={false}>
   You can add a vector drawable icon to the default drawable folder of your application module(androidApp/src/main/res/drawable/). Check out a [sample vector drawable link](https://github.com/suprsend/suprsend-android-sdk/blob/main/androidApp/src/main/res/drawable/ic_alarm.xml).
@@ -77,8 +76,6 @@ To show a small app icon in your notification, you'll have to add a small icon i
       **Option A. Using Android Asset Studio *(Recommended)***
 
       To quickly generate small icons with the correct settings, you can use [Android Asset Studio](https://romannurik.github.io/AndroidAssetStudio/icons-notification.html#source.type=clipart\&source.clipart=ac_unit\&source.space.trim=1\&source.space.pad=0\&name=ic_suprsend_app_icon).
-
-
 
       **Option B. Manually create icons**
 
@@ -133,8 +130,6 @@ To change the notification sound you will have to add the sound file to the raw 
 <Warning>
   **Sound is set at channel level for android version >= 8.0:**
 
-
-
   From Android O onwards (\~95% of the android users), notification sound became a property of notification channel and is only set at the time of new [category creation](https://developer.android.com/develop/ui/views/notifications/channels). So, the new sound set at template will only change for users if
 
   * you are sending the notification in a new [notification category](/docs/notification-category)
@@ -156,15 +151,9 @@ There will always be the case where you would be required to add dynamic content
   <Step title="Using variables in the templates:">
     Once the variables are declared, you can use them while designing the android push template. We support `handlebars` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: `**{{variable_name}}**`
 
-
-
     If you have declared the variables in the global 'Variables' button, then they will come as auto-suggestions when you type a curly bracket `{`. This will remove the chances of error like variable mismatch at the time of template rendering.
 
-
-
     Note that you will be able to enter a variable name even when you have not declared it inside the 'Variables' button. To manually enter the variable name, follow the [handlerbars guide here](https://handlebarsjs.com/guide/#what-is-handlebars).
-
-
 
     Below are some examples of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the 'Templates' section:
 
@@ -214,8 +203,6 @@ There will always be the case where you would be required to add dynamic content
 
     <Warning>
       **What happens if there is variable mismatch at the time of sending?**
-
-
 
       At the time of sending communication, if there is a variable present in the template whose value is not rendered due to mismatch or missing, SuprSend will simply discard the template and not send that particular notification to your user.
 

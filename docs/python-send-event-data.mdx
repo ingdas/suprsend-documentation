@@ -3,12 +3,6 @@ title: "Send and Track Events"
 description: "This document will cover the method to send event to Suprsend platform"
 ---
 
-You can follow the steps mentioned in the documentation below or refer to our quick code recipe
-
-<Card title="Send and Track events using python SDK" icon="bolt">
-  Read the recipe
-</Card>
-
 ## Pre-requisites
 
 1. [Integrate Python SDK](/docs/python-sdk)
@@ -61,7 +55,9 @@ You can send event to Suprsend platform by using the `supr_client.track_event` m
 | `idempotency_key` | unique key in the request call for [idempotent requests](/docs/python-send-event-data#idempotent-requests)                                          | string     | *optional*  |
 
 <Warning>
-  **Event naming guidelines**
+  **Event naming guidelines:**
+
+
 
   When you create an Event or a property, please ensure that the Event Name or Property Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
 </Warning>

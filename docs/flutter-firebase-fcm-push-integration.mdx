@@ -19,7 +19,7 @@ Example integration project can be found [here](<https://github.com/suprsend/sup
   </Step>
 
   <Step title="Adding Firebase dependencies and plugins" stepNumber="3">
-    3.1. Add the below dependency inside projects *build.gradle* inside dependencies
+    3.1. Add the below dependency inside projects *`build.gradle`* inside dependencies
 
     <CodeGroup>
       ```groovy build.gradle
@@ -30,7 +30,9 @@ Example integration project can be found [here](<https://github.com/suprsend/sup
       ```
     </CodeGroup>
 
-    3.2. Add the below plugin inside the app *build.gradle*
+
+
+    3.2. Add the below plugin inside the app *`build.gradle`*
 
     <CodeGroup>
       ```groovy build.gradle
@@ -38,7 +40,9 @@ Example integration project can be found [here](<https://github.com/suprsend/sup
       ```
     </CodeGroup>
 
-    3.3. Add the below dependency inside apps *build.gradle* inside dependencies
+
+
+    3.3. Add the below dependency inside apps *`build.gradle`* inside dependencies
 
     <CodeGroup>
       ```groovy build.gradle
@@ -50,11 +54,11 @@ Example integration project can be found [here](<https://github.com/suprsend/sup
   <Step title="Implementing push" stepNumber="4">
     Push feature can be implemented in two ways:
 
-
-
     <AccordionGroup>
       <Accordion title="Option-1: Token Generation and Notification handled By SDK" defaultOpen={false}>
         You may use this option if all of your android push notifications are to be handled via SuprSend SDK. We recommend you use this method as it is just a single-step process to just register the service in your application manifest and everything else will be ready.
+
+
 
         <CodeGroup>
           ```xml AndroidManifest.xml
@@ -124,6 +128,8 @@ In Android13 (API 33) or higher [notification permission](https://developer.andr
 
 
     **NOTE**: This method is available from suprsend-flutter-sdk v2.0.0. Please update it if using lower versions
+
+
 
     <CodeGroup>
       ```javascript main.dart

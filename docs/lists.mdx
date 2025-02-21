@@ -40,7 +40,7 @@ You can create lists using one of the following methods:
 
   You'll find the option to create the list and update users on the List Tab.
 
-  * To **create a list**, click on the "**+ New List**" button and add the relevant information. `List ID` is the unique identifier for the list. `Name` and `Description` are just for reference so that you know what this list represents.
+  * To **create a list**, click on the "**`+ New List`**" button and add the relevant information. `List ID` is the unique identifier for the list. `Name` and `Description` are just for reference so that you know what this list represents.
 
   ![](/images/docs/d3d88c5-image.png)
 
@@ -70,7 +70,11 @@ You can create lists using one of the following methods:
 </Accordion>
 
 <Accordion title="Automate list sync using database connector" defaultOpen={false}>
-  You can automate your list update using data directly by writing SQL query on your database. This allows your data, product and growth teams to completely own product and engagement notifications without any development effort. You can also use it to sync user profiles and send personalized broadcasts to users using their profile properties. See how to setup database sync [here](/docs/list-sync-via-database).
+  You can automate your list update using data directly by writing SQL query on your database. This allows your data, product and growth teams to completely own product and engagement notifications without any development effort.&#x20;
+
+
+
+  You can also use it to sync user profiles and send personalized broadcasts to users using their profile properties. See how to setup database sync [here](/docs/list-sync-via-database).
 
   ![](/images/docs/1edccb7-image.png)
 </Accordion>
@@ -79,9 +83,9 @@ You can create lists using one of the following methods:
 
 You can configure events when a user enters or exits a list. For example - you have a list of users **"Active on the platform in last 7 days"**. Whenever a user exists this list, you might want to send a notification to re-engage the users. You can do so using list events. There are 2 types of list events that you can configure
 
-1. **User Entry** - This will trigger a bulk event `$USER_ENTERED_LIST - <list_id>` for all new users added to the list whenever a list is updated.
+* **User Entry** - This will trigger a bulk event `$USER_ENTERED_LIST - <list_id>` for all new users added to the list whenever a list is updated.
 
-2. **User Exit** - This will trigger a bulk event `$USER_EXITED_LIST - <list_id>` for all new users removed from the list whenever a list is updated.
+* **User Exit** - This will trigger a bulk event `$USER_EXITED_LIST - <list_id>` for all new users removed from the list whenever a list is updated.
 
 List events is a list property and can be updated using **Modify List** option on [SuprSend dashboard -> List page](https://app.suprsend.com/en/staging/lists) or using the [list API](/reference/create-list). Event tracking is set as false by default.
 

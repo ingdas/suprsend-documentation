@@ -68,54 +68,26 @@ There will always be the case where you would be required to add dynamic content
       ```
     </CodeGroup>
 
-    1. To enter a nested variable, enter in the format 
+    1. To enter a nested variable, enter in the format`{{var1.var2.var3}}`. Eg. to refer to city in the example above, you need to enter`{{event.location.city}}`
 
-       `{{var1.var2.var3}}`
+    2. To refer to an array element, enter in format`{{var1.[index].var2}}`. Eg. to refer to`product_name`of the first element of the array`array`, enter`{{array.[0].product_name}}`
 
-       . Eg. to refer to city in the example above, you need to enter 
-
-       `{{event.location.city}}`
-
-    2. To refer to an array element, enter in format 
-
-       `{{var1.[index].var2}}`
-
-       . Eg. to refer to 
-
-       `product_name`
-
-        of the first element of the array 
-
-       `array`
-
-       , enter 
-
-       `{{array.[0].product_name}}`
-
-    3. If you have any space in the variable name, enclose it in square bracket 
-
-       `{{event.[first name]}}`
+    3. If you have any space in the variable name, enclose it in square bracket`{{event.[first name]}}`
 
     You will be able to see the sample values in the Preview section, as well as in the Live version when you publish a draft. If you cannot see your variable being rendered with the sample value, check one of the following:
 
-    1. Make sure you have entered the variable name and the sample value in the 
+    1. Make sure you have entered the variable name and the sample value in the**Variables**button.
 
-       **Variables**
-
-        button.
-
-    2. Make sure you have entered the correct variable name in the template, as per the 
-
-       `handlebarsjs`
-
-        guideline.
+    2. Make sure you have entered the correct variable name in the template, as per the`handlebarsjs`guideline.
 
     <Warning>
-      ## What happens if there is variable mismatch at the time of sending?
+      **What happens if there is variable mismatch at the time of sending?**
 
 
 
       At the time of sending communication, if there is a variable present in the template whose value is not rendered due to mismatch or missing, SuprSend will simply discard the template and not send that particular notification to your user.
+
+
 
       Please note that the rest of the templates will be sent. Eg. if there is an error in rendering Web Push template, but email template is successfully rendered, Web Push notification will not be triggered, but email notification will be triggered by SuprSend.
     </Warning>

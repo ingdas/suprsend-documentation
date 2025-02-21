@@ -39,7 +39,11 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
   <Step title="Call reset to clear user data on log-out">
     As soon as the user logs out, call `SuprSend.shared.reset()` method to clear data attributed to a user. This will generate a new random `distinct_id` and clear all super properties. This allows you to handle multiple users on a single device.
 
+
+
     When you call this method, we internally create an event called **$user\_logout**. You can see this event on the SuprSend workflows event list and you can configure a workflow on it.
+
+
 
     <CodeGroup>
       ```swift Swift
@@ -52,5 +56,7 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
     </Warning>
   </Step>
 </Steps>
+
+
 
 ***

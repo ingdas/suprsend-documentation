@@ -1,8 +1,7 @@
 ---
 title: "Email Template"
+description: "This section is a step-by-step guide to designing and publishing an email template."
 ---
-
-This section is a step-by-step guide to designing and publishing an email template.
 
 ## Design Template
 
@@ -14,7 +13,7 @@ The email designed is responsive, you can see how the template looks on desktop 
 
 ![2482](/images/docs/ab6f529-Screenshot_2021-10-19_at_4.12.49_PM.png "Screenshot 2021-10-19 at 4.12.49 PM.png")
 
-To add other details (subject, from name, from email, reply to and email markup) click on 'Other Email Settings'.
+To add other details (subject, from name, from email, reply to and email markup) click on '`Other Email Settings`'.
 
 ![1386](/images/docs/b1145ee-Screenshot_2021-10-20_at_1.27.36_PM.png "Screenshot 2021-10-20 at 1.27.36 PM.png")
 
@@ -47,15 +46,9 @@ Make sure to go through the [Google Registration Guidelines](https://developers.
 
 1. To use Email Markup on SuprSend, you can add your schema in 'Other Email Settings'.
 
-2. You can take sample schema for your usecase from 
+2. You can take sample schema for your usecase from [Google reference guide](https://developers.google.com/gmail/markup/reference)
 
-   [Google reference guide](https://developers.google.com/gmail/markup/reference)
-
-3. You can add variables in the schema with 
-
-   `handlebarsjs`
-
-    language
+3. You can add variables in the schema with`handlebarsjs`language
 
 4. When you are in testing phase and your markup request is not approved by Google, make sure your Sender Email id is the same as Recipient Email id.
 
@@ -77,19 +70,19 @@ There will always be the case where you would be required to add dynamic content
 
     Below are some examples of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the 'Templates' section:
 
-    1. To enter a nested variable, enter in the format 
+    1. To enter a nested variable, enter in the format
 
        `{{var1.var2.var3}}`
 
-       . Eg. to refer to city in the example above, you need to enter 
+       . Eg. to refer to city in the example above, you need to enter
 
        `{{event.location.city}}`
 
-    2. If you have any space in the variable name, enclose it in square bracket 
+    2. If you have any space in the variable name, enclose it in square bracket
 
        `{{event.[first name]}}`
 
-    3. To add array names, you need to use an email functionality called 
+    3. To add array names, you need to use an email functionality called
 
        **'Merge Tags'**
 
@@ -144,9 +137,7 @@ There will always be the case where you would be required to add dynamic content
     </Steps>
   </Step>
 
-  <Step title="And that's how you add a Dynamic content in the Email" stepNumber="3">
-
-  </Step>
+  <Step title="And that's how you add a Dynamic content in the Email" stepNumber="3" />
 </Steps>
 
 ## Display blocks based on condition
@@ -165,23 +156,21 @@ Here's how you can add display condition to an email block:
   </Step>
 
   <Step title="Select the block and click on the &#x22;Display Conditions&#x22; checkbox from quick content settings or the right-hand side content settings" stepNumber="2">
-
-
     ![](/images/docs/dcc458e-display_email.png)
   </Step>
 
   <Step title="Add the condition in the editor and click on &#x22;Create new condition&#x22;" stepNumber="3">
     * Add a relevant name and description to the condition.
 
-    * You can add condition in this format 
+    * You can add condition in this format
 
       `(condition <key> "==" <value>)`
 
-      . You can use any of the 
+      . You can use any of the
 
       [supported conditional operators](/docs/email#supported-conditional-operators)
 
-       in the conditional statement
+      in the conditional statement
 
     ![](/images/docs/baa3119-Group_20.png)
 
@@ -224,22 +213,22 @@ You will be able to see the sample values in the Preview section, as well as in 
 
 If you cannot see your variable being rendered with the sample value, check one of the following:
 
-1. Make sure you have entered the variable name and the sample value in the 
+1. Make sure you have entered the variable name and the sample value in the**Variables**button.
 
-   **Variables**
-
-    button.
-
-2. Make sure you have entered the correct variable name in the template, as per the 
-
-   `handlebarsjs`
-
-    guideline.
+2. Make sure you have entered the correct variable name in the template, as per the`handlebarsjs`guideline.
 
 <Warning>
   At the time of sending communication, if there is a variable present in the template whose value is not rendered due to mismatch or missing, SuprSend will simply discard the template and not send that particular notification to your user.
 
-  Please note that the rest of the templates will be sent. Eg. if there is an error in rendering Android Push template, but email template is successfully rendered, Android Push notification will not be triggered, but email notification will be triggered by SuprSend.
+
+
+
+
+  Please note that the rest of the templates will be sent.&#x20;
+
+
+
+  For Example: If there is an error in rendering Android Push template, but email template is successfully rendered, Android Push notification will not be triggered, but email notification will be triggered by SuprSend.
 </Warning>
 
 ## Frequently Asked Questions
@@ -247,9 +236,5 @@ If you cannot see your variable being rendered with the sample value, check one 
 <Accordion title="I have added some HTML content in my template and the rendered email on my email client (gmail, outlook) is different from the preview shown in the editor." defaultOpen={false}>
   Email clients strip some HTML tags related to styling to script while rendering the email as it may pose security risks. You can use alternative tags to achieve similar output. You can check the supported tags in each email client [here](https://www.campaignmonitor.com/css/).
 </Accordion>
-
-
-
-
 
 ***

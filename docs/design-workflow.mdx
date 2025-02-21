@@ -9,11 +9,11 @@ description: "Learn how to design multi-channel and multi-stakeholder workflows"
 
 ## Creating a new workflow
 
-You can create a new workflow by clicking on **+Create Workflow** button on the workflow page. It will open a modal, where you'll need to input a name and category for the workflow. It's crucial to choose a relevant name initially, as it will determine the related workflow slug, which cannot be modified later. While creating the workflow, you can select any notification category and adjust it later if needed.
+You can create a new workflow by clicking on **`+Create Workflow`** button on the workflow page. It will open a modal, where you'll need to input a name and category for the workflow. It's crucial to choose a relevant name initially, as it will determine the related workflow slug, which cannot be modified later. While creating the workflow, you can select any notification category and adjust it later if needed.
 
 ![](/images/docs/35a2d26-image.png)
 
-After entering the required details, click on **Create** button to create a new workflow in draft state. You'll see the created workflow on top of the listing page, click on it to start editing. Now, add relevant nodes to your workflow and edit workflow settings. Once you've finalized your edits, remember to **commit changes** to make the workflow live. If you don't want to make your changes live right away, you can **exit edit mode** and come back later to commit the changes. Rest assured, your modifications will remain saved in the draft state until finalized.
+After entering the required details, click on `Create` button to create a new workflow in draft state. You'll see the created workflow on top of the listing page, click on it to start editing. Now, add relevant nodes to your workflow and edit workflow settings. Once you've finalized your edits, remember to **`commit changes`** to make the workflow live. If you don't want to make your changes live right away, you can `exit edit mode` and come back later to commit the changes. Rest assured, your modifications will remain saved in the draft state until finalized.
 
 ![](https://files.readme.io/e79f3e2-ezgif.com-speed.gif)
 
@@ -27,21 +27,11 @@ It is the first step of your workflow and contains information about the event t
 
 ![](/images/docs/982e348-image.png)
 
-* `event name`
+* `event name`- Name of the event defined in the workflow trigger.
 
-   \- Name of the event defined in the workflow trigger.
+* `properties`- Properties should have data corresponding to variables added in the template content or data required to render dynamic fields in workflow nodes like override channels, dynamic delay windows, etc.
 
-* `properties`
-
-   \- Properties should have data corresponding to variables added in the template content or data required to render dynamic fields in workflow nodes like override channels, dynamic delay windows, etc.
-
-* `distinct_id`
-
-  \- Unique identifier of the user who performs the event and needs to be notified. You can also 
-
-  [override recipient](/docs/override-recipient-list)
-
-   to notify other users who have not performed the event. For instance, notify the document owner of the new comments added by a commentor or inform the finance team when a new expense ticket is raised.
+* `distinct_id`- Unique identifier of the user who performs the event and needs to be notified. You can also [override recipient](/docs/override-recipient-list) to notify other users who have not performed the event. For instance, notify the document owner of the new comments added by a commentor or inform the finance team when a new expense ticket is raised.
 
 You can trigger events using one of our SDKs or directly integrate with your CDP platforms, like Segment, where you currently track your events.
 
@@ -49,25 +39,19 @@ You can trigger events using one of our SDKs or directly integrate with your CDP
 
 Functions are logical steps in your workflow. We currently support the following functions:
 
-1. [Delay](/docs/delay)
+1. [Delay](/docs/delay): wait for a time before proceeding to the next node.
 
-   : wait for a time before proceeding to the next node.
-
-2. [Batch](/docs/batching-digest)
-
-   : aggregate multiple triggers into a single batch and send a single consolidated notification.
+2. [Batch](/docs/batching-digest): aggregate multiple triggers into a single batch and send a single consolidated notification.
 
 3. Time Window: send notification in a given time schedule.
 
-We are adding more functions to support the complex notification usecases. Have a use case in mind? Reach out to us in our [Slack community](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#/shared-invite/email), and we'll prioritize it.
+We are adding more functions to support the complex notification use-cases. Have a use case in mind? Reach out to us in our [Slack community](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#/shared-invite/email), and we'll prioritize it.
 
 ### 3. Branch Nodes
 
 Branches split the workflow execution into parallel flows. We currently support the following branch:
 
-1. [Wait Until](/docs/wait-until)
-
-   : wait until a condition is met or a specific time interval is reached.
+1. [Wait Until](/docs/wait-until): wait until a condition is met or a specific time interval is reached.
 
 ### 4. Delivery Nodes
 
@@ -99,13 +83,13 @@ This is where basic workflow details like name, description and tags go. You can
 
 ### Change Node name and Description
 
-To modify the name and description of a node, click on the **edit metadata** option from the burger menu on your node form. Choose a descriptive name that clarifies the function of the step, and we suggest including node type in the name for easier identification. In the description field, provide a concise explanation of the logic and important elements of the node. For instance, in a send node, you can specify the template being used or provide details about the list of users who will be notified if it differs from the actor.
+To modify the name and description of a node, click on the `edit metadata` option from the burger menu on your node form. Choose a descriptive name that clarifies the function of the step, and we suggest including node type in the name for easier identification. In the description field, provide a concise explanation of the logic and important elements of the node. For instance, in a send node, you can specify the template being used or provide details about the list of users who will be notified if it differs from the actor.
 
 ![](/images/docs/aeb24d6-image.png)
 
 ### Delete Node
 
-If you want to remove a node from the workflow, click on the **delete** option from the burger menu on your node form to delete it.
+If you want to remove a node from the workflow, click on the `delete` option from the burger menu on your node form to delete it.
 
 ## Cloning a workflow
 

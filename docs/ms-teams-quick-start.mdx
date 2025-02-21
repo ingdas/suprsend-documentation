@@ -43,12 +43,7 @@ To design a workflow, you need:
 
 2. **Delivery node** - Delivery nodes represent the channels where users will receive notifications. You can use [multi-channel](/docs/delivery-multi-channel) nodes to send messages across multiple channels, though it’s generally better to use [smart channel routing](/docs/smart-delivery) to notify users sequentially rather than bombarding them on all channels at once.
 
-* **Template** in delivery node contains the content of the notification. You can add both static and dynamic content sourced from user properties or trigger payloads. You can choose to edit in markdown or JSONNET format. For simple text messages, use markdown (add variables in handlebars format as `{{var}}`) and for complex adaptive card designs, you can use [JSONNET](https://jsonnet.org/ref/language.html) editor. Variables can be added as `data.var` or `data["$batched_events"][0].var` for batched alerts in JSONNET editor.
-
-
-
-
-  Ensure to publish the template before using it in a workflow. [Learn how to design MS Teams template here](/docs/ms-teams-template).
+* **Template** in delivery node contains the content of the notification. You can add both static and dynamic content sourced from user properties or trigger payloads. You can choose to edit in markdown or JSONNET format. For simple text messages, use markdown (add variables in handlebars format as `{{var}}`) and for complex adaptive card designs, you can use [JSONNET](https://jsonnet.org/ref/language.html) editor. Variables can be added as `data.var` or `data["$batched_events"][0].var` for batched alerts in JSONNET editor.Ensure to publish the template before using it in a workflow. [Learn how to design MS Teams template here](/docs/ms-teams-template).
 
 ![](https://files.readme.io/e5b9db7-template_edit.gif)
 
@@ -287,15 +282,5 @@ Once triggered, you can monitor the request and it's status on the "Requests" ta
 In SuprSend, each environment is isolated, meaning workflows, users, and vendors are configured separately in testing and production workspaces.
 
 Follow this [go live checklist](/docs/go-live-checklist) to setup things in production once you are done testing.
-
-### What's next?
-
-* **Invite other team members** - You can invite other collaborators from your team to your SuprSend account from [Account Settings -> Teams page.](https://app.suprsend.com/en/account-settings/team)
-
-* Go through our [best practices](/docs/best-practices) to design the right notification experience for your users.
-
-* Check out [workflow documentation ](/docs/design-workflow)to learn how to design advanced notification usecases.
-
-* For deeper integration with SuprSend, check out the [core concepts](/docs/templates) and learn more about our flagship features - [In-app Inbox](/docs/inbox-overview) and [Preferences](/docs/preferences) to deliver a delightful user experience.
 
 ***

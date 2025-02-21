@@ -8,7 +8,9 @@ SuprSend template editor uses handlebars templating language to add variables an
 Apart from the inbuilt helper functions, we have also created some custom helper functions which you can use in template editors.
 
 <Warning>
-  ## Not supported in SMS and Whatsapp
+  **Not supported in SMS and Whatsapp:**
+
+
 
   Since, SMS (in India) and Whatsapp require pre-approved templates to send messages, we can't support conditional content rendering in SMS and Whatsapp templates. You can use handlebars helpers if you are sending SMS in US with vendors like Twilio and Messagebird.
 </Warning>
@@ -25,31 +27,31 @@ Apart from the inbuilt helper functions, we have also created some custom helper
 
     **Returns:**
 
-    * Variable value if the variable value is present. For instance, the above example with data 
+    * Variable value if the variable value is present. For instance, the above example with data
 
       `{"name":"Joe"}`
 
-       will return 
+      will return
 
       `Joe`
 
-    * Default value if variable value is in 
+    * Default value if variable value is in
 
       `"", null, undefined`
 
-      . For instance, the above example with data 
+      . For instance, the above example with data
 
       `{"name":""}`
 
-      , 
+      ,
 
       `{"name":null}`
 
-       or 
+      or
 
       `{"city":"Bangalore"}`
 
-       will return 
+      will return
 
       `user`
   </Accordion>
@@ -57,7 +59,11 @@ Apart from the inbuilt helper functions, we have also created some custom helper
   <Accordion title="compare" defaultOpen={false}>
     Can be used to show some content in the template based on a condition. For email, you can use [display condition](/docs/email#display-blocks-based-on-condition) to show or hide a particular content block
 
+
+
     **Syntax:**
+
+
 
     <CodeGroup>
       ```handlebars handlebars
@@ -69,7 +75,11 @@ Apart from the inbuilt helper functions, we have also created some custom helper
       ```
     </CodeGroup>
 
+
+
     **Example:**
+
+
 
     <CodeGroup>
       ```handlebars handlebars
@@ -87,41 +97,15 @@ Apart from the inbuilt helper functions, we have also created some custom helper
       ```
     </CodeGroup>
 
+
+
     **Returns:**
 
-    * Returns 
+    * Returns ***`true_block`*** if the condition inside compare statement returns truthy value. For instance, the above example with data`{"candidate_count":1}`will return`is`
 
-      ***true_block***
+    * Returns ***`false_block`*** (in case else statement is present) if the condition inside compare statement returns falsy value. For instance, Example-1 with data`{"candidate_count":3}`will return`are`
 
-       if the condition inside compare statement returns truthy value. For instance, the above example with data 
-
-      `{"candidate_count":1}`
-
-       will return 
-
-      `is`
-
-    * Returns 
-
-      ***false_block***
-
-       (in case else statement is present) if the condition inside compare statement returns falsy value. For instance, Example-1 with data 
-
-      `{"candidate_count":3}`
-
-       will return 
-
-      `are`
-
-    * or Returns 
-
-      ***no value***
-
-       if the else statement is not present. For instance, Example-2 with data 
-
-      `{"candidate_count":3}`
-
-       will not return anything
+    * or Returns ***`no value`*** if the else statement is not present. For instance, Example-2 with data`{"candidate_count":3}`will not return anything
 
     **Supported Conditional operators in compare statement:**
 
@@ -137,10 +121,22 @@ Apart from the inbuilt helper functions, we have also created some custom helper
     | '!=='    | LHS value or data type does not equal RHS       | 1 '!==' "1"            |
 
     <Warning>
-      Builtin helpers and custom helpers in handlebars can only work with nested objects if the value of parent key is present. For example, `{{default place.city "San Francisco"}}` will return `"San Francisco"` only if `place` key is present, i.e., `{"place":[]}`
+      Builtin helpers and custom helpers in handlebars can only work with nested objects if the value of parent key is present.&#x20;
+
+
+
+      For example, `{{default place.city "San Francisco"}}` will return `"San Francisco"` only if `place` key is present, i.e., `{"place":[]}`
     </Warning>
 
-    However, you can use the nested `if` condition to check if the parent is present and if so, then render nested objects value. Refer below example
+
+
+    However, you can use the nested `if` condition to check if the parent is present and if so, then render nested objects value.&#x20;
+
+
+
+    Refer below example:
+
+
 
     <CodeGroup>
       ```text text
@@ -162,7 +158,11 @@ Apart from the inbuilt helper functions, we have also created some custom helper
   <Accordion title="each" defaultOpen={false}>
     You can iterate over a static or dynamic length list using each helper. Inside the block, you add the array object key which you want to iterate over.
 
+
+
     **Syntax:**
+
+
 
     <CodeGroup>
       ```handlebars handlebars
@@ -172,7 +172,11 @@ Apart from the inbuilt helper functions, we have also created some custom helper
       ```
     </CodeGroup>
 
+
+
     **Example:**
+
+
 
     <CodeGroup>
       ```handlebars handlebars
@@ -182,7 +186,11 @@ Apart from the inbuilt helper functions, we have also created some custom helper
       ```
     </CodeGroup>
 
+
+
     **Returns:** Above example for below mock data will return `steve Olivia`
+
+
 
     <CodeGroup>
       ```json json
@@ -235,9 +243,13 @@ Apart from the inbuilt helper functions, we have also created some custom helper
   <Accordion title="jsonStringify" defaultOpen={false}>
     Coverts any type of JSON input to a string. Can be used to print JSON and array directly in templates without having to convert it into individual strings. One of the common usecase is to pass complete JSON in Inbox template -> custom JSON field to generate custom UI.
 
+
+
     **Syntax:** `{{jsonStringify variable}}`
 
     variable should be a valid JSON input.
+
+
 
     **Examples:**
 
@@ -260,17 +272,23 @@ Apart from the inbuilt helper functions, we have also created some custom helper
   <Accordion title="lowercase" defaultOpen={false}>
     This handlebar helper is used to convert string to lowercase. If non string values are provided empty string `''` is returned.
 
+
+
     **Syntax:** `{{lowercase "string"}}`
   </Accordion>
 
   <Accordion title="uppercase" defaultOpen={false}>
     This handlebar helper is used to convert string to uppercase. If non string values are provided empty string `''` is returned.
 
+
+
     **Syntax:** `{{uppercase "string"}}`
   </Accordion>
 
   <Accordion title="capitalize" defaultOpen={false}>
     This handlebar helper is used to capitalize the first character in provided string. If non string values are provided empty string `''` is returned.
+
+
 
     **Syntax:** `{{capitalize "string"}}`
   </Accordion>
@@ -282,7 +300,11 @@ Apart from the inbuilt helper functions, we have also created some custom helper
   <Accordion title="add" defaultOpen={false}>
     Returns the sum of two operands. Both input values should be numbers, else it will throw an error.
 
+
+
     **Syntax:** `{{add number1 number2}}`
+
+
 
     **Examples:**
 
@@ -304,7 +326,11 @@ Apart from the inbuilt helper functions, we have also created some custom helper
   <Accordion title="subtract" defaultOpen={false}>
     Returns the difference between two operands. Both input values should be numbers, else it will throw an error.
 
+
+
     **Syntax:** `{{subtract number1 number2}}`
+
+
 
     **Examples:**
 
@@ -326,7 +352,11 @@ Apart from the inbuilt helper functions, we have also created some custom helper
   <Accordion title="multiply" defaultOpen={false}>
     Returns the product of two operands. Both input values should be numbers, else it will throw an error.
 
+
+
     **Syntax:** `{{multiply number1 number2}}`
+
+
 
     **Examples:**
 
@@ -348,7 +378,11 @@ Apart from the inbuilt helper functions, we have also created some custom helper
   <Accordion title="divide" defaultOpen={false}>
     Returns the quotient of the left operand divided by the right operand. Both input values should be numbers; else it will throw an error.
 
+
+
     **Syntax:** `{{divide dividend divisor}}`
+
+
 
     **Examples:**
 
@@ -370,7 +404,11 @@ Apart from the inbuilt helper functions, we have also created some custom helper
   <Accordion title="round" defaultOpen={false}>
     Returns the value of a number rounded to the nearest integer. The input value should be a number; else it will throw an error.
 
+
+
     **Syntax:** `{{round number}}`
+
+
 
     **Examples:**
 
@@ -383,7 +421,11 @@ Apart from the inbuilt helper functions, we have also created some custom helper
   <Accordion title="mod" defaultOpen={false}>
     Returns the remainder left over when one operand is divided by a second operand. It always takes the sign of the dividend. This helper will throw an error if it encounters an input value that is not a number or if the divisor is 0.
 
+
+
     **Syntax:** `{{mod dividend divisor}}`
+
+
 
     **Examples:**
 
@@ -408,6 +450,8 @@ Apart from the inbuilt helper functions, we have also created some custom helper
 <AccordionGroup>
   <Accordion title="unique" defaultOpen={false}>
     Returns unique items in an array
+
+
 
     **Syntax:** `{{unique variable "key_string" }}`
 
@@ -468,6 +512,8 @@ Apart from the inbuilt helper functions, we have also created some custom helper
   <Accordion title="itemAt" defaultOpen={false}>
     Returns item at a particular index in the array. It can be useful in scenarios where you want to display a message like `liked by Mike and 3 others`.
 
+
+
     **Syntax:** `{{itemAt variable index }}`
 
     | Parameter    | Description                                                        |
@@ -503,12 +549,8 @@ Apart from the inbuilt helper functions, we have also created some custom helper
       ```
     </CodeGroup>
 
-
-
     <Info>
       **Note:**&#x20;
-
-
 
       This helper only works with an array of primitive data types like string, boolean, etc. If you have an array with objects in it, you can combine it with a unique helper to return the indexed value of a particular key inside the object. For instance, `{{itemAt (unique array "city") 0}}` in above mock will return `San Francisco`.
     </Info>
@@ -516,6 +558,8 @@ Apart from the inbuilt helper functions, we have also created some custom helper
 
   <Accordion title="join" defaultOpen={false}>
     Concatenates all the values in an array, using a specified separator string between each value.
+
+
 
     **Syntax:** `{{join variable "separator"}}`
 
@@ -553,15 +597,17 @@ Apart from the inbuilt helper functions, we have also created some custom helper
       ```
     </CodeGroup>
 
+
+
     **Note:**
 
     This helper only works with an array of primitive data types like string, boolean, etc. If you have an array with objects in it, you can combine them with a unique helper to join the value of a particular key inside the object. For instance, `{{join (unique array "city")}}` in above mock will return `San Francisco, Austin`
-
-    ###
   </Accordion>
 
   <Accordion title="length" defaultOpen={false}>
     Can be used to get the number of items in an array or the character length of a string. It can be useful in scenarios where you want to display a message like `your post has got 100 likes`.
+
+
 
     **Syntax:** `{{length variable}}`
 

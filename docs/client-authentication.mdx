@@ -3,9 +3,9 @@ title: "Overview"
 description: "This document describe about authenticating client SDK's to use SuprSend features."
 ---
 
-<Info>
-  Many of our mobile SDK's are under revamp stage. These SDK's still use workspace key and workspace secret authentication.
-</Info>
+<Check>
+  📘 Many of our mobile SDK's are under revamp stage. These SDK's still use workspace key and workspace secret authentication.
+</Check>
 
 SuprSend client SDK's use public API keys to authenticate requests. You can find Public Keys in *SuprSend Dashboard -> Developers -> APIKeys -> Public Keys*. You can generate new ones and delete or rotate existing keys.
 
@@ -31,13 +31,9 @@ You can use any of the above format. This key will be used as secret to generate
 
 This should be created on your backend application only. You will need to sign the JWT token with the signing key from above step and expose this JWT token to your Frontend application.
 
-* **JWT Algorithm:**
+* **JWT Algorithm:**&#x45;S256
 
-   ES256
-
-* **JWT Secret:**
-
-   Signing key in PEM format generated in step1. If you are using Base64 format, it should be converted in to PEM format.
+* **JWT Secret:**&#x53;igning key in PEM format generated in step1. If you are using Base64 format, it should be converted in to PEM format.
 
 * **JWT Payload:**
 
