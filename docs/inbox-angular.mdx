@@ -104,27 +104,23 @@ You can use [embeddable inbox](/docs/embeddable-inbox) provided by SuprSend in a
             ): void;
           }
           ```
-        </CodeGroup>iii. In **tsconfig.app.json** file add type file in **compilerOptions.typeRoots** key.    <CodeGroup>
-          ```json tsconfig.app.json
-          {
-            "extends": "./tsconfig.json",
-            "compilerOptions": {
-              "outDir": "./out-tsc/app",
-              "typeRoots": ["./src/types/"] // add this
-            },
-            "files": ["src/main.ts"],
-            "include": ["src/**/*.d.ts"]
-          }
-          ```
         </CodeGroup>
 
-    1. Create **types/index.d.ts** inside app directory.
+          <p>iii. In **tsconfig.app.json** file add type file in **compilerOptions.typeRoots** key. </p>
 
-    2. Declare the module and methods. If you add other customization properties add them here.
-
-    ##
+          <CodeGroup>
+            ```json tsconfig.app.json
+            {
+              "extends": "./tsconfig.json",
+              "compilerOptions": {
+                "outDir": "./out-tsc/app",
+                "typeRoots": ["./src/types/"] // add this
+              },
+              "files": ["src/main.ts"],
+              "include": ["src/**/*.d.ts"]
+            }
   </Step>
-</Steps>
+</Step>
 
 ###
 
