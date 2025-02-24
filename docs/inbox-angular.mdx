@@ -104,19 +104,19 @@ You can use [embeddable inbox](/docs/embeddable-inbox) provided by SuprSend in a
             ): void;
           }
           ```
-    * In tsconfig.app.json file add type file in compilerOptions.typeRoots key.
+    * In **tsconfig.app.json**, add the type file in **compilerOptions.typeRoots** key.
 
-        <CodeGroup>
-          ```typescript tsconfig.app.json
-          {
-            "extends": "./tsconfig.json",
-            "compilerOptions": {
-              "outDir": "./out-tsc/app",
-              "typeRoots": ["./src/types/"] // add this
-            },
-            "files": ["src/main.ts"],
-            "include": ["src/**/*.d.ts"]
-          }
+         <CodeGroup>
+         ```json tsconfig.app.json
+         {
+           "extends": "./tsconfig.json",
+           "compilerOptions": {
+             "outDir": "./out-tsc/app",
+             "typeRoots": ["./src/types/"] // add this
+           },
+           "files": ["src/main.ts"],
+           "include": ["src/**/*.d.ts"]
+         }
           ```
         </CodeGroup>
   </Step>
