@@ -154,7 +154,7 @@ Refer [workflow trigger methods](/docs/trigger-workflow) to see how dynamic data
 
 <AccordionGroup>
   <Accordion title="Retain Items" defaultOpen={false}>
-    Defines the number of trigger data that will be included in your [Digest (Batch) variable](/docs/batching-digest#using-batch-variables-in-templates). You have the option to display either the first n triggers or the last n triggers in your digest output. By default, the first 10 triggers are included. You can customize the number of triggers to any value between 2 and 100.
+    Defines the number of trigger data that will be included in your Digest Batch. You have the option to display either the first n triggers or the last n triggers in your digest output. By default, the first 10 triggers are included. You can customize the number of triggers to any value between 2 and 100.
   </Accordion>
 
   <Accordion title="Min Trigger Count" defaultOpen={false}>
@@ -166,7 +166,7 @@ Refer [workflow trigger methods](/docs/trigger-workflow) to see how dynamic data
 
 Batch output variable has 2 type of variables:
 
-1. `$batched_events`array : All the event properties corresponding to a batched event is appended to this array and can be used in the template in the array format. The number of event properties returned here is limited by [retain batch events](/docs/batching-digest#retain-batch-events).
+1. `$batched_events`array : All the event properties corresponding to a batched event is appended to this array and can be used in the template in the array format. The number of event properties returned here is limited by retain batch events.
 
 2. `$batched_event_count`: This count represents the number of events in a batch and is utilized to render the batch count in a template. For instance, you might send a message like,`Joe left 5 comments in the last 1 hour`where 5 corresponds to $batched\_event\_count.
 
