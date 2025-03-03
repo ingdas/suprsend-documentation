@@ -5,7 +5,7 @@ description: "Guide to integrate Segment with SuprSend"
 
 The SuprSend segment integration enables you to sync users and events from Segment to SuprSend. This allows for seamless migration of users from Segment to SuprSend and the ability to use events from Segment to power automated workflows within SuprSend.
 
-## Getting Started
+## Connector Setup on SuprSend
 
 Login to SuprSend dashboard. Go to **Settings** -> **Connectors**. Select **"Segment"** from the connectors list. This is how segment integration page looks like.
 
@@ -71,21 +71,9 @@ Example of Segment `identify` API call
 
 associated user JSON at SuprSend will be.
 
-* Segment 
+* Segment`userID`is used to map the`distinct_id`of user on SuprSend.
 
-  `userID`
-
-   is used to map the 
-
-  `distinct_id`
-
-   of user on SuprSend.
-
-* All properties inside 
-
-  `traits`
-
-   are considered as user properties which can be further used to map user channels and preferences in SuprSend.
+* All properties inside`traits`are considered as user properties which can be further used to map user channels and preferences in SuprSend.
 
 <CodeGroup>
   ```javascript javascript
@@ -167,8 +155,6 @@ Click on **`Save Mapping`** to save the changes
 <Warning>
   **Changes in mapping keys will be applied to future syncs**
 
-
-
   It's important to note that any changes made to channel or preference mapping will only be applied to future user syncs. If the mapping is changed, you'll have to replay all past user syncs in order to update the data in the user profile for existing users.
 
   Also, we don't override channel information. So, if a user's email or any other channel value is changed in user profile, it will be appended to the user channel list and notification will be sent on both old and new email. This is to ensure that no communication is lost during the change and users can continue to receive notifications on their preferred channels.
@@ -183,8 +169,6 @@ You'll have to configure SuprSend as a destination in Segment.
 <Info>
   **Use webhooks destination to connect with SuprSend**
 
-
-
   Since, we are in beta and we don't have a first-party integration with Segment yet, you can use webhooks in Segment destination list to connect with SuprSend.
 </Info>
 
@@ -192,15 +176,15 @@ Follow below steps to configure SuprSend Destination in Segment:
 
 <Steps>
   <Step title="Login to your Segment account. ">
-    1. Login to your Segment account. Select 
+    1. Login to your Segment account. Select
 
        **Connections**
 
-        -> 
+       ->
 
        **Destinations**
 
-        from the side navigation menu and click on 
+       from the side navigation menu and click on
 
        **"Add Destination"**
 
@@ -254,21 +238,21 @@ Follow below steps to configure SuprSend Destination in Segment:
       <Step title="In Select Mappings, add below details:">
         1. [`https://hub.suprsend.com/connector/segment/`](https://hub.suprsend.com/connector/segment/)
 
-            -> URL
+           -> URL
 
         2. `POST`
 
-            -> Method
+           -> Method
 
         3. `Bearer _api_key_`
 
-            -> 
+           ->
 
            `Authorization`
 
-            in headers. Please make sure to replace "
+           in headers. Please make sure to replace "
 
-           *api_key*
+           *api\_key*
 
            " with actual api key from segment connector settings page.
 
@@ -290,11 +274,11 @@ Follow below steps to configure SuprSend Destination in Segment:
   </Step>
 
   <Step title="Enable Mapping">
-    1. After successful testing, 
+    1. After successful testing,
 
        **Save and Enable**
 
-        the mapping.
+       the mapping.
 
     ![](/images/docs/d92dc6b-image.png)
   </Step>
