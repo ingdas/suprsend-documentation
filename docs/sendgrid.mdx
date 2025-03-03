@@ -23,14 +23,14 @@ On the SuprSend dashboard, follow the steps as below:
 
 ![1942](/images/docs/f216396-Screenshot_2022-01-19_at_1.22.39_PM.png "Screenshot 2022-01-19 at 1.22.39 PM.png")
 
-| Form Field             | Description                                                                                                                                                                                                     |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Nickname               | You can give any name which may help you to identify this account easily. For example - *Sendgrid \[Production]*                                                                                                |
-| API Key                | You will get this API key from your Sendgrid account. SuprSend uses this API key to send email on your behalf via your registered Sendgrid account.                                                             |
-| From Name              | Default 'From Name' that email will go from. You can override this in the individual template.*eg. SuprSend*                                                                                                    |
+| Form Field             | Description                                                                                                                                                          |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nickname               | You can give any name which may help you to identify this account easily. For example - *Sendgrid \[Production]*                                                     |
+| API Key                | You will get this API key from your Sendgrid account. SuprSend uses this API key to send email on your behalf via your registered Sendgrid account.                  |
+| From Name              | Default 'From Name' that email will go from. You can override this in the individual template.*eg. SuprSend*                                                         |
 | From Address           | Default 'From Email ID' that email will go from. You can override this in the individual template.*eg. [\[email protected\]](mailto:support@suprsend.com)*           |
 | Reply Address          | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. [\[email protected\]](mailto:support@suprsend.com)* |
-| Price per notification | This is the amount you pay per email notification to Sendgrid. It helps us to calculate, estimate and optimise your cost spent on notifications.                                                                |
+| Price per notification | This is the amount you pay per email notification to Sendgrid. It helps us to calculate, estimate and optimise your cost spent on notifications.                     |
 
 ### How to get API Key from Sendgrid account
 
@@ -56,7 +56,7 @@ If you have used sendgrid design library to design email templates and planning 
 
 <Steps>
   <Step title="Export HTML file of your existing template">
-    <Accordion title="Option 1: Sendgrid templates are designed using drag and drop editor" defaultOpen={false}>
+    <Accordion title="Sendgrid templates are designed using drag and drop editor" defaultOpen={false}>
       * Go to Sendgrid Design Library
 
       * Select the email template that you want to export and click on "Edit"
@@ -88,9 +88,7 @@ If you have used sendgrid design library to design email templates and planning 
   </Step>
 
   <Step title="Copy paste the HTML content in SuprSend email editor">
-    * Go to
-
-      [SuprSend dashboard -> Templates page](https://app.suprsend.com/en/staging)
+    * Go to [SuprSend dashboard -> Templates page](https://app.suprsend.com/en/staging)
 
     * Click on "+New Template" and add a template name.
 
@@ -117,5 +115,7 @@ If you have used sendgrid design library to design email templates and planning 
     </CodeGroup>
   </Step>
 </Steps>
+
+After publishing the template, you can test template using ["Test template"](https://docs.suprsend.com/docs/testing-the-template) functionality on the template editor.
 
 ***
