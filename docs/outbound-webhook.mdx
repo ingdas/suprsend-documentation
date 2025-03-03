@@ -9,15 +9,11 @@ You can use webhook to get real-time notification updates in your application. S
 
 SuprSend sends a JSON payload to a specified endpoint (URL) as soon as a notification update is received, for example when a message is sent, delivered, seen or replied by user. You can configure which events you want to receive on a particular endpoint, allowing you to filter out unnecessary data and only receive the information relevant to your application. Once the data is received, a POST request is sent to the endpoint you've provided. You can then use it to store information or trigger specific actions in your app.
 
-## Getting Started
+## Set up your webhook endpoint
 
 <Steps>
   <Step title="Create an endpoint in your application to receive webhook requests">
-    Create an endpoint in your application specifically to receive webhook requests from SuprSend. The endpoint should be an HTTP or HTTPS URL. Once you have created the endpoint, configure it in SuprSend dashboard to receive notification updates. You can use one endpoint per event type or you can send multiple types of events to the same endpoint.
-
-    <Info>
-      We are currently providing the webhook support for whatsapp & SMS channel. Support for other channels will be rolled out soon.
-    </Info>
+    Create an endpoint in your application specifically to receive webhook requests from SuprSend. The endpoint should be an HTTP or HTTPS URL. Once you have created the endpoint, configure it in SuprSend dashboard to receive notification updates. You can use one endpoint per event type or you can send multiple types of events to the same endpoint
   </Step>
 
   <Step title="Add the endpoint in SuprSend dashboard and start receiving events">
