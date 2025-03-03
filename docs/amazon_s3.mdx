@@ -3,15 +3,17 @@ title: "Amazon S3"
 description: "Export notification data from Suprsend to your S3 bucket"
 ---
 
-There are 2 types of connectors in SuprSend: **Source** and **Destination**. Source is used to connect event and user data from a third party platform into SuprSend to power notifications. Destination is used to sync data like message templates and notification metrics that we track in SuprSend back to your data warehouse for reporting and analysis.
-
 Amazon S3 is a destination used to ingest data from SuprSend into your S3 bucket type. You can directly query on this data using Athena or import it to data warehouses like Redshift, Snowflake, Clickhouse etc. for analysis.
 
 ## How it works?
 
 This integration exports individual [parquet](https://parquet.apache.org/) files for **message templates** and **notification data** to your S3 bucket at a regular interval. You can select what all data you want to sync to your S3 bucket. The sync happens every 3-5 minutes, ensuring that you always have the latest data in your S3 bucket. There'll be a separate parquet file for each day.
 
-Note that this integration only publishes parquet files to your storage bucket. You can either use Athena to query this data or ingest this data into a data warehouse for analysis.
+<Note>
+  This integration only publishes parquet files to your storage bucket. You can either use Athena to query this data or ingest this data into a data warehouse for analysis.
+</Note>
+
+
 
 ## Setting up Amazon S3 connector
 
@@ -19,49 +21,23 @@ Note that this integration only publishes parquet files to your storage bucket. 
   <Step title="Create S3 bucket" stepNumber="1">
     This will be the location of data export. Skip this step If you want to sync to an existing bucket or you can create a new bucket by following below steps:
 
-    1. Sign into the
-
-       [Amazon AWS S3 Management Console](https://eu-west-2.signin.aws.amazon.com/oauth?response_type=code\&client_id=arn%3Aaws%3Aiam%3A%3A015428540659%3Auser%2Fs3\&redirect_uri=https%3A%2F%2Fs3.console.aws.amazon.com%2Fs3%2F%3Fstate%3DhashArgs%2523%26isauthcode%3Dtrue\&forceMobileLayout=0\&forceMobileApp=0\&code_challenge=e9KtrxOOGcXg2wHjDELaAHe3tE2kBKR2yklpkrrms-g\&code_challenge_method=SHA-256)
-
-       and Click on Create Bucket button.
+    1. Sign into the [Amazon AWS S3 Management Console](https://eu-west-2.signin.aws.amazon.com/oauth?response_type=code\&client_id=arn%3Aaws%3Aiam%3A%3A015428540659%3Auser%2Fs3\&redirect_uri=https%3A%2F%2Fs3.console.aws.amazon.com%2Fs3%2F%3Fstate%3DhashArgs%2523%26isauthcode%3Dtrue\&forceMobileLayout=0\&forceMobileApp=0\&code_challenge=e9KtrxOOGcXg2wHjDELaAHe3tE2kBKR2yklpkrrms-g\&code_challenge_method=SHA-256) and Click on Create Bucket button.
 
        ![](/images/docs/c37cc40-image.png)
 
-    2. This will open a form. Enter a relevant bucket name, something like:
+    2. This will open a form. Enter a relevant bucket name, something like:**`suprsend-notification`.**
 
-       **`suprsend-notification`.**
-
-    3. Select the region and Set Object Ownership to
-
-       **ACLs disabled. (recommended).**
+    3. Select the region and Set Object Ownership to**ACLs disabled. (recommended).**
 
        ![](/images/docs/9e66556-image.png)
 
-    4. Next, Select
-
-       **`Block all public access`**
-
-       and
-
-       **`disable`**
-
-       bucket versioning.
+    4. Next, Selec&#x74;**`Block all public access`**&#x61;n&#x64;**`disable`**&#x62;ucket versioning.
 
     5. Do not add any Tags.
 
-    6. Leave Default encryption at defaults:
+    6. Leave Default encryption at defaults:`Encryption key type = Server-side encryption`with Amazon S3 managed keys (SSE-S3) and`Bucket Key = Enable.`
 
-       `Encryption key type = Server-side encryption`
-
-       with Amazon S3 managed keys (SSE-S3) and
-
-       `Bucket Key = Enable.`
-
-    7. Do not change any Advanced settings and click on the
-
-       **`Create bucket`**
-
-       button.
+    7. Do not change any Advanced settings and click on th&#x65;**`Create bucket`**&#x62;utton.
 
        ![](/images/docs/4a07acb-Screenshot_2023-08-09_at_9.29.19_PM.png)
   </Step>
@@ -69,7 +45,8 @@ Note that this integration only publishes parquet files to your storage bucket. 
   <Step title="Set permission policy for the bucket" stepNumber="2">
     We'll need permission to `PutObject` for data ingestion in your bucket. To set permission policy, On your [Amazon AWS IAM Management Console](https://console.aws.amazon.com/iam/) , select Policies Page from the side bar. Click on **`Create Policy`** and on the JSON tab, copy paste the below code.
 
-    Replace **`suprsend-notification`** with the bucket name you've created.
+
+    Replace **`suprsend-notification`** with the bucket name you've created. Create a relevant name to the policy, something like - **`SingleBucketWriteAccess`**.
 
     <CodeGroup>
       ```json Amazon AWS IAM Management Console
@@ -91,7 +68,7 @@ Note that this integration only publishes parquet files to your storage bucket. 
       ```
     </CodeGroup>
 
-    Create a relevant name to the policy, something like - **`SingleBucketWriteAccess`**.
+
   </Step>
 
   <Step title="Create a user with access to the bucket" stepNumber="3">
