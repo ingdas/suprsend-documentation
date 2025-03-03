@@ -32,8 +32,8 @@ This section is a step by step guide to add Mailgun as your email service provid
     | Domain Prefix / Sandbox Domain | **Sandbox Domain** - Add sandbox domain name if you are using mailgun sandbox domain for sending emails **Domain Prefix** - Prefix of the subdomain names added in mailgun account. For example - if your subdomain name is *mg.mydomain.com*, the domain prefix will be *mg* Leave it blank if your root domain is added as the domain in mailgun account like *mydomain.com* Mailgun domain names can be referred from [here](https://app.mailgun.com/app/sending/domains) |
     | Data center region             | For domain region = EU, select "Europe region" else select "Outside Europe"                                                                                                                                                                                                                                                                                                                                                                                                  |
     | From Name                      | Default 'From Name' that email will go from. You can override this in the individual template.*eg. SuprSend*                                                                                                                                                                                                                                                                                                                                                                 |
-    | From Address                   | Default 'From Email ID' that email will go from. You can override this in the individual template.*eg. [\[email protected\]](mailto:support@suprsend.com)*                                                                                                                                                                                                                                                                        |
-    | Reply Address                  | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. [\[email protected\]](mailto:support@suprsend.com)*                                                                                                                                                                                                                                                              |
+    | From Address                   | Default 'From Email ID' that email will go from. You can override this in the individual template.*eg. [\[email protected\]](mailto:support@suprsend.com)*                                                                                                                                                                                                                                                                                                                   |
+    | Reply Address                  | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. [\[email protected\]](mailto:support@suprsend.com)*                                                                                                                                                                                                                                                                                                         |
     | Price per notification         | This is the amount you pay per email notification to Mailgun. It helps us to calculate, estimate and optimise your cost spent on notifications.                                                                                                                                                                                                                                                                                                                              |
   </Step>
 </Steps>
@@ -48,8 +48,6 @@ Private API key can be seen only at the time of creation. You can either use any
 
 <Warning>
   **🚧  User role to read API keys:**
-
-
 
   Users with "developer" or "admin" role can only read the API keys. Please check with relevant folks in your team if you are not able to see the API keys in your account
 </Warning>
@@ -68,10 +66,16 @@ URL: [`https://hub.suprsend.com/webhook/mailgun/`](https://hub.suprsend.com/webh
 
 ## How to add Unsubscription link in email
 
-It is advisable to give your recipients the ability to unsubscribe from emails. First, it is required by the [CAN-Spam Act](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business). Second, if you don’t give them this option, they are more likely to click on the spam complaint button, which will cause more harm than allowing them to unsubscribe. Finally, many ESPs look for unsubscribe links and are more likely to filter your email if they don’t have them.
+It's recommended to allow recipients to unsubscribe from emails. You can either:
 
-You can add "Unsubscribe" link to your email by enabling **Unsubscribes** in *Sending -> Domain settings (Tracking section)*
+1. **Use your vendor's unsubscribe link** by enabling **Unsubscribes** in *Sending → Domain settings (Tracking section)*. This opts users out of all emails from that vendor.
+
+2. **Use SuprSend’s hosted preference page** for more granular control, allowing users to manage preferences per category while also reducing unnecessary vendor API calls for opt-outs.
 
 ![](/images/docs/afc5e04-Screenshot_2022-07-09_at_11.15.03_PM.png "Screenshot 2022-07-09 at 11.15.03 PM.png")
+
+Why it's important to give unsubscribe option in email:
+
+First, it is required by the [CAN-Spam Act](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business). Second, if you don’t give them this option, they are more likely to click on the spam complaint button, which will cause more harm than allowing them to unsubscribe. Finally, many ESPs look for unsubscribe links and are more likely to filter your email if they don’t have them.
 
 ***
