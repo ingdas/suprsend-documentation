@@ -123,9 +123,7 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
   <Step title="Give SuprSend permission to Subscribe to SNS topic." stepNumber="5">
     Go to AWS SNS Console and open Topics list. Click on the topic that you created in the earlier step.
 
-    1. Click`Edit`.
-
-    2. On the edit page, expand the`Access Policy`section. The policy looks something like below. You'll notice that the current policy gives`sns:Publish`permission to your SES account.
+    1. Click on`Edit`. On the edit page, expand the`Access Policy`section. The policy looks something like below. You'll notice that the current policy gives`sns:Publish`permission to your SES account.
 
     <CodeGroup>
       ```json Amazon SNS Console
@@ -245,8 +243,8 @@ Here's a description on what each of these form fields describe:
 
 ## Setting Amazon SES event tracking
 
-One of the platform advantage of using SuprSend as a central communication system is that it shows notification analytics for all channels in your SuprSend account together. For enabling event tracking at SuprSend (such as delivery, opened, blocked, spam etc.), you'll have to "sns:Subscribe" action to SuprSend.
+One of the platform advantage of using SuprSend as a central communication system is that it shows notification analytics for all channels in your SuprSend account together. For enabling event tracking at SuprSend (such as delivery, opened, blocked, spam etc.), you'll have to `sns:Subscribe`action to SuprSend.
 
-Once you've given "sns:Subscribe" Action permission (to SuprSend AWS Account) on your SNS-topic, suprsend will attempt to create a subscription on that topic. Once subscription succeeds, you should see successfully "Subscribed" to topic when you visit the Vendor settings page. Email Tracking should start working
+Once you've given `sns:Subscribe` Action permission (to SuprSend AWS Account) on your SNS-topic, suprsend will attempt to create a subscription on that topic. Once subscription succeeds, you should see successfully "Subscribed" to topic when you visit the Vendor settings page. Email Tracking should start working
 
 ***
