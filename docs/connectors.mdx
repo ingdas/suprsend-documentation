@@ -3,39 +3,47 @@ title: "Connectors"
 description: "Integrate 3rd party platforms with SuprSend"
 ---
 
-With SuprSend Connectors, you can connect data from your 3rd party platforms with SuprSend. This will help you to create user list, trigger workflow directly from these data platforms.
+With SuprSend Connectors, you can connect data from your 3rd party platforms with SuprSend. This will help you to create user list, sync users, events and trigger workflow directly from these data platforms.
 
-Benefits of integrating 3rd party platforms:
+### Benefits of integrating 3rd party platforms
 
-1. **Connect your customer data within mins:**&#x49;f you already track customer data in these platforms, you can directly sync user data from these platforms within mins.
+1. **Connect your customer data within mins:** If you already track customer data in these platforms, you can directly sync user data from these platforms within mins.
 
-2. **Testing the platform becomes easy:**&#x4F;nce your data is synced, you can quickly create a template on our platform and test it out.
+2. **Testing the platform becomes easy:** Once your data is synced, you can quickly create a template on our platform and test it out.
 
-3. **Engineering bandwidth saved:**&#x4F;nce your user and event data is synced, you can directly build and trigger workflows from SuprSend dashboard. It saves engineering bandwidth and also give control to product and growth teams to directly power notification from 3rd party platforms.
+3. **Engineering bandwidth saved:** Once your user and event data is synced, you can directly build and trigger workflows from SuprSend dashboard. It saves engineering bandwidth and also give control to product and growth teams to directly power notification from 3rd party platforms.
 
-There are 2 types of connectors in SuprSend: Source and Destination.
+There are 3 types of connectors in SuprSend: Third party data source, Third party data destination and database.
 
-* **Source** is used to connect event and user data from a third party platform into SuprSend to power notifications.
+* **Third party data source: U**sed to connect event and user data from a third party platform to power notifications or sync user cohorts (lists) in SuprSend.
 
-* **Destination** is used to sync data like message templates and notification metrics that we track in SuprSend back to your data warehouse for reporting and analysis.
+  * [Mixpanel](/docs/mixpanel)
 
-We currently have integration support for below connectors:
+  * [Segment](/docs/segment)
 
-**Sources**
+* **Third party data destination:** Used to sync data like message templates and notification metrics that we track in SuprSend back to your data warehouse for reporting and analysis.
 
-* [Mixpanel](/docs/mixpanel)
+  * [Amazon S3](/docs/amazon_s3)
 
-* [Segment](/docs/segment)
+* **Database:** [Database](/docs/database) connector enables you to setup notifications directly on top of the data from your data warehouse. This way data, product and growth teams can directly setup production notifications and automated marketing campaigns on the 360 degree data without doing any trade-offs on the amount of data available in click stream platforms.
 
-* [Database](/docs/database)
 
-**Destination**
 
-* [Amazon S3](/docs/amazon_s3)
+
+
+  Using database connector, you can directly sync user profiles and create lists in SuprSend with a simple SQL query, without any engineering effort. You can then use these lists to send broadcasts.
+
+  * **Postgres**
+
+  * **MySQL**
+
+  * **Bigquery**
+
+
 
 Need support for another connector? [Please Let us know](https://suprsendcommunity.slack.com/ssb/redirect)
 
-## Add Connectors based on Workspaces
+### Add Connectors based on Workspaces
 
 Most of these platforms have different project for staging and for production. Since, each workspace in SuprSend has separate connector settings, you can connect your connector staging project with SuprSend staging workspace. Once you are done testing, connect your production project with SuprSend production workspace.
 
