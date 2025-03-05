@@ -1,5 +1,5 @@
 ---
-title: "Firebase Push (FCM)"
+title: "Android Push (FCM)"
 description: "This will guide you to integrate FCM push notifications in android react native applications using SuprSend"
 ---
 
@@ -15,7 +15,7 @@ This section is a step-by-step guide to integrating FCM as your service provider
   </Step>
 
   <Step title="Adding Firebase dependencies and plugins">
-    3.1. Add the below dependency inside projects *build.gradle* inside dependencies
+    Add the below dependency inside projects *build.gradle* inside dependencies
 
     <CodeGroup>
       ```groovy build.gradle
@@ -26,7 +26,9 @@ This section is a step-by-step guide to integrating FCM as your service provider
       ```
     </CodeGroup>
 
-    3.2. Add the below plugin inside the app *build.gradle*
+
+
+    Add the below plugin inside the app *build.gradle*
 
     <CodeGroup>
       ```groovy build.gradle
@@ -34,7 +36,9 @@ This section is a step-by-step guide to integrating FCM as your service provider
       ```
     </CodeGroup>
 
-    3.3. Add the below dependency inside apps *build.gradle* inside dependencies
+
+
+    Add the below dependency inside apps *build.gradle* inside dependencies
 
     <CodeGroup>
       ```groovy build.gradle
@@ -46,8 +50,12 @@ This section is a step-by-step guide to integrating FCM as your service provider
   <Step title="Implementing push">
     Push feature can be implemented in two ways:
 
-    <Accordion title="Option-1: Token Generation and Notification handled By SDK" defaultOpen={false}>
+
+
+    <Accordion title="Token Generation and Notification handled By SDK [Recommended]" defaultOpen={true}>
       You may use this option if all of your android push notifications are to be handled via SuprSend SDK. We recommend you use this method as it is just a single-step process to just register the service in your application manifest and everything else will be ready.
+
+
 
       <CodeGroup>
         ```xml AndroidManifest.xml
@@ -66,8 +74,10 @@ This section is a step-by-step guide to integrating FCM as your service provider
       </CodeGroup>
     </Accordion>
 
-    <Accordion title="Option-2: Token Generation and Notification handled By Your Application:" defaultOpen={false}>
-      2.1. Once you get a token from Firebase you can pass the token by using the below code
+    <Accordion title="Token Generation and Notification handled By Your Application" defaultOpen={false}>
+      Once you get a token from Firebase you can pass the token by using the below code
+
+
 
       <CodeGroup>
         ```javascript javascript
@@ -75,7 +85,9 @@ This section is a step-by-step guide to integrating FCM as your service provider
         ```
       </CodeGroup>
 
-      2.2 When you get a push notification you will get a payload and it can be passed to the method provided by Suprsend React Native SDK and the notification displaying part will be handled by SDK.
+
+
+      When you get a push notification you will get a payload and it can be passed to the method provided by Suprsend React Native SDK and the notification displaying part will be handled by SDK.
 
       <CodeGroup>
         ```javascript javascript
@@ -110,8 +122,10 @@ In Android13 (API 33) or higher [notification permission](https://developer.andr
     </CodeGroup>
   </Step>
 
-  <Step title="Step 2">
-    Add POST\_NOTIFICATIONS permission in AndroidManifest.xml if not present already.From your code call the SDK method to show a notification permission popup.&#x20;
+  <Step title="Call the SDK method to show a notification permission popup">
+    This method is asynchronous and returns permission values like granted, denied, and never\_ask\_again.
+
+
 
     <Tip>
       NOTE: This method is asynchronous and returns permission values like granted, denied, and never\_ask\_again.
@@ -122,6 +136,8 @@ In Android13 (API 33) or higher [notification permission](https://developer.andr
       const permission = await Suprsend.askNotificationPermission();
       ```
     </CodeGroup>
+
+
 
     Once permission is granted users can be able to get push notifications.
   </Step>
