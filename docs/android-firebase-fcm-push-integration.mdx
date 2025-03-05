@@ -17,7 +17,7 @@ This section is a step-by-step guide to integrate FCM as your service provider f
   </Step>
 
   <Step title="Adding Firebase dependencies and plugins">
-    3.1. Add below dependency inside projects *build.gradle* inside dependencies
+    Add below dependency inside projects *build.gradle* inside dependencies
 
     <CodeGroup>
       ```groovy build.gradle
@@ -28,7 +28,7 @@ This section is a step-by-step guide to integrate FCM as your service provider f
       ```
     </CodeGroup>
 
-    3.2. Add below plugin inside apps *build.gradle*
+    Add below plugin inside apps *build.gradle*
 
     <CodeGroup>
       ```groovy build.gradle
@@ -36,7 +36,7 @@ This section is a step-by-step guide to integrate FCM as your service provider f
       ```
     </CodeGroup>
 
-    3.3. Add below dependency inside apps *build.gradle* inside dependencies
+    Add below dependency inside apps *build.gradle* inside dependencies
 
     <CodeGroup>
       ```groovy build.gradle
@@ -49,7 +49,7 @@ This section is a step-by-step guide to integrate FCM as your service provider f
     Push feature can be implemented in two ways:
 
     <AccordionGroup>
-      <Accordion title="Token Generation and Notification handled By SDK" defaultOpen={false}>
+      <Accordion title="Token Generation and Notification handled By SDK [Recommended]" defaultOpen={false}>
         You may use this option if all of your android push notifications are to be handled via SuprSend SDK. We recommend you to use this method as it is just a single step process to just register the service in your application manifest and everything else will be ready.
 
         <CodeGroup>
