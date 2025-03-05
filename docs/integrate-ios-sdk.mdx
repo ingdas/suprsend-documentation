@@ -8,8 +8,6 @@ description: "This document covers installation and initialization steps for you
 There are two ways you can install SuprSend SDK into your app:
 
 <Accordion title="Using Cocoapods" defaultOpen={false}>
-  Refer complete docs [here](/docs/integrate-ios-sdk#cocoapods-integration).&#x20;
-
   <Steps>
     <Step title="Add the below pods to your pod file.">
       <CodeGroup>
@@ -33,20 +31,12 @@ There are two ways you can install SuprSend SDK into your app:
 </Accordion>
 
 <Accordion title="Manual Installation" defaultOpen={false}>
-  Refer to complete docs [here](/docs/integrate-ios-sdk#manual-integration)
-
-
-
-  Follow the below steps to do manual integration of SuprSend SDK in the iOS application.
-
   <Steps>
     <Step title="Download these two zip files">
       [SuprSendSdk.xcframework.zip](https://github.com/suprsend/SuprSend-iOS-XCFramework/releases/download/1.0.0/SuprSendSdk.xcframework.zip) and [SuprsendCore.xcframework.zip](https://github.com/suprsend/SuprSend-iOS-XCFramework/releases/download/1.0.0/SuprsendCore.xcframework.zip) and unzip/ extract them.
     </Step>
 
-    <Step title="Move them to your project folder.">
-
-    </Step>
+    <Step title="Move them to your project folder." />
 
     <Step title="Select your project target">
       Select your project target and move to the section ***Frameworks, Libraries, and Embedded Content***
@@ -62,8 +52,6 @@ There are two ways you can install SuprSend SDK into your app:
       After navigating to the project folder, select ***`SuprSendSdk.xcframework`*** and ***`SuprsendCore.xcframework`***
     </Step>
   </Steps>
-
-
 </Accordion>
 
 ## Initialization
@@ -80,10 +68,8 @@ There are two ways you can install SuprSend SDK into your app:
       ```
     </CodeGroup>
   </Step>
-
-  <Step title="Set up workspace key and secret">
-    Replace ***`<your_workspace_key>`*** and ***`<your_workspace_secret>`*** with your project workspace key and workspace secret, which you can find in the SuprSend dashboard.
-  </Step>
 </Steps>
+
+Replace ***`<workspace_key>`*** and ***`<workspace_secret>`***  with the keys linked to your SuprSend account. You can find it on SuprSend dashboard (Developers -> API keys) section.
 
 ***
