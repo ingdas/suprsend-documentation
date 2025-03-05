@@ -56,19 +56,19 @@ There are two ways you can install SuprSend SDK into your app:
 
 ## Initialization
 
-<Steps>
-  <Step title="Add the below lines of code in your AppDelegate.swift.">
-    <CodeGroup>
-      ```swift AppDelegate.swift
-      import SuprSendSdk 
+Add the below lines of code in your AppDelegate.swift.
 
-      // inside application didFinishLaunchingWithOptions method
-      let suprSendConfiguration = SuprSendSDKConfiguration(withKey: "<your_workspace_key>", secret:"<your_workspace_secret>")
-      SuprSend.shared.configureWith(configuration: suprSendConfiguration, launchOptions: launchOptions)   
-      ```
-    </CodeGroup>
-  </Step>
-</Steps>
+<CodeGroup>
+  ```javascript AppDelegate.swift
+  import SuprSendSdk 
+
+  // inside application didFinishLaunchingWithOptions method
+  let suprSendConfiguration = SuprSendSDKConfiguration(withKey: "<workspace_key>", secret:"<workspace_secret>")
+  SuprSend.shared.configureWith(configuration: suprSendConfiguration, launchOptions: launchOptions) 
+  ```
+</CodeGroup>
+
+
 
 Replace ***`<workspace_key>`*** and ***`<workspace_secret>`***  with the keys linked to your SuprSend account. You can find it on SuprSend dashboard (Developers -> API keys) section.
 
