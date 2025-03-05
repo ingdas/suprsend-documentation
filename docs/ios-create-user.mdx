@@ -3,15 +3,13 @@ title: "Create User Profile"
 description: "This document will cover the methods to create a user and set communication channel preferences along with push notification token"
 ---
 
-## Pre-requisites
-
-[Integrate iOS SDK](/docs/integrate-ios-sdk)
-
 ## How Suprsend identifies a user
 
 Suprsend identifies Users by unique identifier `distinct_id`. The identifier for a user is important as we use this key to create a user profile and all the information related to a user, like channel preferences, is attached to that profile. It's best to send the users`distinct_id` from your database to map it across different devices and platforms. You can view the user profile by searching `distinct_id` on the Subscribers page in SuprSend Dashboard.
 
 **Please note:** You cannot change a user's ID once it has been set, so we recommend you use a non-transient ID like a primary key rather than a phone number or email address.
+
+## Manage Users
 
 <Steps>
   <Step title="Create/Identify a new user">
@@ -39,11 +37,7 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
   <Step title="Call reset to clear user data on log-out">
     As soon as the user logs out, call `SuprSend.shared.reset()` method to clear data attributed to a user. This will generate a new random `distinct_id` and clear all super properties. This allows you to handle multiple users on a single device.
 
-
-
     When you call this method, we internally create an event called **$user\_logout**. You can see this event on the SuprSend workflows event list and you can configure a workflow on it.
-
-
 
     <CodeGroup>
       ```swift Swift
@@ -56,7 +50,5 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
     </Warning>
   </Step>
 </Steps>
-
-
 
 ***
