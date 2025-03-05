@@ -6,11 +6,7 @@ description: "This document guides you to integrate apns push notification in re
 <Warning>
   **Major Release (V 1.0.0)** 🚧
 
-
-
   Starting from iOS version v1.0.0, we have introduced explicit push notification permission and option to add images in your notification. Also, introduced background mode for improved tracking of notification delivery.
-
-
 
   If you are using an iOS version older than v1.0.0 and upgrading to the new version. Please ensure to use the latest integration steps, especially for below methods:
 
@@ -27,9 +23,7 @@ description: "This document guides you to integrate apns push notification in re
 
     2. Click on **+capabilities** and select **Push Notifications** and **Background Modes**
 
-    ![](/images/docs/29bafbe-Screenshot_2022-05-19_at_5.48.52_PM.png "Screenshot 2022-05-19 at 5.48.52 PM.png")
-
-    1. In Background Modes, select Remote Notifications option. We use background notifications to receive delivery reports when your app is in quit and background state. Refer [doc](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/pushing_background_updates_to_your_app) to know more about background notification
+    ![](/images/docs/29bafbe-Screenshot_2022-05-19_at_5.48.52_PM.png "Screenshot 2022-05-19 at 5.48.52 PM.png")In Background Modes, select Remote Notifications option. We use background notifications to receive delivery reports when your app is in quit and background state. Refer [doc](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/pushing_background_updates_to_your_app) to know more about background notification
 
     ![](/images/docs/75c5310-Screenshot_2022-09-27_at_1.48.11_PM.png)
   </Step>
@@ -49,7 +43,7 @@ description: "This document guides you to integrate apns push notification in re
   <Step title="Register for push notification in AppDelegate.m file">
     Call *registerForPushNotifications* method below the SuprSend sdk initialised code which will register the iOS device for push service.
 
-    ```objectivec
+    ```objectivec AppDelegate.m
     [SuprSend.shared configureWithConfiguration:configuration launchOptions:launchOptions]; // init code which is already added at time of initialisation
 
     UNAuthorizationOptions options = UNAuthorizationOptionAlert+UNAuthorizationOptionBadge+UNAuthorizationOptionSound;  // Add this
@@ -61,7 +55,7 @@ description: "This document guides you to integrate apns push notification in re
     There are 2 ways in which your app can prompt the users to allow push notifications on their device:
 
     <Accordion title="Explicit Authorization" defaultOpen={false}>
-      [Explicit authorization](/docs/react-native-apns-push#1-explicitly-request-authorization-in-context) allows you to display alerts, add a badge to the app icon, or play sounds whenever a notification is delivered. In this type of authorization, the request is made the first time user launches your app. If the user denies the request, you can't send subsequent prompts to send the notification.
+      Explicit authorization allows you to display alerts, add a badge to the app icon, or play sounds whenever a notification is delivered. In this type of authorization, the request is made the first time user launches your app. If the user denies the request, you can't send subsequent prompts to send the notification.
 
       ![](/images/docs/8538f91-app_permission.png)
 
@@ -71,11 +65,11 @@ description: "This document guides you to integrate apns push notification in re
     </Accordion>
 
     <Accordion title="Provisional Authorization (Supported in iOS 12.0 and above)" defaultOpen={false}>
-      [Provisional notifications ](/docs/react-native-apns-push#2-provisional-authorization-supported-in-ios-120-and-above)are sent quietly to the users —they don’t interrupt the user with a sound or banner. Also, they will not be shown when your app is in foreground. First time this type of notifications are sent, user is asked to "Keep" or "Turn off" the notifications. If they click on "Keep", the further notifications continue to be sent
+      Provisional notifications are sent quietly to the users —they don’t interrupt the user with a sound or banner. Also, they will not be shown when your app is in foreground. First time this type of notifications are sent, user is asked to "Keep" or "Turn off" the notifications. If they click on "Keep", the further notifications continue to be sent
 
       ![](/images/docs/0367021-provisional.png)
 
-      Add below code in `AppDelegate.m` file for provisional authorization instead of the [above one](/docs/react-native-apns-push#step-3-register-for-push-notification-in-appdelegatem-file).
+      Add below code in `AppDelegate.m` file for provisional authorization.
 
       <CodeGroup>
         ```objectivec AppDelegate.m
@@ -162,9 +156,7 @@ description: "This document guides you to integrate apns push notification in re
       ```
     </CodeGroup>
 
-    ![](/images/docs/df1b9d550359532399612d3427d3a075b3e9c2bc70578e3b201fc15fc1c1cabf-Screenshot_2024-09-03_at_2.08.29_PM.png)
-
-    1. Replace the content in **NotificationService.swift** file with below code. In this snippet on line 11, 12 replace values with your workspace key and workspace secret.
+    ![](/images/docs/df1b9d550359532399612d3427d3a075b3e9c2bc70578e3b201fc15fc1c1cabf-Screenshot_2024-09-03_at_2.08.29_PM.png)Replace the content in **NotificationService.swift** file with below code. In this snippet on line 11, 12 replace values with your workspace key and workspace secret.
 
     <CodeGroup>
       ```swift NotificationService.swift
@@ -294,7 +286,7 @@ description: "This document guides you to integrate apns push notification in re
       ```
     </CodeGroup>
 
-    You are now all set to send push notifications. All you have to do is add iOS vendor configuration on SuprSend dashboard and your push notifications will be configured. Please refer [vendor integration guide](/docs/ios-push-vendor-integration) to integrate your apns push service
+    You are now all set to send push notifications. All you have to do is add [iOS vendor configuration](/docs/ios-push-vendor-integration) on SuprSend dashboard and your push notifications will be configured. Please refer [vendor integration guide](/docs/ios-push-vendor-integration) to integrate your apns push service
   </Step>
 </Steps>
 

@@ -19,40 +19,32 @@ description: "This document will cover integration steps for iOS side of your Re
 
 
 
-    **NOTE:** If you are upgrading the SDK version, run `pod update` inside **ios** folder.
+    <Note>
+      If you are upgrading the SDK version, run `pod update` inside **ios** folder.
+    </Note>
+
+
   </Step>
 
   <Step title="Adding Swift support and Bridge header">
     ReactNative iOS side is in Objective-C and our native iOS SDK is written in Swift language so its mandatory to add Swift support in your project.&#x20;
 
-
-
     You can skip this step if you already have swift language support in your project.
 
     <Steps>
-      <Step title="Open xcodeworkspace file inside iOS folder. This will open Xcode.">
-
-      </Step>
+      <Step title="Open xcodeworkspace file inside iOS folder. This will open Xcode." />
 
       <Step title="Add Swift file to project like shown below.">
         ![2880](/images/docs/2dadcb0-Screenshot_2022-05-19_at_5.47.31_PM.png "Screenshot 2022-05-19 at 5.47.31 PM.png")
       </Step>
 
-      <Step title="Select Swift File and click on Next button.">
+      <Step title="Select Swift File and click on Next button." />
 
-      </Step>
+      <Step title="Now give a suitable name to your file and click Create." />
 
-      <Step title="Now give a suitable name to your file and click Create.">
+      <Step title="After that popup will be shown asking to configure Objective-C bridge header." />
 
-      </Step>
-
-      <Step title="After that popup will be shown asking to configure Objective-C bridge header.">
-
-      </Step>
-
-      <Step title="Click on Create Bridge Header.">
-
-      </Step>
+      <Step title="Click on Create Bridge Header." />
     </Steps>
 
     Thats it! your React native iOS project can now understand code written in Swift language.
@@ -64,8 +56,6 @@ description: "This document will cover integration steps for iOS side of your Re
       platform :ios, '13.0' // this version has to be 13 or greater
       ```
     </CodeGroup>
-
-
   </Step>
 
   <Step title="Run pod install from inside iOS folder.">
