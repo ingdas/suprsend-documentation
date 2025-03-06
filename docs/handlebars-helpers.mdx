@@ -464,7 +464,7 @@ Apart from the inbuilt helper functions, we have also created some custom helper
 
     | Example                                          | Output                                 |
     | ------------------------------------------------ | -------------------------------------- |
-    | `{{unique email }}`                              | `[email protected], [email protected]` |
+    | `{{unique email }}`                              | `joe@abc.com, steve@abc.com` |
     | `{{unique array "city" }}`                       | `San Francisco, Austin`                |
     | `{{unique personal_details "name.first_name" }}` | `john, mike`                           |
 
@@ -500,9 +500,9 @@ Apart from the inbuilt helper functions, we have also created some custom helper
           }
         ],
         "email": [
-          "[email protected]",
-          "[email protected]",
-          "[email protected]"
+          "joe@abc.com",
+          "steve@abc.com",
+          "joe@abc.com"
         ]
       }
       ```
@@ -525,7 +525,7 @@ Apart from the inbuilt helper functions, we have also created some custom helper
 
     | Example              | Output              |
     | -------------------- | ------------------- |
-    | `{{itemAt email 1}}` | `[email protected]` |
+    | `{{itemAt email 1}}` | `steve@abc.com` |
 
     <CodeGroup>
       ```json Mock JSON
@@ -544,7 +544,7 @@ Apart from the inbuilt helper functions, we have also created some custom helper
             "name": "Nova"
           }
         ],
-        "email":["[email protected]","[email protected]","[email protected]"]
+        "email":["joe@abc.com","steve@abc.com","joe@abc.com"]
       }
       ```
     </CodeGroup>
@@ -572,8 +572,8 @@ Apart from the inbuilt helper functions, we have also created some custom helper
 
     | Example                | Output                                                      |
     | ---------------------- | ----------------------------------------------------------- |
-    | `{{join email }}`      | `[email protected] , [email protected] , [email protected]` |
-    | `{{join email ' - '}}` | `[email protected] - [email protected] - [email protected]` |
+    | `{{join email }}`      | `joe@abc.com , steve@abc.com , joe@abc.com` |
+    | `{{join email ' - '}}` | `joe@abc.com - steve@abc.com - joe@abc.com` |
 
     <CodeGroup>
       ```json Mock JSON
@@ -592,7 +592,7 @@ Apart from the inbuilt helper functions, we have also created some custom helper
             "name": "Nova"
           }
         ],
-        "email":["[email protected]","[email protected]","[email protected]"]
+        "email":["joe@abc.com","steve@abc.com","joe@abc.com"]
       }
       ```
     </CodeGroup>
@@ -640,7 +640,7 @@ Apart from the inbuilt helper functions, we have also created some custom helper
             "name": "Nova"
           }
         ],
-        "email":["[email protected]","[email protected]","[email protected]"],
+        "email":["joe@abc.com","steve@abc.com","joe@abc.com"],
         "name":"Justin",
         "active":true
       }

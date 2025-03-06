@@ -42,7 +42,7 @@ It is a unified API to trigger workflow and doesn't require user creation before
       "recipients": []map[string]interface{}{
         {
           "distinct_id":  "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
-          "$email": []string{"[email protected]"},
+          "$email": []string{"abc@example.com"},
           "name":"recipient_1",
           "$preferred_language": "en",
   				"$timezone": "America/New_York"
@@ -92,12 +92,12 @@ Recipients in workflow call is an array of `distinct_ids` or recipient objects. 
   "recipients": [
         {
           "distinct_id": "id1",
-          "$email":["[email protected]"],
+          "$email":["abc@example.com"],
           "name":"recipient_1"
         },
     	 {
           "distinct_id": "id1",
-          "$email":["[email protected]"],
+          "$email":["abc@example.com"],
           "name":"recipient_2"
         }
       ]
@@ -121,7 +121,7 @@ This is how the complete recipient object with look like
   ```json json
   {
     "distinct_id": "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
-    "$email":["[email protected]"],
+    "$email":["abc@example.com"],
     "$channels":["email","inbox"],
     "user_prop1":"value_1",
     "$preferred_language":"en",
@@ -143,13 +143,13 @@ This is how the complete recipient object with look like
 
 <CodeGroup>
   ```json json
-  "$email":["[email protected]"],
+  "$email":["abc@example.com"],
   "$whatsapp":["+15555555555"],
   "$sms":["+15555555555"],
   "$androidpush": [{"token": "__android_push_token__", "provider": "fcm", "device_id": ""}],  
   "$iospush":[{"token": "__ios_push_token__", "provider": "apns", "device_id": ""}],
   "$slack": [{
-    "email": "[email protected]",
+    "email": "abc@example.com",
     "access_token": "xoxb-XXXXXXXX"
   }]   // slack using email
 
@@ -216,7 +216,7 @@ Sample template with actor and recipient properties:
     "recipients": [
       {
         "distinct_id": "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
-        "$email":["[email protected]"],
+        "$email":["abc@example.com"],
         "name":"recipient_1"
       }
     ],
@@ -264,7 +264,7 @@ You can send notifications to anonymous users by passing ` "is_transient": true`
       "recipients": []map[string]interface{}{
         {
           "is_transient": true,
-          "$email": []string{"[email protected]"},
+          "$email": []string{"abc@example.com"},
           "name":"recipient_1",
         },
       },
@@ -496,7 +496,7 @@ To add one or more Attachments to a Notification (viz. Email), call `wfInstance.
 
         // if $channels is present, communication will be tried on mentioned channels only.
         // "$channels": []string{"email"},
-        "$email": []string{"[email protected]"},
+        "$email": []string{"abc@example.com"},
         "$androidpush": []map[string]interface{}{
           {"token": "__android_push_token__", "provider": "fcm", "device_id": ""},
         },

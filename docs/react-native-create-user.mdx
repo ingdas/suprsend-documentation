@@ -29,7 +29,7 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
 
       //Sample Values
       suprsend.identify("291eaa13-62f5-4d52-b2dd");
-      suprsend.identify("[email protected]");
+      suprsend.identify("johndoe@gmail.com");
       ```
     </CodeGroup>
 
@@ -63,7 +63,7 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
 
         <CodeGroup>
           ```javascript javascript
-          suprsend.user.setEmail("[email protected]");  // To add Email
+          suprsend.user.setEmail("user@example.com");  // To add Email
 
           suprsend.user.setSms("+91XXXXXXXXXX");  // To add SMS
 
@@ -87,7 +87,7 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
 
         <CodeGroup>
           ```javascript javascript
-          suprsend.user.unSetEmail("[email protected]");  // To remove Email
+          suprsend.user.unSetEmail("user@example.com");  // To remove Email
 
           suprsend.user.unSetSms("+91XXXXXXXXXX");  // To remove SMS
 

@@ -50,7 +50,7 @@ Here is a sample payload of direct API trigger
         # notify user 
         {
           "distinct_id": "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
-          "$email":["[email protected]"],
+          "$email":["abc@example.com"],
           "name":"recipient_1",
           "$preferred_language": "en",
   				"$timezone": "America/New_York"
@@ -91,7 +91,7 @@ Here is a sample payload of direct API trigger
         // notify user 
         {
           "distinct_id": "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
-          "$email":["[email protected]"],
+          "$email":["abc@example.com"],
           "name":"recipient_1",
           "$preferred_language": "en",
   				"$timezone": "America/New_York"
@@ -147,7 +147,7 @@ Here is a sample payload of direct API trigger
         // notify user 
         {
           "distinct_id":  "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
-          "$email": []string{"[email protected]"},
+          "$email": []string{"abc@example.com"},
           "name":"recipient_1",
           "$preferred_language": "en",
   				"$timezone": "America/New_York"
@@ -224,7 +224,7 @@ Here is a sample payload of direct API trigger
              //notify user
              .put(new JSONObject()
                   .put("distinct_id", "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09")
-                  .put("$email", Arrays.asList("[email protected]"))
+                  .put("$email", Arrays.asList("abc@example.com"))
                   .put("name", "recipient_1")
                   .put("$preferred_language", "en")
   				        .put("$timezone", "America/New_York")
@@ -262,7 +262,7 @@ Here is a sample payload of direct API trigger
       "recipients": [
         {
           "distinct_id": "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
-          "$email":["[email protected]"],
+          "$email":["abc@example.com"],
           "name":"recipient_1",
           "$preferred_language": "en",
   				"$timezone": "America/New_York"
@@ -305,7 +305,7 @@ This is how the complete recipient payload with look like
   ```json json
   {
     "distinct_id": "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
-    "$email":["[email protected]"],
+    "$email":["abc@example.com"],
     "$channels":["email","inbox"],
     "user_prop1":"value_1",
     "$preferred_language":"en",
@@ -315,7 +315,7 @@ This is how the complete recipient payload with look like
   {
     "object_type": "departments",
     "id":"finance",
-    "$email":["[email protected]"],
+    "$email":["abc@example.com"],
     "user_prop1":"value_1"
   }
   ```
@@ -334,13 +334,13 @@ This is how the complete recipient payload with look like
 
 <CodeGroup>
   ```json json
-  "$email":["[email protected]"],
+  "$email":["user@example.com"],
   "$whatsapp":["+15555555555"],
   "$sms":["+15555555555"],
   "$androidpush": [{"token": "__android_push_token__", "provider": "fcm", "device_id": ""}],  
   "$iospush":[{"token": "__ios_push_token__", "provider": "apns", "device_id": ""}],
   "$slack": [{
-    "email": "[email protected]",
+    "email": "user@example.com",
     "access_token": "xoxb-XXXXXXXX"
   }]   // slack using email
 
@@ -389,12 +389,12 @@ Recipients in workflow call is an array of `distinct_ids` or recipient objects. 
   "recipients": [
         {
           "distinct_id": "id1",
-          "$email":["[email protected]"],
+          "$email":["id1@example.com"],
           "name":"recipient_1"
         },
     	 {
           "distinct_id": "id1",
-          "$email":["[email protected]"],
+          "$email":["id2@example.com"],
           "name":"recipient_2"
         }
       ]
@@ -433,7 +433,7 @@ Sample template with actor and recipient properties:
     "recipients": [
       {
         "distinct_id": "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
-        "$email":["[email protected]"],
+        "$email":["abc@example.com"],
         "name":"recipient_1"
       }
     ],

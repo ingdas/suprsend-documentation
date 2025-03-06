@@ -29,7 +29,7 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
        
       //Sample Values
       ssApi.identify("291XXXXX-62XX-4dXX-b2XX");
-      ssApi.identify("[email protected]");
+      ssApi.identify("[support@suprsend.com](mailto:support@suprsend.com)");
       ```
     </CodeGroup>
 
@@ -65,7 +65,7 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
 
         <CodeGroup>
           ```kotlin kotlin
-          ssApi.getUser().setEmail("[email protected]")  // To add Email
+          ssApi.getUser().setEmail("[support@suprsend.com](mailto:support@suprsend.com)")  // To add Email
 
           ssApi.getUser().setSms("91XXXXXXXXXX")  // To add SMS
 
@@ -87,7 +87,7 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
 
         <CodeGroup>
           ```kotlin kotlin
-          ssApi.getUser().unSetEmail("[email protected]");  // To remove Email
+          ssApi.getUser().unSetEmail("[support@suprsend.com](mailto:support@suprsend.com)");  // To remove Email
 
           ssApi.getUser().unSetSms("91XXXXXXXXXX") // To remove SMS
 

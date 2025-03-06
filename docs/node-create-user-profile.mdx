@@ -51,7 +51,7 @@ Communication Channel Preference decides whether a user will receive communicati
 
     <CodeGroup>
       ```javascript javascript
-      user.add_email("[email protected]") // add Email
+      user.add_email("user@example.com") // add Email
 
       user.add_sms("+15555555555") // add SMS
 
@@ -66,7 +66,7 @@ Communication Channel Preference decides whether a user will receive communicati
 
       // add Slack using email
       user.add_slack({
-        email: "[email protected]",
+        email: "user@example.com",
         access_token: "xoxb-XXXXXXXX"
       }); 
 
@@ -118,7 +118,7 @@ Communication Channel Preference decides whether a user will receive communicati
 
     <CodeGroup>
       ```javascript javascript
-      user.remove_email("[email protected]") // remove Email
+      user.remove_email("user@example.com") // remove Email
 
       user.remove_sms("+15555555555") // remove SMS
 
@@ -133,7 +133,7 @@ Communication Channel Preference decides whether a user will receive communicati
 
       // remove Slack email
       user.remove_slack({
-        email: "[email protected]",
+        email: "user@example.com",
         access_token: "xoxb-XXXXXXXX"
       });  
 
@@ -215,11 +215,11 @@ To update multiple user profiles use Bulk API. There isn't any limit on number-o
   const bulk_ins = supr_client.bulk_users.new_instance()
 
   const user1 = supr_client.user.get_instance("distinct_id_1") // user1 instance
-  user1.add_email("[email protected]")
+  user1.add_email("u1@example.com")
   user1.set_preferred_language("en")
 
   const user2 = supr_client.user.get_instance("distinct_id_2") // user2 instance
-  user2.remove_email("[email protected]")
+  user2.remove_email("u2@example.com")
 
   //append users instance to bulk instance
   bulk_ins.append(user1)

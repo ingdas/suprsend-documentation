@@ -45,7 +45,7 @@ Especially for event based workflow triggers, where you just pass the user's `di
       ```python python
       # Add channel details to user-instance. Call relevant add_* methods
 
-      user.add_email("[email protected]") # - To add Email
+      user.add_email("user@example.com") # - To add Email
 
       user.add_sms("+15555555555") # - To add SMS
 
@@ -61,7 +61,7 @@ Especially for event based workflow triggers, where you just pass the user's `di
       # - To add Slack using email
       user.add_slack(
         {
-          "email": "[email protected]",
+          "email": "user@example.com",
           "access_token": "xoxb-XXXXXXXX"
         })  
 
@@ -125,7 +125,7 @@ Especially for event based workflow triggers, where you just pass the user's `di
       ```python python
       # Remove channel details from user-instance. Call relevant remove_* methods
 
-      user.remove_email("[email protected]") # - To remove Email
+      user.remove_email("user@example.com") # - To remove Email
 
       user.remove_sms("+15555555555") # - To remove SMS
 
@@ -141,7 +141,7 @@ Especially for event based workflow triggers, where you just pass the user's `di
       # - To remove Slack email
       user.remove_slack(
         {
-          "email": "[email protected]",
+          "email": "user@example.com",
           "access_token": "xoxb-XXXXXXXX"
         })  
 
@@ -285,10 +285,10 @@ Use `.append()` on bulk\_users instance to add however-many-records to call in b
   bulk_ins = supr_client.bulk_users.new_instance()
   # Prepare multiple users
   u1 = supr_client.user.get_instance("distinct_id_1") # User 1
-  u1.add_email("[email protected]")
+  u1.add_email("u1@example.com")
 
   u2 = supr_client.user.get_instance("distinct_id_2") # User 2
-  u2.add_email("[email protected]")
+  u2.add_email("u2@example.com")
 
   # --- use .append on bulk instance to add one or more records
   bulk_ins.append(u1)

@@ -121,7 +121,7 @@ It is possible to use suprsend helper methods to perform edit operations on an o
     ```javascript javascript
     # Add channel details to object_ins-instance. Call relevant add_* methods
 
-    object_ins.add_email("[email protected]"); # - To add Email
+    object_ins.add_email("object_ins@example.com"); # - To add Email
 
     object_ins.add_sms("+15555555555"); # - To add SMS
 
@@ -137,7 +137,7 @@ It is possible to use suprsend helper methods to perform edit operations on an o
     # - To add Slack using email
     object_ins.add_slack(
       {
-        "email": "[email protected]",
+        "email": "user@example.com",
         "access_token": "xoxb-XXXXXXXX"
       });
 
@@ -201,7 +201,7 @@ It is possible to use suprsend helper methods to perform edit operations on an o
     ```javascript javascript
     # Remove channel details from object_ins-instance. Call relevant remove_* methods
 
-    object_ins.remove_email("[email protected]"); # - To remove Email
+    object_ins.remove_email("object_ins@example.com"); # - To remove Email
 
     object_ins.remove_sms("+15555555555"); # - To remove SMS
 
@@ -217,7 +217,7 @@ It is possible to use suprsend helper methods to perform edit operations on an o
     # - To remove Slack email
     object_ins.remove_slack(
       {
-        "email": "[email protected]",
+        "email": "object_ins@example.com",
         "access_token": "xoxb-XXXXXXXX"
       });  
 

@@ -54,7 +54,7 @@ It is a unified API to trigger workflow and doesn't require user creation before
         .put("recipients", new JSONArray()
              .put(new JSONObject()
                   .put("distinct_id", "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09")
-                  .put("$email", Arrays.asList("[email protected]"))
+                  .put("$email", Arrays.asList("abc@example.com"))
                   .put("name", "recipient_1")
                   .put("$preferred_language", "en")
   				        .put("$timezone", "America/New_York")
@@ -127,11 +127,11 @@ Recipients in workflow call is an array of `distinct_ids` or recipient objects. 
     .put("recipients", new JSONArray()
          .put(new JSONObject()
               .put("distinct_id", "id1")
-              .put("$email", Arrays.asList("[email protected]"))
+              .put("$email", Arrays.asList("recipient1@example.com"))
               .put("name", "recipient_1"))
          .put(new JSONObject()
               .put("distinct_id", "id2")
-              .put("$email", Arrays.asList("[email protected]"))
+              .put("$email", Arrays.asList("recipient2@example.com"))
               .put("name", "recipient_2"))
         )
   ```
@@ -153,7 +153,7 @@ This is how the complete recipient object with look like
     .put("recipients", new JSONArray()
          .put(new JSONObject()
               .put("distinct_id", "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09")
-              .put("$email", Arrays.asList("[email protected]")) // email communication channel
+              .put("$email", Arrays.asList("abc@example.com")) // email communication channel
               .put("$sms", Arrays.asList("+15555555555")) // sms communication channel
               .put("$channels", Arrays.asList("email","inbox"))
               .put("$preferred_language", "en")
@@ -180,7 +180,7 @@ This is how the complete recipient object with look like
   JSONObject body = new JSONObject()
     .put("recipients", new JSONArray()
          .put(new JSONObject()
-              .put("$email", Arrays.asList("[email protected]")) // email communication channel
+              .put("$email", Arrays.asList("abc@example.com")) // email communication channel
               .put("$sms", Arrays.asList("+15555555555"))      // sms communication channel
               .put("$whatsapp", Arrays.asList("+15555555555")) // whatsapp communication channel
               .put("$androidpush", new JSONObject()						 // androidpush communication channel
@@ -192,7 +192,7 @@ This is how the complete recipient object with look like
                    .put("provider", "apns")
                    .put("device_id", ""))
               .put("$slack", new JSONObject()								 // slack using user email id
-                   .put("email", "[email protected]")
+                   .put("email", "abc@example.com")
                    .put("access_token", "xoxb-XXXXXXXX"))
               .put("$slack", new JSONObject()								 // slack using member_id
                    .put("user_id", "U/WXXXXXXXX")
@@ -242,7 +242,7 @@ In scenarios where you need to notify a group of users based on another user's a
       .put("recipients", new JSONArray()
            .put(new JSONObject()
                 .put("distinct_id", "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09")
-                .put("$email", Arrays.asList("[email protected]"))
+                .put("$email", Arrays.asList("abc@example.com"))
                 .put("name", "recipient_1")
                ))
       .put("data", new JSONObject()
@@ -272,7 +272,7 @@ You can send notifications to anonymous users by passing ` "is_transient": true`
       .put("recipients", new JSONArray()
            .put(new JSONObject()
                 .put("is_transient", true)	// for anonymous recipient
-                .put("$email", Arrays.asList("[email protected]"))
+                .put("$email", Arrays.asList("abc@example.com"))
                 .put("name", "recipient_1")
                ))
       .put("data", new JSONObject()
@@ -470,13 +470,13 @@ You can configure workflow from backend API by following below steps:
             // "$channels": ["email"],
 
             // User communication channel can be added as [optional]:
-            // "$email":["[email protected]"],
+            // "$email":["user@example.com"],
             // "$whatsapp":["+15555555555"],
             // "$sms":["+15555555555"],
             // "$androidpush": [{"token": "__android_push_token__", "provider": "fcm", "device_id": ""}],  
             // "$iospush":[{"token": "__ios_push_token__", "provider": "apns", "device_id": ""}],
             // "$slack": {
-            //  "email": "[email protected]",
+            //  "email": "e@example.com",
             //  "access_token": "xoxb-XXXXXXXX"
             //}   --- slack using email
 

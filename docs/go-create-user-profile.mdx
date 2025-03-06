@@ -48,7 +48,7 @@ Suprsend identifies a user by a unique identifier `distinct_id`. The identifier 
           user := suprClient.Users.GetInstance("__distinct_id__") // Unique identifier of user in your application
 
           // Add email channel
-          user.AddEmail("[email protected]")
+          user.AddEmail("abc@example.com")
 
           // add sms channel
           user.AddSms("+1444455555")
@@ -88,7 +88,7 @@ Suprsend identifies a user by a unique identifier `distinct_id`. The identifier 
           user := suprClient.Users.GetInstance("__distinct_id__") // Unique identifier of user in your application
 
           // remove email channel
-          user.RemoveEmail("[email protected]")
+          user.RemoveEmail("abc@example.com")
 
           // remove sms channel
           user.RemoveSms("+1444455555")
@@ -195,12 +195,12 @@ Use `.Append()` on BulkUsers instance to add however-many-records to call in bul
 
   // Prepare user1
   user1 := suprClient.Users.GetInstance("__distinct_id1__")
-  user1.AddEmail("[email protected]")
+  user1.AddEmail("abc@example.com")
   user1.AddWhatsapp("+1909090900")
 
   // prepare user 2
   user2 := suprClient.Users.GetInstance("__distinct_id2__")
-  user2.AddEmail("[email protected]")
+  user2.AddEmail("abc@example.com")
   user2.AddWhatsapp("+2909090900")
 
   // Append all users to bulk instance

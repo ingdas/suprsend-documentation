@@ -83,7 +83,7 @@ For event based workflow triggers, you'll have to add channel preference first b
               Subscriber user = suprsendClient.user.getInstance(distinctID);
               
               // Add Email
-              user.addEmail("[email protected]");
+              user.addEmail("user@example.com");
               
               //Add SMS
               user.addSms("+919999999999");
@@ -101,7 +101,7 @@ For event based workflow triggers, you'll have to add channel preference first b
               // Add Slack using user email id
               JSONObject slackIdent = new JSONObject()
           				.put("access_token", "xoxb-XXXXXXXX")
-                  .put("email", "[email protected]");
+                  .put("email", "user@example.com");
               user.addSlack(slackIdent);
               
               // Add Slack using member_id of the user if known
@@ -161,7 +161,7 @@ For event based workflow triggers, you'll have to add channel preference first b
               Subscriber user = suprsendClient.user.getInstance(distinctID);
               
               // Remove Email
-              user.removeEmail("[email protected]");
+              user.removeEmail("user@example.com");
               
               //Remove SMS
               user.removeSms("+919999999999");
@@ -179,7 +179,7 @@ For event based workflow triggers, you'll have to add channel preference first b
               // Remove Slack using user email id
               JSONObject slackIdent = new JSONObject()
           				.put("access_token", "xoxb-XXXXXXXX")
-                  .put("email", "[email protected]");
+                  .put("email", "user@example.com");
               user.removeSlack(slackIdent);
               
               // Remove Slack using member_id of the user if known
@@ -357,11 +357,11 @@ Use `.append()` on bulk\_users instance to add however-many-records to call in b
       // Prepare multiple users
       String distinctID1 = "__distinct_id1__"; // User 1
       Subscriber u1 = suprsendClient.user.getInstance(distinctID1);
-      u1.addEmail("[email protected]");
+      u1.addEmail("user1@example.com");
       
       String distinctID2 = "__distinct_id2__"; // User 2
       Subscriber u2 = suprsendClient.user.getInstance(distinctID2);
-      u2.addEmail("[email protected]");
+      u2.addEmail("user2@example.com");
       
       // --- use .append on bulk instance to add one or more records
       bulkIns.append(u1);
