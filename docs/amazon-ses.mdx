@@ -43,79 +43,59 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
   <Step title="Manange Event destinations" stepNumber="4">
     After creating configuration-set, you'll see a tab "Event Destinations". Email-sending events (send, delivery, open, click, bounce, complaint etc.) will end up in the events destination. Reference documentations:
 
-    [**Creating Amazon SES event destinations**](https://docs.aws.amazon.com/ses/latest/dg/event-destinations-manage.html)
 
-    [Setup SNS event destination for event Publishing](https://docs.aws.amazon.com/ses/latest/dg/event-publishing-add-event-destination-sns.html)
 
-    <Accordion title="Steps to follow for setting up Event Destination and enable Event Tracking:" defaultOpen={false}>
-      1. Go to
+    * [**Creating Amazon SES event destinations**](https://docs.aws.amazon.com/ses/latest/dg/event-destinations-manage.html)
 
-         `Event Destinations`
+    * [Setup SNS event destination for event Publishing](https://docs.aws.amazon.com/ses/latest/dg/event-publishing-add-event-destination-sns.html)
 
-         tab and click
 
-         `Add destination`
 
-         In "Select event types" step, click
+    **Steps to follow for setting up Event Destination and enable Event Tracking:**
 
-         `Select all`
+    <Steps>
+      <Step title="Select the Event Types">
+        Go to`Event Destinations`tab and click`Add destination`In "Select event types" step, click`Select all`button to received all the events to destination.
+      </Step>
 
-         button to received all the events to destination.
+      <Step title="Click on Next.">
 
-      2. Click
+      </Step>
 
-         `Next`
+      <Step title="Go to &#x22;Specify Destination&#x22;">
+        In "`Specify destination`" step.
 
-         .
+        1. Select Destination Type:`Amazon SNS`.
 
-      3. In "
+        2. Enter a destination Name (e.g`ses_suprsend_configset_destination`)
 
-         `Specify destination`
+        3. Make sure`Event publishing`is marked`Enabled`.
 
-         " step.
+        4. Select an SNS topic from the dropdown (or create a new topic) for events destination.
 
-         * Select Destination Type:
+        5. To create a topic, click` Create SNS topic`. In the popup, put `Topic Name` and `Display Name`
 
-           `Amazon SNS`
+        6. Click `Create`.
 
-           .
+        7. Now from the dropdown, select the topic you just created.
+      </Step>
 
-         * Enter a destination Name (e.g
+      <Step title="Click on &#x22;Next&#x22;.">
 
-           `ses_suprsend_configset_destination`
+      </Step>
 
-           )
+      <Step title="Verify information">
+        In the `Review` step, verify the info.
+      </Step>
 
-         * Make sure
+      <Step title="Click &#x22;Add destination&#x22;.">
 
-           `Event publishing`
-
-           is marked
-
-           `Enabled`
-
-           .
-
-         * Select an SNS topic from the dropdown (or create a new topic) for events destination.
-
-         * To create a topic, click
-
-           ` Create SNS topic`
-
-           . In the popup, put "Topic Name" and "Display Name"
-
-         * Click Create.
-
-         * Now from the dropdown, select the topic you just created.
-
-      4. Click Next.
-
-      5. In the "Review" step, verify the info.
-
-      6. Click "Add destination".
-    </Accordion>
+      </Step>
+    </Steps>
 
     Now that you've created a configuration-set to send emails and have specified to receive its events to an SNS-topic, next step is to give SuprSend permission to subscribe to this SNS-topic.
+
+
 
     AWS provides functionality where a different AWS account (in this case SuprSend) can subscribe to an SNS-topic in your account. For more details, [checkout here](https://docs.aws.amazon.com/sns/latest/dg/sns-send-message-to-sqs-cross-account.html).
   </Step>
@@ -209,13 +189,9 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
           	}
           ```
         </CodeGroup>
-
-
       </Step>
 
-      <Step title="ClickSave.">
-
-      </Step>
+      <Step title="ClickSave." />
     </Steps>
   </Step>
 

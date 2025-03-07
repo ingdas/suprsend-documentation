@@ -17,13 +17,9 @@ description: "This document will cover integration steps for iOS side of your Re
       ```
     </CodeGroup>
 
-
-
     <Note>
       If you are upgrading the SDK version, run `pod update` inside **ios** folder.
     </Note>
-
-
   </Step>
 
   <Step title="Adding Swift support and Bridge header">
@@ -31,21 +27,25 @@ description: "This document will cover integration steps for iOS side of your Re
 
     You can skip this step if you already have swift language support in your project.
 
-    <Steps>
-      <Step title="Open xcodeworkspace file inside iOS folder. This will open Xcode." />
+    * Open "xcodeworkspace" file inside iOS folder. This will open Xcode.
 
-      <Step title="Add Swift file to project like shown below.">
-        ![2880](/images/docs/2dadcb0-Screenshot_2022-05-19_at_5.47.31_PM.png "Screenshot 2022-05-19 at 5.47.31 PM.png")
-      </Step>
+    * Add Swift file to project like shown below.
 
-      <Step title="Select Swift File and click on Next button." />
 
-      <Step title="Now give a suitable name to your file and click Create." />
 
-      <Step title="After that popup will be shown asking to configure Objective-C bridge header." />
 
-      <Step title="Click on Create Bridge Header." />
-    </Steps>
+      ![2880](/images/docs/2dadcb0-Screenshot_2022-05-19_at_5.47.31_PM.png "Screenshot 2022-05-19 at 5.47.31 PM.png")
+
+    * Select **Swift File** and click on **`Next`** button.
+
+    * Now give a suitable name to your file and click Create.
+
+    * After that popup will be shown asking to configure Objective-C bridge header. Click on **`Create Bridge Header`**.
+
+
+
+
+      ![](https://files.readme.io/4e4d8ea-Screenshot_2022-05-19_at_6.02.20_PM.png)
 
     Thats it! your React native iOS project can now understand code written in Swift language.
   </Step>
