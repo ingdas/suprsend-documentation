@@ -34,65 +34,69 @@ This is the client javascript SDK used to integrate SuprSend features like Webpu
 
 ## Integration
 
-### 1. Create Client
+<Steps>
+  <Step title="Create Client">
+    Create suprSendClient instance and use same instance to access all the methods of SuprSend library.&#x20;
 
-Create suprSendClient instance and use same instance to access all the methods of SuprSend library.
 
-<CodeGroup>
-  ```typescript syntax
-  import SuprSend from '@suprsend/web-sdk';
 
-  export const suprSendClient = new SuprSend(publicApiKey: string);
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```typescript syntax
+      import SuprSend from '@suprsend/web-sdk';
 
-| Params         | Description                                                                                                                    |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| publicApiKey\* | This is public Key used to authenticate api calls to SuprSend. Get it in SuprSend dashboard **ApiKeys -> Public Keys** section |
+      export const suprSendClient = new SuprSend(publicApiKey: string);
+      ```
+    </CodeGroup>
 
-### 2. Authenticate User
+    | Params         | Description                                                                                                                    |
+    | -------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+    | publicApiKey\* | This is public Key used to authenticate api calls to SuprSend. Get it in SuprSend dashboard **ApiKeys -> Public Keys** section |
+  </Step>
 
-Authenticate user so that all the actions performed after authenticating will be w.r.t that user. This is mandatory step and need to be called before using any other method. This is usually performed after successful login and on reload of page to re-authenticate user.
+  <Step title="Authenticate User">
+    Authenticate user so that all the actions performed after authenticating will be w.r.t that user. This is mandatory step and need to be called before using any other method. This is usually performed after successful login and on reload of page to re-authenticate user.
 
-<CodeGroup>
-  ```typescript syntax
-  const authResponse = await suprSendClient.identify(
-    distinctId: any,
-    userToken?: string, // only needed in production environments for security
-    { refreshUserToken: (oldUserToken: string, tokenPayload: Dictionary) => Promise<string> }
-  );
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```typescript syntax
+      const authResponse = await suprSendClient.identify(
+        distinctId: any,
+        userToken?: string, // only needed in production environments for security
+        { refreshUserToken: (oldUserToken: string, tokenPayload: Dictionary) => Promise<string> }
+      );
+      ```
+    </CodeGroup>
 
-| Properties       | Description                                                                                                                                                                                                      |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| distinctId\*     | Unique identifier to identify a user across platform.                                                                                                                                                            |
-| userToken        | Mandatory when enhanced security mode is on. This is ES256 JWT token generated in your server-side. Refer [docs](/docs/client-authentication#enhanced-security-mode-with-signed-user-token) to create userToken. |
-| refreshUserToken | This function is called by SDK internally to get new userToken before existing token is expired. The returned string is used as the new userToken.                                                               |
+    | Properties       | Description                                                                                                                                                                                                      |
+    | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | distinctId\*     | Unique identifier to identify a user across platform.                                                                                                                                                            |
+    | userToken        | Mandatory when enhanced security mode is on. This is ES256 JWT token generated in your server-side. Refer [docs](/docs/client-authentication#enhanced-security-mode-with-signed-user-token) to create userToken. |
+    | refreshUserToken | This function is called by SDK internally to get new userToken before existing token is expired. The returned string is used as the new userToken.                                                               |
 
-**Returns:** `Promise<ApiResponse>`
+    **Returns:** `Promise<ApiResponse>`
 
-#### 2.1 Check if user is authenticated
+    #### 2.1 Check if user is authenticated
 
-This method will check if user is authenticated i.e., `distinctId` is attached to SuprSend instance. To check for userToken also pass checkUserToken flag true.
+    This method will check if user is authenticated i.e., `distinctId` is attached to SuprSend instance. To check for userToken also pass checkUserToken flag true.
 
-<CodeGroup>
-  ```typescript syntax
-  suprSendClient.isIdentified(checkUserToken?: boolean): boolean
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```typescript syntax
+      suprSendClient.isIdentified(checkUserToken?: boolean): boolean
+      ```
+    </CodeGroup>
+  </Step>
 
-### 3. Reset user
+  <Step title="Reset user">
+    This will remove user data from SuprSend instance. This is usually called on logout action.
 
-This will remove user data from SuprSend instance. This is usually called on logout action.
+    <CodeGroup>
+      ```typescript syntax
+      await suprSendClient.reset();
+      ```
+    </CodeGroup>
 
-<CodeGroup>
-  ```typescript syntax
-  await suprSendClient.reset();
-  ```
-</CodeGroup>
-
-**Returns:** `Promise<ApiResponse>`
+    **Returns:** `Promise<ApiResponse>`
+  </Step>
+</Steps>
 
 ## Response Structure
 
