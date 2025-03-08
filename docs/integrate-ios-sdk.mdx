@@ -33,12 +33,10 @@ There are two ways you can install SuprSend SDK into your app:
 <Accordion title="Manual Installation" defaultOpen={false}>
   <Steps>
     <Step title="Download these two zip files">
-      [SuprSendSdk.xcframework.zip](https://github.com/suprsend/SuprSend-iOS-XCFramework/releases/download/1.0.0/SuprSendSdk.xcframework.zip) and [SuprsendCore.xcframework.zip](https://github.com/suprsend/SuprSend-iOS-XCFramework/releases/download/1.0.0/SuprsendCore.xcframework.zip) and unzip/ extract them.
+      [SuprSendSdk.xcframework.zip](https://github.com/suprsend/SuprSend-iOS-XCFramework/releases/download/1.0.0/SuprSendSdk.xcframework.zip) and [SuprsendCore.xcframework.zip](https://github.com/suprsend/SuprSend-iOS-XCFramework/releases/download/1.0.0/SuprsendCore.xcframework.zip) and unzip/ extract them and move them to your project folder.
     </Step>
 
-    <Step title="Move them to your project folder." />
-
-    <Step title="Select your project target">
+    <Step title="Select your target project">
       Select your project target and move to the section ***Frameworks, Libraries, and Embedded Content***
 
       ![](/images/docs/0fbe367-Screenshot_2022-04-08_at_13.45.44.png "Screenshot 2022-04-08 at 13.45.44.png")
@@ -67,8 +65,6 @@ Add the below lines of code in your AppDelegate.swift.
   SuprSend.shared.configureWith(configuration: suprSendConfiguration, launchOptions: launchOptions) 
   ```
 </CodeGroup>
-
-
 
 Replace ***`<workspace_key>`*** and ***`<workspace_secret>`***  with the keys linked to your SuprSend account. You can find it on SuprSend dashboard (Developers -> API keys) section.
 
