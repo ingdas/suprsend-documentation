@@ -226,39 +226,22 @@ Follow below steps to configure SuprSend Destination in Segment:
   </Step>
 
   <Step title="Add below mapping in the send request:">
-    <Steps>
-      <Step title="Select any of event type - track and identify">
-        ![](https://mintlify.s3-us-west-1.amazonaws.com/suprsend/images/docs/71ff24e-image.png)
-      </Step>
+    * Select any of event type - track and identify
 
-      <Step title="In Add test event, select Load Test Event from Source">
-        ![](/images/docs/141834f-image.png)
-      </Step>
+      ![](https://files.readme.io/71ff24e-image.png)
 
-      <Step title="In Select Mappings, add below details:">
-        1. [`https://hub.suprsend.com/connector/segment/`](https://hub.suprsend.com/connector/segment/)
+    * In Add test event, select **Load Test Event from Source**
 
-           -> URL
+      ![](https://files.readme.io/141834f-image.png)
 
-        2. `POST`
+    * In Select Mappings, add below details:
 
-           -> Method
+    > URL: [https://hub.suprsend.com/connector/segment/](https://hub.suprsend.com/connector/segment/)
 
-        3. `Bearer _api_key_`
+    > Method: `POST`
 
-           ->
-
-           `Authorization`
-
-           in headers. Please make sure to replace "
-
-           *api\_key*
-
-           " with actual api key from segment connector settings page.
-
-        ![](/images/docs/8d6594d-image.png)
-      </Step>
-    </Steps>
+    > `Authorization` in headers: `Bearer _api_key_`(Please make sure to replace "*`api_key`*" with actual api key from segment connector settings page.)
+    > ![](https://files.readme.io/8d6594d-image.png)
   </Step>
 
   <Step title="Sending Test Event">
