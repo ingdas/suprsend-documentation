@@ -7,8 +7,6 @@ This document will cover the methods to integrate SuprSend SDK in your Angular a
 
 <Steps>
   <Step title="Bell icon count and toast message as soon as the notification is delivered">
-
-
     ![](/images/docs/259b66b-image.png)
   </Step>
 
@@ -91,22 +89,22 @@ You can use [embeddable inbox](/docs/embeddable-inbox) provided by SuprSend in a
 
     * Declare the module and methods. If you add other customization properties add them here.
 
-        <CodeGroup>
-          ```typescript index.d.ts
-          declare module '@suprsend/web-inbox' {
-            function initSuprSendInbox(
-              target: HTMLElement | null,
-              config: {
-                workspaceKey: string;
-                distinctId: string;
-                subscriberId: string;
-              }
-            ): void;
-          }
-          ```
-        </CodeGroup>
+          <CodeGroup>
+            ```typescript index.d.ts
+            declare module '@suprsend/web-inbox' {
+              function initSuprSendInbox(
+                target: HTMLElement | null,
+                config: {
+                  workspaceKey: string;
+                  distinctId: string;
+                  subscriberId: string;
+                }
+              ): void;
+            }
+            ```
+          </CodeGroup>
 
-          <p>iii. In **tsconfig.app.json** file add type file in **compilerOptions.typeRoots** key. </p>
+      <p>iii. In **tsconfig.app.json** file add type file in **compilerOptions.typeRoots** key. </p>
 
           <CodeGroup>
             ```json tsconfig.app.json
@@ -119,8 +117,10 @@ You can use [embeddable inbox](/docs/embeddable-inbox) provided by SuprSend in a
               "files": ["src/main.ts"],
               "include": ["src/**/*.d.ts"]
             }
+            ```
+          </CodeGroup>
   </Step>
-</Step>
+</Steps>
 
 ###
 
