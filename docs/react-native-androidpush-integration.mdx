@@ -50,12 +50,8 @@ This section is a step-by-step guide to integrating FCM as your service provider
   <Step title="Implementing push">
     Push feature can be implemented in two ways:
 
-
-
     <Accordion title="Token Generation and Notification handled By SDK [Recommended]" defaultOpen={true}>
       You may use this option if all of your android push notifications are to be handled via SuprSend SDK. We recommend you use this method as it is just a single-step process to just register the service in your application manifest and everything else will be ready.
-
-
 
       <CodeGroup>
         ```xml AndroidManifest.xml
@@ -77,15 +73,11 @@ This section is a step-by-step guide to integrating FCM as your service provider
     <Accordion title="Token Generation and Notification handled By Your Application" defaultOpen={false}>
       Once you get a token from Firebase you can pass the token by using the below code
 
-
-
       <CodeGroup>
         ```javascript javascript
         suprsend.user.setAndroidFcmPush(fcm_token);
         ```
       </CodeGroup>
-
-
 
       When you get a push notification you will get a payload and it can be passed to the method provided by Suprsend React Native SDK and the notification displaying part will be handled by SDK.
 
@@ -124,8 +116,6 @@ In Android13 (API 33) or higher [notification permission](https://developer.andr
 
   <Step title="Call the SDK method to show a notification permission popup">
     This method is asynchronous and returns permission values like granted, denied, and never\_ask\_again.
-
-
 
     <Tip>
       NOTE: This method is asynchronous and returns permission values like granted, denied, and never\_ask\_again.
