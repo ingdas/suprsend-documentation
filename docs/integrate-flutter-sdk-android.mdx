@@ -1,6 +1,6 @@
 ---
 title: "Integrate Flutter SDK - Android"
-description: "This document will cover SDK installation and initialization steps for your Android application"
+description: "This document will cover SDK installation and initialization steps for your Flutter Android application"
 ---
 
 ## Installation
@@ -8,8 +8,6 @@ description: "This document will cover SDK installation and initialization steps
 <Steps>
   <Step title="Open your Flutter project’s pubspec.yaml file">
     Add following line of code inside dependencies in pubspec.yaml file
-
-
 
     <CodeGroup>
       ```yaml pubsec.yaml
@@ -31,8 +29,6 @@ description: "This document will cover SDK installation and initialization steps
     <Warning>
       **Troubleshooting notes:**
 
-
-
       In case you face compilation errors or warnings, please perform the following troubleshooting steps:
 
       * Ensure mavenCentral is present under repositories in project's build.gradle
@@ -52,9 +48,9 @@ description: "This document will cover SDK installation and initialization steps
       **Note**: **SSApi.init** should only be called in Application class, not inside Activity class ie.. **MainActivity.kt**. If your project does not have an Application class, you'll have to create it manually and register it in the AndroidManifest.
     </Note>
 
+
+
     Example: If you create a new Application class called [MainApplication.kt](https://github.com/suprsend/suprsend-flutter-sdk/blob/main/example/android/app/src/main/kotlin/com/suprsend/suprsend_flutter_sdk_example/SuprsendFlutterPluginTestApplication.kt) in your source package, go to your AndroidManifest file and enter the path of the class in the tag like this:
-
-
 
     <CodeGroup>
       ```xml AndroidManifest.xml
