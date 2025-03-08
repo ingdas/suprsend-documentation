@@ -30,7 +30,7 @@ This section is a step by step guide to select Postmark as your email service pr
     | Account Token          | Account token is used by postmark for account level API access. These tokens cannot be used to access individual server data. It's a non-mandatory field to send emails.                                                                                                    |
     | From Name              | Default 'From Name' that email will go from. You can override this in the individual template.*eg. SuprSend*                                                                                                                                                                |
     | From Email             | From email for Postmark has to be a verified email by postmark . Check [below section](/docs/postmark#how-to-verify-email-and-whitelist-domain-on-postmark) on how to verify your email or enable domain whitelisting on Postmark.                                          |
-    | Reply Email            | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. [support@suprsend.com](\(mailto:support@suprsend.com\))*                                                                                                    |
+    | Reply Email            | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. [support@suprsend.com](\(mailto:support@suprsend.com\))*                                                                                                   |
     | Price per notification | This is the amount you pay per email notification to Postmark. It helps us to calculate, estimate and optimise your cost spent on notifications.                                                                                                                            |
     |                        |                                                                                                                                                                                                                                                                             |
   </Step>
@@ -64,11 +64,11 @@ Email signature verification is an important step without which Postmark does no
 
 SuprSend uses webhooks to update notification statuses on delivery, user actions like open/click or the failure scenarios. This allows SuprSend to power your notification analytics. To allow SuprSend to receive these events via webhook, add SuprSend's webhook URL in your Postmark account.
 
-1. Go to Postmark -> servers -> select your server -> select your stream -> webhooks -> add webhook
+* Go to Postmark -> servers -> select your server -> select your stream -> webhooks -> add webhook
 
 ![](/images/docs/23d0698-Screenshot_2024-03-30_at_1.32.21_AM.png)
 
-1. On **Add webhook**, settings page, add [https://hub.suprsend.com/webhook/postmark/](https://hub.suprsend.com/webhook/postmark/) in webhook URL section and enable all events on Postmark.
+* On **Add webhook**, settings page, add [https://hub.suprsend.com/webhook/postmark/](https://hub.suprsend.com/webhook/postmark/) in webhook URL section and enable all events on Postmark.
 
 ![](/images/docs/19a5ffa-Screenshot_2024-03-30_at_1.36.14_AM.png)
 
