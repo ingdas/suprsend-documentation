@@ -43,7 +43,7 @@ Enclose your app in **SuprSendProvider** like below and pass the `workspace key`
 
 ## Adding SuprSend Inbox component
 
-### useBell hook
+### 1) useBell hook
 
 This hook provides unSeenCount, markAllSeen which is related to the Bell icon in the inbox
 
@@ -62,7 +62,7 @@ This hook provides unSeenCount, markAllSeen which is related to the Bell icon in
   ```
 </CodeGroup>
 
-### useNotifications hook
+### 2) useNotifications hook
 
 This hook provides a notifications list, unSeenCount, markClicked, markAllSeen.
 
@@ -135,8 +135,6 @@ This hook provides a notifications list, unSeenCount, markClicked, markAllSeen.
   ```
 </CodeGroup>
 
-
-
 ##### Notification Object structure:
 
 <CodeGroup>
@@ -162,7 +160,7 @@ This hook provides a notifications list, unSeenCount, markClicked, markAllSeen.
   ```
 </CodeGroup>
 
-### useEvent hook
+### 3) useEvent hook
 
 This hook is an event emitter when and takes arguments event type and callback function when the event happens. Must be called anywhere inside SuprSendProvider
 
