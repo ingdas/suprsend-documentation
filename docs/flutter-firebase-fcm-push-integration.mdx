@@ -3,9 +3,9 @@ title: "Firebase Push (FCM)"
 description: "This will guide you to integrate FCM push notifications in android flutter applications using SuprSend"
 ---
 
-This section is a step-by-step guide to integrating FCM as your service provider in your flutter application for sending Android Push notifications.
-
-Example integration project can be found [here](<https://github.com/suprsend/suprsend-flutter-sdk/tree/main/example&#xA;>).
+<Tip>
+  Example integration project can be found [here](<https://github.com/suprsend/suprsend-flutter-sdk/tree/main/example&#xA;>).
+</Tip>
 
 <Steps>
   <Step title="Create a Firebase project in the firebase console" stepNumber="1">
@@ -19,7 +19,7 @@ Example integration project can be found [here](<https://github.com/suprsend/sup
   </Step>
 
   <Step title="Adding Firebase dependencies and plugins" stepNumber="3">
-    3.1. Add the below dependency inside projects *`build.gradle`* inside dependencies
+    Add the below dependency inside projects *`build.gradle`* inside dependencies
 
     <CodeGroup>
       ```groovy build.gradle
@@ -32,7 +32,7 @@ Example integration project can be found [here](<https://github.com/suprsend/sup
 
 
 
-    3.2. Add the below plugin inside the app *`build.gradle`*
+    Add the below plugin inside the app *`build.gradle`*
 
     <CodeGroup>
       ```groovy build.gradle
@@ -42,7 +42,7 @@ Example integration project can be found [here](<https://github.com/suprsend/sup
 
 
 
-    3.3. Add the below dependency inside apps *`build.gradle`* inside dependencies
+    Add the below dependency inside apps *`build.gradle`* inside dependencies
 
     <CodeGroup>
       ```groovy build.gradle
@@ -55,10 +55,8 @@ Example integration project can be found [here](<https://github.com/suprsend/sup
     Push feature can be implemented in two ways:
 
     <AccordionGroup>
-      <Accordion title="Option-1: Token Generation and Notification handled By SDK" defaultOpen={false}>
+      <Accordion title="Token Generation and Notification handled By SDK [Recommended]" defaultOpen={true}>
         You may use this option if all of your android push notifications are to be handled via SuprSend SDK. We recommend you use this method as it is just a single-step process to just register the service in your application manifest and everything else will be ready.
-
-
 
         <CodeGroup>
           ```xml AndroidManifest.xml
@@ -77,8 +75,8 @@ Example integration project can be found [here](<https://github.com/suprsend/sup
         </CodeGroup>
       </Accordion>
 
-      <Accordion title="Option-2: Token Generation and Notification handled By Your Application:" defaultOpen={false}>
-        1. Once you get a token from Firebase you can pass the token by using the below code
+      <Accordion title="Token Generation and Notification handled By Your Application" defaultOpen={false}>
+        Once you get a token from Firebase you can pass the token by using the below code
 
         <CodeGroup>
           ```javascript main.dart
@@ -86,7 +84,9 @@ Example integration project can be found [here](<https://github.com/suprsend/sup
           ```
         </CodeGroup>
 
-        1. When you get a push notification you will get a payload and it can be passed to the method provided by Suprsend Flutter SDK and the notification displaying part will be handled by SDK.
+
+
+        When you get a push notification you will get a payload and it can be passed to the method provided by Suprsend Flutter SDK and the notification displaying part will be handled by SDK.
 
         <CodeGroup>
           ```javascript main.dart
@@ -95,6 +95,8 @@ Example integration project can be found [here](<https://github.com/suprsend/sup
         </CodeGroup>
 
         <Info>
+          ## How to identify if notification is sent by SuprSend?
+
           If notification payload contains key **supr\_send\_n\_pl** then simply consider this as payload sent from suprsend and pass the payload to suprsend sdk.
         </Info>
       </Accordion>
@@ -102,14 +104,12 @@ Example integration project can be found [here](<https://github.com/suprsend/sup
   </Step>
 </Steps>
 
-**Targeting Android 13 (API-33):**
+### **Targeting Android 13 (API-33)**
 
 In Android13 (API 33) or higher [notification permission](https://developer.android.com/develop/ui/views/notifications/notification-permission) will be disabled by default so permission needs to be asked to enable notifications if you are targeting android 13 users. You can follow [this doc](https://developer.android.com/about/versions/13/setup-sdk) to update to support Andriod 13(API 33), if not already supported. Please test the application as well as upgrading to API 33 may causes breaking changes.
 
 <Steps>
-  <Step title="Step 1">
-    Add POST\_NOTIFICATIONS permission in AndroidManifest.xml if not present already.
-
+  <Step title="Add POST_NOTIFICATIONS permission in AndroidManifest.xml if not present already.">
     <CodeGroup>
       ```xml AndroidManifest.xml
       <manifest ...>
@@ -122,12 +122,12 @@ In Android13 (API 33) or higher [notification permission](https://developer.andr
     </CodeGroup>
   </Step>
 
-  <Step title="Step 2">
-    From your code call the SDK method to show a notification permission popup. This method is asynchronous and returns permission values. To show permission popup we use flutter package ***permission\_handler***
+  <Step title="From your code call the SDK method to show a notification permission popup">
+    This method is asynchronous and returns permission values. To show permission popup we use flutter package ***permission\_handler***
 
-
-
-    **NOTE**: This method is available from suprsend-flutter-sdk v2.0.0. Please update it if using lower versions
+    <Info>
+      This method is available from suprsend-flutter-sdk v2.0.0. Please update it if using lower versions
+    </Info>
 
 
 
@@ -140,6 +140,8 @@ In Android13 (API 33) or higher [notification permission](https://developer.andr
       print("permission data is ${data == PermissionStatus.granted}");
       ```
     </CodeGroup>
+
+
 
     Once permission is granted users can be able to get push notifications.
   </Step>
