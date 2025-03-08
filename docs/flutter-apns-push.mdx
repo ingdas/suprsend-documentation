@@ -1,12 +1,10 @@
 ---
 title: "iOS Push Integration"
-description: "This document guides you to integrate apns push notification in flutter ios application."
+description: "This document guides you to integrate apns push notification in flutter iOS application."
 ---
 
 <Warning>
   Starting from iOS version v1.0.0, we have introduced explicit push notification permission and option to add images in your notification. Also, introduced background mode for improved tracking of notification delivery.
-
-
 
   If you are using an iOS version older than v1.0.0 and upgrading to the new version. Please ensure to use the latest integration steps, especially for below methods:
 
@@ -17,21 +15,23 @@ description: "This document guides you to integrate apns push notification in fl
   3. [Tracking delivery methods](/docs/flutter-apns-push#step-4-enable-sending-and-tracking-of-push-notifications)
 </Warning>
 
+<Tip>
+  Example flutter repository with this implementation can be found [here](https://github.com/suprsend/suprsend-flutter-sdk/tree/main/example)
+</Tip>
+
 <Steps>
   <Step title="Add capabilities in iOS application" stepNumber="1">
     1. Inside Targets select **signing and capabilities**
 
     2. Click on **+capabilities** and select **Push Notifications** and **Background Modes**
 
-    ![](/images/docs/29bafbe-Screenshot_2022-05-19_at_5.48.52_PM.png "Screenshot 2022-05-19 at 5.48.52 PM.png")
-
-    1. In Background Modes, select **Remote Notifications** option. We use background notifications to receive delivery reports when your app is in quit and background state. Refer [doc](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/pushing_background_updates_to_your_app) to know more about background notification
+    ![](/images/docs/29bafbe-Screenshot_2022-05-19_at_5.48.52_PM.png "Screenshot 2022-05-19 at 5.48.52 PM.png")In Background Modes, select **Remote Notifications** option. We use background notifications to receive delivery reports when your app is in quit and background state. Refer [doc](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/pushing_background_updates_to_your_app) to know more about background notification
 
     ![](/images/docs/75c5310-Screenshot_2022-09-27_at_1.48.11_PM.png)
   </Step>
 
   <Step title="Register for push notification in AppDelegate.swift file" stepNumber="2">
-    Call *registerForPushNotifications* method below the SuprSend sdk initialized code which will register the iOS device for push service
+    Call `registerForPushNotifications` method below the SuprSend SDK initialized code which will register the iOS device for push service
 
     <CodeGroup>
       ```objectivec AppDelegate.swift
@@ -47,21 +47,21 @@ description: "This document guides you to integrate apns push notification in fl
 
     <AccordionGroup>
       <Accordion title="Explicit Authorization" defaultOpen={false}>
-        [Explicit authorization](/docs/flutter-apns-push#1-explicit-authorization) allows you to display alerts, add a badge to the app icon, or play sounds whenever a notification is delivered. In this type of authorization, the request is made the first time user launches your app. If the user denies the request, you can't send subsequent prompts to send the notification.
+        Explicit authorization allows you to display alerts, add a badge to the app icon, or play sounds whenever a notification is delivered. In this type of authorization, the request is made the first time user launches your app. If the user denies the request, you can't send subsequent prompts to send the notification.
 
         ![](/images/docs/8538f91-app_permission.png)
 
         <Info>
-          Explicit authorization is our default authorization method as it automatically sets alert, sound and badge as soon as the user allows this request.
+          Explicit authorization is default authorization method as it automatically sets alert, sound and badge as soon as the user allows this request.
         </Info>
       </Accordion>
 
       <Accordion title="Provisional Authorization" defaultOpen={false}>
-        [Provisional Authorization](/docs/flutter-apns-push#2-provisional-authorization-supported-in-ios-120-and-above) (Supported in iOS 12.0 and above) are sent quietly to the users —they don’t interrupt the user with a sound or banner. Also, they will not be shown when your app is in foreground. First time this type of notifications are sent, user is asked to "Keep" or "Turn off" the notifications. If they click on "Keep", the further notifications continue to be sent
+        Provisional Authorization (Supported in iOS 12.0 and above) are sent quietly to the users —they don’t interrupt the user with a sound or banner. Also, they will not be shown when your app is in foreground. First time this type of notifications are sent, user is asked to "Keep" or "Turn off" the notifications. If they click on "Keep", the further notifications continue to be sent
 
         ![](/images/docs/0367021-provisional.png)
 
-        Add below code in `AppDelegate.swift` file for provisional authorization instead of the [above one](/docs/flutter-apns-push#step-2-register-for-push-notification-in-appdelegateswift-file).
+        Add below code in `AppDelegate.swift` file for provisional authorization.
 
         <CodeGroup>
           ```swift AppDelegate.swift
@@ -82,8 +82,6 @@ description: "This document guides you to integrate apns push notification in fl
 
   <Step title="Enable sending and tracking of push notifications" stepNumber="4">
     Receiving iOS APNS token sending to backend and listening for push notification and tracking user notification clicks can be done using the following snippet of code. Directly copy and paste it at end of the AppDelegate.swift file inside *AppDelegate* class.
-
-
 
     <CodeGroup>
       ```swift AppDelegate.swift
@@ -306,9 +304,5 @@ description: "This document guides you to integrate apns push notification in fl
     You are now all set to send push notifications. All you have to do is add iOS vendor configuration on SuprSend dashboard and your push notifications will be configured. Please refer [vendor integration guide](/docs/ios-push-vendor-integration) to integrate your apns push service.
   </Step>
 </Steps>
-
-<Tip>
-  **NOTE:** Example flutter repository with this implementation can be found [here](https://github.com/suprsend/suprsend-flutter-sdk/tree/main/example)
-</Tip>
 
 ***
