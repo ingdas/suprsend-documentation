@@ -1,9 +1,7 @@
 ---
 title: "Integrate Flutter SDK - iOS"
-description: "This document will cover SDK installation and initialization steps for your iOS application"
+description: "This document will cover SDK installation and initialization steps for your Flutter iOS application"
 ---
-
-Please follow the below steps for Suprsend SDK set up in your Flutter iOS project
 
 ## Installation
 
@@ -22,8 +20,6 @@ Please follow the below steps for Suprsend SDK set up in your Flutter iOS projec
   </Step>
 
   <Step title="Run flutter pub get in the terminal">
-
-
     <CodeGroup>
       ```shell shell
       flutter pub get
@@ -32,17 +28,17 @@ Please follow the below steps for Suprsend SDK set up in your Flutter iOS projec
   </Step>
 
   <Step title="Changes in PodFile and Run pod">
-    Install SuprSend sdk needs iOS platform version of 13 or above, so check it inside PodFile and change if its less than 13.0 and then run **pod install** from inside iOS folder.
+    SuprSend SDK can be installed in iOS platform version >= 13.  Check version in PodFile and upgrade it by running **pod install** inside iOS folder.
 
     <CodeGroup>
       ```ruby PodFile
-      platform :ios, '13.0' // this version has to be 13 or greater
+      platform :ios, '13.0' // this version has to be >=13
       ```
     </CodeGroup>
   </Step>
 
   <Step title="Change iOS Deployment Target">
-    &#x20;SuprSend sdk needs an iOS deployment target of 11 or above, open your project in Xcode(*project > ios > project.xcworkspace*) and update the target as given in below image.
+    &#x20;SuprSend sdk needs an iOS deployment target >= 11. Open your project in Xcode(*project > ios > project.xcworkspace*) and update the target.
 
     ![](/images/docs/18650ad-Screenshot_2022-07-27_at_12.36.03_PM.png "Screenshot 2022-07-27 at 12.36.03 PM.png")
   </Step>
@@ -50,7 +46,7 @@ Please follow the below steps for Suprsend SDK set up in your Flutter iOS projec
 
 ## Initialization
 
-To integrate SuprSend in your iOS app, you'll need to import Suprsend iOS sdk into your application. In `AppDelegate` add the below mentioned code inside `didFinishLaunchingWithOptions` method, just before returning.
+Import Suprsend iOS SDK into your application. In `AppDelegate`, add the below code inside `didFinishLaunchingWithOptions` method, just before returning.
 
 <CodeGroup>
   ```objectivec AppDelegate.swift
@@ -72,9 +68,7 @@ To integrate SuprSend in your iOS app, you'll need to import Suprsend iOS sdk in
   ```
 </CodeGroup>
 
-Replace **WORKSPACE KEY** and **WORKSPACE SECRET** with your workspace values. You will get both the tokens from [Suprsend dashboard](https://app.suprsend.com/) (***Settings page -> "API keys"*** section). For more details, check the [documentation on 'Workspaces'](/docs/workspace).
-
-![](/images/docs/d60fec2-Frame_58_1.png)
+Replace **`WORKSPACE KEY`** and **`WORKSPACE SECRET`** with values linked to your account. You'll find this in SuprSend dashboard (Developers -> API keys) page.
 
 ## Logging
 
