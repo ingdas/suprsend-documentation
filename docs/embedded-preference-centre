@@ -1,5 +1,5 @@
 ---
-title: "Overview"
+title: "Embedded Preference Centre"
 description: "Get an overview of the Notification Preference centre in SuprSend"
 ---
 
@@ -18,17 +18,13 @@ With SuprSend, user can set preferences at 3 levels - communication channel, not
 SDKs are available in below languages. We'll be adding support in other languages soon:
 
 <CardGroup cols={3}>
-  <Card title="Javascript" icon="js">
+  <Card title="Javascript" icon="js" href="docs/preferences-javascript">
     (Web)
   </Card>
 
-  <Card title="React" icon="react" href="/docs/react">
+  <Card title="React" icon="react" href="docs/preferences-angular" />
 
-  </Card>
-
-  <Card title="Angular" icon="angular" href="/docs/angular">
-
-  </Card>
+  <Card title="Angular" icon="angular" href="docs/preferences-react" />
 </CardGroup>
 
 ## Adding preference page link in notifications
