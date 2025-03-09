@@ -3,6 +3,8 @@ title: "Amazon S3"
 description: "Export notification data from Suprsend to your S3 bucket"
 ---
 
+There are 2 types of connectors in SuprSend: **Source** and **Destination**. Source is used to connect event and user data from a third party platform into SuprSend to power notifications. Destination is used to sync data like message templates and notification metrics that we track in SuprSend back to your data warehouse for reporting and analysis.
+
 Amazon S3 is a destination used to ingest data from SuprSend into your S3 bucket type. You can directly query on this data using Athena or import it to data warehouses like Redshift, Snowflake, Clickhouse etc. for analysis.
 
 ## How it works?
@@ -12,8 +14,6 @@ This integration exports individual [parquet](https://parquet.apache.org/) files
 <Note>
   This integration only publishes parquet files to your storage bucket. You can either use Athena to query this data or ingest this data into a data warehouse for analysis.
 </Note>
-
-
 
 ## Setting up Amazon S3 connector
 
@@ -45,7 +45,6 @@ This integration exports individual [parquet](https://parquet.apache.org/) files
   <Step title="Set permission policy for the bucket" stepNumber="2">
     We'll need permission to `PutObject` for data ingestion in your bucket. To set permission policy, On your [Amazon AWS IAM Management Console](https://console.aws.amazon.com/iam/) , select Policies Page from the side bar. Click on **`Create Policy`** and on the JSON tab, copy paste the below code.
 
-
     Replace **`suprsend-notification`** with the bucket name you've created. Create a relevant name to the policy, something like - **`SingleBucketWriteAccess`**.
 
     <CodeGroup>
@@ -67,28 +66,28 @@ This integration exports individual [parquet](https://parquet.apache.org/) files
       }
       ```
     </CodeGroup>
-
-
   </Step>
 
   <Step title="Create a user with access to the bucket" stepNumber="3">
     This user will be needed to get the `access key id` and `secret`. To create user permission policy, On your [Amazon AWS IAM Management Console](https://console.aws.amazon.com/iam/) , select `Users Page`from the side bar. If you want to use an existing user, just assign the [permission created in step 2](/docs/amazon_s3#step-2-set-permission-policy-for-the-bucket) to your existing user.
 
-    <Accordion title="You can create a new user by these steps" defaultOpen={false}>
-      1. On the user page, click o&#x6E;**"Add users"**
 
-      2. Add relevant user name, you can use this name for example:`s3-bucket-suprsend`
 
-      3. Leave provide user access to the AWS Management Console unchecked and click o&#x6E;**"Next: Permissions"**
+    **You can create a new user by these steps:**
 
-      4. Select Attach existing policies directly.
+    1. On the user page, click o&#x6E;**"Add users"**
 
-      5. Search for the policy created in step 2 and select it.
+    2. Add relevant user name, you can use this name for example:`s3-bucket-suprsend`
 
-      6. Click **"Next: Tags"** -> **"Next:Review"** -> **"Create User"** buttons.
+    3. Leave provide user access to the AWS Management Console unchecked and click o&#x6E;**"Next: Permissions"**
 
-      7. Continue to step 4 before closing the browser.
-    </Accordion>
+    4. Select Attach existing policies directly.
+
+    5. Search for the policy created in step 2 and select it.
+
+    6. Click **"Next: Tags"** -> **"Next:Review"** -> **"Create User"** buttons.
+
+    7. Continue to step 4 before closing the browser.
   </Step>
 
   <Step title="Get access key ID and secret for the above user" stepNumber="4">
