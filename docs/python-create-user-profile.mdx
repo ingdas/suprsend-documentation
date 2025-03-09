@@ -3,29 +3,28 @@ title: "Create User Profile"
 description: "This document will cover the methods to create a user and set channel preferences"
 ---
 
-## Pre-requisites
-
-[Integrate Python SDK](/docs/python-sdk)
-
 ## How Suprsend identifies a user
 
-Suprsend identifies a user by a unique identifier `distinct_id`. The identifier for a user is important as we use this key to create user profile and all the information related to a user, like channel preferences, is attached to that profile. You can view user profile by searching `distinct_id` on [Subscribers page](https://app.suprsend.com/en/production/subscribers/subscribers/)
+SuprSend identifies users with immutable `distinct_id`. It's best to map the same identifier in your DB with `distinct_id` in SuprSend. Do not use identifiers that can be changed like email or phone number. You can view synced users by searching `distinct_id` on [Users page](https://app.suprsend.com/en/production/users).
 
-**Please note:** you cannot change a user's id once it has been set, so we recommend you use a non-transient id like primary key in your DB rather than phone number or email address.
+## Create User
 
-## Step 1 : Create a new user
-
-To create a new user or to update the profile of an existing user, you'll have to first instantiate the user object. Call `supr_client.user.get_instance` to instantiate user object.
+To create a new user or to update an existing user, you'll have to fetch user instance. Call `supr_client.user.get_instance` to instantiate user object.
 
 <CodeGroup>
   ```python python
+  import suprsend
+
+  supr_client = suprsend.Suprsend("workspace_key", "workspace_secret")
+
   distinct_id = "distinct_id"  # Unique identifier of user in your application
+
   # Instantiate User profile
-  user = supr_client.user.get_instance(distinct_id=distinct_id)
+  user = supr_client.users.get_edit_instance(distinct_id)
   ```
 </CodeGroup>
 
-## Step 2: Set Communication Channel preferences
+## Edit  User
 
 Communication Channel Preference decides whether a user will receive communication on a particular channel or not. Setting Channel preferences means that whenever you are triggering a workflow, the communication will be sent on the channels set in user profile (given that the template for that channel is present in the template group).
 
@@ -304,8 +303,6 @@ Use `.append()` on bulk\_users instance to add however-many-records to call in b
 
 <Warning>
   **Bulk API supported in SDK version 0.2.0 and above:**
-
-
 
   Bulk API is supported in SuprSend python-sdk version 0.2.0 and above. If you are using an older version, please upgrade to the latest SDK version.
 </Warning>
