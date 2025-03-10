@@ -1,32 +1,68 @@
 ---
 title: "Broadcast"
-description: "Method to trigger broadcast messages using python SDK"
+description: "Method to trigger broadcast on lists using python SDK"
 ---
-
-You can use this method to send instant notifications to a list of users.
 
 ## Pre-requisites
 
 [Create a list of users](/docs/python-lists)
 
-## Data Structure of Broadcast body
+## Trigger Broadcast
 
-Brodcast body with all possible configurations
+You can trigger broadcast using `supr_client.subscriber_lists.broadcast()` method.
 
 <CodeGroup>
-  ```python python
-  broadcast_body = {
-    "list_id": "_list_id_",
-    "template": "_template_slug_",
-    "notification_category": "_",
-    "channels": [],
-    "delay": "_time_delay_",
-    "trigger_at": "_ISO_timestamp_",
-    "data": {
-      "key1": "value1",
-      "key2": "value2"
+  ```python Request [Method]
+  from suprsend import Suprsend,  SuprsendAPIException, SubscriberListBroadcast
 
-    }
+  supr_client = Suprsend(
+    "_workspace_key_",
+    "_workspace_secret_",
+  )
+
+  broadcast_body = {
+  "list_id": "_list_id_",
+  "template": "_template_slug_",
+  "notification_category": "promotional",
+  "channels": [], # Pass channel values - email, sms, whatsapp, androidpush, iospush, ms_teams, slack, webpush
+  "delay": "_time_delay_", 
+  "trigger_at": "2022-12-27T11:14:51.643Z",
+  "data": {
+    "key1": "value1",
+    "key2": "value2"
+  }
+
+  inst = SubscriberListBroadcast(body=broadcast_body)
+  resp = supr_client.subscriber_lists.broadcast(inst)
+  print(resp)
+  ```
+
+  ```python Sample
+  from suprsend import Suprsend,  SuprsendAPIException, SubscriberListBroadcast
+
+  supr_client = Suprsend(
+    "_workspace_key_",
+    "_workspace_secret_",
+  )
+
+  broadcast_body = {
+  "list_id": "_list_id_",
+  "template": "_template_slug_",
+  "notification_category": "promotional",
+  "channels": ["iospush"], # Pass channel values - email, sms, whatsapp, androidpush, iospush, ms_teams, slack, webpush
+  # "delay": 30,
+  # "trigger_at": "2022-12-27T11:14:51.643Z",
+  "data": {
+    "amount": "$100",
+    "product_name": "Medicines"
+  }
+
+  inst = SubscriberListBroadcast(body=broadcast_body)
+  resp = supr_client.subscriber_lists.broadcast(inst)
+  print(resp)
+  ```
+
+  ```
   ```
 </CodeGroup>
 
@@ -41,44 +77,5 @@ Broadcast body field description:
 | **`delay`**                 | Broadcast will be halted for the time mentioned in delay, and become active once the delay period is over.                                                                                                                                                                      | **XX**d**XX**h**XX**m**XX**s or if its number (n) then delay is in seconds (n) | *Optional*  |
 | **`trigger_at`**            | Trigger broadcast on a specific date-time                                                                                                                                                                                                                                       | date string in ISO 8601 eg. "2021-08-27T20:14:51.643Z"                         | *Optional*  |
 | **`data`**                  | variable data defined in templates                                                                                                                                                                                                                                              | *JSON* "data": \{ "key": \{ "key": "value", "key": "value" } },                | *Optional*  |
-
-### Sample broadcast body
-
-<CodeGroup>
-  ```python python
-  broadcast_body = {
-    "list_id": "bulk_list",
-    "template": "purchase-confirmation",
-    "notification_category": "transactional",
-    "channels": ["iospush"],
-    # "delay": 30,
-    # "trigger_at": "2022-12-27T11:14:51.643Z",
-    "data": {
-      "amount": "$100",
-      "product_name": "Medicines"
-    }
-  ```
-</CodeGroup>
-
-## Triggering Broadcast
-
-You can trigger broadcast using `supr_client.subscriber_lists.broadcast()` method.
-
-<CodeGroup>
-  ```python python
-  from suprsend import Suprsend,  SuprsendAPIException, SubscriberListBroadcast
-
-  supr_client = Suprsend(
-    "_api_key_",
-    "_api_secret_",
-  )
-
-  broadcast_body = {...}
-
-  inst = SubscriberListBroadcast(body=broadcast_body)
-  resp = supr_client.subscriber_lists.broadcast(inst)
-  print(resp)
-  ```
-</CodeGroup>
 
 ***
