@@ -49,7 +49,18 @@ It is a unified API to trigger workflow and doesn't require user creation before
   response = supr_client.workflows.trigger(w1)
   print(response)
   ```
+
+  ```python Response
+  {
+    success: true,
+    status: 'success',
+    status_code: 202,
+    message: { status: 'success' }
+  }
+  ```
 </CodeGroup>
+
+Once your request is accepted, you can check the status of your request on [SuprSend Logs](https://app.suprsend.com/en/staging/logs/api?last_n_minutes=1440) page.
 
 | Property                           | Type                               | Description                                                                                                                                                                                                                                                                                                              |
 | ---------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -284,27 +295,12 @@ SuprSend supports idempotency to ensure that requests can be retried safely with
 
 * **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
 
-### Response structure
-
-<CodeGroup>
-  ```json json
-  {
-    success: true,
-    status: 'success',
-    status_code: 202,
-    message: { status: 'success' }
-  }
-  ```
-</CodeGroup>
-
-Once your request is accepted, you can check the status of your request in the '[ SuprSend Logs](https://app.suprsend.com/en/staging/logs)' section.
-
-## Bulk API for triggering multiple workflows
+## Bulk trigger multiple workflows
 
 Bulk API allows you to send multiple workflow requests in a single call. There isn't any limit on number-of-records that can be added to bulk\_workflows instance. Use `.append()` on `workflows.bulk_trigger_instance()` instance to add however-many-records to call in bulk.
 
 <CodeGroup>
-  ```python python
+  ```python Request
   from suprsend import Event
   from suprsend import WorkflowTriggerRequest
 
@@ -331,45 +327,20 @@ Bulk API allows you to send multiple workflow requests in a single call. There i
   response = bulk_ins.trigger()
   print(response)
   ```
-</CodeGroup>
 
-### Response
-
-Response is an instance of `suprsend.BulkResponse` type
-
-<CodeGroup>
-  ```python python
-  # Response structure
-  from suprsend import BulkResponse
-
-  BulkResponse(
-    status = "success",
-    total = 10, # number of records sent in bulk
-    success = 10, # number of records succeeded
-    failure = 0, # number of records failed
-    warnings = [],
-    failed_records = []
-  )
-
-  BulkResponse(
+  ```python Response
+  {
     status = "fail",
     total = 10, # number of records sent in bulk
     success = 0, # number of records succeeded
     failure = 10, # number of records failed
     warnings = [],
     failed_records = [{"record": {...}, "error": "error_str", "code": 500}]
-  )
-
-  BulkResponse(
-    status = "partial",
-    total = 10, # number of records sent in bulk
-    success = 6, # number of records succeeded
-    failure = 4, # number of records failed
-    warnings = [],
-    failed_records = [{"record": {...}, "error": "error_str", "code": 500}]
-  )
+  }
   ```
 </CodeGroup>
+
+
 
 ## Add file attachment in email
 
@@ -383,7 +354,7 @@ To add one or more Attachments to a Notification (viz. Email), call `wf_instance
   wf_instance = Workflow(body=workflow_body)
 
   # this snippet can be used to add attachment to workflow
-  file_path = "/home/user/billing.pdf"
+  file_path = "/home/user/billing.pdf" 
   wf_instance.add_attachment(file_path)
   ```
 </CodeGroup>
@@ -396,10 +367,14 @@ To add one or more Attachments to a Notification (viz. Email), call `wf_instance
 
 ## Dynamic workflow trigger
 
-You can trigger workflow from python SDK using `supr_client.trigger_workflow` method.
+You can trigger workflow from python SDK using `supr_client.trigger_workflow` method.&#x20;
+
+The SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance status. Note: The actual processing/execution of workflow happens asynchronously.&#x20;
+
+Once your request is accepted, you can check the status of your request in the '[ SuprSend Logs](https://app.suprsend.com/en/staging/logs)' section.
 
 <CodeGroup>
-  ```python python
+  ```python Request
   from suprsend import Workflow
   # Prepare Workflow body
   workflow_body = {
@@ -485,6 +460,23 @@ You can trigger workflow from python SDK using `supr_client.trigger_workflow` me
   response = supr_client.trigger_workflow(wf)
   print(response)
   ```
+
+  ```python Response
+  # Response structure
+  {
+      "success": True, # if true, request was accepted.
+      "status": "success",
+      "status_code": 202, # http status code
+      "message": "OK",
+  }
+
+  {
+      "success": False, # error will be present in message
+      "status": "fail",
+      "status_code": 500, # http status code
+      "message": "error message",
+  }
+  ```
 </CodeGroup>
 
 For configuring a workflow from backend, you can pass following properties in your method
@@ -512,32 +504,7 @@ For configuring a workflow from backend, you can pass following properties in yo
   <img src="/images/docs/5610927-Screenshot_2021-10-21_at_6.31.48_PM.png" />
 </Frame>
 
-#### Response structure
 
-When you call `supr_client.trigger_workflow`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance status.
-
-Note: The actual processing/execution of workflow happens asynchronously.
-
-<CodeGroup>
-  ```python python
-  # Response structure
-  {
-      "success": True, # if true, request was accepted.
-      "status": "success",
-      "status_code": 202, # http status code
-      "message": "OK",
-  }
-
-  {
-      "success": False, # error will be present in message
-      "status": "fail",
-      "status_code": 500, # http status code
-      "message": "error message",
-  }
-  ```
-</CodeGroup>
-
-Once your request is accepted, you can check the status of your request in the '[ SuprSend Logs](https://app.suprsend.com/en/staging/logs)' section.
 
 #### Bulk API for triggering multiple workflows
 
@@ -546,7 +513,7 @@ Bulk API allows you to send multiple workflow requests in a single call. There i
 Use `.append()` on `bulk_workflows` instance to add however-many-records to call in bulk.
 
 <CodeGroup>
-  ```python python
+  ```python Request
   from suprsend import Workflow
 
   bulk_ins = supr_client.bulk_workflows.new_instance()
@@ -566,41 +533,18 @@ Use `.append()` on `bulk_workflows` instance to add however-many-records to call
 
   print(response)
   ```
-</CodeGroup>
 
-#### Response
-
-Response is an instance of `suprsend.BulkResponse` class
-
-<CodeGroup>
-  ```python python
-  # Response structure
-  from suprsend import BulkResponse
-
-  BulkResponse(
-    status = "success",
-    total = 10, # number of records sent in bulk
-    success = 10, # number of records succeeded
-    failure = 0, # number of records failed
-    failed_records = []
-  )
-
-  BulkResponse(
+  ```python Response
+  {
     status = "fail",
     total = 10, # number of records sent in bulk
     success = 0, # number of records succeeded
     failure = 10, # number of records failed
     failed_records = [{"record": {...}, "error": "error_str", "code": 500}]
-  )
-
-  BulkResponse(
-    status = "partial",
-    total = 10, # number of records sent in bulk
-    success = 6, # number of records succeeded
-    failure = 4, # number of records failed
-    failed_records = [{"record": {...}, "error": "error_str", "code": 500}]
-  )
+  }
   ```
 </CodeGroup>
+
+
 
 ***
