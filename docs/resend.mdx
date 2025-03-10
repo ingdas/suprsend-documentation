@@ -10,9 +10,7 @@ This section is a step by step guide to add Resend as your email service provide
 **Step-1: O**n the SuprSend dashboard, follow the steps as below:
 
 <Steps>
-  <Step title="Go to vendors tab from the side navigation panel. Select 'Email' channel">
-
-  </Step>
+  <Step title="Go to vendors tab from the side navigation panel. Select 'Email' channel" />
 
   <Step title="Select the relevant notification category from the list">
     [Reference Link to Notification Category](/docs/notification-category)
@@ -66,8 +64,10 @@ Go to the webhook tab from side navigation on your resend account and add SuprSe
 
 ## How to add Unsubscription link in email
 
-It is advisable to give your recipients the ability to unsubscribe from emails. First, it is required by the [CAN-Spam Act](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business). Second, if you don’t give them this option, they are more likely to click on the spam complaint button, which will cause more harm than allowing them to unsubscribe. Finally, many ESPs look for unsubscribe links and are more likely to filter your email if they don’t have them.
+You can directly add unsubscription link in your email using [`$hosted_preference_url`](/docs/preferences#hosted-preference-page) variable in your template. This link directs users to the [SuprSend preference page](/docs/preferences). With SuprSend preference setting, you have the flexibility to create multiple notification categories based on the type of notifications. This allows users to opt-out of specific notification categories, providing them with granular control over their preferences compared to other email services where they can only opt-out from all marketing communications at once.
 
-You can directly add unsubscription link in your email using `$hosted_preference_url` variable in your template. This link directs users to the [SuprSend preference page](/docs/preferences). With SuprSend preference setting, you have the flexibility to create multiple notification categories based on the type of notifications. This allows users to opt-out of specific notification categories, providing them with granular control over their preferences compared to other email services where they can only opt-out from all marketing communications at once.
+## Why it's important to give unsubscribe option in email?
+
+First, it is required by the [CAN-Spam Act](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business). Second, if you don’t give them this option, they are more likely to click on the spam complaint button, which will cause more harm than allowing them to unsubscribe. Finally, many ESPs look for unsubscribe links and are more likely to filter your email if they don’t have them.
 
 ***
