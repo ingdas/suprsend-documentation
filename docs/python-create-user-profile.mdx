@@ -52,10 +52,8 @@ To Edit user, you need to first fetch user instance, call all the update methods
   ```
 </CodeGroup>
 
-
-
-<Steps>
-  <Step title="Add User Channels">
+<AccordionGroup>
+  <Accordion title="Add User Channels" defaultOpen={true}>
     Add communication channels on which you want to notify user. Push sand Inbox tokens are automatically tracked on user identification when the corresponding frontend SDK is integrated. Other channels (Email, SMS, Slack, MS teams, Whatsapp) need to be explicitly set in user profile.
 
     Use `user.add_*` method(s) to add user channels.
@@ -129,9 +127,9 @@ To Edit user, you need to first fetch user instance, call all the update methods
 
       ```
     </CodeGroup>
-  </Step>
+  </Accordion>
 
-  <Step title="Remove User Channels">
+ <Accordion title="Remove User Channels" defaultOpen={false}>
     Use `user.remove_*` method(s) to remove channels.
 
     <CodeGroup>
@@ -203,9 +201,9 @@ To Edit user, you need to first fetch user instance, call all the update methods
 
       ```
     </CodeGroup>
-  </Step>
+  </Accordion>
 
-  <Step title="Remove Channel types">
+  <Accordion title="Remove Channel types defaultOpen={false}">
     This method will delete/unset all values in specified channel for user (ex: remove all emails attached to user).
 
     <CodeGroup>
@@ -218,14 +216,9 @@ To Edit user, you need to first fetch user instance, call all the update methods
       $email, $whatsapp, $sms, $androidpush, $iospush, $webpush, $slack, $ms_teams
       ```
     </CodeGroup>
-
-    <Warning>
-      After calling `add_*/remove_*/unset` methods, don't forget to call `users.async_edit()` since user update is async update and the changes will be sent to SuprSend only after calling this method.
-    </Warning>
-  </Step>
-</Steps>
-
-<AccordionGroup>
+  </Accordion>
+  
+  
   <Accordion title="Set Preferred language" defaultOpen={false}>
     If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
 
@@ -252,11 +245,11 @@ To Edit user, you need to first fetch user instance, call all the update methods
     user.set({ key1: value1, key2: value2 })
     user.set({"name": "John Doe","city": "San Francisco"})
     ```
-
   </Accordion>
 
   <Accordion title="Set Once" defaultOpen={false}>
-  Works just like user.set, except it will not override already existing property values. This is useful for properties like first_login_date.
+    Works just like user.set, except it will not override already existing property values. This is useful for properties like first\_login\_date.
+
     ```python
     user.set_once(key, value)
     user.set_once("first_login","2021-11-02")
@@ -264,46 +257,48 @@ To Edit user, you need to first fetch user instance, call all the update methods
     user.set_once({ key1: value1, key2: value2 })
     user.set_once({"first_login": "2021-11-02","signup_date": "2021-11-02"})
     ```
-
   </Accordion>
 
   <Accordion title="Append" defaultOpen={false}>
-  This method will append a value to the array list.
+    This method will append a value to the array list.
+
     ```python
     user.append(key, value)
     user.append("played_games", "game_1")
-    
+
     user.append({ key1: value1, key2: value2 })
     user.append({"played_games": "game_1", "liked_games": "game_2"})
     ```
-
   </Accordion>
 
   <Accordion title="Remove" defaultOpen={false}>
-  This method will remove a value from the array list.
+    This method will remove a value from the array list.
+
     ```python
     user.remove(key, value)
     user.remove("played_games", "game_1")
-    
+
     user.remove({ key1: value1, key2: value2 })
     user.remove({"played_games": "game_1", "liked_games": "game_2"})
     ```
-
   </Accordion>
 
   <Accordion title="Increment" defaultOpen={false}>
-  This method will remove a value from the array list.
+    This method will remove a value from the array list.
+
     ```python
     user.remove(key, value)
     user.remove("played_games", "game_1")
-    
+
     user.remove({ key1: value1, key2: value2 })
     user.remove({"played_games": "game_1", "liked_games": "game_2"})
     ```
-
   </Accordion>
-  
 </AccordionGroup>
+
+<Warning>
+      After calling `add_*/remove_*/unset` methods, don't forget to call `users.async_edit()` since user update is async update and the changes will be sent to SuprSend only after calling this method.
+    </Warning>
 
 ## Add Preferences in User Profile
 
