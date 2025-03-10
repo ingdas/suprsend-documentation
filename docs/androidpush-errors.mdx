@@ -29,6 +29,16 @@ In this guide, we'll cover all the errors returned by the vendor when SuprSend i
 
 You can find the entire [list of FCM errors here](https://firebase.google.com/docs/cloud-messaging/http-server-ref#error-codes).
 
+### Post "[https://fcm.googleapis.com/fcm/send"](https://fcm.googleapis.com/fcm/send%22): read xxxx: read: connection reset by peer
+
+The "Connection reset by peer" logs are likely being caused by the HTTPS Load Balancer in GCP having a timeout of 600 seconds. Please reach out to our [support](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#) in case of this issue. You can also setup [channel routing](/docs/smart-delivery) so that user gets notification on the next best channel if androidpush is unreachable.
+
+<Accordion title="500: read tcp xxxx: i/o timeout" defaultOpen={false}>
+  The FCM server encountered an error while trying to process the request. SuprSend has implemented exponential back-off retry mechanism to handle such errors. If you continue to receive this error, you should raise it to [FCM support](https://firebase.google.com/support). You can also setup [channel routing](/docs/smart-delivery) so that user gets notification on the next best channel if androidpush is unreachable.
+</Accordion>
+
+
+
 ## FCM - V1 version
 
 | Error                                                                                                                                 | How to solve?                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
