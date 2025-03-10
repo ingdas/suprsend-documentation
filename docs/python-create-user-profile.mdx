@@ -52,8 +52,10 @@ To Edit user, you need to first fetch user instance, call all the update methods
   ```
 </CodeGroup>
 
+Here's a list of all edit methods:
+
 <AccordionGroup>
-  <Accordion title="Add User Channels" defaultOpen={true}>
+  <Accordion title="Add User Channels" defaultOpen={false}>
     Add communication channels on which you want to notify user. Push sand Inbox tokens are automatically tracked on user identification when the corresponding frontend SDK is integrated. Other channels (Email, SMS, Slack, MS teams, Whatsapp) need to be explicitly set in user profile.
 
     Use `user.add_*` method(s) to add user channels.
@@ -129,7 +131,7 @@ To Edit user, you need to first fetch user instance, call all the update methods
     </CodeGroup>
   </Accordion>
 
- <Accordion title="Remove User Channels" defaultOpen={false}>
+  <Accordion title="Remove User Channels" defaultOpen={false}>
     Use `user.remove_*` method(s) to remove channels.
 
     <CodeGroup>
@@ -203,7 +205,7 @@ To Edit user, you need to first fetch user instance, call all the update methods
     </CodeGroup>
   </Accordion>
 
-  <Accordion title="Remove Channel types defaultOpen={false}">
+  <Accordion title="Remove Channel types">
     This method will delete/unset all values in specified channel for user (ex: remove all emails attached to user).
 
     <CodeGroup>
@@ -217,8 +219,7 @@ To Edit user, you need to first fetch user instance, call all the update methods
       ```
     </CodeGroup>
   </Accordion>
-  
-  
+
   <Accordion title="Set Preferred language" defaultOpen={false}>
     If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
 
@@ -259,6 +260,18 @@ To Edit user, you need to first fetch user instance, call all the update methods
     ```
   </Accordion>
 
+  <Accordion title="Unset" defaultOpen={false}>
+    Unset is used to remove a property key.
+
+    ```python
+    user.unset(key)
+    user.unset("name")
+      
+    user.unset([key1, key2])
+    user.unset(["name","city"])
+    ```
+  </Accordion>
+
   <Accordion title="Append" defaultOpen={false}>
     This method will append a value to the array list.
 
@@ -284,90 +297,62 @@ To Edit user, you need to first fetch user instance, call all the update methods
   </Accordion>
 
   <Accordion title="Increment" defaultOpen={false}>
-    This method will remove a value from the array list.
+    Increase or decrease integer values on consecutive action, like login count. To reduce a property, provide a negative number for the value.
 
     ```python
-    user.remove(key, value)
-    user.remove("played_games", "game_1")
+    user.increment(key, value)
+    user.increment("login_count", 1)
 
-    user.remove({ key1: value1, key2: value2 })
-    user.remove({"played_games": "game_1", "liked_games": "game_2"})
+    user.increment({ key1: value1, key2: value2 })
+    user.increment({"login_count" : 1, "order_count" : 1})
     ```
   </Accordion>
 </AccordionGroup>
 
 <Warning>
-      After calling `add_*/remove_*/unset` methods, don't forget to call `users.async_edit()` since user update is async update and the changes will be sent to SuprSend only after calling this method.
-    </Warning>
+  After calling `add_*/remove_*/unset` methods, don't forget to call `users.async_edit()` since user edit is async update and the changes will be sent to SuprSend only after calling this method.
+</Warning>
 
-## Add Preferences in User Profile
+## Bulk Update Users
 
-You can also set custom properties in user profile that is used to set user preferences
-
-###
-
-If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in `user.set_preferred_language()` method. This is useful especially for the applications which offer vernacular or multi-lingual support.
-
-<CodeGroup>
-  ```python python
-  # Add language preference to user-instance.
-
-  user.set_preferred_language("en")
-
-  # After setting the language on user-instance, call save()
-  response = user.save()
-  print(response)
-  ```
-</CodeGroup>
-
-**Response:**
-
-When you call `user.save()`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance / failure status.
-
-<CodeGroup>
-  ```python python
-  # Response structure
-  {
-      "success": True, # if true, request was accepted.
-      "status": "success",
-      "status_code": 202, # http status code
-      "message": "OK",
-  }
-
-  {
-      "success": False, # error will be present in message
-      "status": "fail",
-      "status_code": 500, # http status code
-      "message": "error message",
-  }
-  ```
-</CodeGroup>
-
-## Bulk API for handling multiple user profiles
-
-To update user profiles in bulk, use Bulk users API. There isn't any limit on number-of-records that can be added to `bulk_users` instance.
+There isn't any limit on number-of-records that can be added to `bulk_users` instance.
 
 Use `.append()` on bulk\_users instance to add however-many-records to call in bulk.
 
 <CodeGroup>
-  ```python python
-  bulk_ins = supr_client.bulk_users.new_instance()
-  # Prepare multiple users
-  u1 = supr_client.user.get_instance("distinct_id_1") # User 1
+  ```python Request
+  # Create bulk instance
+  bulk_ins = supr_client.users.get_bulk_edit_instance()
+
+  # Prepare multiple users edit instance 
+  distinct_id1 = "__distinct_id1__"  # User 1
+  u1 = supr_client.users.get_edit_instance(distinct_id1)
   u1.add_email("u1@example.com")
 
-  u2 = supr_client.user.get_instance("distinct_id_2") # User 2
+  distinct_id2 = "__distinct_id2__"  # User 2
+  u2 = supr_client.users.get_edit_instance(distinct_id2)
   u2.add_email("u2@example.com")
 
-  # --- use .append on bulk instance to add one or more records
-  bulk_ins.append(u1)
-  bulk_ins.append(u2)
-  # OR
+  # Append users to the bulk instance
   bulk_ins.append(u1, u2)
 
   # -------
-  response = bulk_ins.save()
-  print(response)
+  res = bulk_ins.save()
+  print(res)
+  ```
+
+  ```
+  console.log("Hello World");
+  ```
+
+  ```python Response
+  {
+    status = "fail",
+    total = 10, # number of records sent in bulk
+    success = 0, # number of records succeeded
+    failure = 10, # number of records failed
+    failed_records = [{"record": {...}, "error": "error_str", "code": 500}]
+  }
   ```
 </CodeGroup>
 
@@ -377,205 +362,6 @@ Use `.append()` on bulk\_users instance to add however-many-records to call in b
   Bulk API is supported in SuprSend python-sdk version 0.2.0 and above. If you are using an older version, please upgrade to the latest SDK version.
 </Warning>
 
-### How SuprSend Processes the bulk API request
 
-* On calling `bulk_ins.save()`, the SDK internally makes one-or-more Callable-chunks.
-
-* Each callable-chunk contains a subset of records, the subset calculation is based on each record's bytes-size and max allowed chunk-size, chunk-length etc.
-
-* For each callable-chunk SDK makes an HTTP call to SuprSend to register the request.
-
-### Response
-
-Response is an instance of `suprsend.BulkResponse` class
-
-<CodeGroup>
-  ```python python
-  # Response structure
-  from suprsend import BulkResponse
-
-  BulkResponse(
-    status = "success",
-    total = 10, # number of records sent in bulk
-    success = 10, # number of records succeeded
-    failure = 0, # number of records failed
-    failed_records = []
-  )
-
-  BulkResponse(
-    status = "fail",
-    total = 10, # number of records sent in bulk
-    success = 0, # number of records succeeded
-    failure = 10, # number of records failed
-    failed_records = [{"record": {...}, "error": "error_str", "code": 500}]
-  )
-
-  BulkResponse(
-    status = "partial",
-    total = 10, # number of records sent in bulk
-    success = 6, # number of records succeeded
-    failure = 4, # number of records failed
-    failed_records = [{"record": {...}, "error": "error_str", "code": 500}]
-  )
-  ```
-</CodeGroup>
-
-## Advanced Configuration - Set User Properties
-
-You can use SuprSend Python SDK to set advanced user properties, which will help in creating a user profile. You can use these properties to create user cohorts on SuprSend's platform with future releases.
-
-<AccordionGroup>
-  <Accordion title="Set" defaultOpen={false}>
-    Set is used to set the custom user property or properties. The given name and value will be assigned to the user, overwriting an existing property with the same name if present. It can take key as first param, value as second param for setting single user property or object for setting multiple user properties.
-
-    <CodeGroup>
-      ```python python
-      from suprsend import Suprsend
-      supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
-
-      distinct_id = "__uniq_user_identifier__"
-      u1 = supr_client.user.get_instance(distinct_id)
-      u1.set("key", "value")  # for single property
-      u1.set(properties)      # for multiple properties where properties is a dict()
-
-      # set single property using key and value
-      u1.set("name", "user")
-      # set multiple/nested properties using dictionary
-      u1.set({
-        "prop1": "val1", 
-        "prop2": ["one", "two", "three"], 
-        "number": 20
-      })
-      ```
-    </CodeGroup>
-
-    | Parameters | Type              | Description                                                                                                                                                                                                                                                                                 |
-    | ---------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | **arg1**   | string/dictionary | *Mandatory* This param will be string in case where only single property needs to be created/updated. It will be a dictionary in cases where complex objects need to be set in user properties, like multiple properties, arrays, nested properties etc. Should not start with `$` or `ss_` |
-    | **arg2**   | any               | *Optional* This will be value that will be attached to key property. Not required in cases where first param is a dictionary.                                                                                                                                                               |
-
-    <Warning>
-      When you create a key, please ensure that the Key Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
-    </Warning>
-  </Accordion>
-
-  <Accordion title="Set Once" defaultOpen={false}>
-    Works just like `user.set`, except it will not overwrite existing property values. This is useful for properties like *First login date*
-
-    <CodeGroup>
-      ```python python
-      from suprsend import Suprsend
-      supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
-
-      distinct_id = "__uniq_user_identifier__"
-      u1 = supr_client.user.get_instance(distinct_id)
-      u1.set_once(key, value)  # for single property
-      u1.set_once(properties)  # for multiple properties
-
-      # For setting once a single property:
-      u1.set_once("first_login", "2021-11-02")
-
-      # For setting once multiple properties
-      u1.set_once({"first_login" : "2021-11-02", "DOB" : "1991-10-02"})
-      ```
-    </CodeGroup>
-  </Accordion>
-
-  <Accordion title="Increment" defaultOpen={false}>
-    Add the given amount to an existing property on the user. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
-
-    <CodeGroup>
-      ```python python
-      from suprsend import Suprsend
-      supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
-
-      distinct_id = "__uniq_user_identifier__"
-      u1 = supr_client.user.get_instance(distinct_id)
-      u1.increment(key, value)  # for single property
-      u1.increment(property_obj)  # for multiple properties
-
-      # For incrementing a single property:
-      u1.increment("login_count", 1)
-
-      # For incrementing multiple properties:
-      u1.increment({"login_count" : 1, "order_count" : 1})
-      ```
-    </CodeGroup>
-  </Accordion>
-
-  <Accordion title="Append" defaultOpen={false}>
-    This method will append a value to the list for a given property.
-
-    <CodeGroup>
-      ```python python
-      from suprsend import Suprsend
-      supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
-
-      distinct_id = "__uniq_user_identifier__"
-      u1 = supr_client.user.get_instance(distinct_id)
-      u1.append(key, value)  # for single property
-      u1.append(properties)  # for multiple properties
-
-      # For appending a single property:
-      u1.append("wishlist", "iphone12")
-
-      # For appending multiple properties:
-      u1.append({"wishlist" : "iphone12", "wishlist" : "Apple airpods"})
-      ```
-    </CodeGroup>
-
-    ###
-  </Accordion>
-
-  <Accordion title="Remove" defaultOpen={false}>
-    This method will remove a value from the list for a given property.
-
-    <CodeGroup>
-      ```python python
-      from suprsend import Suprsend
-      supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
-
-      distinct_id = "__uniq_user_identifier__"
-      u1 = supr_client.user.get_instance(distinct_id)
-      u1.remove(key, value)  # for single property
-      u1.remove(properties)  # for multiple properties
-
-      # For removing a single property:
-      u1.remove("wishlist", "iphone12")
-
-      # For removing multiple properties:
-      u1.remove({"wishlist" : "iphone12", "wishlist": "Apple airpods"})
-      ```
-    </CodeGroup>
-  </Accordion>
-
-  <Accordion title="Unset" defaultOpen={false}>
-    This will remove a property permanently from user properties.
-
-    <CodeGroup>
-      ```python python
-
-      from suprsend import Suprsend
-      supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
-
-      distinct_id = "__uniq_user_identifier__"
-      u1 = supr_client.user.get_instance(distinct_id)
-      u1.unset(key)  # for single property
-      u1.unset(property_list)  # for multiple properties
-
-      # For unsetting a single property:
-      u1.unset("wishlist")
-
-      # For unsetting multiple properties:
-      u1.unset(["wishlist", "cart"])
-      ```
-    </CodeGroup>
-
-    | Parameters         | Type           | Description                                                       |
-    | ------------------ | -------------- | ----------------------------------------------------------------- |
-    | **key**            | string         | This property provided will be deleted from user properties       |
-    | **property\_list** | array\[string] | If list is given all properties included in list will be removed. |
-  </Accordion>
-</AccordionGroup>
 
 ***
