@@ -432,4 +432,33 @@ You can pass optional query parameters -`limit`, `before`, `after`
   ```
 </CodeGroup>
 
-##
+## Get lists subscribed by user
+
+You can pass optional query parameters -`limit`, `before`, `after`
+
+<CodeGroup>
+  ```javascript Request
+  res = supr_client.users. get_lists_subscribed_to("__distinct_id__", {"after": "01JJW6HXXXXPB59ARDW85G0KN", "limit": 1})
+  print(res)
+  ```
+
+  ```
+  console.log("Hello World");
+  ```
+
+  ```json Response
+  {
+    "lists": [
+      {
+        "list_id": "marketing_updates",
+        "subscribed_at": "2024-02-20T12:00:00Z",
+        "status": "subscribed"
+      }
+    ],
+    "paging": {
+      "after": "01JJW6HXXXXPB59ARDW85G0KN",
+      "has_more": true
+    }
+  }
+  ```
+</CodeGroup>
