@@ -28,41 +28,37 @@ To create a new user or to update an existing user, you'll have to fetch user in
 
 To Edit user, you need to first fetch user instance, call all the update methods and save changes using `users.async_edit` method.
 
-```python Python
-#Fetch user instance
-user = supr_client.users.get_edit_instance("__distinct_id__")
+<CodeGroup>
+  ```python Request
+  #Fetch user instance
+  user = supr_client.users.get_edit_instance("__distinct_id__")
 
-#Call user update methods
-user.set_timezone("America/Los_Angeles")
-user.set("name", "John Doe")
+  #Call user update methods
+  user.set_timezone("America/Los_Angeles")
+  user.set("name", "John Doe")
 
-#Save Changes
-res = supr_client.users.async_edit(user)
-print(res)
-```
+  #Save Changes
+  res = supr_client.users.async_edit(user)
+  print(res)
+  ```
 
-```json Response
-{
-  "success": boolean,
-  "status": "success"/"fail",
-  "status_code": http_status_code,
-  "message": "response_message"/"error_message",
-}
-```
+  ```json Response
+  {
+    "success": boolean,
+    "status": "success"/"fail",
+    "status_code": http_status_code,
+    "message": "response_message"/"error_message",
+  }
+  ```
+</CodeGroup>
 
-<Tip>
-  **Set Channel Preference for event based workflows:**
 
-  In event based workflows, since you only pass user's `distinct_id` in your track event call, you'll have to add channel preference first in user profile first before making the call.
-</Tip>
 
 <Steps>
   <Step title="Add User Channels">
-    Communication Channel Preference decides whether a user will receive communication on a particular channel or not. Setting Channel preferences means that whenever you are triggering a workflow, the communication will be sent on the channels set in user profile (given that the template for that channel is present in the template group).
+    Add communication channels on which you want to notify user. Push sand Inbox tokens are automatically tracked on user identification when the corresponding frontend SDK is integrated. Other channels (Email, SMS, Slack, MS teams, Whatsapp) need to be explicitly set in user profile.
 
-
-
-    Use `user.add_*` method(s) to add user channels in a profile
+    Use `user.add_*` method(s) to add user channels.
 
     <CodeGroup>
       ```python python
@@ -74,10 +70,7 @@ print(res)
 
       user.add_whatsapp("+15555555555") # - To add Whatsapp
 
-      user.add_androidpush("__android_push_fcm_token__") # - by default, token is assumed to be fcm-token
-
-      # You can set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
-      user.add_androidpush("__android_push_xiaomi_token__", provider="xiaomi")
+      user.add_androidpush("__android_push_fcm_token__")
 
       user.add_iospush("__iospush_token__")
 
@@ -134,32 +127,26 @@ print(res)
           }
         })
 
-      # After setting the channel details on user-instance, call save()
-      response = user.save()
-      print(response)
       ```
     </CodeGroup>
   </Step>
 
   <Step title="Remove User Channels">
-    Use `user.remove_*` method(s) to remove channels from a user profile
+    Use `user.remove_*` method(s) to remove channels.
 
     <CodeGroup>
       ```python python
       # Remove channel details from user-instance. Call relevant remove_* methods
 
-      user.remove_email("user@example.com") # - To remove Email
+      user.remove_email("user@example.com")
 
-      user.remove_sms("+15555555555") # - To remove SMS
+      user.remove_sms("+15555555555")
 
-      user.remove_whatsapp("+15555555555") # - To remove Whatsapp
+      user.remove_whatsapp("+15555555555")
 
-      user.remove_androidpush("__android_push_fcm_token__") # - by default, token is assumed to be fcm-token
+      user.remove_androidpush("__android_push_fcm_token__")
 
-      # You can set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
-      user.remove_androidpush("__android_push_xiaomi_token__", provider="xiaomi")
-
-      user.remove_iospush("__iospush_token__")
+      user.remove_iospush("__iospush_token__") 
 
       # - To remove Slack email
       user.remove_slack(
@@ -190,7 +177,7 @@ print(res)
           }
         })
 
-      # - To add MS teams user or channel using conversation_id
+      # - To remove MS teams user or channel using conversation_id
       user.remove_ms_teams(
         {
       		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
@@ -198,7 +185,7 @@ print(res)
       		"conversation_id": "19:c1524d7c-a06f-456f-8abe-xxxx"
         })
 
-      # - To add MS teams user using user_id
+      # - To remove MS teams user using user_id
       user.remove_ms_teams(
         {
       		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
@@ -206,7 +193,7 @@ print(res)
       		"user_id": "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
         })
 
-      # - To add MS teams using incoming webhook
+      # - To remove MS teams using incoming webhook
       user.remove_ms_teams(
         {
           "incoming_webhook": {
@@ -214,51 +201,115 @@ print(res)
           }
         })
 
-      # After setting the channel details on user-instance, call save()
-      response = user.save()
-      print(response)
       ```
     </CodeGroup>
   </Step>
 
-  <Step title="Remove User Channels in bulk">
-    If you need to delete/unset all emails (or any other channel) of a user, you can call `user.unset()` method on the user instance. The method accepts the channel key/s (a single key or list of keys)
+  <Step title="Remove Channel types">
+    This method will delete/unset all values in specified channel for user (ex: remove all emails attached to user).
 
     <CodeGroup>
       ```python python
       # --- To delete all emails associated with user
       user.unset("$email")
-      response = user.save()
-      print(response)
-
-      # what value to pass to unset channels
-      # for email:                $email
-      # for whatsapp:             $whatsapp
-      # for SMS:                  $sms
-      # for androidpush tokens:   $androidpush
-      # for iospush tokens:       $iospush
-      # for webpush tokens:       $webpush
-      # for slack:                $slack
-      # for ms_teams:             $ms_teams
-
-      # --- multiple channels can also be deleted in one call by passing argument as a list
       user.unset(["$email", "$sms", "$whatsapp"])
-      response = user.save()
-      print(response)
+
+      # Supported channel keys are:
+      $email, $whatsapp, $sms, $androidpush, $iospush, $webpush, $slack, $ms_teams
       ```
     </CodeGroup>
 
     <Warning>
-      After calling `add_*/remove_*/unset` methods, don't forget to call `user.save()`. On call of save(), SDK sends the request to SuprSend platform to update the User Profile.
+      After calling `add_*/remove_*/unset` methods, don't forget to call `users.async_edit()` since user update is async update and the changes will be sent to SuprSend only after calling this method.
     </Warning>
   </Step>
 </Steps>
+
+<AccordionGroup>
+  <Accordion title="Set Preferred language" defaultOpen={false}>
+    If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
+
+    ```python
+    user.set_preferred_language("en")
+    ```
+  </Accordion>
+
+  <Accordion title="Set preferred timezone" defaultOpen={false}>
+    You can set timezone of user using this method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab).
+
+    ```python
+    user.set_timezone("America/Los_Angeles")
+    ```
+  </Accordion>
+
+  <Accordion title="Set" defaultOpen={false}>
+    Set is used to add custom user properties. It is an upsert function, meaning any existing property value with the same key will be overwritten on subsequent updates.
+
+    ```python
+    user.set(key, value)
+    user.set("name","John Doe")
+      
+    user.set({ key1: value1, key2: value2 })
+    user.set({"name": "John Doe","city": "San Francisco"})
+    ```
+
+  </Accordion>
+
+  <Accordion title="Set Once" defaultOpen={false}>
+  Works just like user.set, except it will not override already existing property values. This is useful for properties like first_login_date.
+    ```python
+    user.set_once(key, value)
+    user.set_once("first_login","2021-11-02")
+      
+    user.set_once({ key1: value1, key2: value2 })
+    user.set_once({"first_login": "2021-11-02","signup_date": "2021-11-02"})
+    ```
+
+  </Accordion>
+
+  <Accordion title="Append" defaultOpen={false}>
+  This method will append a value to the array list.
+    ```python
+    user.append(key, value)
+    user.append("played_games", "game_1")
+    
+    user.append({ key1: value1, key2: value2 })
+    user.append({"played_games": "game_1", "liked_games": "game_2"})
+    ```
+
+  </Accordion>
+
+  <Accordion title="Remove" defaultOpen={false}>
+  This method will remove a value from the array list.
+    ```python
+    user.remove(key, value)
+    user.remove("played_games", "game_1")
+    
+    user.remove({ key1: value1, key2: value2 })
+    user.remove({"played_games": "game_1", "liked_games": "game_2"})
+    ```
+
+  </Accordion>
+
+  <Accordion title="Increment" defaultOpen={false}>
+  This method will remove a value from the array list.
+    ```python
+    user.remove(key, value)
+    user.remove("played_games", "game_1")
+    
+    user.remove({ key1: value1, key2: value2 })
+    user.remove({"played_games": "game_1", "liked_games": "game_2"})
+    ```
+
+  </Accordion>
+  
+</AccordionGroup>
 
 ## Add Preferences in User Profile
 
 You can also set custom properties in user profile that is used to set user preferences
 
-### Set Preferred language
+###
 
 If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in `user.set_preferred_language()` method. This is useful especially for the applications which offer vernacular or multi-lingual support.
 
