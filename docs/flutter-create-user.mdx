@@ -11,7 +11,7 @@ SuprSend identifies users with immutable `distinct_id`. It's best to map the sam
   <Step title="Create / Identify a new user" stepNumber="1">
     You can identify a user via `suprsend.identify()` method. Call this method as soon as you know the identity of user, that is after login authentication. If you don't call this method, user will be identified using distinct\_id (uuid) that sdk generates internally.
 
-    When you call this method, we internally create an event called **$user\_login**. You can use this event to trigger workflow on user login.
+    When you call this method, we internally create an event called **`$user_login`**. You can use this event to trigger workflow on user login.
 
     <CodeGroup>
       ```javascript Dart
@@ -20,7 +20,6 @@ SuprSend identifies users with immutable `distinct_id`. It's best to map the sam
       //Sample
       suprsend.identify("291eaa13-62f5-4d52-b2dd");
       suprsend.identify(10005);
-      suprsend.identify("abc@example.com");
       ```
     </CodeGroup>
 
@@ -168,8 +167,6 @@ You can sync other user properties in SuprSend and use it to pass dynamic conten
       "wishlist": ["iphone12", "Apple airpods"]
     });
     ```
-
-
   </Accordion>
 
   <Accordion title="Increment" defaultOpen={false}>
@@ -187,8 +184,6 @@ You can sync other user properties in SuprSend and use it to pass dynamic conten
       "order_count": 1
     });
     ```
-
-
   </Accordion>
 </AccordionGroup>
 
