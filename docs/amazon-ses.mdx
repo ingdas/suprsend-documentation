@@ -43,13 +43,9 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
   <Step title="Manange Event destinations" stepNumber="4">
     After creating configuration-set, you'll see a tab "Event Destinations". Email-sending events (send, delivery, open, click, bounce, complaint etc.) will end up in the events destination. Reference documentations:
 
-
-
     * [**Creating Amazon SES event destinations**](https://docs.aws.amazon.com/ses/latest/dg/event-destinations-manage.html)
 
     * [Setup SNS event destination for event Publishing](https://docs.aws.amazon.com/ses/latest/dg/event-publishing-add-event-destination-sns.html)
-
-
 
     **Steps to follow for setting up Event Destination and enable Event Tracking:**
 
@@ -58,9 +54,7 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
         Go to`Event Destinations`tab and click`Add destination`In "Select event types" step, click`Select all`button to received all the events to destination.
       </Step>
 
-      <Step title="Click on Next.">
-
-      </Step>
+      <Step title="Click on Next." />
 
       <Step title="Go to &#x22;Specify Destination&#x22;">
         In "`Specify destination`" step.
@@ -80,22 +74,16 @@ Follow below steps to integrate your Amazon SES account with SuprSend:
         7. Now from the dropdown, select the topic you just created.
       </Step>
 
-      <Step title="Click on &#x22;Next&#x22;.">
-
-      </Step>
+      <Step title="Click on &#x22;Next&#x22;." />
 
       <Step title="Verify information">
         In the `Review` step, verify the info.
       </Step>
 
-      <Step title="Click &#x22;Add destination&#x22;.">
-
-      </Step>
+      <Step title="Click &#x22;Add destination&#x22;." />
     </Steps>
 
     Now that you've created a configuration-set to send emails and have specified to receive its events to an SNS-topic, next step is to give SuprSend permission to subscribe to this SNS-topic.
-
-
 
     AWS provides functionality where a different AWS account (in this case SuprSend) can subscribe to an SNS-topic in your account. For more details, [checkout here](https://docs.aws.amazon.com/sns/latest/dg/sns-send-message-to-sqs-cross-account.html).
   </Step>
@@ -231,6 +219,20 @@ Here's a description on what each of these form fields describe:
 
 One of the platform advantage of using SuprSend as a central communication system is that it shows notification analytics for all channels in your SuprSend account together. For enabling event tracking at SuprSend (such as delivery, opened, blocked, spam etc.), you'll have to `sns:Subscribe`action to SuprSend.
 
-Once you've given `sns:Subscribe` Action permission (to SuprSend AWS Account) on your SNS-topic, suprsend will attempt to create a subscription on that topic. Once subscription succeeds, you should see successfully "Subscribed" to topic when you visit the Vendor settings page. Email Tracking should start working
+Once you've given `sns:Subscribe` Action permission (to SuprSend AWS Account) on your SNS-topic, suprsend will attempt to create a subscription on that topic. Once subscription succeeds, you should see successfully "Subscribed" to topic when you visit the Vendor settings page. Email Tracking should start working.
+
+## How to add Unsubscription link in email
+
+It's recommended to allow recipients to unsubscribe from emails. You can either:
+
+1. **Use your vendor's unsubscribe link** by enabling **Unsubscribes** in *Sending → Domain settings (Tracking section)*. This opts users out of all emails from that vendor.
+
+2. **Use SuprSend’s** [**hosted preference page** ](/docs/preferences#hosted-preference-page)for more granular control, allowing users to manage preferences per category while also reducing unnecessary vendor API calls for opt-outs.
+
+![](/images/docs/afc5e04-Screenshot_2022-07-09_at_11.15.03_PM.png "Screenshot 2022-07-09 at 11.15.03 PM.png")
+
+**Why it's important to give unsubscribe option in email?**
+
+First, it is required by the [CAN-Spam Act](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business). Second, if you don’t give them this option, they are more likely to click on the spam complaint button, which will cause more harm than allowing them to unsubscribe. Finally, many ESPs look for unsubscribe links and are more likely to filter your email if they don’t have them.
 
 ***
