@@ -23,6 +23,10 @@ SuprSend identifies users with immutable `distinct_id`. It's best to map the sam
       suprsend.identify("abc@example.com");
       ```
     </CodeGroup>
+
+    | Parameter        | Type                      | Description                                                                         |
+    | ---------------- | ------------------------- | ----------------------------------------------------------------------------------- |
+    | **distinct\_id** | int, bigint, string, UUID | *mandatory* Unique identifier for a user across devices or between multiple logins. |
   </Step>
 
   <Step title="Call reset to clear user data on log out" stepNumber="2">
@@ -125,6 +129,66 @@ You can sync other user properties in SuprSend and use it to pass dynamic conten
       suprsend.user.unSet(["wishlist", "cart"]);
       ```
     </CodeGroup>
+  </Accordion>
+
+  <Accordion title="Set Once" defaultOpen={false}>
+    Works just like `user.set`, except it will not overwrite existing property values. This is useful for properties like *First login date*
+
+    ```dart
+    import 'package:suprsend_flutter/suprsend_flutter.dart';
+
+    void main() {
+      // Initialize SuprSend instance
+      final Suprsend suprsend = Suprsend();
+
+      // Set a single property once
+      suprsend.user.setOnce("first_login", "2021-11-02");
+
+      // Set multiple properties once
+      suprsend.user.setOnce({
+        "first_login": "2021-11-02",
+        "DOB": "1991-10-02",
+      });
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="Append" defaultOpen={false}>
+    This method will append a value to an array
+
+    ```dart
+    Suprsend.user.append(key, value);  
+    Suprsend.user.append(propertyObj);  // for multiple properties
+
+    // Sample values for appending a single property:
+    Suprsend.user.append("wishlist", "iphone12");
+
+    // Sample values for appending multiple properties:
+    Suprsend.user.append({
+      "wishlist": ["iphone12", "Apple airpods"]
+    });
+    ```
+
+
+  </Accordion>
+
+  <Accordion title="Increment" defaultOpen={false}>
+    Increase or decrease integer values on consecutive action, like login count. To reduce a property, provide a negative number for the value.
+
+    ```dart
+    // For single property
+    Suprsend.user.increment(key, value);
+    Suprsend.user.increment("login_count", 1);
+
+    // For multiple properties
+    Suprsend.user.increment(propertyObj);
+    Suprsend.user.increment({
+      "login_count": 1,
+      "order_count": 1
+    });
+    ```
+
+
   </Accordion>
 </AccordionGroup>
 
