@@ -11,18 +11,16 @@ SuprSend identifies users with immutable `distinct_id`. It's best to map the sam
 
 To create a new user or to update an existing user, you'll have to fetch user instance. Call `supr_client.user.get_instance` to instantiate user object.
 
-<CodeGroup>
-  ```python python
-  import suprsend
+```python
+import suprsend
 
-  supr_client = suprsend.Suprsend("workspace_key", "workspace_secret")
+supr_client = suprsend.Suprsend("workspace_key", "workspace_secret")
 
-  distinct_id = "distinct_id"  # Unique identifier of user in your application
+distinct_id = "distinct_id"  # Unique identifier of user in your application
 
-  # Instantiate User profile
-  user = supr_client.users.get_edit_instance(distinct_id)
-  ```
-</CodeGroup>
+# Instantiate User profile
+user = supr_client.users.get_edit_instance(distinct_id)
+```
 
 ## Edit  User
 
@@ -362,6 +360,76 @@ Use `.append()` on bulk\_users instance to add however-many-records to call in b
   Bulk API is supported in SuprSend python-sdk version 0.2.0 and above. If you are using an older version, please upgrade to the latest SDK version.
 </Warning>
 
+## Get User Details
 
+<CodeGroup>
+  ```javascript Request
+  res = supr_client.users.get("__distinct_id__")
+  print(res)
+  ```
 
-***
+  ```json Response
+  {
+    "distinct_id": "__distinct_id__",
+    "properties": {
+      "name": "John Doe",
+      "email": ["johndoe@example.com"],
+      "created_at": "2024-01-01T12:00:00Z"
+    },
+    "status": "active"
+  }
+  ```
+</CodeGroup>
+
+## Delete User
+
+<CodeGroup>
+  ```javascript Request
+  res = supr_client.users.delete("__distinct_id__")
+  print(res)
+  ```
+
+  ```
+  console.log("Hello World");
+  ```
+
+  ```json Response
+   {
+   "success": True, 
+   "status_code": 204
+   }
+  ```
+</CodeGroup>
+
+## Get list of objects subscribed by user
+
+You can pass optional query parameters -`limit`, `before`, `after`
+
+<CodeGroup>
+  ```javascript Request
+  res = supr_client.users.get_objects_subscribed_to("__distinct_id__", {"after": "01JJW6HXXXXPB59ARDW85G0KN", "limit": 1})
+  print(res)
+  ```
+
+  ```
+  console.log("Hello World");
+  ```
+
+  ```json Response
+  {
+      "objects": [
+        {
+          "object_id": "_object_id_",
+          "type": "_object_type_",
+          "subscribed_at": "2024-02-20T10:15:30Z"
+        }
+      ],
+      "paging": {
+        "after": "01JJW6HXXXXPB59ARDW85G0KN",
+        "has_more": false
+      }
+    }
+  ```
+</CodeGroup>
+
+##
