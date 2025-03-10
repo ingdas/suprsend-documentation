@@ -115,11 +115,11 @@ To add one or more Attachments to a Notification (viz. Email), you can just appe
 * Ensure that file\_path is a publicly accessible URL. Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
 
 <CodeGroup>
-  ```python python
+  ```python Request
   from suprsend import Event
 
   distinct_id = "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08"
-  event_name = "product_purchased" 
+  event_name = "invoice_generated" 
   properties = {...}
 
   event = Event(distinct_id=distinct_id, event_name=event_name, properties=properties)
@@ -137,16 +137,12 @@ To add one or more Attachments to a Notification (viz. Email), you can just appe
   Please add public accessible URL only as attachment file otherwise it will throw an error `404 not found` and workflow will not be triggered
 </Warning>
 
+## Bulk Event trigger
 
-
-## Bulk API for multiple event requests
-
-You can use Bulk API to send multiple events.
-
-Use `.append()` on bulk\_events instance to add however-many-records to call in bulk.
+You can use Bulk API to send multiple events. Use `.append()` on bulk\_events instance to add however-many-records to call in bulk.
 
 <CodeGroup>
-  ```python python
+  ```python Request
   from suprsend import Event
 
   bulk_ins = supr_client.bulk_events.new_instance()
@@ -164,32 +160,8 @@ Use `.append()` on bulk\_events instance to add however-many-records to call in 
   response = bulk_ins.trigger()
   print(response)
   ```
-</CodeGroup>
 
-<Warning>
-  Bulk API is supported in SuprSend python-sdk version 0.2.0 and above. If you are using an older version, please upgrade to the latest SDK version.
-</Warning>
-
-### How SuprSend Processes the bulk API request
-
-* On calling `bulk_ins.trigger()`, the SDK internally makes one-or-more Callable-chunks.
-
-* Each callable-chunk contains a subset of records, the subset calculation is based on each record's bytes-size and max allowed chunk-size, chunk-length etc.
-
-* For each callable-chunk SDK makes an HTTP call to SuprSend to register the request.
-
-## Add file attachment in bulk API (for email)
-
-Similar to single API call, you can add file attachment to bulk API by appending the attachment filepath to each event instance in bulk API call.
-
-* Call `event.add_attachment()` for each file with an accessible URL. Ensure that file\_path is a publicly accessible URL.
-
-* Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
-
-Refer below example for adding attachment in bulk API call
-
-<CodeGroup>
-  ```python python
+  ```python With Email attachment
   from suprsend import Event
 
   bulk_ins = supr_client.bulk_events.new_instance()
@@ -215,45 +187,20 @@ Refer below example for adding attachment in bulk API call
   response = bulk_ins.trigger()
   print(response)
   ```
-</CodeGroup>
 
-<Warning>
-  Please add public accessible URL only as attachment file otherwise it will throw an error `404 not found` and workflow will not be triggered
-</Warning>
-
-### Response
-
-Response is an instance of `suprsend.BulkResponse` class
-
-<CodeGroup>
-  ```python python
-  # Response structure
-  from suprsend import BulkResponse
-
-  BulkResponse(
-    status = "success",
-    total = 10, # number of records sent in bulk
-    success = 10, # number of records succeeded
-    failure = 0, # number of records failed
-    failed_records = []
-  )
-
-  BulkResponse(
+  ```python Response
+  {
     status = "fail",
     total = 10, # number of records sent in bulk
     success = 0, # number of records succeeded
     failure = 10, # number of records failed
     failed_records = [{"record": {...}, "error": "error_str", "code": 500}]
-  )
-
-  BulkResponse(
-    status = "partial",
-    total = 10, # number of records sent in bulk
-    success = 6, # number of records succeeded
-    failure = 4, # number of records failed
-    failed_records = [{"record": {...}, "error": "error_str", "code": 500}]
-  )
+  }
   ```
 </CodeGroup>
+
+<Warning>
+  Bulk API is supported in SuprSend python-sdk version 0.2.0 and above. If you are using an older version, please upgrade to the latest SDK version.
+</Warning>
 
 ***
