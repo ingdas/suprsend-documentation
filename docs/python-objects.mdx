@@ -6,430 +6,415 @@ url: "/docs/python/objects"
 
 Objects represent non-user entities such as organizations, teams, roles, and projects. Understand more about objects [here](https://docs.suprsend.com/docs/objects).
 
-## Upsert (create/update) an object
+## Create Object
 
-Create or update an object
+This is an `upsert` method, used to create or update an object.
 
-```python
-object_instance = supr_client.objects.upsert("object_type", "object_id", object_payload={"key": "value"})
-print(object_instance)
-```
+<CodeGroup>
+  ```javascript Response [method]
+  import suprsend
 
-## Edit
+  # Correct client instantiation
+  supr_client = suprsend.Suprsend("Workspace_Key", "Workspace_Secret")
 
-Edit an object, this is different from upsert since here, it is allowed to pass `operations`key which allows to define order of edit operations on the object instance
+  # Object details
+  object_id = "id"
+  object_type = "type"
 
-```python
-object_instance = supr_client.objects.edit("object_type", "object_id", edit_payload={"operations": {
-            "$set": {
-                "name": "user"
-            },
-            "$remove": {"name": "user"}
-        }})
-print(object_instance)
-```
+  # Correct payload format
+  payload = {
+      "properties": {  # Nested inside "properties"
+          "name": "John Doe",
+          "$email": "john@example.com"
+      }
+  }
+
+  # Attempting upsert operation (assuming correct method)
+  res = supr_client.objects.upsert(object_type, object_id, payload)
+  print(res)
+  ```
+
+  ```python Response
+  {
+    'object_type': 'type', 
+    'id': 'id', 
+    'subscriptions_count': 0, 
+    'properties': {'properties': {'$email': 'john@example.com', 'name': 'John Doe'}
+                  }, 
+    'created_at': '2025-03-12T22:00:38.730766+00:00', 
+    'updated_at': '2025-03-12T22:00:38.730766+00:00', 
+    '$inbox': 
+    [
+      {
+        'value': 'jjloR7gJX38-DEWleXa6-wfpaS_zk7-t4DfVKo07wbc', 
+        'id_provider': 'suprsend', 
+        'status': 'active', 
+        'perma_status': 'active'
+      }
+    ]
+  }
+  ```
+</CodeGroup>
+
+<Note>
+  When you call `supr_client.objects.upsert()`, the response will immediately indicate whether the request was successful or if the object was not created.
+</Note>
+
+## Edit an object (build edit payload yourself)
+
+Use this to modify an object, typically for removing channels or unsetting properties. The payload will follow the same structure as the Object Edit API
+
+<CodeGroup>
+  ```javascript Request
+  import suprsend
+
+  def get_supr_client():
+    supr_client = suprsend.Suprsend("Workspace_Key", "Workspace_Secret")
+
+    return supr_client
+
+  def test_object_api():
+    res = supr_client.objects.edit("abc_tmp", "abc_1", {"operations": [{"$set": {"name": "John Doe"}}]})
+    print(res)
+
+    if __name__ == "__main__":
+      test_object_api()    
+  ```
+
+  ```python Response
+  {
+   'object_type': 'abc_tmp', 'id': 'abc_1',
+   'subscriptions_count': 0, 
+   'properties': {'name': 'John Doe'}, 
+   'created_at': '202X-03-03T14:42:28.355415+00:00', 
+   'updated_at': '202X-03-04T08:32:19.203926+00:00', 
+   '$inbox': 
+   [
+     {'value': 'QN1wE9vUkXXXXXXXXXXwAM2ZXXX_STXXXXXPTLs', 
+      'id_provider': 'suprsend', 
+      'status': 'active', 
+      'perma_status': 'active'}
+   ]
+  }
+  ```
+</CodeGroup>
+
+## Edit an object (using helper methods) \[Recommended]
+
+It is possible to use the SDK's helper methods to perform edit operations on an object.
+
+<AccordionGroup>
+  <Accordion title="Create Object Instance" defaultOpen={false}>
+    For this, first create object instance then call any of the helper methods mentioned below and finally save the changes
+
+    <CodeGroup>
+      ```python Request
+      obj_inst = supr_client.objects.get_edit_instance("_object_type_", "_object_id_")
+      res = supr_client.objects.edit(obj_inst)
+      print(res)
+      ```
+
+      ```python Response
+      {
+       'object_type': '_object_type_', 
+       'id': '_object_id_', 
+       'subscriptions_count': 0, 
+       'properties': {}, 
+       'created_at': '2025-03-04T08:34:58.061696+00:00', 
+       'updated_at': '2025-03-04T08:34:58.061696+00:00', 
+       '$inbox': 
+       	[
+         {'value': 'dHvPs6pmUUwSLkiQTAsfM2yro2TRx2CXZOtjNkum9b8', 'id_provider': 'suprsend', 'status': 'active', 'perma_status': 'active'}
+        ]
+      }
+      ```
+    </CodeGroup>
+
+
+  </Accordion>
+
+  <Accordion title="Add channels" defaultOpen={false}>
+    Use `object_ins.add_*` method(s) to add channels
+
+    <CodeGroup>
+      ```javascript helloWorld.js
+      console.log("Hello World");
+      ```
+    </CodeGroup>
+
+
+  </Accordion>
+
+  <Accordion title="Remove channels" defaultOpen={false}>
+    Use `object_ins.remove_*` method(s) to remove channels from an object
+
+    <CodeGroup>
+      ```javascript Request
+      console.log("Hello World");
+      ```
+    </CodeGroup>
+
+
+  </Accordion>
+
+  <Accordion title="Remove channels in bulk" defaultOpen={false}>
+    If you need to delete/unset all emails (or any other channel data) of an object, you can call object\_ins.unset() method. The method accepts the channel key/s (a single key or list of keys)
+
+    <CodeGroup>
+      ```javascript helloWorld.js
+      console.log("Hello World");
+      ```
+    </CodeGroup>
+
+
+  </Accordion>
+
+  <Accordion title="Set preferred language" defaultOpen={false}>
+    If you want to send notification in object's preferred language, you can set it by passing language code in `object_ins.setPreferredLanguage()` method. This is useful especially for the applications which offer vernacular or multi-lingual support
+
+    <CodeGroup>
+      ```javascript helloWorld.js
+      console.log("Hello World");
+      ```
+    </CodeGroup>
+
+
+  </Accordion>
+
+  <Accordion title="Set timezone" defaultOpen={false}>
+    You can set timezone of user using object\_ins.setPreferredLanguage() method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab)
+
+    <CodeGroup>
+      ```javascript helloWorld.js
+      console.log("Hello World");
+      ```
+    </CodeGroup>
+
+
+  </Accordion>
+</AccordionGroup>
 
 ## List Objects
 
 List objects for an `object_type`. You can also pass listing options in the payload which includes `limit`,`before`,`after`
 
-```python
-objects = supr_client.objects.list("object_type", options={"limit": 10, "before": "id1"})
-print(objects)
-```
+<CodeGroup>
+  ```python Request
+  res = supr_client.objects.list("object_type")
+  {"after": "01JJW6H55N3JPB59ARDW85G0KN", "limit": 1}
 
-## Get Object
+  print(res) 
+  ```
 
-```python
-object_instance = supr_client.objects.get("object_type", "object_id")
-print(object_instance)
-```
+  ```python Response
+  {
+     "meta":{
+        "count":0,
+        "limit":10,
+        "has_prev":false,
+        "before":"None",
+        "has_next":false,
+        "after":"None"
+     },
+     "results":[]
+  }
+  ```
+</CodeGroup>
+
+## Get Object Details
+
+<CodeGroup>
+  ```python Request
+  res = supr_client.objects.get("object_type", "object_id")
+  print(res)
+  ```
+
+  ```python Response
+  {
+    'object_type': 'skme', 
+    'id': 'skme_6', 
+    'subscriptions_count': 0, 
+    'properties': 
+    {
+      'name': 'New Object'
+    }, 
+      'created_at': '2025-03-12T22:15:02.805468+00:00', 
+      'updated_at': '2025-03-12T22:15:02.805468+00:00', 
+      '$inbox': 
+      [
+        {
+          'value': '7EXnFak37-qht8H0-HvsBVEQfQjunHcVs6W5Hl3MOcY', 
+          'id_provider': 'suprsend', 
+          'status': 'active', 
+          'perma_status': 'active'
+        }
+      ]
+  }
+  ```
+</CodeGroup>
 
 ## Delete Object
 
-```python
-delete_resp = supr_client.objects.delete("object_type", "object_id")
-print(delete_resp)
-```
+<CodeGroup>
+  ```python Request
+  res = supr_client.objects.delete("object_type", "object_id")
+  print(res) 
+  ```
 
-## Create Subscriptions
-
-```python
-payload = {"recipients": ["recipient1", "recipient2"]}
-object_instance = supr_client.objects.create_subscriptions("object_type", "object_id", payload)
-print(object_instance)
-```
-
-## List Subscriptions
-
-```python
-object_instance = supr_client.objects.get_subscriptions("object_type", "object_id")
-print(object_instance)
-```
-
-## Delete Subscriptions
-
-```python
-delete_resp = supr_client.objects.delete_subscriptions("object_type", "object_id")
-print(delete_resp)
-```
-
-## Edit Operations via Helper Methods
-
-It is possible to use suprsend helper methods to perform edit operations on an object. For this first instantiate suprsend object:
-
-```python
-object_ins = supr_client.objects.get_instance("object_type", "object_id")
-```
-
-### 1. Add Channels
-
-Use `object_ins.add_*` method(s) to add user channels in a profile
-
-```python
-# Add channel details to object_ins-instance. Call relevant add_* methods
-
-object_ins.add_email("object_ins@example.com") # - To add Email
-
-object_ins.add_sms("+15555555555") # - To add SMS
-
-object_ins.add_whatsapp("+15555555555") # - To add Whatsapp
-
-object_ins.add_androidpush("__android_push_fcm_token__") # - by default, token is assumed to be fcm-token
-
-# You can set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
-object_ins.add_androidpush("__android_push_xiaomi_token__", provider="xiaomi")
-
-object_ins.add_iospush("__iospush_token__")
-
-# - To add Slack using email
-object_ins.add_slack(
+  ```python Response
   {
-    "email": "user@example.com",
-    "access_token": "xoxb-XXXXXXXX"
-  })  
+    'success': True, 
+    'status_code': 204
+  }
+  ```
+</CodeGroup>
 
-# - To add Slack if slack member_id is known
-object_ins.add_slack(
+### Bulk Delete Objects
+
+<CodeGroup>
+  ```python Request
+  res = supr_client.objects.bulk_delete("object_type", {"object_ids": [" abc_1 "]})
+  print(res) 
+  ```
+
+  ```python Request
   {
-    "user_id": "U03XXXXXXXX",
-    "access_token": "xoxb-XXXXXXXX"
+    'success': True, 
+    'status_code': 204
+  }
+  ```
+</CodeGroup>
+
+## Create Subscription to Objects
+
+<CodeGroup>
+  ```python Request
+  res = supr_client.objects.create_subscriptions("object_type", "object_id", {
+    "recipients": ["id1", {"object_type": "abc_1", "id": "abc_2"}],
+    "properties": {"type": "admin"},
   })
 
-# - To add Slack channel
-object_ins.add_slack(
+  print(res)
+  ```
+
+  ```python Response
   {
-    "channel_id": "CXXXXXXXX",
-    "access_token": "xoxb-XXXXXXXX"
-  })
+    'results': 
+    [
+      {'properties': {'type': 'admin'}, 
+       'user': None, 
+       'object': 
+       {
+         'id': 'abc_2', 
+         'object_type': 'abc_1', 
+         'subscriptions_count': 0, 
+         'updated_at': '2025-03-12T22:30:51.508+00:00'
+       }, 
+       'created_at': '2025-03-12T22:30:51.510014+00:00', 
+       'updated_at': '2025-03-12T22:30:51.510014+00:00'
+      }
+    ]
+  }
+  ```
+</CodeGroup>
 
-# - To add Slack incoming webhook
-object_ins.add_slack(
+## List Subscriptions of Objects
+
+<CodeGroup>
+  ```javascript Request
+  res = supr_client.objects.get_subscriptions("object_type", "object_id") 
+  {"after": "01JJW6H55NXXXXXX5G0KN", "limit": 1}
+
+  print(res) 
+  ```
+
+  ```python Response
   {
-    "incoming_webhook": {
-      "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
-    }
-  })
+    'meta': 
+    {
+      'count': 1, 
+        'limit': 10, 
+          'has_prev': False, 
+            'before': None, 
+              'has_next': False, 
+                'after': None
+    }, 
+      'results': 
+      [
+        {'properties': {'type': 'admin'}, 
+         'user': None, 
+         'object': 
+         {
+           'id': 'abc_2', 
+           'object_type': 'abc_1', 
+           'subscriptions_count': 0, 
+           'updated_at': '2025-03-12T22:30:51.508+00:00'
+         }, 
+         'created_at': '2025-03-12T22:30:51.510014+00:00', 
+         'updated_at': '2025-03-12T22:30:51.510014+00:00'
+        }
+      ]
+  }
+  ```
+</CodeGroup>
 
-# - To add MS teams object_ins or channel using conversation_id
-object_ins.add_ms_teams(
+## Delete Subscriptions in Objects
+
+<CodeGroup>
+  ```python Request
+  res = supr_client.objects.delete_subscriptions
+  (
+    "object_type", "object_id", {
+      "recipients": ["id1", {"object_type": "abc_1", "id": "abc_2"}],
+      "recipients": ["distinct_id1", {"object_type": "type1", "id": "id1"}],
+    })
+
+  print(res) 
+  ```
+
+  ```python Response
   {
-		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
-		"service_url": "https://smba.trafficmanager.net/amer",
-		"conversation_id": "19:c1524d7c-a06f-456f-8abe-xxxx"
-  })
+    'success': True, 
+      'status_code': 204
+  }
+  ```
+</CodeGroup>
 
-# - To add MS teams object_ins using user_id
-object_ins.add_ms_teams(
+## Get list of objects subscribed by object
+
+An object can subscribe to other objects. Use this method to get the list of all objects that the current object has subscribed to
+
+<CodeGroup>
+  ```python Request
+  # Get list of objects subscribed by the object
+  res = supr_client.objects.get_objects_subscribed_to("object_type", "object_id", {}) 
+  {"after": "01JJW6H55NXXXXX85G0KN", "limit": 1}
+
+  print(res)
+  ```
+
+  ```python Response
   {
-		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
-		"service_url": "https://smba.trafficmanager.net/amer",
-		"user_id": "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
-  })
-
-# - To add MS teams using incoming webhook
-object_ins.add_ms_teams(
-  {
-    "incoming_webhook": {
-      "url": "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
-    }
-  })
-
-# After setting the channel details on user-instance, call save()
-response = object_ins.save()
-print(response)
-
-```
-
-### 2. Remove Channels
-
-Use `object_ins.remove_*` method(s) to remove channels from an object profile
-
-```python
-# Remove channel details from object_ins-instance. Call relevant remove_* methods
-
-object_ins.remove_email("object_ins@example.com") # - To remove Email
-
-object_ins.remove_sms("+15555555555") # - To remove SMS
-
-object_ins.remove_whatsapp("+15555555555") # - To remove Whatsapp
-
-object_ins.remove_androidpush("__android_push_fcm_token__") # - by default, token is assumed to be fcm-token
-
-# You can set the optional provider value [fcm/xiaomi/oppo] if its not a fcm-token
-object_ins.remove_androidpush("__android_push_xiaomi_token__", provider="xiaomi")
-
-object_ins.remove_iospush("__iospush_token__")
-
-# - To remove Slack email
-object_ins.remove_slack(
-  {
-    "email": "object_ins@example.com",
-    "access_token": "xoxb-XXXXXXXX"
-  })  
-
-# - To remove Slack if slack member_id is known
-object_ins.remove_slack(
-  {
-    "object_ins_id": "U03XXXXXXXX",
-    "access_token": "xoxb-XXXXXXXX"
-  })
-
-# - To remove Slack channel
-object_ins.remove_slack(
-  {
-    "channel_id": "CXXXXXXXX",
-    "access_token": "xoxb-XXXXXXXX"
-  })
-
-# - To remove Slack incoming webhook
-object_ins.remove_slack(
-  {
-    "incoming_webhook": {
-      "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
-    }
-  })
-
-# - To add MS teams object_ins or channel using conversation_id
-object_ins.remove_ms_teams(
-  {
-		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
-		"service_url": "https://smba.trafficmanager.net/amer",
-		"conversation_id": "19:c1524d7c-a06f-456f-8abe-xxxx"
-  })
-
-# - To add MS teams object_ins using user_id
-object_ins.remove_ms_teams(
-  {
-		"tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
-		"service_url": "https://smba.trafficmanager.net/amer",
-		"object_ins_id": "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
-  })
-
-# - To add MS teams using incoming webhook
-object_ins.remove_ms_teams(
-  {
-    "incoming_webhook": {
-      "url": "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
-    }
-  })
-
-# After setting the channel details on object_ins-instance, call save()
-response = object_ins.save()
-print(response)
-```
-
-### 3. Remove Channels in bulk
-
-If you need to delete/unset all emails (or any other channel) of an object, you can call `object_ins.unset()` method on the object instance. The method accepts the channel key/s (a single key or list of keys)
-
-```python
-# --- To delete all emails associated with object_ins
-object_ins.unset("$email")
-response = object_ins.save()
-print(response)
-
-# what value to pass to unset channels
-# for email:                $email
-# for whatsapp:             $whatsapp
-# for SMS:                  $sms
-# for androidpush tokens:   $androidpush
-# for iospush tokens:       $iospush
-# for webpush tokens:       $webpush
-# for slack:                $slack
-# for ms_teams:             $ms_teams
-
-# --- multiple channels can also be deleted in one call by passing argument as a list
-object_ins.unset(["$email", "$sms", "$whatsapp"])
-response = object_ins.save()
-print(response)
-
-```
-
-<Warning>
-  > After calling `add_*/remove_*/unset` methods, don't forget to call `object_ins.save()`. On call of save(), SDK sends the request to SuprSend platform to update the Object Profile.
-</Warning>
-
-## Add Preferences in Object Profile
-
-You can also set custom properties in object profile that is used to set object preferences
-
-### Set Preferred language
-
-```python
-# Add language preference to object-instance.
-
-object_ins.set_preferred_language("en")
-
-# After setting the language on user-instance, call save()
-response = object_ins.save()
-print(response)
-```
-
-### Set Timezone
-
-```python
-# Add timezone to object-instance.
-
-object_ins.set_timezone("America/Belize")
-
-# After setting the language on object-instance, call save()
-response = object_ins.save()
-print(response)
-```
-
-## Advanced Configuration - Set Object Properties
-
-You can use SuprSend Python SDK to set advanced object properties, which will help in creating a object profile.
-
-### 1. Set
-
-Set is used to set the custom property or properties. The given name and value will be assigned to the object, overwriting an existing property with the same name if present. It can take key as first param, value as second param for setting single object property or object for setting multiple object properties.
-
-```python
-from suprsend import Suprsend
-supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
-
-o1 = supr_client.objects.get_instance("object_type", "object_id")
-o1.set("key", "value")  # for single property
-o1.set(properties)      # for multiple properties where properties is a dict()
-
-# set single property using key and value
-o1.set("name", "user")
-# set multiple/nested properties using dictionary
-o1.set({
-  "prop1": "val1", 
-  "prop2": ["one", "two", "three"], 
-  "number": 20
-})
-```
-
-| Parameters | Types             | Description                                                                                                                                                                                                                                                                                           |
-| ---------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| arg1       | string/dictionary | *Mandatory*&#xA;This param will be string in case where only single property needs to be created/updated. It will be a dictionary in cases where complex objects need to be set in object properties, like multiple properties, arrays, nested properties etc.&#xA;Should not start with `$` or `ss_` |
-| arg2       | any               | *Optional*&#xA;This will be value that will be attached to key property. Not required in cases where first param is a dictionary.                                                                                                                                                                     |
-
-<Note>
-  > When you create a key, please ensure that the Key Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
-</Note>
-
-### 2. Set Once
-
-Works just like `object_ins.set`, except it will not overwrite existing property values. This is useful for properties like *First login date*
-
-```python
-from suprsend import Suprsend
-supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
-
-o1 = supr_client.objects.get_instance("object_type", "object_id")
-o1.set_once(key, value)  # for single property
-o1.set_once(properties)  # for multiple properties
-
-# For setting once a single property:
-o1.set_once("first_login", "2021-11-02")
-
-# For setting once multiple properties
-o1.set_once({"first_login" : "2021-11-02", "DOB" : "1991-10-02"})
-```
-
-### 3. Increment
-
-Add the given amount to an existing property on the object. If the object does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
-
-```python
-from suprsend import Suprsend
-supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
-
-o1 = supr_client.objects.get_instance("object_type", "object_id")
-o1.increment(key, value)  # for single property
-o1.increment(property_obj)  # for multiple properties
-
-# For incrementing a single property:
-o1.increment("login_count", 1)
-
-# For incrementing multiple properties:
-o1.increment({"login_count" : 1, "order_count" : 1})
-```
-
-### 4. Append
-
-This method will append a value to the list for a given property.
-
-```python
-from suprsend import Suprsend
-supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
-
-o1 = supr_client.objects.get_instance("object_type", "object_id")
-o1.append(key, value)  # for single property
-o1.append(properties)  # for multiple properties
-
-# For appending a single property:
-o1.append("wishlist", "iphone12")
-
-# For appending multiple properties:
-o1.append({"wishlist" : "iphone12", "wishlist" : "Apple airpods"})
-```
-
-### 5. Remove
-
-This method will remove a value from the list for a given property.
-
-```python
-from suprsend import Suprsend
-supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
-
-o1 = supr_client.objects.get_instance("object_type", "object_id")
-o1.remove(key, value)  # for single property
-o1.remove(properties)  # for multiple properties
-
-# For removing a single property:
-o1.remove("wishlist", "iphone12")
-
-# For removing multiple properties:
-o1.remove({"wishlist" : "iphone12", "wishlist": "Apple airpods"})
-```
-
-### 6. Unset
-
-This will remove a property permanently from properties.
-
-```python
-
-from suprsend import Suprsend
-supr_client = Suprsend("WORKSPACE_KEY", "WORKSPACE_SECRET")
-
-o1 = supr_client.objects.get_instance("object_type", "object_id")
-o1.unset(key)  # for single property
-o1.unset(property_list)  # for multiple properties
-
-# For unsetting a single property:
-o1.unset("wishlist")
-
-# For unsetting multiple properties:
-o1.unset(["wishlist", "cart"])
-```
-
-| Parameter          | Type           | Description                                                       |
-| ------------------ | -------------- | ----------------------------------------------------------------- |
-| key                | string         | This property provided will be deleted from object properties     |
-| **property\_list** | array\[string] | If list is given all properties included in list will be removed. |
+    'meta': 
+    {
+      'count': 1, 
+        'limit': 10, 
+          'has_prev': False, 
+            'before': None, 
+              'has_next': False, 
+                'after': None
+    }, 
+      'results': 
+      [
+        {
+          'properties': {'type': 'admin'}, 
+          'object': {'id': 'skme_1', 'object_type': 'skme_tmp', 
+                     'properties': {'name': 'Test Object'}, 
+                     'subscriptions_count': 1, 
+                     'updated_at': '2025-03-12T22:30:50.865092+00:00'}, 
+          'created_at': '2025-03-12T22:30:51.510014+00:00', 
+          'updated_at': '2025-03-12T22:30:51.510014+00:00'}
+      ]
+  }
+  ```
+</CodeGroup>

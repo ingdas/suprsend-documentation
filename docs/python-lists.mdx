@@ -5,49 +5,7 @@ description: "Methods to create and manage lists using python SDK"
 
 The Lists SDK methods lets you create / manage list of subscribers. You can then send [broadcast](/docs/broadcast) to all the users in the list.
 
-### Create / Update List
-
-
-
-### Add Subscribers to the list
-
-
-
-### Remove Subscribers from the list
-
-
-
-### Get List details
-
-
-
-### Get all Lists
-
-
-
-## Data structure of List:
-
-These are all the possible configurations of a list
-
-<CodeGroup>
-  ```json json
-  {
-  	"list_id": "_list_id_",
-  	"list_name": "_list_name",
-  	"list_description: "_some sample description_"
-  }
-  ```
-</CodeGroup>
-
-Field Description:
-
-| Field           | Descriptiom                                                                                                                                                                                                                                                                                                                                                      | Obligation  |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| **list\_id**    | Unique identifier for the list. Follow these guidelines for naming the list: - list\_id can be of max 64 characters. - It can contain characters \[a-z0-9\_-] i.e. alphanumeric characters, \_(underscore) and -(hyphen). - list\_id is case-insensitive. Suprsend first converts list\_id to lowercase before storing it or doing any sort of comparison on it. | *mandatory* |
-| **list\_name**  | Name of the list. This is for your reference and can be referred to understand what this list is for.                                                                                                                                                                                                                                                            | *optional*  |
-| **description** | Description of the list to identify what type of users belong to this list.                                                                                                                                                                                                                                                                                      | *optional*  |
-
-### Sample list body
+## Sample list body
 
 <CodeGroup>
   ```json json
@@ -59,189 +17,177 @@ Field Description:
   ```
 </CodeGroup>
 
-## List Methods
+## Create / Update List
 
-Below are some methods that you can use to create and update list:
+You can use `supr_client.subscribers_list.create` method to create a new list
 
-<Steps>
-  <Step title="Create a List">
-    You can use `supr_client.subscribers_list.create` method to create a new list
+<CodeGroup>
+  ```python Request (method)
+  from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
+  from suprsend import Suprsend
+  # Initialize SDK
+  supr_client = Suprsend("_api_key_", "_api_secret_")
 
-    <CodeGroup>
-      ```python python
-      from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
-      from suprsend import Suprsend
-      # Initialize SDK
-      supr_client = Suprsend("_api_key_", "_api_secret_")
+  try:
+      data = supr_client.subscriber_lists.create({
+      "list_id": "_list_id",   #Unique identifier for the list.
+      "list_name": "_list_name",   #Name of the list (optional)
+      "list_description": "_some sample description for the list_",   #describes what type of users belong to this list.
+      })
+      print(data)
+  except (SuprsendAPIException,SuprsendValidationError) as ex:
+      print(ex). 
+  ```
 
-      try:
-          data = supr_client.subscriber_lists.create({
-          "list_id": "_list_id",
-          "list_name": "_list_name",
-          "list_description": "_some sample description for the list_",
-          })
-          print(data)
-      except (SuprsendAPIException,SuprsendValidationError) as ex:
-          print(ex)
-      ```
-    </CodeGroup>
+  ```python Response
+  {
+  	"list_id": "list-id",
+  	"list_name": "List Name",
+    "updated_at": "2022-12-18T10:40:27.268417+00:00",
+  	"list_description": "List description"
+  }
+  ```
+</CodeGroup>
 
-    **Response:**
+<Note>
+  Suprsend first converts list\_id to lowercase before storing it or doing any sort of comparison on it.
 
-    <CodeGroup>
-      ```json json
+  * `list_id `can be of max 64 characters.&#x20;
+
+  * It can contain characters \[a-z0-9\_-] i.e. alphanumeric characters, \_(underscore) and -(hyphen).&#x20;
+
+  * `list_id` is case-insensitive.&#x20;
+</Note>
+
+## Get list data
+
+You can get the latest information of a list using `supr_client.subscribers_list.get` method.
+
+<CodeGroup>
+  ```python Request (method)
+  from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
+  from suprsend import Suprsend
+  # Initialize SDK
+  supr_client = Suprsend("_api_key_", "_api_secret_")
+
+  try:
+      data = supr_client.subscribers_list.get("_list_id_");
+      print(data)
+      
+  except (SuprsendAPIException,SuprsendValidationError) as ex:
+      print(ex)
+
+  ```
+
+  ```python Response
+  {
+  	"list_id": "list-id",
+  	"list_name": "List Name",
+    "updated_at": "2022-12-18T10:40:27.268417+00:00",
+  	"list_description": "List description"
+  }
+  ```
+</CodeGroup>
+
+## Get all lists
+
+To get the data of all the lists created in your workspace, use `supr_client.subscribers_list.get_all()`  method
+
+<CodeGroup>
+  ```python Request (method)
+  from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
+  from suprsend import Suprsend
+  # Initialize SDK
+  supr_client = Suprsend("_api_key_", "_api_secret_")
+
+  try:
+  	const data = supr_client.subscribers_list.get_all();
+      print(data)
+      
+  except (SuprsendAPIException,SuprsendValidationError) as ex:
+      print(ex)
+  ```
+
+  ```python Response
+  {
+    "meta": {
+      "limit": 20,
+      "offset": 0,
+      "count": 1
+    },
+    "results": [
       {
-      	"list_id": "list-id",
-      	"list_name": "List Name",
+        "list_id": "list-id1",
+        "list_name": "List Name1",
         "updated_at": "2022-12-18T10:40:27.268417+00:00",
-      	"list_description": "List description"
-      }
-      ```
-    </CodeGroup>
-  </Step>
-
-  <Step title="Get list data">
-    You can get the latest information of a list using `supr_client.subscribers_list.get` method
-
-    <CodeGroup>
-      ```python Python
-      from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
-      from suprsend import Suprsend
-      # Initialize SDK
-      supr_client = Suprsend("_api_key_", "_api_secret_")
-
-      try:
-          data = supr_client.subscribers_list.get("_list_id_");
-          print(data)
-          
-      except (SuprsendAPIException,SuprsendValidationError) as ex:
-          print(ex)
-      ```
-    </CodeGroup>
-
-    **Response:**
-
-    <CodeGroup>
-      ```json json
+        "list_description": "List description1"
+      },
       {
-      	"list_id": "list-id",
-      	"list_name": "List Name",
-        "updated_at": "2022-12-18T10:40:27.268417+00:00",
-      	"list_description": "List description"
+        "list_id": "list-id2",
+        "list_name": "List Name2",
+        "updated_at": "2022-12-19T10:40:27.268417+00:00",
+        "list_description": "List description2"
       }
-      ```
-    </CodeGroup>
-  </Step>
+    ]
+  }
+  ```
+</CodeGroup>
 
-  <Step title="Get all lists">
-    To get the data of all the lists created in your workspace, use `supr_client.subscribers_list.get_all()` method
+## Add Subscribers to the list
 
-    <CodeGroup>
-      ```python Python
-      from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
-      from suprsend import Suprsend
-      # Initialize SDK
-      supr_client = Suprsend("_api_key_", "_api_secret_")
+You can add subscribers to the list using `supr_client.subscribers_list.add()`. There is no limit to the number of subscribers that you can add to a list.
 
-      try:
-      	const data = supr_client.subscribers_list.get_all();
-          print(data)
-          
-      except (SuprsendAPIException,SuprsendValidationError) as ex:
-          print(ex)
-      ```
-    </CodeGroup>
+<CodeGroup>
+  ```javascript Request (method)
+  from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
+  from suprsend import Suprsend
+  # Initialize SDK
+  supr_client = Suprsend("_api_key_", "_api_secret_")
 
-    **Response:**
+  try:
+  	data = supr_client.subscribers_list.add("_list_id_", [
+  		"_distinct_id1_",
+  		"_distinct_id2_"
+  	]);
+  	print(data)
 
-    <CodeGroup>
-      ```json json
-      {
-        "meta": {
-          "limit": 20,
-          "offset": 0,
-          "count": 1
-        },
-        "results": [
-          {
-            "list_id": "list-id1",
-            "list_name": "List Name1",
-            "updated_at": "2022-12-18T10:40:27.268417+00:00",
-            "list_description": "List description1"
-          },
-          {
-            "list_id": "list-id2",
-            "list_name": "List Name2",
-            "updated_at": "2022-12-19T10:40:27.268417+00:00",
-            "list_description": "List description2"
-          }
-        ]
-      }
-      ```
-    </CodeGroup>
-  </Step>
+  except (SuprsendAPIException,SuprsendValidationError) as ex:
+  	print(ex)
+  ```
 
-  <Step title="Add Subscribers to the list">
-    You can add subscribers to the list using `supr_client.subscribers_list.add()`. There is no limit to the number of subscribers that you can add to a list.
+  ```python Response
+  { success: true }
+  ```
+</CodeGroup>
 
-    <CodeGroup>
-      ```python Python
-      from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
-      from suprsend import Suprsend
-      # Initialize SDK
-      supr_client = Suprsend("_api_key_", "_api_secret_")
+## Remove Subscribers from the list
 
-      try:
-      	data = supr_client.subscribers_list.add("_list_id_", [
-      		"_distinct_id1_",
-      		"_distinct_id2_"
-      	]);
-      	print(data)
+You can remove subscribers from the list using `supr_client.subscribers_list.remove()`
 
-      except (SuprsendAPIException,SuprsendValidationError) as ex:
-      	print(ex)
-      ```
-    </CodeGroup>
+<CodeGroup>
+  ```javascript Request (method)
+  from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
+  from suprsend import Suprsend
+  # Initialize SDK
+  supr_client = Suprsend("_api_key_", "_api_secret_")
 
-    #### Response
+  try:
+  	data = supr_client.subscribers_list.remove("_list_id_", [
+  		"_distinct_id1_",
+  		"_distinct_id2_"
+  	]);
+  	print(data)
 
-    <CodeGroup>
-      ```json json
-      { success: true }
-      ```
-    </CodeGroup>
-  </Step>
+  except (SuprsendAPIException,SuprsendValidationError) as ex:
+  	print(ex)
 
-  <Step title="Remove Subscribers from the list">
-    You can remove subscribers from the list using `supr_client.subscribers_list.remove()`.
+  ```
 
-    <CodeGroup>
-      ```python Python
-      from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
-      from suprsend import Suprsend
-      # Initialize SDK
-      supr_client = Suprsend("_api_key_", "_api_secret_")
+  ```
+  { success: true }
+  ```
+</CodeGroup>
 
-      try:
-      	data = supr_client.subscribers_list.remove("_list_id_", [
-      		"_distinct_id1_",
-      		"_distinct_id2_"
-      	]);
-      	print(data)
 
-      except (SuprsendAPIException,SuprsendValidationError) as ex:
-      	print(ex)
-      ```
-    </CodeGroup>
 
-    **Response:**
-
-    <CodeGroup>
-      ```json json
-      { success: true }
-      ```
-    </CodeGroup>
-  </Step>
-</Steps>
-
-***
+###
