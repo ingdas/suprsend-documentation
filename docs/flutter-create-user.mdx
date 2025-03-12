@@ -14,7 +14,7 @@ SuprSend identifies users with immutable `distinct_id`. It's best to map the sam
     When you call this method, we internally create an event called **`$user_login`**. You can use this event to trigger workflow on user login.
 
     <CodeGroup>
-      ```javascript Dart
+      ```dart Dart
       suprsend.identify(__distinct_id__);
 
       //Sample
@@ -31,6 +31,8 @@ SuprSend identifies users with immutable `distinct_id`. It's best to map the sam
   <Step title="Call reset to clear user data on log out" stepNumber="2">
     As soon as the user logs out, call `suprsend.reset()` method to clear data attributed to a user. This allows you to handle multiple user logins on a single device and keep their data isolated from each other.
 
+    When you call this method, we internally create an event called **$user\_logout**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
+
     <CodeGroup>
       ```javascript Dart
       suprsend.reset();
@@ -38,6 +40,8 @@ SuprSend identifies users with immutable `distinct_id`. It's best to map the sam
     </CodeGroup>
 
     <Warning>
+      **Mandatory to call reset on logout:**
+
       Don't forget to call reset on user logout. If not called, users' distinct\_id will not reset and multiple tokens and channels will get added to the distinct\_id who logged in first on the device.
     </Warning>
   </Step>
@@ -50,7 +54,7 @@ SuprSend identifies users with immutable `distinct_id`. It's best to map the sam
         Add user channels on signup, or whenever a user updates their communication channels in the application flow.
 
         <CodeGroup>
-          ```javascript Dart
+          ```dart Dart
           suprsend.user.setEmail("abc@example.com");  // To add Email
 
           suprsend.user.setSms("+91XXXXXXXXXX");  // To add SMS, mandatory to pass country code
@@ -58,6 +62,14 @@ SuprSend identifies users with immutable `distinct_id`. It's best to map the sam
           suprsend.user.setWhatsApp("+91XXXXXXXXXX"); // To add Whatsapp, mandatory to pass country code
           ```
         </CodeGroup>
+
+        Android Push token will automatically be set at the time of user login. All you have to do is to integrate the push notification service in your application. Here's the [Android Push Integration guide](https://docs.suprsend.com/docs/flutter-firebase-fcm-push-integration).
+
+        <Warning>
+          **Country Code Mandatory:**
+
+          > Make sure you are sending the country code when you are calling communication methods for SMS and Whatsapp.
+        </Warning>
       </Accordion>
 
       <Accordion title="Remove User Channels" defaultOpen={false}>
@@ -75,7 +87,7 @@ SuprSend identifies users with immutable `distinct_id`. It's best to map the sam
   </Step>
 </Steps>
 
-## Set User Properties
+## Advance Configurations- Set User Properties
 
 You can sync other user properties in SuprSend and use it to pass dynamic content in template or add in workflow conditions.
 
@@ -98,6 +110,12 @@ You can sync other user properties in SuprSend and use it to pass dynamic conten
     <Warning>
       Property key can't start with **`$`** or **`ss_`**, as this is reserved for our internal events and property names.
     </Warning>
+
+    | Parameters     | Type   | Description                                                                                                     |
+    | -------------- | ------ | --------------------------------------------------------------------------------------------------------------- |
+    | key            | string | *Mandatory*&#xA;This is property key that will be attached to user.&#xA;&#xA;Should not start with `$` or `ss_` |
+    | value          | any    | *Optional*&#xA;This will be value that will be attached to key property.                                        |
+    | **JSONObject** | object | *Optional*&#xA;This is used in case of setting multiple user properties.                                        |
   </Accordion>
 
   <Accordion title="Remove" defaultOpen={false}>
