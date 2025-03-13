@@ -5,18 +5,6 @@ description: "Methods to create and manage lists using python SDK"
 
 The Lists SDK methods lets you create / manage list of subscribers. You can then send [broadcast](/docs/broadcast) to all the users in the list.
 
-## Sample list body
-
-<CodeGroup>
-  ```json json
-  {
-  	"list_id": "list_1",
-  	"list_name": "city_san_francisco",
-  	"list_description: "All Users whose last updated city is San Francisco"
-  }
-  ```
-</CodeGroup>
-
 ## Create / Update List
 
 You can use `supr_client.subscribers_list.create` method to create a new list
@@ -186,8 +174,10 @@ You can remove subscribers from the list using `supr_client.subscribers_list.re
   ```
   { success: true }
   ```
+
+  ```
+  (idk where can i get api secret)
+  ```
 </CodeGroup>
-
-
 
 ###

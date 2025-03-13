@@ -13,15 +13,13 @@ This is an `upsert` method, used to create or update an object.
 <CodeGroup>
   ```javascript Response [method]
   import suprsend
-
-  # Correct client instantiation
   supr_client = suprsend.Suprsend("Workspace_Key", "Workspace_Secret")
 
   # Object details
   object_id = "id"
   object_type = "type"
 
-  # Correct payload format
+  # Correct payload format (optional)
   payload = {
       "properties": {  # Nested inside "properties"
           "name": "John Doe",
@@ -60,41 +58,29 @@ This is an `upsert` method, used to create or update an object.
   When you call `supr_client.objects.upsert()`, the response will immediately indicate whether the request was successful or if the object was not created.
 </Note>
 
-## Edit an object (build edit payload yourself)
+## Create Object Instance
 
-Use this to modify an object, typically for removing channels or unsetting properties. The payload will follow the same structure as the Object Edit API
+For this, first create object instance then call any of the helper methods mentioned below and finally save the changes
 
 <CodeGroup>
-  ```javascript Request
-  import suprsend
-
-  def get_supr_client():
-    supr_client = suprsend.Suprsend("Workspace_Key", "Workspace_Secret")
-
-    return supr_client
-
-  def test_object_api():
-    res = supr_client.objects.edit("abc_tmp", "abc_1", {"operations": [{"$set": {"name": "John Doe"}}]})
-    print(res)
-
-    if __name__ == "__main__":
-      test_object_api()    
+  ```python Request
+  obj_inst = supr_client.objects.get_edit_instance("_object_type_", "_object_id_")
+  res = supr_client.objects.edit(obj_inst)
+  print(res)
   ```
 
   ```python Response
   {
-   'object_type': 'abc_tmp', 'id': 'abc_1',
+   'object_type': '_object_type_', 
+   'id': '_object_id_', 
    'subscriptions_count': 0, 
-   'properties': {'name': 'John Doe'}, 
-   'created_at': '202X-03-03T14:42:28.355415+00:00', 
-   'updated_at': '202X-03-04T08:32:19.203926+00:00', 
+   'properties': {}, 
+   'created_at': '2025-03-04T08:34:58.061696+00:00', 
+   'updated_at': '2025-03-04T08:34:58.061696+00:00', 
    '$inbox': 
-   [
-     {'value': 'QN1wE9vUkXXXXXXXXXXwAM2ZXXX_STXXXXXPTLs', 
-      'id_provider': 'suprsend', 
-      'status': 'active', 
-      'perma_status': 'active'}
-   ]
+   	[
+     {'value': 'dHvPs6pmUUwSLkiQTAsfM2yro2TRx2CXZOtjNkum9b8', 'id_provider': 'suprsend', 'status': 'active', 'perma_status': 'active'}
+    ]
   }
   ```
 </CodeGroup>
@@ -104,35 +90,6 @@ Use this to modify an object, typically for removing channels or unsetting prope
 It is possible to use the SDK's helper methods to perform edit operations on an object.
 
 <AccordionGroup>
-  <Accordion title="Create Object Instance" defaultOpen={false}>
-    For this, first create object instance then call any of the helper methods mentioned below and finally save the changes
-
-    <CodeGroup>
-      ```python Request
-      obj_inst = supr_client.objects.get_edit_instance("_object_type_", "_object_id_")
-      res = supr_client.objects.edit(obj_inst)
-      print(res)
-      ```
-
-      ```python Response
-      {
-       'object_type': '_object_type_', 
-       'id': '_object_id_', 
-       'subscriptions_count': 0, 
-       'properties': {}, 
-       'created_at': '2025-03-04T08:34:58.061696+00:00', 
-       'updated_at': '2025-03-04T08:34:58.061696+00:00', 
-       '$inbox': 
-       	[
-         {'value': 'dHvPs6pmUUwSLkiQTAsfM2yro2TRx2CXZOtjNkum9b8', 'id_provider': 'suprsend', 'status': 'active', 'perma_status': 'active'}
-        ]
-      }
-      ```
-    </CodeGroup>
-
-
-  </Accordion>
-
   <Accordion title="Add channels" defaultOpen={false}>
     Use `object_ins.add_*` method(s) to add channels
 
@@ -141,8 +98,6 @@ It is possible to use the SDK's helper methods to perform edit operations on an 
       console.log("Hello World");
       ```
     </CodeGroup>
-
-
   </Accordion>
 
   <Accordion title="Remove channels" defaultOpen={false}>
@@ -153,8 +108,6 @@ It is possible to use the SDK's helper methods to perform edit operations on an 
       console.log("Hello World");
       ```
     </CodeGroup>
-
-
   </Accordion>
 
   <Accordion title="Remove channels in bulk" defaultOpen={false}>
@@ -165,8 +118,6 @@ It is possible to use the SDK's helper methods to perform edit operations on an 
       console.log("Hello World");
       ```
     </CodeGroup>
-
-
   </Accordion>
 
   <Accordion title="Set preferred language" defaultOpen={false}>
@@ -177,8 +128,6 @@ It is possible to use the SDK's helper methods to perform edit operations on an 
       console.log("Hello World");
       ```
     </CodeGroup>
-
-
   </Accordion>
 
   <Accordion title="Set timezone" defaultOpen={false}>
@@ -189,10 +138,34 @@ It is possible to use the SDK's helper methods to perform edit operations on an 
       console.log("Hello World");
       ```
     </CodeGroup>
-
-
   </Accordion>
 </AccordionGroup>
+
+## Edit an object (build edit payload yourself)
+
+Use this to modify an object, typically for removing channels or unsetting properties. The payload will follow the same structure as the Object Edit API
+
+<CodeGroup>
+  ```python Request
+  res = supr_client.objects.edit("object_type", "object_id", {"operations": [{"$set": {"name": "John Doe"}}]})
+  print(res)
+  ```
+
+  ```python Response
+  {
+   'object_type': '_object_type_', 
+   'id': '_object_id_', 
+   'subscriptions_count': 0, 
+   'properties': {}, 
+   'created_at': '2025-03-04T08:34:58.061696+00:00', 
+   'updated_at': '2025-03-04T08:34:58.061696+00:00', 
+   '$inbox': 
+   	[
+     {'value': 'dHvPs6pmUUwSLkiQTAsfM2yro2TRx2CXZOtjNkum9b8', 'id_provider': 'suprsend', 'status': 'active', 'perma_status': 'active'}
+    ]
+  }
+  ```
+</CodeGroup>
 
 ## List Objects
 
@@ -231,8 +204,8 @@ List objects for an `object_type`. You can also pass listing options in the pay
 
   ```python Response
   {
-    'object_type': 'skme', 
-    'id': 'skme_6', 
+    'object_type': 'abc_1', 
+    'id': 'abc_2', 
     'subscriptions_count': 0, 
     'properties': 
     {
@@ -269,23 +242,7 @@ List objects for an `object_type`. You can also pass listing options in the pay
   ```
 </CodeGroup>
 
-### Bulk Delete Objects
-
-<CodeGroup>
-  ```python Request
-  res = supr_client.objects.bulk_delete("object_type", {"object_ids": [" abc_1 "]})
-  print(res) 
-  ```
-
-  ```python Request
-  {
-    'success': True, 
-    'status_code': 204
-  }
-  ```
-</CodeGroup>
-
-## Create Subscription to Objects
+## Add Object Subscription
 
 <CodeGroup>
   ```python Request
@@ -358,7 +315,7 @@ List objects for an `object_type`. You can also pass listing options in the pay
   ```
 </CodeGroup>
 
-## Delete Subscriptions in Objects
+## Remove Object Subscription
 
 <CodeGroup>
   ```python Request
@@ -408,7 +365,7 @@ An object can subscribe to other objects. Use this method to get the list of all
       [
         {
           'properties': {'type': 'admin'}, 
-          'object': {'id': 'skme_1', 'object_type': 'skme_tmp', 
+          'object': {'id': 'abc_2', 'object_type': 'abc_1', 
                      'properties': {'name': 'Test Object'}, 
                      'subscriptions_count': 1, 
                      'updated_at': '2025-03-12T22:30:50.865092+00:00'}, 

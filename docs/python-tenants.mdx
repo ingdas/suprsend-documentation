@@ -9,19 +9,22 @@ In SuprSend, Tenants are workspace level entity. By default, SuprSend creates a 
 
 <CodeGroup>
   ```python Request
-  from suprsend import Suprsend,  SuprsendAPIException
+  from suprsend import Suprsend, SuprsendAPIException
 
   supr_client = Suprsend("workspace_key", "workspace_secret")
 
-  # prepare tenant payload
-  _payload = {...} 
+  # Define tenant ID and prepare tenant payload
+  tenant_id = "your_tenant_id_here"  # Replace with actual tenant ID
+  tenant_payload = {
+      # Provide valid payload data
+  }
 
   try:
-  response = supr_client.tenants.upsert(x, tenant_payload)
-  print(response)
+      response = supr_client.tenants.upsert(tenant_id, tenant_payload)
+      print(response)
   except SuprsendAPIException as ex:
-  # Handle exception
-  print(ex)
+      # Handle exception
+      print(ex)
   ```
 
   ```json Tenant Payload
@@ -51,38 +54,32 @@ In SuprSend, Tenants are workspace level entity. By default, SuprSend creates a 
     }
   ```
 
-  ```json Response
+  ```python Response
   {
-     "tenant_id":"_tenant_id_",
-     "tenant_name":"ABC Company",
-     "logo":"https://sample_image.png",
-     "primary_color":"#ff0000",
-     "secondary_color":"#00ff00",
-     "tertiary_color":"#0000ff",
-     "timezone":"America/New_York",
-     "blocked_channels":[],
-     "social_links":{
-        "website":"https://suprsend.com",
-        "facebook":"",
-        "linkedin":"",
-        "twitter":"",
-        "instagram":"",
-        "medium":"",
-        "discord":"",
-        "telegram":"",
-        "youtube":""
-     },
-     "embedded_preference_url":"",
-     "hosted_preference_domain":"preferences.suprsend.com",
-     "properties":{
-        "prop1":"value1",
-        "prop2":{
-           "prop3":[
-              "value2"
-           ]
-        }
-     },
-     "updated_at":"2025-03-10T20:01:29.856119Z"
+    'tenant_id': 'your_tenant_id_here', 
+    'tenant_name': 'tenant_name', 
+   	'logo': 'https://logo.url', 
+  	'timezone': '', 
+  	'blocked_channels': ['eg-whatsapp'], 
+  	'embedded_preference_url': 'URL', 
+  	'hosted_preference_domain': 'https://preference.url', 
+  	'primary_color': '#0751E8', 
+  	'secondary_color': '#e308e3', 
+  	'tertiary_color': '#1EE9F1', 
+  	'social_links': 
+    	{
+        'website': '', 
+        'facebook': '', 
+        'linkedin': '', 
+        'twitter': '', 
+        'instagram': '', 
+        'medium': '', 
+        'discord': '', 
+  			'telegram': '', 
+  			'youtube': ''
+  		}, 
+  	'properties': {}, 
+  	'updated_at': '2025-03-13T18:16:35.744843Z'
   }
   ```
 </CodeGroup>
@@ -111,7 +108,7 @@ In SuprSend, Tenants are workspace level entity. By default, SuprSend creates a 
   supr_client = Suprsend("workspace_key", "workspace_secret")
 
   try:
-  	response = supr_client.brands.get(brand_id)
+  	response = supr_client.tenants.get(tenant_id)
   	print(response)
   except SuprsendAPIException as ex:
   	# Handle exception
@@ -120,27 +117,30 @@ In SuprSend, Tenants are workspace level entity. By default, SuprSend creates a 
 
   ```python Response
   {
-  	"tenant_id": "tenant-id",
-  	"tenant_name": "Tenant Name",
-  	"logo": "https://logo.url",
-  	"primary_color": "#ff0000",
-  	"secondary_color": "#00ff00",
-  	"tertiary_color": "#0000ff",
-  	"social_links": {
-  		"website": "",
-  		"facebook": "",
-  		"linkedin": "",
-  		"twitter": "",
-  		"instagram": "",
-  		"medium": "",
-  		"discord": "",
-  		"telegram": "",
-  		"youtube": "",
-  	},
-  	"properties": {
-  		"prop1": "value1",
-  		"prop2": "value2"
-  	}
+    'tenant_id': 'your_tenant_id_here', 
+    'tenant_name': 'tenant_name', 
+    'logo': "https://logo.url", 
+    'timezone': "time_zone", 
+    'blocked_channels': "channel_names", 
+    'embedded_preference_url': 'URL_here', 
+    'hosted_preference_domain': '_domain_', 
+    'primary_color': '#0751E8', 
+    'secondary_color': '#e308e3', 
+    'tertiary_color': '#1EE9F1', 
+    'social_links': 
+    	{
+        'website': '', 
+        'facebook': '', 
+        'linkedin': '', 
+        'twitter': '', 
+        'instagram': '', 
+        'medium': '', 
+        'discord': '', 
+        'telegram': '', 
+        'youtube': ''
+      }, 
+      'properties': {}, 
+      'updated_at': '2025-02-27T10:21:15.235666Z'
   }
   ```
 </CodeGroup>
@@ -166,40 +166,38 @@ By default `limit=20` . Value for limit must be \< 1000
 
   ```python Response
   {
-    "meta": {
-    	"limit": 20,
-      "offset": 0,
-      "count": 1
-    },
-    "results": [
-      {
-        "brand_id": "brand-id",
-        "brand_name": "Brand Name",
-        "logo": "https://logo.url",
-        "primary_color": "#ff0000",
-        "secondary_color": "#00ff00",
-        "tertiary_color": "#0000ff",
-        "social_links": {
-          "website": "",
-          "facebook": "",
-          "linkedin": "",
-          "twitter": "",
-          "instagram": "",
-          "medium": "",
-          "discord": "",
-          "telegram": "",
-          "youtube": "",
-        },
-        "properties": {
-          "prop1": "value1",
-          "prop2": "value2"
-        }
+    'meta': 
+    	{
+        'count': 28, 
+        'limit': 20, 
+        'offset': 0
+      }, 
+    'results': 
+    	[
+        {
+          'tenant_id': 'your_tenant_id_1', 
+  				'tenant_name': 'tenant_name_1', 
+          'logo': 'file_name/file_url', 
+          'timezone': '', 
+          'blocked_channels': ['if_any'], 
+          'embedded_preference_url': 'URL', 
+          'hosted_preference_domain': 'your_domain_here', 
+          'primary_color': '#0751E8', 
+          'secondary_color': '#e308e3', 
+          'tertiary_color': '#1EE9F1', 
+          'social_links': 
+          	{
+              'website': '', 'facebook': '', 'linkedin': '', 'twitter': '', 'instagram': '', 'medium': '', 'discord': '', 'telegram': '', 'youtube': ''
+            }, 
+          'properties': {
+            "prop1": "value1",
+            "prop2": "value2"
+            }
+          'updated_at': '2025-03-13T18:16:35.744843Z'
       }
     ]
   }
   ```
 </CodeGroup>
-
-
 
 ***
