@@ -1,0 +1,57 @@
+---
+title: "Full screen or Sidesheet notifications feed"
+description: "This will guide you through integration steps of feed in full screen or sidesheet in your react application"
+---
+
+If you want to render notifications in separate screen or in side-sheet or in any other way instead of popover, you can use `NotificationFeed` component wrapped inside [SuprSendFeedProvider](https://docs.suprsend.com/docs/headless-feed#suprsendfeedprovider). Both of these components should be children of [SuprSendProvider](https://docs.suprsend.com/docs/react-1#suprsendprovider).
+
+<CodeGroup>
+  ```javascript Example.jsx
+  import { SuprSendProvider, SuprSendFeedProvider, NotificationFeed } from '@suprsend/react';
+
+  function Example() {
+    return (
+      <SuprSendProvider>
+        <SuprSendFeedProvider>
+          <NotificationFeed />
+        </SuprSendFeedProvider>
+      </SuprSendProvider>
+    );
+  }
+  ```
+
+  ```javascript TypeDef
+  interface SuprSendFeedProviderProps {
+    tenantId?: string;
+    pageSize?: number;
+    stores?: IStore[] | null;
+    host?: { socketHost?: string, apiHost?: string };
+  }
+
+  interface NotificationFeedProps {
+    pagination?: boolean;
+    showUnreadCountOnTabs?: boolean;
+    hideAvatar?: boolean;
+    themeType?: ThemeType;
+    theme?: INotificationFeedTheme;
+    notificationClickHandler?: (notification: IRemoteNotification) => void;
+    primaryActionClickHandler?: (notification: IRemoteNotification) => void;
+    secondaryActionClickHandler?: (notification: IRemoteNotification) => void;
+    loaderComponent?: React.FC;
+    noNotificationsComponent?: React.FC;
+    tabBadgeComponent?: React.FC<{ count: number }>;
+    notificationComponent?: React.FC<CustomNotificationCard>;
+    headerRightComponent?: React.FC<{markAllRead: () => void, closeInboxPopover: () => void}>;
+  }
+  ```
+</CodeGroup>
+
+**Note:** Please refer [Customising CSS styles](https://docs.suprsend.com/docs/customising-feed#customising-css-styles) section to view typedefs for `INotificationFeedTheme`.
+
+Infinite scroll is also included to fetch more pages in `NotificationFeed` component. Specifying height for the container is needed for infinite scroll to work properly.
+
+<CodeGroup>
+  ```javascript Example.jsx
+  <NotificationFeed theme={{ notificationsContainer: { container: { height: '100vh' } } }} />
+  ```
+</CodeGroup>
