@@ -19,7 +19,7 @@ description: "This will guide you to integrate FCM push notifications in android
   </Step>
 
   <Step title="Adding Firebase dependencies and plugins" stepNumber="3">
-    Add the below dependency inside projects *`build.gradle`* inside dependencies
+    3.1. Add the below dependency inside projects *`build.gradle`* inside dependencies
 
     <CodeGroup>
       ```groovy build.gradle
@@ -30,9 +30,7 @@ description: "This will guide you to integrate FCM push notifications in android
       ```
     </CodeGroup>
 
-
-
-    Add the below plugin inside the app *`build.gradle`*
+    3.2. Add the below plugin inside the app *`build.gradle`*
 
     <CodeGroup>
       ```groovy build.gradle
@@ -40,9 +38,7 @@ description: "This will guide you to integrate FCM push notifications in android
       ```
     </CodeGroup>
 
-
-
-    Add the below dependency inside apps *`build.gradle`* inside dependencies
+    3.3 Add the below dependency inside apps *`build.gradle`* inside dependencies
 
     <CodeGroup>
       ```groovy build.gradle
@@ -83,8 +79,6 @@ description: "This will guide you to integrate FCM push notifications in android
           suprsend.setAndroidFcmPush(fcm_token);
           ```
         </CodeGroup>
-
-
 
         When you get a push notification you will get a payload and it can be passed to the method provided by Suprsend Flutter SDK and the notification displaying part will be handled by SDK.
 
@@ -129,8 +123,6 @@ In Android13 (API 33) or higher [notification permission](https://developer.andr
       This method is available from suprsend-flutter-sdk v2.0.0. Please update it if using lower versions
     </Info>
 
-
-
     <CodeGroup>
       ```javascript main.dart
       import 'package:permission_handler/permission_handler.dart';
@@ -140,8 +132,6 @@ In Android13 (API 33) or higher [notification permission](https://developer.andr
       print("permission data is ${data == PermissionStatus.granted}");
       ```
     </CodeGroup>
-
-
 
     Once permission is granted users can be able to get push notifications.
   </Step>
