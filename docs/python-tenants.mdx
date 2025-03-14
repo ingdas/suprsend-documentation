@@ -3,201 +3,232 @@ title: "Tenants"
 description: "Tenants (previously named as brands) are used for personalizing communication on behalf of some other entity/organization."
 ---
 
-In SuprSend, Tenants are workspace level entity. By default, SuprSend creates a tenant with `tenant_id="default"` (representing your organization) in each of your workspaces. Read more about tenants [here](/docs/tenants).
+In SuprSend, Tenants are workspace-level entities. By default, SuprSend creates a tenant with `tenant_id="default"` (representing your organization) in each of your workspaces. Read more about tenants [here](/docs/tenants).
 
 ### Create / Update Tenant
 
 <CodeGroup>
-  ```python Request
-  from suprsend import Suprsend, SuprsendAPIException
 
-  supr_client = Suprsend("workspace_key", "workspace_secret")
+```python Request
+from suprsend import Suprsend, SuprsendAPIException
 
-  # Define tenant ID and prepare tenant payload
-  tenant_id = "your_tenant_id_here"  # Replace with actual tenant ID
-  tenant_payload = {
-      # Provide valid payload data
-  }
+supr_client = Suprsend("workspace_key", "workspace_secret")
 
-  try:
-      response = supr_client.tenants.upsert(tenant_id, tenant_payload)
-      print(response)
-  except SuprsendAPIException as ex:
-      # Handle exception
-      print(ex)
-  ```
-
-  ```json Tenant Payload
-  {
-  	"tenant_name": "ABC Company",
-  	"logo": "https://sample_image.png",
-  	"primary_color": "#ff0000",
-  	"secondary_color": "#00ff00",
-  	"tertiary_color": "#0000ff",
-  	"timezone": "America/New_York",
-  	"blocked_channels": [], //Notification on these channels will not be sent to users for the tenant e.g ["sms", "whatsapp"]
-  	"social_links": {
-  		"website": "https://suprsend.com",
-  		"facebook": "",
-  		"linkedin": "",
-  		"twitter": "",
-  		"instagram": "",
-  		"medium": "",
-  		"discord": "",
-  		"telegram": "",
-  		"youtube": "",
-  	},
-  	"embedded_preference_url": "",
+# Define tenant ID and prepare tenant payload
+tenant_id = "tenant_01"  # Replace with actual tenant ID
+tenant_payload = {
+    "tenant_name": "ABC Company",
+    "logo": "https://sample_image.png",
+    "primary_color": "#ff0000",
+    "secondary_color": "#00ff00",
+    "tertiary_color": "#0000ff",
+    "timezone": "America/New_York",
+    "blocked_channels": [],
+    "social_links": {
+        "website": "https://suprsend.com",
+        "facebook": "",
+        "linkedin": "",
+        "twitter": "",
+        "instagram": "",
+        "medium": "",
+        "discord": "",
+        "telegram": "",
+        "youtube": ""
+    },
+    "embedded_preference_url": "",
     "properties": {
-      "prop1": "value1",
-      "prop2": { "prop3": ["value2"]}
+        "prop1": "value1",
+        "prop2": { "prop3": ["value2"] }
     }
-  ```
+}
 
-  ```python Response
-  {
-    'tenant_id': 'your_tenant_id_here', 
-    'tenant_name': 'tenant_name', 
-   	'logo': 'https://logo.url', 
-  	'timezone': '', 
-  	'blocked_channels': ['eg-whatsapp'], 
-  	'embedded_preference_url': 'URL', 
-  	'hosted_preference_domain': 'https://preference.url', 
-  	'primary_color': '#0751E8', 
-  	'secondary_color': '#e308e3', 
-  	'tertiary_color': '#1EE9F1', 
-  	'social_links': 
-    	{
-        'website': '', 
-        'facebook': '', 
-        'linkedin': '', 
-        'twitter': '', 
-        'instagram': '', 
-        'medium': '', 
-        'discord': '', 
-  			'telegram': '', 
-  			'youtube': ''
-  		}, 
-  	'properties': {}, 
-  	'updated_at': '2025-03-13T18:16:35.744843Z'
-  }
-  ```
+try:
+    response = supr_client.tenants.upsert(tenant_id, tenant_payload)
+    print(response)
+except SuprsendAPIException as ex:
+    print(ex)
+```
+
+
+```json Tenant Payload
+{
+    "tenant_name": "ABC Company",
+    "logo": "https://sample_image.png",
+    "primary_color": "#ff0000",
+    "secondary_color": "#00ff00",
+    "tertiary_color": "#0000ff",
+    "timezone": "America/New_York",
+    "blocked_channels": [],
+    "social_links": {
+        "website": "https://suprsend.com",
+        "facebook": "",
+        "linkedin": "",
+        "twitter": "",
+        "instagram": "",
+        "medium": "",
+        "discord": "",
+        "telegram": "",
+        "youtube": ""
+    },
+    "embedded_preference_url": "",
+    "properties": {
+        "prop1": "value1",
+        "prop2": { "prop3": ["value2"] }
+    }
+}
+```
+
+
+```python Response
+{
+   "tenant_id":"your_tenant_id_here",
+   "tenant_name":"tenant_name",
+   "logo":"https://logo.url",
+   "timezone":"",
+   "blocked_channels":[
+      "eg-whatsapp"
+   ],
+   "embedded_preference_url":"URL",
+   "hosted_preference_domain":"https://preference.url",
+   "primary_color":"#0751E8",
+   "secondary_color":"#e308e3",
+   "tertiary_color":"#1EE9F1",
+   "social_links":{
+      "website":"",
+      "facebook":"",
+      "linkedin":"",
+      "twitter":"",
+      "instagram":"",
+      "medium":"",
+      "discord":"",
+      "telegram":"",
+      "youtube":""
+   },
+   "properties":{
+      
+   },
+   "updated_at":"2025-03-13T18:16:35.744843Z"
+}
+```
+
 </CodeGroup>
 
 ### Field Description:
 
-| Field                                        | **Description**                                                                                                                                                                                                                                                                         |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| tenant\_id (\*mandatory)                     | tenant-id can be of max 64 characters. It can contain characters \[a-z0-9\_-] i.e. alphanumeric characters, \_(underscore) and -(hyphen). tenant\_id is case-insensitive. Suprsend will first converts tenant\_id to lowercase before storing it or doing any sort of comparison on it. |
-| tenant\_name (\*mandatory)                   | Name of the tenant                                                                                                                                                                                                                                                                      |
-| logo (optional)                              | url of the tenant logo                                                                                                                                                                                                                                                                  |
-| tenant colors (primary, secondary, tertiary) | tenant colors settings are mainly used while designing templates. If you don't provide any of the colors for the tenant, SuprSend will assume you want to use the default values, so color settings will automatically be set to the color settings of `default` tenant.                |
-| social\_links: (optional)                    | urls of social media accounts of the tenant                                                                                                                                                                                                                                             |
-| properties                                   | Custom properties for tenants/brands are updated via an upsert on top-level keys. If a key exists, its value is replaced; otherwise, it's added, leaving other key-value pairs unchanged.                                                                                               |
+| Field                                          | Description                                                               |
+| ---------------------------------------------- | ------------------------------------------------------------------------- |
+| tenant_id (\*mandatory)                        | Unique identifier for the tenant (max 64 characters, lowercase enforced). |
+| tenant_name (\*mandatory)                      | Name of the tenant.                                                       |
+| logo (optional)                                | URL of the tenant logo.                                                   |
+| primary_color, secondary_color, tertiary_color | Tenant branding colors.                                                   |
+| timezone                                       | Tenant's time zone. Used as a fallback for notification preferences.      |
+| blocked_channels                               | Channels that will be skipped when sending notifications.                 |
+| social_links (optional)                        | URLs of the tenant's social media accounts.                               |
+| embedded_preference_url                        | URL for embedded preference settings.                                     |
+| properties                                     | Custom key-value pairs for the tenant.                                    |
 
 <Warning>
-  While updating a social link, if you pass its value as null, then SuprSend will ignore it. If you really want to remove the value you must the value="" (instead of null) e.g. If you want to remove social\_link url for `facebook`, you must pass `facebook=""` \{ "social\_links": \{ "facebook": "" } }
+  While updating a social link, passing its value as `null` will be ignored by SuprSend. To remove a value, set it to an empty string (`""`), e.g., `{ "social_links": { "facebook": "" } }`.
 </Warning>
 
 ### Get Tenant
 
 <CodeGroup>
-  ```python Request (method)
-  from suprsend import Suprsend,  SuprsendAPIException
 
-  supr_client = Suprsend("workspace_key", "workspace_secret")
+```python Request
+from suprsend import Suprsend, SuprsendAPIException
 
-  try:
-  	response = supr_client.tenants.get(tenant_id)
-  	print(response)
-  except SuprsendAPIException as ex:
-  	# Handle exception
-  	print(ex)
-  ```
+supr_client = Suprsend("workspace_key", "workspace_secret")
 
-  ```python Response
-  {
-    'tenant_id': 'your_tenant_id_here', 
-    'tenant_name': 'tenant_name', 
-    'logo': "https://logo.url", 
-    'timezone': "time_zone", 
-    'blocked_channels': "channel_names", 
-    'embedded_preference_url': 'URL_here', 
-    'hosted_preference_domain': '_domain_', 
-    'primary_color': '#0751E8', 
-    'secondary_color': '#e308e3', 
-    'tertiary_color': '#1EE9F1', 
-    'social_links': 
-    	{
-        'website': '', 
-        'facebook': '', 
-        'linkedin': '', 
-        'twitter': '', 
-        'instagram': '', 
-        'medium': '', 
-        'discord': '', 
-        'telegram': '', 
-        'youtube': ''
-      }, 
-      'properties': {}, 
-      'updated_at': '2025-02-27T10:21:15.235666Z'
-  }
-  ```
+try:
+    response = supr_client.tenants.get("tenant_id")
+    print(response)
+except SuprsendAPIException as ex:
+    print(ex)
+```
+
+
+```python Response
+{
+   "tenant_id":"tenant_01",
+   "tenant_name":"ABC Company",
+   "logo":"https://logo.url",
+   "timezone":"America/New_York",
+   "blocked_channels":[
+      "whatsapp",
+      "email"
+   ],
+   "embedded_preference_url":"https://app.suprsend.com/en/staging/preferences",
+   "hosted_preference_domain":"preferences.suprsend.com",
+   "primary_color":"#0751E8",
+   "secondary_color":"#e308e3",
+   "tertiary_color":"#1EE9F1",
+   "social_links":{
+      "website":"https://www.suprsend.com/",
+      "facebook":"",
+      "linkedin":"",
+      "twitter":"",
+      "instagram":"",
+      "medium":"",
+      "discord":"",
+      "telegram":"",
+      "youtube":""
+   },
+   "properties":{
+      "address":"5678 Market Street Suite 300 San Francisco, CA 94103 USA"
+   },
+   "updated_at":"2025-02-27T10:21:15.235666Z"
+}
+```
+
 </CodeGroup>
 
-### List Tenant
+### List Tenants
 
-By default `limit=20` . Value for limit must be \< 1000
+By default, `limit=20`. The maximum value for `limit` is `1000`.
 
 <CodeGroup>
-  ```python Request (method)
-  from suprsend import Suprsend,  SuprsendAPIException
 
-  supr_client = Suprsend("workspace_key", "workspace_secret")
+```python Request
+from suprsend import Suprsend, SuprsendAPIException
 
-  try:
-  	params = {"limit": 20, "offset": 0}
-  	response = supr_client.tenants.list(**params)
-  	print(response)
-  except SuprsendAPIException as ex:
-  	# Handle exception
-  	print(ex)
-  ```
+supr_client = Suprsend("workspace_key", "workspace_secret")
 
-  ```python Response
-  {
-    'meta': 
-    	{
-        'count': 28, 
-        'limit': 20, 
-        'offset': 0
-      }, 
-    'results': 
-    	[
-        {
-          'tenant_id': 'your_tenant_id_1', 
-  				'tenant_name': 'tenant_name_1', 
-          'logo': 'file_name/file_url', 
-          'timezone': '', 
-          'blocked_channels': ['if_any'], 
-          'embedded_preference_url': 'URL', 
-          'hosted_preference_domain': 'your_domain_here', 
-          'primary_color': '#0751E8', 
-          'secondary_color': '#e308e3', 
-          'tertiary_color': '#1EE9F1', 
-          'social_links': 
-          	{
-              'website': '', 'facebook': '', 'linkedin': '', 'twitter': '', 'instagram': '', 'medium': '', 'discord': '', 'telegram': '', 'youtube': ''
-            }, 
-          'properties': {
-            "prop1": "value1",
-            "prop2": "value2"
-            }
-          'updated_at': '2025-03-13T18:16:35.744843Z'
+try:
+    params = {"limit": 20, "offset": 0}
+    response = supr_client.tenants.list(**params)
+    print(response)
+except SuprsendAPIException as ex:
+    print(ex)
+```
+
+
+```python Response
+{
+   "meta":{
+      "count":28,
+      "limit":20,
+      "offset":0
+   },
+   "results":[
+      {
+         "tenant_id":"tenant_01",
+         "tenant_name":"ABC Company",
+         "logo":"https://logo.url",
+         "timezone":"",
+         "blocked_channels":[
+            "whatsapp",
+            "email"
+         ],
+         "embedded_preference_url":"URL",
+         "hosted_preference_domain":"your_domain_here",
+         "primary_color":"#0751E8",
+         "secondary_color":"#e308e3",
+         "tertiary_color":"#1EE9F1",
+         "updated_at":"2025-03-13T18:16:35.744843Z"
       }
-    ]
-  }
-  ```
-</CodeGroup>
+   ]
+}
+```
 
-***
+</CodeGroup>
