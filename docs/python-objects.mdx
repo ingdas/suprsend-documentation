@@ -12,7 +12,7 @@ This is an `upsert` method, used to create or update an object.
 
 <CodeGroup>
 
-```python Response [method]
+```python Response
 import suprsend
 supr_client = suprsend.Suprsend("Workspace_Key", "Workspace_Secret")
 
@@ -21,14 +21,12 @@ object_id = "engineering"
 object_type = "departments"
 
 # Optional: for setting additional properties on object
-payload = {
-    "properties": {  
-        "name": "John Doe",
-        "$email": "john@example.com"
+properties = {  
+        "key1": "val1",
+		"$email":"devs@abc.com"
     }
-}
 
-res = supr_client.objects.upsert(object_type, object_id, payload)
+res = supr_client.objects.upsert(object_type, object_id, properties)
 print(res)
 ```
 
@@ -39,17 +37,21 @@ print(res)
    "id":"engineering",
    "subscriptions_count":0,
    "properties":{
-      "properties":{
-         "$email":"john@example.com",
-         "name":"John Doe"
-      }
-   },
+      "key1": "val1"
+      },
    "created_at":"2025-01-20T19:21:42.030343+00:00",
-   "updated_at":"2025-03-14T14:06:05.928675+00:00",
+   "updated_at":"2025-02-14T14:06:05.928675+00:00",
    "$inbox":[
       {
          "value":"H4iGeGSHyXXXXXXSeuBb_PJGXXXgWu_LsXXXXXyiw",
          "id_provider":"suprsend",
+         "status":"active",
+         "perma_status":"active"
+      }
+   ],
+	"$email":[
+      {
+         "value":"abc@example.com",
          "status":"active",
          "perma_status":"active"
       }
@@ -59,15 +61,9 @@ print(res)
 
 </CodeGroup>
 
-<Note>
-  When you call `supr_client.objects.upsert()`, the response will immediately indicate whether the request was successful or if the object was not created.
-</Note>
-
 ## Edit an object (using helper methods) \[Recommended\]
 
-It is possible to use the SDK's helper methods to perform edit operations on an object.
-
-Basic payload for Object:
+To edit object, you need to first fetch object instance, call all the update methods and save changes using `objects.edit` method.
 
 <CodeGroup>
 
@@ -77,7 +73,7 @@ obj_inst = supr_client.objects.get_edit_instance("object_type", "object_id")
 
 # Call object update methods
 obj_inst.set_timezone("America/Los_Angeles")
-obj_inst.set("name", "John Doe")
+obj_inst.set("company_name", "ABC company")
 
 # Save Changes 
 res = supr_client.objects.edit(obj_inst)  
@@ -93,7 +89,7 @@ print(res)
    "properties":{
       "$preferred_language":"en",
       "$timezone":"America/Los_Angeles",
-      "name":"John Doe"
+      "company_name":"ABC company"
    },
    "created_at":"2025-03-04T08:34:58.061696+00:00",
    "updated_at":"2025-03-14T14:40:21.467156+00:00",
@@ -114,7 +110,7 @@ List of available methods:
 
 <AccordionGroup>
   <Accordion title="Add channels" defaultOpen="false">
-    Use `object_ins.add\_` method(s) to add channels
+    Use `object_ins.add\_\*` method(s) to add channels
 
     <CodeGroup>
 
@@ -184,7 +180,7 @@ List of available methods:
     </CodeGroup>
   </Accordion>
   <Accordion title="Remove channels" defaultOpen="false">
-    Use `object_ins.remove\_` method(s) to remove channels from an object
+    Use `object_ins.remove\_\*` method(s) to remove channels from an object
 
     <CodeGroup>
 
@@ -253,8 +249,8 @@ List of available methods:
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Remove channels in bulk" defaultOpen="false">
-    If you need to delete/unset all emails (or any other channel data) of an object, you can call `object_ins.unset()` method. The method accepts the channel key/s (a single key or list of keys).
+  <Accordion title="Remove channel types" defaultOpen="false">
+    If you need to delete/unset all emails (or any other channel data) of an object, you can call `object_ins.unset()` method. The method accepts the channel key/s (a single key or list of keys). This method will delete/unset all values in specified channel for user (ex: remove all emails attached to user).
 
     <CodeGroup>
 
