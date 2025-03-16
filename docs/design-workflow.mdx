@@ -9,15 +9,15 @@ description: "Learn how to design multi-channel and multi-stakeholder workflows"
 
 ## Creating a new workflow
 
-Click on  button on the workflow page to create workflow from scratch or select a workflow from our sample library. 
+Click on  button on the workflow page to create workflow from scratch or select a workflow from our sample library.
 
-- Pass workflow name and category. Choose a relevant name initially as it determines the related workflow slug, which cannot be modified later. 
+- Pass workflow name and category. Choose a relevant name initially as it determines the related workflow slug, which cannot be modified later.
 - [Notification Category](https://docs.suprsend.com/docs/notification-category) is used to apply user preferences to the workflow. While creating the workflow, you can select any notification category and adjust it later if needed.
 
 ![](/images/docs/35a2d26-image.png)
 
 - After entering the required details, click on `Create` button to create a new workflow in draft state. You'll see the created workflow on top of the listing page, click on it to start editing.
-- Next, add relevant nodes to your workflow and edit workflow settings. 
+- Next, add relevant nodes to your workflow and edit workflow settings.
 - Once you've finalized your edits, remember to  make the workflow live. If you don't want to make your changes live right away, you can `exit edit mode` and come back later to commit the changes. Rest assured, your modifications will remain saved in the draft state until finalized.
 
 ![](https://files.readme.io/e79f3e2-ezgif.com-speed.gif)
@@ -43,20 +43,25 @@ Other than re-engagement notifications, most transactional workflows will either
 Functions are logical steps in your workflow. We currently support the following functions:
 
 <CardGroup cols="3">
-  <Card title="Delay">
-    1. halt workflow for an interval before proceeding to the next node.
+  <Card title="Delay" href="/docs/delay">
+    Halt workflow for an interval before proceeding to the next node.
   </Card>
-  <Card title="New Card">
-    
+  <Card title="Batch" href="/docs/batch">
+    Aggregate multiple triggers into a single consolidated notification.
   </Card>
-  <Card title="New Card">
-    
+  <Card title="Digest" href="/docs/digest">
+    Batch multiple alerts and send a summary at a recurring schedule.
+  </Card>
+  <Card title="Time Window" href="/docs/time-window">
+    Send notification in a given time schedule or in user's timezone.
+  </Card>
+  <Card title="Data Transform" href="/docs/data-transform">
+    Transforms existing workflow data and creates / modifies variables.
+  </Card>
+  <Card title="Invoke Workflow" href="/docs/invoke-workflow">
+    Trigger another workflow using current workflow data.
   </Card>
 </CardGroup>
-
-1. [Delay](/docs/delay): 
-2. [Batch](/docs/batching-digest): aggregate multiple triggers into a single batch and send a single consolidated notification.
-3. Time Window: send notification in a given time schedule.
 
 We are adding more functions to support the complex notification use-cases. Have a use case in mind? Reach out to us in our [Slack community](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#/shared-invite/email), and we'll prioritize it.
 
@@ -64,7 +69,14 @@ We are adding more functions to support the complex notification use-cases. Have
 
 Branches split the workflow execution into parallel flows. We currently support the following branch:
 
-1. [Wait Until](/docs/wait-until): wait until a condition is met or a specific time interval is reached.
+<CardGroup cols={2}>
+  <Card title="Wait Until" href="/docs/wait-until">
+    Halt workflow until a condition is met or a specific time interval is reached.
+  </Card>
+  <Card title="Branch" href="/docs/branch">
+    Route notifications through different workflow routes based on conditions.
+  </Card>
+</CardGroup>
 
 ### 4\. Delivery Nodes
 
@@ -86,13 +98,13 @@ This is where basic workflow details like name, description and tags go. You can
 
 ![](/images/docs/bd4ac3f-image.png)
 
-| Field                 | Obligation | Description                                                                                                                      |
-| --------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| Name                  |            |                                                                                                                                  |
-| Description           |            |                                                                                                                                  |
-| Notification Category |            |                                                                                                                                  |
-| Tags                  |            |                                                                                                                                  |
-| Throttle              |            |                                                                                                                                  |
+| Field                 | Obligation | Description |
+| --------------------- | ---------- | ----------- |
+| Name                  |            |             |
+| Description           |            |             |
+| Notification Category |            |             |
+| Tags                  |            |             |
+| Throttle              |            |             |
 
 ### Change Node name and Description
 
