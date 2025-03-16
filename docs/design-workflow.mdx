@@ -9,63 +9,71 @@ description: "Learn how to design multi-channel and multi-stakeholder workflows"
 
 ## Creating a new workflow
 
+Click on  button on the workflow page to create workflow from scratch or select a workflow from our sample library. 
 
-Click on **`+Create Workflow`** button on the workflow page to create workflow from scratch or select a workflow from our sample library.&#x20;
-
-* Pass workflow name and category. Choose a relevant name initially as it determines the related workflow slug, which cannot be modified later.&#x20;
-
-* Notification Category is used to apply user preferences to the workflow. While creating the workflow, you can select any notification category and adjust it later if needed.
+- Pass workflow name and category. Choose a relevant name initially as it determines the related workflow slug, which cannot be modified later. 
+- [Notification Category](https://docs.suprsend.com/docs/notification-category) is used to apply user preferences to the workflow. While creating the workflow, you can select any notification category and adjust it later if needed.
 
 ![](/images/docs/35a2d26-image.png)
 
-After entering the required details, click on `Create` button to create a new workflow in draft state. You'll see the created workflow on top of the listing page, click on it to start editing. Now, add relevant nodes to your workflow and edit workflow settings. Once you've finalized your edits, remember to **`commit changes`** to make the workflow live. If you don't want to make your changes live right away, you can `exit edit mode` and come back later to commit the changes. Rest assured, your modifications will remain saved in the draft state until finalized.
+- After entering the required details, click on `Create` button to create a new workflow in draft state. You'll see the created workflow on top of the listing page, click on it to start editing.
+- Next, add relevant nodes to your workflow and edit workflow settings. 
+- Once you've finalized your edits, remember to  make the workflow live. If you don't want to make your changes live right away, you can `exit edit mode` and come back later to commit the changes. Rest assured, your modifications will remain saved in the draft state until finalized.
 
 ![](https://files.readme.io/e79f3e2-ezgif.com-speed.gif)
 
 ## Designing workflow
 
-Workflows allow you to create complex notifications with a series of steps, determining whom to notify, when, and via which notification channels. Here, we'll detail how to create a multi-step workflow on SuprSend dashboard and trigger it from your codebase. A workflow is made of three on themajor steps (referred to as nodes of the workflow).
+Workflows allow you to create complex notifications with a series of steps, determining whom to notify, when, and via which notification channels. Here, we'll detail how to create a multi-step workflow on SuprSend dashboard and trigger it from your codebase. A workflow is made of three major steps (referred to as nodes of the workflow).
 
-### 1. Trigger Node
+### 1\. Trigger Node
 
-It is the first step of your workflow and contains information about the event that triggers the workflow run. To initiate a workflow run, make the event call with the following data:
+It is the first step of your workflow and contains information about what initiates the workflow, and related conditions. There are 3 types of workflow triggers possible:
+
+1. List entry / exit: Starts the workflow when a user enters or exists a [list](https://docs.suprsend.com/docs/lists).
+2. Event Stream: Starts the workflow when one of the linked events is sent to SuprSend.
+3. Workflow API: Here, you explicitly call a workflow using its workflow-slug, specifying the workflow and recipients directly in the API request.
+
+Other than re-engagement notifications, most transactional workflows will either be triggered by passing an event or using workflow API. Compare event vs workflow API here.
 
 ![](/images/docs/982e348-image.png)
 
-* `event name`- Name of the event defined in the workflow trigger.
-
-* `properties`- Properties should have data corresponding to variables added in the template content or data required to render dynamic fields in workflow nodes like override channels, dynamic delay windows, etc.
-
-* `distinct_id`- Unique identifier of the user who performs the event and needs to be notified. You can also [override recipient](/docs/override-recipient-list) to notify other users who have not performed the event. For instance, notify the document owner of the new comments added by a commentor or inform the finance team when a new expense ticket is raised.
-
-You can trigger events using one of our SDKs or directly integrate with your CDP platforms, like Segment, where you currently track your events.
-
-### 2. Function Nodes
+### 2\. Function Nodes
 
 Functions are logical steps in your workflow. We currently support the following functions:
 
-1. [Delay](/docs/delay): wait for a time before proceeding to the next node.
+<CardGroup cols="3">
+  <Card title="Delay" icon="sparkles">
+    1. halt workflow for an interval before proceeding to the next node.
+  </Card>
+  <Card title="New Card" icon="sparkles">
+    
+  </Card>
+  <Card title="New Card" icon="sparkles">
+    
+  </Card>
+</CardGroup>
 
+1. [Delay](/docs/delay): 
 2. [Batch](/docs/batching-digest): aggregate multiple triggers into a single batch and send a single consolidated notification.
-
 3. Time Window: send notification in a given time schedule.
 
 We are adding more functions to support the complex notification use-cases. Have a use case in mind? Reach out to us in our [Slack community](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#/shared-invite/email), and we'll prioritize it.
 
-### 3. Branch Nodes
+### 3\. Branch Nodes
 
 Branches split the workflow execution into parallel flows. We currently support the following branch:
 
 1. [Wait Until](/docs/wait-until): wait until a condition is met or a specific time interval is reached.
 
-### 4. Delivery Nodes
+### 4\. Delivery Nodes
 
 These nodes are the final steps in the workflow, responsible for delivering notifications to users. You can either configure [single channel nodes](/docs/delivery-single-channel) to send notification on one of the channels (Email, SMS, Whatsapp, Inbox, Mobile push, Web push, Slack and Teams) or add a [multi-channel node](/docs/delivery-multi-channel) to send notification across multiple channels at once.
 
 If you want to send multi-channel notifications, we recommend using [smart channel routing](/docs/smart-delivery) to ensure that notifications are delivered sequentially on multiple channels rather than bombarding users on all channels at once. In case of smart routing, notifications are sent with a delay on channels until user engages with the notification on one of the channels. This way, you can achieve the uptick in engagement (delivery, seen and interaction rate) without unnecessary noise and also save cost of paid notification channels.
 
 <Frame caption="Smart Channel Routing configured to send reminder across Email and Inbox">
-  <img src="/images/docs/079fa1b-image.png" />
+  ![](/images/docs/079fa1b-image.png)
 </Frame>
 
 Notification content is picked from the template, and only published and live templates can be added to the delivery node. Therefore, it's essential to [design the template](/docs/templates) before configuring this node.
@@ -78,13 +86,13 @@ This is where basic workflow details like name, description and tags go. You can
 
 ![](/images/docs/bd4ac3f-image.png)
 
-| Field                 | Obligation  | Description                                                                                                                                                                                                                                                                                                                                                                                          |
-| --------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Name                  | *mandatory* | Unique name of the workflow. The workflow name should be easily identifiable for your reference at a later stage. For example - `Appointment Reminder`. You can also use event name as your workflow name if there is only one workflow linked to that event.                                                                                                                                        |
-| Description           | *optional*  | You can use this field to add more details about your workflow like the notification logic. For example - `Send 1 hour before the appointment`                                                                                                                                                                                                                                                       |
-| Notification Category | *mandatory* | [Notification category](/docs/notification-category) is used to group related workflows together and are also used for users to set their preferences across a group of workflows. There are 3 notification categories by default `transactional` (user action based alerts), `promotional` (marketing notifications) and `system` (time sensitive notifications like OTP and authentication codes). |
-| Tags                  | *optional*  | Tags are used to group related workflows together. For example, all booking related workflows can be tagged as `Booking`.                                                                                                                                                                                                                                                                            |
-| Throttle              | *optional*  | You can use throttle to limit the number of workflow executions per user in a given time window. [Know more about throttle here](/docs/throttle)                                                                                                                                                                                                                                                     |
+| Field                 | Obligation | Description                                                                                                                      |
+| --------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Name                  |            |                                                                                                                                  |
+| Description           |            |                                                                                                                                  |
+| Notification Category |            |                                                                                                                                  |
+| Tags                  |            |                                                                                                                                  |
+| Throttle              |            |                                                                                                                                  |
 
 ### Change Node name and Description
 
@@ -106,4 +114,4 @@ Once cloned, your workflow will appear as a draft in your chosen destination. Yo
 
 ![](https://files.readme.io/fe58c04-workflow_clone.gif)
 
-***
+---
