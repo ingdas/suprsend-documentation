@@ -81,7 +81,7 @@ print(res)
 ```
 
 
-```python Sample Response
+```python Response
 {
    "object_type":"departments",
    "id":"engineering",
@@ -110,11 +110,9 @@ List of available methods:
 
 <AccordionGroup>
   <Accordion title="Add channels" defaultOpen="false">
-    Use `object_ins.add\_\*` method(s) to add channels
+    Use `object_ins.add\\\_\\\*` method(s) to add channels
 
-    <CodeGroup>
-
-    ```python Request
+    ```python
     obj_inst = supr_client.objects.get_edit_instance("object_type", "object_id")
     
     # Add Email
@@ -176,15 +174,11 @@ List of available methods:
     res = supr_client.objects.edit(obj_inst)
     print(res)
     ```
-
-    </CodeGroup>
   </Accordion>
   <Accordion title="Remove channels" defaultOpen="false">
-    Use `object_ins.remove\_\*` method(s) to remove channels from an object
+    Use `object_ins.remove\\\_\\\*` method(s) to remove channels from an object
 
-    <CodeGroup>
-
-    ```python Request
+    ```python
     obj_inst = supr_client.objects.get_edit_instance("object_type", "object_id")
     
     # Remove Email
@@ -246,55 +240,29 @@ List of available methods:
     res = supr_client.objects.edit(obj_inst)
     print(res)
     ```
-
-    </CodeGroup>
   </Accordion>
   <Accordion title="Remove channel types" defaultOpen="false">
-    If you need to delete/unset all emails (or any other channel data) of an object, you can call `object_ins.unset()` method. The method accepts the channel key/s (a single key or list of keys). This method will delete/unset all values in specified channel for user (ex: remove all emails attached to user).
+    This method will delete/unset all values in specified channel for object (ex: remove all emails attached to object).
 
-    <CodeGroup>
-
-    ```python Request
+    ```python
     # Remove multiple channels in bulk
     channels_to_remove = ["$email", "$whatsapp", "$sms", "$androidpush", "$iospush", "$webpush", "$slack", "$ms_teams"]
     obj_inst.unset(channels_to_remove)
-    
-    # what value to pass to unset channels
-    # for email:                $email
-    # for whatsapp:             $whatsapp
-    # for SMS:                  $sms
-    # for androidpush tokens:   $androidpush
-    # for iospush tokens:       $iospush
-    # for webpush tokens:       $webpush
-    # for slack:                $slack
-    # for ms_teams:             $ms_teams
     ```
-
-    </CodeGroup>
   </Accordion>
   <Accordion title="Set preferred language" defaultOpen="false">
-    If you want to send notification in object's preferred language, you can set it by passing language code in `object_ins.setPreferredLanguage()` method. This is useful especially for the applications which offer vernacular or multi-lingual support
+    If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
 
-    <CodeGroup>
-
-    ```python Request
-    # Set preferred language
-    obj_inst.set({"$preferred_language": "en"})
+    ```python
+    obj_inst.set_preferred_language("en")
     ```
-
-    </CodeGroup>
   </Accordion>
   <Accordion title="Set timezone" defaultOpen="false">
-    You can set timezone of user using `object_ins.setPreferredLanguage()` method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab)
+    You can set timezone of user using this method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab).
 
-    <CodeGroup>
-
-    ```python Request
-    # Set preferred language
+    ```python
     obj_inst.set_timezone("America/Los_Angeles")
     ```
-
-    </CodeGroup>
   </Accordion>
   <Accordion title="Set">
     Set any custom property using this method. It will shallow merge existing properties with new values. Key shouldn't start with `$` or `ss`.
@@ -304,11 +272,11 @@ List of available methods:
     ```python Request
     # Set a single property
     obj_inst.set(key, value)
-    obj_inst.set("name","John Doe")
+    obj_inst.set("company_name","ABC company")
       
     # Set multiple properties
     obj_inst.set({ key1: value1, key2: value2 })
-    obj_inst.set({"name": "John Doe","city": "San Francisco"})
+    obj_inst.set({"company_name": "ABC company","city": "San Francisco"})
     ```
 
     </CodeGroup>
@@ -320,10 +288,10 @@ List of available methods:
 
     ```python Request
     #unset single channel or property
-    obj_inst.unset(["$email"])
+    obj_inst.unset("$email")
     
     #unset multiple channels or properties
-    obj_inst.unset(channels_to_remove)
+    obj_inst.unset(["$email","company_name"])
     ```
 
     </CodeGroup>
@@ -369,10 +337,12 @@ List of available methods:
 
     ```python Request
     #single property	
-    obj_inst.set_once("so", "c") 
+    obj_inst.set_once(key, value)
+    obj_inst.set_once("first_login", "2021-11-02") 
     
     #multiple properties 
-    obj_inst.set_once({"so": "d"})
+    obj_inst.set_once({ key1: value1, key2: value2 })
+    obj_inst.set_once({"first_login": "2021-11-02","signup_date": "2021-11-02"})
     ```
 
     </CodeGroup>
@@ -405,7 +375,7 @@ Use this to modify an object, typically for removing channels or unsetting prope
 
 ```python Request
 res = supr_client.objects.edit
-("object_type", "object_id", {"operations": [{"$set": {"name": "John Doe"}}]})
+("object_type", "object_id", {"operations": [{"$set": {"company_name": "ABC company"}}]})
 
 print(res)
 ```
@@ -464,7 +434,7 @@ print(res)
          "id":"engineering",
          "subscriptions_count":0,
          "properties":{
-            "name":"John Doe"
+            "company_name":"ABC company"
          },
          "created_at":"2025-03-14T15:31:59.151061+00:00",
          "updated_at":"2025-03-14T15:31:59.182616+00:00",
@@ -499,7 +469,7 @@ print(res)
    "id":"engineering",
    "subscriptions_count":0,
    "properties":{
-      "name":"John Doe"
+      "company_name":"ABC company"
    },
    "created_at":"2025-03-14T15:31:59.151061+00:00",
    "updated_at":"2025-03-14T15:31:59.182616+00:00",
@@ -522,8 +492,12 @@ print(res)
 
 ```python Request
 res = supr_client.objects.create_subscriptions("object_type", "object_id", {
-  "recipients": ["distinct_id_1", {"object_type": "departments", "object_id": "engineering"}],
-  "properties": {"type": "members"},
+  "recipients": [
+		"distinct_id_1", {
+			"object_type": "teams", 
+			"object_id": "product"
+		}],
+  "properties": {"type": "members"}
 })
 
 print(res)
@@ -532,27 +506,40 @@ print(res)
 
 ```python Response
 {
-  'results': 
-  [
-    {'properties': {'type': 'admin'}, 
-     'user': None, 
-     'object': 
-     {
-       'id': 'abc_2', 
-       'object_type': 'abc_1', 
-       'subscriptions_count': 0, 
-       'updated_at': '2025-03-12T22:30:51.508+00:00'
-     }, 
-     'created_at': '2025-03-12T22:30:51.510014+00:00', 
-     'updated_at': '2025-03-12T22:30:51.510014+00:00'
-    }
-  ]
+   "results":[
+      {
+         "properties":{
+            "type":"members"
+         },
+         "user":{
+            "distinct_id":"distinct_id_1",
+            "updated_at":"2025-02-16T22:45:16.395682+00:00"
+         },
+         "object":"None",
+         "created_at":"2025-02-16T22:45:16.399883+00:00",
+         "updated_at":"2025-02-16T22:45:16.399883+00:00"
+      },
+      {
+         "properties":{
+            "type":"members"
+         },
+         "user":"None",
+         "object":{
+            "id":"product",
+            "object_type":"teams",
+            "subscriptions_count":6,
+            "updated_at":"2025-03-16T22:45:16.399427+00:00"
+         },
+         "created_at":"2025-02-16T22:45:16.399883+00:00",
+         "updated_at":"2025-02-16T22:45:16.399883+00:00"
+      }
+   ]
 }
 ```
 
 </CodeGroup>
 
-## List Subscriptions of Objects
+## List Object Subscription
 
 <CodeGroup>
 
@@ -581,8 +568,8 @@ print(res)
          },
          "user":,
          "object":{
-            "id":"abc_2",
-            "object_type":"abc_1",
+            "id":"product",
+            "object_type":"teams",
             "subscriptions_count":0,
             "updated_at":"2025-03-12T22:30:51.508+00:00"
          },
@@ -603,7 +590,10 @@ print(res)
 res = supr_client.objects.delete_subscriptions
 (
   "object_type", "object_id", {
-    "recipients": ["distinct_id_1", {"object_type": "departments", "object_id": "engineering"}],
+    "recipients": [
+		"distinct_id_1", {
+			"object_type": "departments", 
+			"object_id": "engineering"}]
   })
 
 print(res) 
@@ -648,11 +638,8 @@ print(res)
             "type":"admin"
          },
          "object":{
-            "id":"abc_2",
-            "object_type":"abc_1",
-            "properties":{
-               "name":"Test Object"
-            },
+            "id":"product",
+            "object_type":"teams",
             "subscriptions_count":1,
             "updated_at":"2025-03-12T22:30:50.865092+00:00"
          },
@@ -689,13 +676,12 @@ print(res)
 <CodeGroup>
 
 ```python Request
-payload = {"recipients": ["recipient1", "recipient2"]}
-res = supr_client.objects.bulk_delete("object_type", {"object_ids": [payload]})
+res = supr_client.objects.bulk_delete("object_type", {"object_ids": ["object_id1","object_id2"]})
 print(res)
 ```
 
 
-```python Request
+```python Response
 {
   "success": True, 
   "status_code": 204
