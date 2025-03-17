@@ -13,55 +13,23 @@ The content of the notification is designed with [templates](/docs/templates). I
 
 <Steps>
   <Step title="Identify Applicable Channels">
-    **The First step is to identify applicable channels for delivery**in user profile. Applicable channels are the subset of the following two:
+    The First step is to identify applicable channels for delivery in user profile. Applicable channels are the subset of the following:
 
-    * **Active channels on template**
+    - **Active channels on template**
 
-      \- Active channels are published and live channels in the template. For WhatsApp and SMS (Indian vendors), templates become live upon approval by the respective provider.
+      Active channels are published and live channels in the template. For WhatsApp and SMS (Indian vendors), templates become live upon approval by the respective provider.
+    - **Active channels in user profile**
 
-    * **Active channels in user profile**
+      Available channels in user profile which are not marked inactive. A set channel becomes inactive in case the channel is`removed `or`unset`using [SDK or API](/docs/users#via-sdk) or it is marked inactive by SuprSend.
+    - **Channels where user preference is set as opt-in**
 
-      \- Available channels in user profile which are not marked inactive. A set channel becomes inactive in case the channel is
-
-      `removed`
-
-      or
-
-      `unset`
-
-      using
-
-      [SDK or API](/docs/users#via-sdk)
-
-      or it is marked inactive by SuprSend.
-
-    <Note>
-      📘 SuprSend marks the user channel identity inactive for email and whatsapp in case of hard errors from vendor end, such as bounced email addresses, unregistered whatsapp numbers. This is done to safeguard your email domain authority or whatsapp rating if you continue to send notifications to users who have reported or marked your email or messages as spam. Additionally, this helps in whatsapp cost saving, as vendor charges for every processed request. Inactive marking period by SuprSend is 15 days for whatsapp and 90 days for email.
-    </Note>
-
-    * **Channels where user preference is set as opt-in**
-
-      \- If you are using SuprSend preference centre to take user preferences, check if the user preference is
-
-      `opt-in`
-
-      for the given channel and notification category (defined in workflow settings). You can check user preference using
-
-      [get user preference API](/reference/get-user-preferences-single-category)
-
-      .
+      If you are using SuprSend preference centre to take user preferences, check if the user preference is`opt-in`for the given channel and notification category (defined in workflow settings). You can check user preference using [get user preference API](/reference/get-user-preferences-single-category).
   </Step>
-
-  <Step title="Define the order of the channel using routing rule">
-    Currently, the order of channel is defined to [optimize on](/docs/smart-delivery#optimize-on) cost (channels are tried from low to high cost). We'll also be introducing options to optimize on engagement so that notifications is sent on the channel with higher chances of open and click first.
+  <Step title="Finalize channel order using routing rule">
+    Currently, the order of channel is defined to [optimize on](/docs/smart-delivery#optimize-on) cost (channels are tried from low to high cost picked from their vendor form). We'll also be introducing options to optimize on engagement so that notifications is sent on the channel with higher chances of open and click first.
   </Step>
-
-  <Step title="Notification Delivery">
-    Now, the **notification will be delivered on each channel in the order with** [time-interval](/docs/smart-delivery#time-to-live) **of \[time\_to\_live / (number\_of\_channels - 1)] apart**. For example, if you have 3 active channels with time to live of 1 hour, notification will be delivered to each channel at 30 minutes apart till the[success metric](/docs/smart-delivery#success-metric)is not achieved.
-  </Step>
-
-  <Step title="Once success metric is achieved, notification delivery on further channels is skipped.">
-
+  <Step title="Send notification with delay between each trigger using time to live">
+    Now, the **notification will be delivered on each channel in the order with** [time-interval](/docs/smart-delivery#time-to-live) **\[time_to_live / (number_of_channels - 1)\] apart** . For example, if you have 3 active channels with time to live of 1 hour, notification will be delivered to each channel at 30 minutes apart till the [success metric](/docs/smart-delivery#success-metric) is not achieved. Once success metric is achieved, notification delivery on further channels is skipped.
   </Step>
 </Steps>
 
@@ -77,7 +45,7 @@ This is used to define the order of channels based on the metric that you want t
 
 ### Time to live
 
-Time to live defines the delay in delivery between 2 subsequent channels. Notification will be delivered on each channel in the order with time-interval of \[time\_to\_live / (number\_of\_channels - 1)] apart. For example, if you 3 channels with time to live of 1 hour, notification will be delivered to each channel at 20 minutes apart till the success metric is achieved.
+Time to live defines the delay in delivery between 2 subsequent channels. Notification will be delivered on each channel in the order with time-interval of \[time_to_live / (number_of_channels - 1)\] apart. For example, if you 3 channels with time to live of 1 hour, notification will be delivered to each channel at 20 minutes apart till the success metric is achieved.
 
 ### Must send to
 
@@ -89,19 +57,10 @@ Success metric can be any event which defines the target user activity that you 
 
 1. **Notification Status**
 
-   \- Success metric can be notification status (delivery, seen, interaction / click) of any of the sent channels. For example, if the target of your notification is user opening the notification, you can set your success metric as
-
-   `Notification Status - Seen`
-
-   .
-
+   Success metric can be notification status (delivery, seen, interaction / click) of any of the sent channels. For example, if the target of your notification is user opening the notification, you can set your success metric as `Notification Status - Seen`.
 2. **Custom Event**
 
-   \- It can be any other custom event that you want your user to perform on the platform in response to the sent notification. For example, in case of payment reminder notification, you can set the success metric as
-
-   `Invoice Paid`
-
-   .
+   It can be any other custom event that you want your user to perform on the platform in response to the sent notification. For example, in case of payment reminder notification, you can set the success metric as`Invoice Paid`.
 
 ### Override Channels
 
@@ -113,58 +72,40 @@ To override channels, include the channels array in event property and add the c
 
 ![](/images/docs/eb7ac2c-image.png)
 
-The expected channel value in the array is:
-
-| Channel      | key to be passed in property array |
-| ------------ | ---------------------------------- |
-| Email        | email                              |
-| SMS          | sms                                |
-| Whatsapp     | whatsapp                           |
-| Android push | androidpush                        |
-| iOS push     | iospush                            |
-| Web push     | webpush                            |
-| Slack        | slack                              |
-| App Inbox    | inbox                              |
-| MS Teams     | ms\_teams                          |
+The expected channel values are: `\\\["email", "sms", "whatsapp", "androidpush", "iospush", "webpush", "slack", "inbox", "ms_teams"\\\]`
 
 You can add channel array as a [JQ-expression](https://jqlang.github.io/jq/manual/). So, in case your channel values do not match with the one mentioned in the above table, you can transform it using the JQ-expression. Below are some examples of how to add duration key in JQ format:
 
-1. General format for duration key at parent level is
-
-   `.channels`
-
-2. If channel is a nested event property key like shown below, enter it in the format
-
-   `.user.channels`
-
-   .
+1. General format for duration key at parent level is`.channels`
+2. If channel is a nested event property key like shown below, enter it in the format `.user.channels`.
 
 <CodeGroup>
-  ```json json
-  properties = {													  
-    "user": {
-      "name": "Steve",
-      "channels": ["email","inbox]
-    }
-  ```
+
+```json json
+properties = {													  
+  "user": {
+    "name": "Steve",
+    "channels": ["email","inbox]
+  }
+```
+
 </CodeGroup>
 
 <Warning>
   When the channel key specified is missing, or resolves to an invalid value, workflow execution will stop and corresponding error will be logged in the logs
 </Warning>
 
-***
+---
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="How channel routing works when a user has multiple identities of the same channel. For example, if there are multiple email ids in a user profile?" defaultOpen={false}>
+  <Accordion title="How channel routing works when a user has multiple identities of the same channel. For example, if there are multiple email ids in a user profile?" defaultOpen="false">
     Routing happens at channel identity level. So, if there are multiple email ids, notification will be sent to one email id and then on another after a delay.
   </Accordion>
-
-  <Accordion title="How does channel routing work if I have vendor routing enabled as well?" defaultOpen={false}>
+  <Accordion title="How does channel routing work if I have vendor routing enabled as well?" defaultOpen="false">
     Vendor routing is independent of channel routing and doesn't add to the delay in channel routing.
   </Accordion>
 </AccordionGroup>
 
-***
+---
