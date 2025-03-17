@@ -59,7 +59,7 @@ Here's a list of all edit methods:
   <Accordion title="Add User Channels" defaultOpen="false">
     Add communication channels on which you want to notify user. Push sand Inbox tokens are automatically tracked on user identification when the corresponding frontend SDK is integrated. Other channels (Email, SMS, Slack, MS teams, Whatsapp) need to be explicitly set in user profile.
 
-    Use `user.add\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\*` method(s) to add user channels.
+    Use `user.add\_\*` method(s) to add user channels.
 
     <CodeGroup>
 
@@ -134,7 +134,7 @@ Here's a list of all edit methods:
     </CodeGroup>
   </Accordion>
   <Accordion title="Remove User Channels" defaultOpen="false">
-    Use `user.remove\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\*` method(s) to remove channels.
+    Use `user.remove\_\*` method(s) to remove channels.
 
     <CodeGroup>
 
@@ -307,7 +307,7 @@ Here's a list of all edit methods:
 </AccordionGroup>
 
 <Warning>
-  After calling `add\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\*/remove\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\*/unset` methods, don't forget to call `users.async_edit()` since user edit is async update and the changes will be sent to SuprSend only after calling this method.
+  After calling `add\_\*/remove\_\*/unset` methods, don't forget to call `users.async_edit()` since user edit is async update and the changes will be sent to SuprSend only after calling this method.
 </Warning>
 
 ## Bulk Update Users
