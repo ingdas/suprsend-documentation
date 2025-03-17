@@ -10,25 +10,28 @@ description: "This document will cover SDK installation and initialization steps
     You can skip this step if you already have this package installed in your system.
 
     <CodeGroup>
-      ```shell bash
-      # if you are using linux / debian based systems
-      sudo apt install libmagic
 
-      # If you are using macOS
-      brew install libmagic
-      ```
+    ```shell bash
+    # if you are using linux / debian based systems
+    sudo apt install libmagic
+    
+    # If you are using macOS
+    brew install libmagic
+    ```
+
     </CodeGroup>
   </Step>
-
   <Step title="Install 'suprsend-py-sdk' using pip">
     <CodeGroup>
-      ```shell bash
-      $ pip install suprsend-py-sdk
 
-      # to upgrade to latest SDK version
+    ```shell bash
+    $ pip install suprsend-py-sdk
+    
+    # to upgrade to latest SDK version
+    
+    $ pip install suprsend-py-sdk --upgrade
+    ```
 
-      $ pip install suprsend-py-sdk --upgrade
-      ```
     </CodeGroup>
 
     <Check>
@@ -41,16 +44,16 @@ description: "This document will cover SDK installation and initialization steps
 
 ## Initialization
 
-For initializing SDK, you need **`WORKSPACE KEY`** and **`WORKSPACE SECRET`**. You will get both the tokens from your [Suprsend dashboard](https://app.suprsend.com/en/production/developers/api-keys) (Developers -> API Keys).
+For initializing SDK, you need  and . You will get both the tokens from your [Suprsend dashboard](https://app.suprsend.com/en/production/developers/api-keys) (Developers -> API Keys).
 
 <CodeGroup>
-  ```python python
-  from suprsend import Suprsend
-  # Initialize SDK
-  supr_client = Suprsend("WORKSPACE KEY", "WORKSPACE SECRET")
-  ```
+
+```python python
+from suprsend import Suprsend
+# Initialize SDK
+supr_client = Suprsend("WORKSPACE KEY", "WORKSPACE SECRET")
+```
+
 </CodeGroup>
 
-
-
-***
+---

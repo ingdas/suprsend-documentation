@@ -7,23 +7,25 @@ description: "This document will cover SDK installation and initialization steps
 
 For SDK installation, you'll have to add the SuprSend jar file. You can include the jar using following two ways:
 
-<Accordion title="Option 1. As a Maven dependency for maven projects from downloaded jar" defaultOpen={false}>
+<Accordion title="Option 1. As a Maven dependency for maven projects from downloaded jar" defaultOpen="false">
   `suprsend-java-sdk` is present as a maven dependency on maven central. Add following code to your pom.xml to include the sdk
 
   <CodeGroup>
-    ```xml xml
-    <dependencies>
-      <dependency>
-        <groupId>com.suprsend</groupId>
-        <artifactId>suprsend-java-sdk</artifactId>
-        <version>0.5.0</version>
-      </dependency>
-    </dependencies>
-    ```
+
+  ```xml xml
+  <dependencies>
+    <dependency>
+      <groupId>com.suprsend</groupId>
+      <artifactId>suprsend-java-sdk</artifactId>
+      <version>0.5.0</version>
+    </dependency>
+  </dependencies>
+  ```
+
   </CodeGroup>
 </Accordion>
 
-<Accordion title="Option 2. As a jar file for non maven projects" defaultOpen={false}>
+<Accordion title="Option 2. As a jar file for non maven projects" defaultOpen="false">
   Click [here](https://github.com/suprsend/suprsend-java-sdk/releases/download/v0.5.0/suprsend-java-sdk-0.5.0-jar-with-dependencies.jar) to download the latest version of java SDK from releases section and add it as an External Jar in your build path. suprsend-java-sdk is available as a JAR with name - `suprsend-java-sdk-0.5.0-jar-with-dependencies.jar`
 
   <Check>
@@ -35,16 +37,18 @@ For SDK installation, you'll have to add the SuprSend jar file. You can include 
 
 ## Initialization
 
-For initializing SDK, you need **`WORKSPACE KEY`** and **`WORKSPACE SECRET`**.
+For initializing SDK, you need **WORKSPACE KEY** and **WORKSPACE SECRET**.
 
 <CodeGroup>
-  ```java java
-  import suprsend.Suprsend;
-  Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE KEY");
-  ```
+
+```java Request
+import suprsend.Suprsend;
+Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE KEY");
+```
+
 </CodeGroup>
 
-Replace **`WORKSPACE KEY`** and **`WORKSPACE SECRET`** with your workspace values. You will get both the tokens from your [Suprsend dashboard](https://app.suprsend.com/) (***Settings page -> "`API keys`"*** section). For more details, check the [documentation on 'Workspaces'](/docs/workspace).
+Replace  and  with your workspace values. You will get both the tokens from your [Suprsend dashboard](https://app.suprsend.com/) ( section). For more details, check the [documentation on 'Workspaces'](/docs/workspace).
 
 ![](/images/docs/d60fec2-Frame_58_1.png)
 
@@ -53,10 +57,12 @@ Replace **`WORKSPACE KEY`** and **`WORKSPACE SECRET`** with your workspace value
 Constructor which allows you to view HTTP calls to Suprsend in your console. The final parameter is a boolean parameter which denotes whether value for "debug" is true or false. Default value for the same is false.
 
 <CodeGroup>
-  ```java java
-  import suprsend.Suprsend;
-  Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE KEY", true);
-  ```
+
+```java Request
+import suprsend.Suprsend;
+Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE KEY", true);
+```
+
 </CodeGroup>
 
-***
+---

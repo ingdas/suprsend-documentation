@@ -1,101 +1,169 @@
 ---
 title: "Tenants"
-description: "Tenants are used for personalizing communication on behalf of some other entity/organization. "
+description: "This document covers methods to manage tenants using python SDK"
 ---
 
-In SuprSend, tenants are workspace level entities. By default, SuprSend creates a tenant with `tenant_id="default"` (representing your organization) in each of your workspaces. You can create more tenans using one of our backend SDKs or from SuprSend Dashboard.
+Tenants (previously named as brands) are used for whitelabelling notifications, personliazing template content or capturing admin preferences for another entity/organization. Tenants are workspace-level entities and by default, a tenant with `tenant_id="default"` (representing your organization) is created your workspace. Read more about tenants [here](/docs/tenants).
 
-## Tenant datastructure:
-
-<CodeGroup>
-  ```json json
-  {
-    "tenant_id": "br-01",
-    "tenant_name": "Awesome Tenant",
-    "logo": "https://ik.imagekit.io/l0quatz6utm/suprsend/staging/media/suprsend-only-logo_c8aa27faef118418e8c5bd7b31a1cafc74e09200.png",
-    "primary_color": "#ff0000",
-    "secondary_color": "#00ff00",
-    "tertiary_color": "#0000ff",
-    "social_links": {
-      "website": "https://suprsend.com",
-      "facebook": "",
-      "linkedin": "",
-      "twitter": "",
-      "instagram": "",
-      "medium": "",
-      "discord": "",
-      "telegram": "",
-      "youtube": ""
-    },
-    "embedded_preference_url": "",
-    "hosted_preference_domain": "",
-    "properties": {
-      "prop1": "value1",
-      "prop2": { "prop3": ["value2"]}
-    }
-  }
-  ```
-</CodeGroup>
-
-| Field                                 | Description                                                                                                                                                               |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| tenant\_id (mandatory)                | max 64 characters and should contains alphanumeric characters(a-z, 0-9), hyphen (-) and underscode(\_).                                                                   |
-| tenant\_name (mandatory)              | name of the tenant.                                                                                                                                                       |
-| colors (primary, secondary, tertiary) | used while designing templates. If not provided `default` tenant colour will be picked.                                                                                   |
-| social\_links                         | social links to your tenant. Pass `""` if you want to remove existing link.                                                                                               |
-| properties                            | Custom properties associated with the tenant. Update operation is upsert (new properties are added to existing one's and if key is already present, value is overridden). |
-|                                       |                                                                                                                                                                           |
-
-## Tenant methods
-
-### Upsert tenant
+## Create / Update Tenant
 
 This method will create a new tenant or update an existing tenant.
 
 <CodeGroup>
-  ```javascript javascript
-  const { Suprsend } = require("@suprsend/node-sdk");
 
-  const supr_client = new Suprsend("workspace_key", "workspace_secret")
+```javascript Request (methods)
+const { Suprsend } = require("@suprsend/node-sdk");
 
-  const tenant_payload = {...} // prepare tenant datastructure payload
-                   
-  const response = supr_client.tenants.upsert(tenant_id, tenant_payload); // create or update tenant
-  response.then((res) => console.log("response", res));
-  ```
+const supr_client = new Suprsend("workspace_key", "workspace_secret")
+
+const tenant_payload = {...} // prepare tenant datastructure payload
+
+// ---- Optional Parameters -------
+const requestData = {
+    secondary_color: "#00ff00",
+    tertiary_color: "#0000ff",
+    timezone: "America/New_York",
+    blocked_channels: ["email"], // These channels will be skipped for sending notifications to recipients when triggering for this tenant.
+    social_links: {
+        website: "https://suprsend.com",
+        facebook: "",
+        linkedin: "",
+        twitter: "",
+        instagram: "",
+        medium: "",
+        discord: "",
+        telegram: "",
+        youtube: ""
+    },
+    embedded_preference_url: "", // In-product Notification center link for capturing user preferences.
+    properties: {
+        prop1: "value1",
+        prop2: { prop3: ["value2"] }
+    }
+};
+
+const response = supr_client.tenants.upsert(tenant_id, tenant_payload); // create or update tenant
+response.then((res) => console.log("response", res));
+```
+
 </CodeGroup>
 
-### Get tenant details
+### Field Description:
+
+| Field                                 | Description                                                                                                                                                               |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| tenant_id (mandatory)                 | max 64 characters and should contains alphanumeric characters(a-z, 0-9), hyphen (-) and underscode(\_).                                                                   |
+| tenant_name (mandatory)               | name of the tenant.                                                                                                                                                       |
+| colors (primary, secondary, tertiary) |                                                                                                                                                                           |
+| social_links                          |                                                                                                                                                                           |
+| properties                            | Custom properties associated with the tenant. Update operation is upsert (new properties are added to existing one's and if key is already present, value is overridden). |
+|                                       |                                                                                                                                                                           |
+
+All properties of the tenant can be referred as `{{$tenant.prop}}` (handlebars) or `data\\\\\\\["tenant"\\\\\\\].prop` in JSONNET format.
+
+### Get Tenant
 
 <CodeGroup>
-  ```javascript Javascript
-  const response = supr_client.tenants.get(tenant_id)
-  ```
+
+```javascript Request (methods)
+const response = supr_client.tenants.get(tenant_id)
+```
+
+
+```javascript Response
+{
+   "tenant_id":"tenant_id",
+   "tenant_name":"ABC Company",
+   "logo":"https://logo_url.png",
+   "timezone":"America/New_York",
+   "blocked_channels":[
+      "whatsapp",
+      "email"
+   ],
+   "embedded_preference_url":"https://app.suprsend.com/preferences",
+   "hosted_preference_domain":"preferences.suprsend.com",
+   "primary_color":"#0751E8",
+   "secondary_color":"#e308e3",
+   "tertiary_color":"#1EE9F1",
+   "social_links":{
+      "website":"https://www.suprsend.com/",
+      "facebook":"",
+      "linkedin":"",
+      "twitter":"",
+      "instagram":"",
+      "medium":"",
+      "discord":"",
+      "telegram":"",
+      "youtube":""
+   },
+   "properties":{
+      "address":"5678 Market Street Suite 300 San Francisco, CA 94103 USA"
+   },
+   "updated_at":"2025-02-27T10:21:15.235666Z"
+}
+```
+
 </CodeGroup>
 
-### Get tenants list
+### List Tenants
+
+By default, `limit=20`. The maximum value for `limit` is `1000`.
 
 <CodeGroup>
-  ```javascript Javascript
-  const response = supr_client.tenants.list();  // default limit 20
-  const response = supr_client.tenants.list({limit:20, offset:0}); //  max limit 1000
-  ```
+
+```javascript Request (methods)
+const response = supr_client.tenants.list();  // default limit 20
+const response = supr_client.tenants.list({limit:20, offset:0}); //  max limit 1000
+```
+
+
+```javascript Response
+{
+   "meta":{
+      "count":28,
+      "limit":20,
+      "offset":0
+   },
+   "results":[
+      {
+         "tenant_id":"tenant_01",
+         "tenant_name":"ABC Company",
+         "logo":"https://logo.url",
+         ...
+         "updated_at":"2025-03-13T18:16:35.744843Z"
+      },
+	  {
+         "tenant_id":"tenant_02",
+         "tenant_name":"CDE Company",
+         "logo":"https://logo.url",
+         ...
+         "updated_at":"2025-03-13T18:16:35.744843Z"
+      }
+	...
+   ]
+}
+```
+
 </CodeGroup>
 
 ## Add tenant in Workflow
 
 <CodeGroup>
-  ```javascript Javascript
-  const wf = new Workflow(workflow_body, {tenant_id :  "_tenant_id_"})
-  ```
+
+```javascript Request (methods)
+const wf = new Workflow(workflow_body, {tenant_id :  "_tenant_id_"})
+```
+
 </CodeGroup>
 
 ## Add tenant in Event
 
 <CodeGroup>
-  ```javascript Javascript
-  const event = new Event(distinct_id, event_name, properties, {tenant_id :  "_tenant_id_"})
-  ```
+
+```javascript Request (methods)
+const event = new Event(distinct_id, event_name, properties, {tenant_id :  "_tenant_id_"})
+```
+
 </CodeGroup>
 
-***
+---

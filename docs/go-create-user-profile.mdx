@@ -1,403 +1,459 @@
 ---
-title: "Create User Profile"
-description: "This document will cover the methods to create a user and set channel preferences"
+title: "Manage User"
+description: "This document will cover the methods to create a user or manage user profile within SuprSend"
 ---
 
-## Pre-requisites
+## How Suprsend identifies a user
 
-[Integrate Go SDK](/docs/integrate-go-sdk)
+SuprSend identifies users with immutable `distinct_id`. It's best to map the same identifier in your DB with `distinct_id` in SuprSend. Do not use identifiers that can be changed like email or phone number. You can view synced users by searching `distinct_id` on [Users page](https://app.suprsend.com/en/production/users).
 
-## How Suprsend Identifies a User
+## Create User
 
-Suprsend identifies a user by a unique identifier `distinct_id`. The identifier for a user is important as we use this key to create user profile and all the information related to a user, like channel preferences, is attached to that profile. You can view user profile by searching `distinct_id` on [Subscribers page](https://app.suprsend.com/en/production/subscribers/subscribers/)
+To create a new user or to update an existing user, you'll have to fetch user instance. Call `supr_client.user.get_instance` to instantiate user object.
 
-**Please note:** you cannot change a user's id once it has been set, so we recommend you use a non-transient id like primary key in your DB rather than phone number or email address.
+```go
+user := suprClient.Users.GetInstance("__distinct_id__") // Unique identifier of user in your application
 
-<Steps>
-  <Step title="Create a new user" stepNumber="1">
-    To create a new user or to update an existing user's profile, you'll have to first instantiate the user object. Call `suprClient.Users.GetInstance` to instantiate the user object.
+// Save user
+_, err = user.Save()
+if err != nil {
+  log.Fatalln(err)
+}
+```
 
-    <CodeGroup>
-      ```go go
-      user := suprClient.Users.GetInstance("__distinct_id__") // Unique identifier of user in your application
+## Edit  User
 
-      // Save user
-      _, err = user.Save()
-      if err != nil {
-        log.Fatalln(err)
-      }
-      ```
-    </CodeGroup>
-  </Step>
-
-  <Step title="Set Communication Channel preferences" stepNumber="2">
-    Communication Channel Preference decides whether a user will receive communication on a particular channel or not. Setting Channel preferences means that whenever you are triggering a workflow, the communication will be sent on the channels set in user profile (given that the template for that channel is present in the template group).
-
-    Especially for event based workflow triggers, where you just pass the user's `distinct_id` and the communication channels are picked from user profile.
-
-    <Note>
-      In event based workflows, since you only pass user's `distinct_id` in your track event call, you'll have to add channel preference first in the user profile before making the call.
-    </Note>
-
-    <AccordionGroup>
-      <Accordion title="Add User Channels" defaultOpen={false}>
-        Use `user.Add_*` method(s) to add user channels in a profile
-
-        <CodeGroup>
-          ```go go
-          user := suprClient.Users.GetInstance("__distinct_id__") // Unique identifier of user in your application
-
-          // Add email channel
-          user.AddEmail("abc@example.com")
-
-          // add sms channel
-          user.AddSms("+1444455555")
-
-          // Add whatsapp channel
-          user.AddWhatsapp("+1444455555")
-
-          // Add androidpush token, token providers: fcm/xiaomi
-          user.AddAndroidpush("__fcm_push_token__", "fcm")
-
-          // Add iospush token, token providers: apns
-          user.AddIospush("__ios_push_token__", "apns")
-
-          // Add webpush token (vapid)
-          user.AddWebpush(map[string]interface{}{
-            "keys": map[string]interface{}{
-              "auth":   "",
-              "p256dh": "",
-            },
-            "endpoint": "",
-          }, "vapid")
-
-          // Save user
-          _, err = user.Save()
-          if err != nil {
-            log.Fatalln(err)
-          }
-          ```
-        </CodeGroup>
-      </Accordion>
-
-      <Accordion title="Remove User Channels" defaultOpen={false}>
-        Use `user.Remove_*` method(s) to remove channels from a user profile
-
-        <CodeGroup>
-          ```go go
-          user := suprClient.Users.GetInstance("__distinct_id__") // Unique identifier of user in your application
-
-          // remove email channel
-          user.RemoveEmail("abc@example.com")
-
-          // remove sms channel
-          user.RemoveSms("+1444455555")
-
-          // remove whatsapp channel
-          user.RemoveWhatsapp("+1444455555")
-
-          // remove androidpush token
-          user.RemoveAndroidpush("__fcm_push_token__", "fcm")
-
-          // remove iospush token
-          user.RemoveIospush("__ios_push_token__", "apns")
-
-          // remove webpush token
-          user.RemoveWebpush(map[string]interface{}{
-            "keys": map[string]interface{}{
-              "auth":   "",
-              "p256dh": "",
-            },
-            "endpoint": "",
-          }, "vapid")
-
-          // Save user
-          _, err = user.Save()
-          if err != nil {
-            log.Fatalln(err)
-          }
-          ```
-        </CodeGroup>
-      </Accordion>
-
-      <Accordion title="Remove User Channels in bulk" defaultOpen={false}>
-        If you need to delete/unset all emails (or any other channel) of a user, you can call `user.Unset()` method on the user instance. The method accepts the channel key/s (a single key or list of keys)
-
-        <CodeGroup>
-          ```go go
-          user := suprClient.Users.GetInstance("__distinct_id__") // Unique identifier of user in your application
-
-          // If you need to remove all emails for this user, call user.Unset(["$email"])
-          user.Unset([]string{"$email"})
-
-          // # what value to pass to unset channels
-          // # for email:                $email
-          // # for whatsapp:             $whatsapp
-          // # for SMS:                  $sms
-          // # for androidpush tokens:   $androidpush
-          // # for iospush tokens:       $iospush
-          // # for webpush tokens:       $webpush
-          // # for slack:                $slack
-
-          // Save user
-          _, err = user.Save()
-          if err != nil {
-            log.Fatalln(err)
-          }
-          ```
-        </CodeGroup>
-
-        <Warning>
-          After calling `Add_*/Remove_*/Unset` methods, don't forget to call `user.Save()`. On call of Save(), SDK sends the request to SuprSend platform to update the User Profile.
-        </Warning>
-      </Accordion>
-    </AccordionGroup>
-  </Step>
-</Steps>
-
-## Add Preferences in User Profile
-
-You can also set custom properties in user profile that is used to set user preferences
-
-### Set Preferred language
-
-If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in `user.SetPreferredLanguage()` method. This is useful especially for the applications which offer vernacular or multi-lingual support.
+To Edit user, you need to first fetch user instance, call all the update methods and save changes using `users.async_edit` method.
 
 <CodeGroup>
-  ```go go
-  user := suprClient.Users.GetInstance("__distinct_id__") // Unique identifier of user in your application
 
-  // Set user preferred language. languageCode must be in [ISO 639-1 2-letter] format
-  user.SetPreferredLanguage("en")
+```go Request
+func main() {
+	// Fetch user instance
+	user := suprClient.Users.GetEditInstance("__distinct_id__")
 
-  // Save user
-  _, err = user.Save()
-  if err != nil {
-    log.Fatalln(err)
-  }
-  ```
+	// Call user update methods
+	user.SetTimezone("America/Los_Angeles")
+	user.Set("name", "John Doe")
+
+	// Save Changes
+	res, err := user.Save()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println(res)
+}
+```
+
+
+```go Response
+{
+  "success": boolean,
+  "status": "success"/"fail",
+  "status_code": http_status_code,
+  "message": "response_message"/"error_message",
+}
+```
+
 </CodeGroup>
 
-**Response:**
-
-When you call `user.Save()`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll get an error message if something fails
-
-## Bulk API for handling multiple user profiles
-
-To update user profiles in bulk, use Bulk users API. There isn't any limit on number-of-records that can be added to `BulkUsers` instance.
-
-Use `.Append()` on BulkUsers instance to add however-many-records to call in bulk.
-
-<CodeGroup>
-  ```go go
-  // create bulkUsers instance
-  bulkIns := suprClient.BulkUsers.NewInstance()
-
-  // Prepare user1
-  user1 := suprClient.Users.GetInstance("__distinct_id1__")
-  user1.AddEmail("abc@example.com")
-  user1.AddWhatsapp("+1909090900")
-
-  // prepare user 2
-  user2 := suprClient.Users.GetInstance("__distinct_id2__")
-  user2.AddEmail("abc@example.com")
-  user2.AddWhatsapp("+2909090900")
-
-  // Append all users to bulk instance
-  bulkIns.Append(user1, user2)
-
-  // Call save
-  bulkResponse, err := bulkIns.Save()
-  if err != nil {
-    log.Fatalln(err)
-  }
-  log.Println(bulkResponse)
-  ```
-</CodeGroup>
-
-### How SuprSend Processes the bulk API request
-
-* On calling`bulkIns.Save()`, the SDK internally makes one-or-more Callable-chunks.
-
-* Each callable-chunk contains a subset of records, the subset calculation is based on each record's bytes-size and max allowed chunk-size, chunk-length etc.
-
-* For each callable-chunk SDK makes an HTTP call to SuprSend to register the request.
-
-**Response:**
-
-Response is an instance of `suprsend.BulkResponse` type
-
-<CodeGroup>
-  ```go go
-  // Response structure
-
-  suprsend.BulkResponse{
-    Status : "success",
-    Total : 10, // number of records sent in bulk
-    Success : 10, // number of records succeeded
-    Failure : 0, // number of records failed
-    FailedRecords : [],
-  }
-
-  suprsend.BulkResponse{
-    Status : "fail",
-    Total : 10, // number of records sent in bulk
-    Success : 0, // number of records succeeded
-    Failure : 10, // number of records failed
-    FailedRecords : [{"record": {...}, "error": "error_str", "code": 500}]
-  }
-
-  suprsend.BulkResponse{
-    Status : "partial",
-    Total : 10, // number of records sent in bulk
-    Success : 6, // number of records succeeded
-    Failure : 4, // number of records failed
-    FailedRecords : [{"record": {...}, "error": "error_str", "code": 500}]
-  }
-  ```
-</CodeGroup>
-
-## Other user methods
+Here's a list of all edit methods:
 
 <AccordionGroup>
-  <Accordion title="Set preferred language" defaultOpen={false}>
-    If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
+  <Accordion title="Add User Channels" defaultOpen="false">
+    Add communication channels on which you want to notify user. Push sand Inbox tokens are automatically tracked on user identification when the corresponding frontend SDK is integrated. Other channels (Email, SMS, Slack, MS teams, Whatsapp) need to be explicitly set in user profile.
+
+    Use `user.add\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*` method(s) to add user channels.
 
     <CodeGroup>
-      ```go go
-      user.SetPreferredLanguage("en")
-      ```
+
+    ```go Request
+    user := suprClient.Users.GetInstance("__distinct_id__") // Unique identifier of user in your application
+    
+    // Add email channel
+    user.AddEmail("user@example.com")
+    
+    // add sms channel
+    user.AddSms("+1444455555")
+    
+    // Add whatsapp channel
+    user.AddWhatsapp("+1444455555")
+    
+    // Add androidpush token, token providers: fcm/xiaomi
+    user.AddAndroidpush("__fcm_push_token__", "fcm")
+    
+    // Add iospush token, token providers: apns
+    user.AddIospush("__ios_push_token__", "apns")
+    
+    // Add webpush token (vapid)
+    user.AddWebpush(map[string]interface{}{
+      "keys": map[string]interface{}{
+        "auth":   "",
+        "p256dh": "",
+      },
+      "endpoint": "",
+    }, "vapid")
+    
+    // Save user
+    _, err = user.Save()
+    if err != nil {
+      log.Fatalln(err)
+    }
+    ```
+
     </CodeGroup>
   </Accordion>
-
-  <Accordion title="Set preferred timezone" defaultOpen={false}>
-    You can set timezone of user using this method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab).
+  <Accordion title="Remove User Channels" defaultOpen="false">
+    Use `user.remove\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*` method(s) to remove channels.
 
     <CodeGroup>
-      ```go go
-      user.SetTimezone("America/Los_Angeles")
-      ```
+
+    ```go Request
+    user := suprClient.Users.GetInstance("__distinct_id__") // Unique identifier of user in your application
+    
+    // remove email channel
+    user.RemoveEmail("user@example.com")
+    
+    // remove sms channel
+    user.RemoveSms("+1444455555")
+    
+    // remove whatsapp channel
+    user.RemoveWhatsapp("+1444455555")
+    
+    // remove androidpush token
+    user.RemoveAndroidpush("__fcm_push_token__", "fcm")
+    
+    // remove iospush token
+    user.RemoveIospush("__ios_push_token__", "apns")
+    
+    // remove webpush token
+    user.RemoveWebpush(map[string]interface{}{
+      "keys": map[string]interface{}{
+        "auth":   "",
+        "p256dh": "",
+      },
+      "endpoint": "",
+    }, "vapid")
+    
+    // Save user
+    _, err = user.Save()
+    if err != nil {
+      log.Fatalln(err)
+    }
+    ```
+
     </CodeGroup>
   </Accordion>
-
-  <Accordion title="Set" defaultOpen={false}>
-    Set is used to set the custom user property or properties. The given key and value will be assigned to the user, overwriting an existing property with the same key if present.
-
-    <CodeGroup>
-      ```go go
-      user.SetKV("prop", "value")
-      user.Set(map[string]interface{}{"prop1": "val1", "prop2": "val2"})
-      ```
-
-      ```javascript Example
-      user.set("name", "user")
-
-      user.set({
-        "prop1": "val1", 
-        "prop2": ["one", "two", "three"], 
-        "number": 20
-      })
-      ```
-    </CodeGroup>
-
-    | Parameters | type                                       |
-    | ---------- | ------------------------------------------ |
-    | key        | string (shouldn't start with `ss_` or `$`) |
-    | value      | any                                        |
-  </Accordion>
-
-  <Accordion title="Set Once" defaultOpen={false}>
-    Works just like `user.set`, except it will not override already existing property values. This is useful for properties like first\_login\_date.
+  <Accordion title="Remove Channel types">
+    This method will delete/unset all values in specified channel for user (ex: remove all emails attached to user).
 
     <CodeGroup>
-      ```javascript JavaScript
-      user.set_once(key, value);
-      user.set_once({ key1: value1, key2: value2 });
-      ```
 
-      ```javascript Example
-      user.set_once("first_login", "2021-11-02")
+    ```go Go
+    user := suprClient.Users.GetInstance("__distinct_id__") // Unique identifier of user in your application
+    
+    // If you need to remove all emails for this user, call user.Unset(["$email"])
+    user.Unset([]string{"$email"})
+    
+    // # what value to pass to unset channels
+    // # for email:                $email
+    // # for whatsapp:             $whatsapp
+    // # for SMS:                  $sms
+    // # for androidpush tokens:   $androidpush
+    // # for iospush tokens:       $iospush
+    // # for webpush tokens:       $webpush
+    // # for slack:                $slack
+    
+    // Save user
+    _, err = user.Save()
+    if err != nil {
+      log.Fatalln(err)
+    }
+    ```
 
-      user.set_once({"first_login" : "2021-11-02", "DOB" : "1991-10-02"})
-      ```
     </CodeGroup>
   </Accordion>
+  <Accordion title="Set Preferred language" defaultOpen="false">
+    If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
 
-  <Accordion title="Append" defaultOpen={false}>
-    This method will append a value to the list for a given property.
-
-    <CodeGroup>
-      ```go go
-      user.SetOnceKV("prop4", "val4")
-      user.SetOnce(map[string]interface{}{"prop3": "val3"})
-      ```
-
-      ```javascript Example
-      user.append("wishlist", "iphone12")
-
-      user.append({"wishlist" : "iphone12"})
-      ```
-    </CodeGroup>
+    ```go
+    user := suprClient.Users.GetInstance("__distinct_id__") // Unique identifier of user in your application
+    
+    // Set user preferred language. languageCode must be in [ISO 639-1 2-letter] format
+    user.SetPreferredLanguage("en")
+    
+    // Save user
+    _, err = user.Save()
+    if err != nil {
+      log.Fatalln(err)
+    }
+    ```
   </Accordion>
+  <Accordion title="Set preferred timezone" defaultOpen="false">
+    You can set timezone of user using this method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab).
 
-  <Accordion title="Remove" defaultOpen={false}>
-    This method will remove a value from the list for a given property.
-
-    <CodeGroup>
-      ```go go
-      user.RemoveKV(k, v)
-      user.Remove({k1: v1, k2, v2})
-      ```
-
-      ```javascript Example
-      user.remove("wishlist", "iphone12")
-
-      user.remove({"wishlist" : "iphone12"})
-      ```
-    </CodeGroup>
+    ```go
+    user.SetTimezone("America/Los_Angeles")
+    ```
   </Accordion>
+  <Accordion title="Set" defaultOpen="false">
+    Set is used to add custom user properties. It is an upsert function, meaning any existing property value with the same key will be overwritten on subsequent updates.
 
-  <Accordion title="Increment" defaultOpen={false}>
-    Add the given number to an existing property on the user. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
-
-    <CodeGroup>
-      ```go go
-      user.IncrementKV("increment_prop", 2)
-      user.Increment(map[string]interface{}{"increment_prop1": 5})
-      ```
-
-      ```javascript Example
-      user.increment("login_count", 1)
-
-      user.increment({"login_count" : 1, "order_count" : 1})
-      ```
-    </CodeGroup>
-
-    | Parameters | type                                       |
-    | ---------- | ------------------------------------------ |
-    | key        | string (shouldn't start with `ss_` or `$`) |
-    | value      | number (+ or -)                            |
+    ```go
+    user.SetKV("prop", "value")
+    user.SetKV("name","John Doe")
+    
+    user.Set(map[string]interface{}{"prop1": "val1", "prop2": "val2"})
+    user.Set({"name": "John Doe","city": "San Francisco"})
+    ```
   </Accordion>
+  <Accordion title="Set Once" defaultOpen="false">
+    Works just like user.set, except it will not override already existing property values. This is useful for properties like first_login_date.
 
-  <Accordion title="Unset" defaultOpen={false}>
-    This will remove a property permanently from user properties.
+    ```go
+    user.set_once(key, value)
+    user.set_once("first_login","2021-11-02")
+      
+    user.set_once({ key1: value1, key2: value2 })
+    user.set_once({"first_login": "2021-11-02","signup_date": "2021-11-02"})
+    ```
+  </Accordion>
+  <Accordion title="Unset" defaultOpen="false">
+    Unset is used to remove a property key.
 
-    <CodeGroup>
-      ```go go
-      user.Unset([]string{"$email"})
-      ```
+    ```go
+    user.Unset([]string{"$email"})
+    ```
+  </Accordion>
+  <Accordion title="Append" defaultOpen="false">
+    This method will append a value to the array list.
 
-      ```javascript Example
-      user.unset("wishlist")
+    ```go
+    user.SetOnceKV("prop4", "val4")
+    user.SetOnceKV("played_games", "game_1")
+    
+    user.SetOnce(map[string]interface{}{"prop3": "val3"})
+    user.SetOnce(map[string]interface{}{"played_games": "game_1", "liked_games": "game_2"})
+    ```
+  </Accordion>
+  <Accordion title="Remove" defaultOpen="false">
+    This method will remove a value from the array list.
 
-      user.unset(["wishlist", "cart"])
-      ```
-    </CodeGroup>
+    ```go
+    user.RemoveKV(k, v)
+    user.RemoveKV("played_games", "game_1")
+    
+    user.Remove({k1: v1, k2, v2})
+    user.Remove({"played_games": "game_1", "liked_games": "game_2"})
+    ```
+  </Accordion>
+  <Accordion title="Increment" defaultOpen="false">
+    Increase or decrease integer values on consecutive action, like login count. To reduce a property, provide a negative number for the value.
 
-    | Parameters | type                                                           |
-    | ---------- | -------------------------------------------------------------- |
-    | keys       | string or array of strings (shouldn't start with `ss_` or `$`) |
+    ```go
+    user.IncrementKV("increment_prop", 2)
+    user.IncrementKV("login_count", 1)
+    
+    user.Increment(map[string]interface{}{"increment_prop1": 5})
+    user.Increment(map[string]interface{}{"login_count" : 1, "order_count" : 1})
+    ```
   </Accordion>
 </AccordionGroup>
 
-***
+<Warning>
+  After calling `add\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/remove\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/unset` methods, don't forget to call `user.Save()` since user edit is async update and the changes will be sent to SuprSend only after calling this method.
+</Warning>
+
+## Bulk Update Users
+
+There isn't any limit on number-of-records that can be added to `bulk_users` instance.
+
+Use `.append()` on bulk_users instance to add however-many-records to call in bulk.
+
+<CodeGroup>
+
+```go Request
+// create bulkUsers instance
+bulkIns := suprClient.BulkUsers.NewInstance()
+
+// Prepare user1
+user1 := suprClient.Users.GetInstance("__distinct_id1__")
+user1.AddEmail("user1@example.com")
+user1.AddWhatsapp("+1909090900")
+
+// prepare user 2
+user2 := suprClient.Users.GetInstance("__distinct_id2__")
+user2.AddEmail("user2@example.com")
+user2.AddWhatsapp("+2909090900")
+
+// Append all users to bulk instance
+bulkIns.Append(user1, user2)
+
+// Call save
+bulkResponse, err := bulkIns.Save()
+if err != nil {
+  log.Fatalln(err)
+}
+log.Println(bulkResponse)
+```
+
+
+```go Response
+{
+  status = "fail",
+  total = 10, # number of records sent in bulk
+  success = 0, # number of records succeeded
+  failure = 10, # number of records failed
+  failed_records = [{"record": {...}, "error": "error_str", "code": 500}]
+}
+```
+
+</CodeGroup>
+
+<Warning>
+  **Bulk API supported in SDK version 0.2.0 and above:**
+
+  Bulk API is supported in SuprSend Go-sdk version 0.2.0 and above. If you are using an older version, please upgrade to the latest SDK version.
+</Warning>
+
+## Get User Details
+
+<CodeGroup>
+
+```go Request
+func main() {
+	// Fetch user instance
+	res, err := suprClient.Users.Get("__distinct_id__")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println(res)
+}
+```
+
+
+```go Response
+{
+  "distinct_id": "__distinct_id__",
+  "properties": {
+    "name": "John Doe",
+    "email": ["johndoe@example.com"],
+    "created_at": "2024-01-01T12:00:00Z"
+  },
+  "status": "active"
+}
+```
+
+</CodeGroup>
+
+## Delete User
+
+<CodeGroup>
+
+```go Request
+func main() {
+	// Delete user instance
+	res, err := suprClient.Users.Delete("__distinct_id__")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println(res)
+}
+```
+
+
+```go Response
+ {
+ "success": True, 
+ "status_code": 204
+ }
+```
+
+</CodeGroup>
+
+## Get list of objects subscribed by user
+
+You can pass optional query parameters -`limit`, `before`, `after`
+
+<CodeGroup>
+
+```go Request
+func main() {
+	// Get objects the user is subscribed to
+	params := map[string]interface{}{
+		"after": "01JJW6HXXXXPB59ARDW85G0KN",
+		"limit": 1,
+	}
+
+	res, err := suprClient.Users.GetObjectsSubscribedTo("__distinct_id__", params)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println(res)
+}
+```
+
+
+```go Response
+{
+    "objects": [
+      {
+        "object_id": "Frontend",
+        "type": "Developers",
+        "subscribed_at": "2024-02-20T10:15:30Z"
+      }
+    ],
+    "paging": {
+      "after": "01JJW6HXXXXPB59ARDW85G0KN",
+      "has_more": false
+    }
+  }
+```
+
+</CodeGroup>
+
+## Get lists subscribed by user
+
+You can pass optional query parameters -`limit`, `before`, `after`
+
+<CodeGroup>
+
+```go Request
+func main() {
+	// Get lists the user is subscribed to
+	params := map[string]interface{}{
+		"after": "01JJW6HXXXXPB59ARDW85G0KN",
+		"limit": 1,
+	}
+
+	res, err := suprClient.Users.GetListsSubscribedTo("__distinct_id__", params)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println(res)
+}
+```
+
+
+```go Response
+{
+  "lists": [
+    {
+      "list_id": "product_updates",
+      "subscribed_at": "2024-02-20T12:00:00Z",
+      "status": "subscribed"
+    }
+  ],
+  "paging": {
+    "after": "01JJW6HXXXXPB59ARDW85G0KN",
+    "has_more": true
+  }
+}
+```
+
+</CodeGroup>
