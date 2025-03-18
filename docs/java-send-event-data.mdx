@@ -6,248 +6,268 @@ description: "This document will cover the method to send event to Suprsend plat
 ## Pre-requisites
 
 1. [Integrate Java SDK](/docs/integrate-java-sdk)
-
 2. [Create User Profile](/docs/java-create-user-profile)
-
 3. [Create Template on SuprSend platform](/docs/templates) - if you want to trigger workflow by passing the event
-
 4. [Create Workflow on SuprSend Platform](/docs/design-workflow) - if you want to trigger workflow by passing the event
 
 ## Create Workflow on SuprSend Platform
 
 For Event based workflow trigger, you'll have to [create the workflow on SuprSend Platform](/docs/design-workflow). Once the workflow is created, you can pass the `EventName` ( `GROCERY_PURCHASED` in below example) defined in workflow configuration with the help of `suprClient.TrackEvent` method. Variables added in the template should be passed as event `Properties`
 
-![577](/images/docs/d95d579-Frame_2.png "Frame 2.png")
+![577](/images/docs/d95d579-Frame_2.png)
 
 ## Send Event
 
 You can send event to Suprsend platform by using the `suprClient.trackEvent` method.
 
 <CodeGroup>
-  ```java Payload Schema
-  package suprsend;
 
-  import org.json.JSONObject;
-  import java.io.UnsupportedEncodingException;
+```java Request [Method]
+package suprsend;
 
-  import suprsend.Suprsend;
-  import suprsend.SuprsendException;
-  import suprsend.Event;
+import org.json.JSONObject;
+import java.io.UnsupportedEncodingException;
 
-  public class Event {
-  	public static void main(String[] args) throws Exception {
-  		trackEvent();
-  	}
+import suprsend.Suprsend;
+import suprsend.SuprsendException;
+import suprsend.Event;
 
-  	private static void trackEvent() throws SuprsendException, UnsupportedEncodingException{
-  		// Initialize SDK
-  		Suprsend suprClient = new Suprsend("_workspace_key_", "_workspace_secret_");
+public class Event {
+	public static void main(String[] args) throws Exception {
+		trackEvent();
+	}
 
-  		String distinctId = "__distinct_id__";
-  		String eventName = "__event_name__";
+	private static void trackEvent() throws SuprsendException, UnsupportedEncodingException{
+		// Initialize SDK
+		Suprsend suprClient = new Suprsend("_workspace_key_", "_workspace_secret_");
 
-  		// dynamic data to render template and workflow variables
-  		JSONObject eventProps = new JSONObject()
-  				.put("key1", "value1")
-  				.put("key2", "value2");
+		String distinctId = "__distinct_id__";
+		String eventName = "__event_name__";
 
-  		Event e = new Event(distinctId, eventName, eventProps);
-  		JSONObject response = suprClient.trackEvent(e);
-  		System.out.println(response);
-  	}
+		// dynamic data to render template and workflow variables
+		JSONObject eventProps = new JSONObject()
+				.put("key1", "value1")
+				.put("key2", "value2");
+
+		Event e = new Event(distinctId, eventName, eventProps);
+		JSONObject response = suprClient.trackEvent(e);
+		System.out.println(response);
+	}
+}
+```
+
+
+```java Sample Code
+package suprsend;
+
+import org.json.JSONObject;
+import java.io.UnsupportedEncodingException;
+
+import suprsend.Suprsend;
+import suprsend.SuprsendException;
+import suprsend.Event;
+
+public class Event {
+  public static void main(String[] args) throws Exception {
+    trackEvent();
   }
-  ```
 
-  ```java Sample Code
-  package suprsend;
+  private static void trackEvent() throws SuprsendException, UnsupportedEncodingException{
+    // Initialize SDK
+    Suprsend suprClient = new Suprsend("_workspace_key_", "_workspace_secret_");
 
-  import org.json.JSONObject;
-  import java.io.UnsupportedEncodingException;
+    String distinctId = "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08";
+    String eventName = "product_purchased";
 
-  import suprsend.Suprsend;
-  import suprsend.SuprsendException;
-  import suprsend.Event;
+    // dynamic data to render template and workflow variables
+    JSONObject eventProps = new JSONObject()
+      .put("first_name", "User")
+      .put("spend_amount", "$10")
+      .put("nested_key_example", new JSONObject().put("nested_key1", "some_value_1"));
 
-  public class Event {
-    public static void main(String[] args) throws Exception {
-      trackEvent();
-    }
-
-    private static void trackEvent() throws SuprsendException, UnsupportedEncodingException{
-      // Initialize SDK
-      Suprsend suprClient = new Suprsend("_workspace_key_", "_workspace_secret_");
-
-      String distinctId = "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08";
-      String eventName = "product_purchased";
-
-      // dynamic data to render template and workflow variables
-      JSONObject eventProps = new JSONObject()
-        .put("first_name", "User")
-        .put("spend_amount", "$10")
-        .put("nested_key_example", new JSONObject().put("nested_key1", "some_value_1"));
-
-      Event e = new Event(distinctId, eventName, eventProps);
-      JSONObject response = suprClient.trackEvent(e);
-      System.out.println(response);
-    }
+    Event e = new Event(distinctId, eventName, eventProps);
+    JSONObject response = suprClient.trackEvent(e);
+    System.out.println(response);
   }
-  ```
+}
+```
+
+
+```java Response
+// Response structure
+{
+    "success": True, # if true, request was accepted.
+    "status": "success",
+    "status_code": 202, # http status code
+    "message": "OK",
+}
+
+{
+    "success": False, # error will be present in message
+    "status": "fail",
+    "status_code": 500, # http status code
+    "message": "error message",
+}
+```
+
 </CodeGroup>
 
 | Parameter     | Description                                                                                                                                         | Format                    | Obligation  |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- | ----------- |
-| `distinct_id` | `distinct_id` of subscriber performing the event                                                                                                    | int, bigint, string, UUID | *mandatory* |
-| `event_name`  | string identifier for the event like `product_purchased`                                                                                            | string                    | *mandatory* |
-| `properties`  | a dictionary representing event attributes like `first_name` Event properties can be used to pass template variables in case of event based trigger | Dictionary                | *optional*  |
+| `distinct_id` | `distinct_id` of subscriber performing the event                                                                                                    | int, bigint, string, UUID | _mandatory_ |
+| `event_name`  | string identifier for the event like `product_purchased`                                                                                            | string                    | _mandatory_ |
+| `properties`  | a dictionary representing event attributes like `first_name` Event properties can be used to pass template variables in case of event based trigger | Dictionary                | _optional_  |
 
 <Warning>
-  When you create an Event or a property, please ensure that the Event Name or Property Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
+  **Event naming guidelines:**
+
+  When you create an Event or a property, please ensure that the Event Name or Property Name does not start with  or , as we have reserved these symbols for our internal events and property names.
 </Warning>
 
 ## Trigger events for custom brand
 
 If you handle communications to end users on behalf of your customers and want to send custom notifications for each brand, you can do that with the help of [brands](/docs/brands).
 
-Just pass the **brand\_id** of your customer brand as **5th parameter in your event instance** like shown below and the properties of that brand will be used to replace brand variables in your template.
+Just pass the **brand_id** of your customer brand as **5th parameter in your event instance** like shown below and the properties of that brand will be used to replace brand variables in your template.
 
 <CodeGroup>
-  ```java java
-  ...
-  Event e = new Event(distinctId, eventName, eventProps, , brandId);
-  ...
-  ```
+
+```java Request
+...
+Event e = new Event(distinctId, eventName, eventProps, , brandId);
+...
+```
+
 </CodeGroup>
 
 ## Idempotent Requests
 
-SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives and processes a request with an idempotency\_key, it will skip processing requests with same `idempotency_key` for next 24 hours. You can use this key to track webhooks related to workflow notifications.
+SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives and processes a request with an idempotency_key, it will skip processing requests with same `idempotency_key` for next 24 hours. You can use this key to track webhooks related to workflow notifications.
 
 To make an idempotent request, pass `idempotency_key` as the **4th parameter in your event instance** like shown below. Idempotency key should be unique that you generate for each request. You may use any string up to 255 characters in length as an idempotency key. Ensure that you don’t add any space in start and end of the key as it will be trimmed.
 
 <CodeGroup>
-  ```java java
-  ...
-  Event e = new Event(distinctId, eventName, eventProps, idempotencyKey);
-  ...
-  ```
+
+```java Request
+...
+Event e = new Event(distinctId, eventName, eventProps, idempotencyKey);
+...
+```
+
 </CodeGroup>
 
 Here are some common approaches for assigning idempotency keys:
 
-* **Generate a random UUID** for each request.
-
-* **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like user147-new-comment-1687437670
-
-* **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
+- **Generate a random UUID** for each request.
+- **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like user147-new-comment-1687437670
+- **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
 
 ## Add file attachment in event (for email)
 
 To add one or more Attachments to a Notification (viz. Email), you can just append the filepath of attachment to the event instance.
 
-* Call `event.addAttachment()` for each file with an accessible URL.
+- Call `event.addAttachment()` for each file with an accessible URL.
+- Ensure that file_path is a publicly accessible URL. Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
 
-* Ensure that file\_path is a publicly accessible URL. Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
+When you call `suprClient.trackEvent`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance status.
 
-Refer below example for adding attachment in event call
+Note: The actual processing/execution of event happens asynchronously. Refer below example for adding attachment in event call:
 
 <CodeGroup>
-  ```java java
-  import org.json.JSONObject;
 
-  import suprsend.Suprsend;
-  import suprsend.Event;
+```java Request
+import org.json.JSONObject;
 
-  public class Event {
-    public static void main(String[] args) throws Exception {
-      trackEvent();
-    }
+import suprsend.Suprsend;
+import suprsend.Event;
+
+public class Event {
+  public static void main(String[] args) throws Exception {
+    trackEvent();
+  }
+  
+  private static Subscriber trackEvent() throws SuprsendException {
+		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
+
+    String distinctId = "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08"; // Mandatory, Unique id of user in your application
+    String eventName = "product_purchased"; // Mandatory, name of the event you're tracking
     
-    private static Subscriber trackEvent() throws SuprsendException {
-  		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
+    // Properties:  Optional, default=None, a dict representing event-attributes
+    JSONObject eventProps = new JSONObject()
+    
+    Event e = new Event(distinctId, eventName, eventProps);
+    String filePath = "https://www.africau.edu/images/default/sample.pdf";
+    e.addAttachment(filePath);
+    
+    // Track event
+		JSONObject response = suprClient.trackEvent(e);
+		System.out.println(response);
+	}
+```
 
-      String distinctId = "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08"; // Mandatory, Unique id of user in your application
-      String eventName = "product_purchased"; // Mandatory, name of the event you're tracking
-      
-      // Properties:  Optional, default=None, a dict representing event-attributes
-      JSONObject eventProps = new JSONObject()
-      
-      Event e = new Event(distinctId, eventName, eventProps);
-      String filePath = "https://www.africau.edu/images/default/sample.pdf";
-      e.addAttachment(filePath);
-      
-      // Track event
-  		JSONObject response = suprClient.trackEvent(e);
-  		System.out.println(response);
-  	}
-  ```
+
+```java Response
+// Response structure
+{
+    "success": true, // if true, request was accepted.
+    "status": "success",
+    "status_code": 202, // http status code
+    "message": "OK",
+}
+
+{
+    "success": false, // error will be present in message
+    "status": "fail",
+    "status_code": 500, // http status code
+    "message": "error message",
+}
+```
+
 </CodeGroup>
 
 <Warning>
   Please add public accessible URL only as attachment file otherwise it will throw an error `404 not found` and workflow will not be triggered
 </Warning>
 
-### Response
-
-When you call `suprClient.trackEvent`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance status.
-
-Note: The actual processing/execution of event happens asynchronously.
-
-<CodeGroup>
-  ```java java
-  // Response structure
-  {
-      "success": true, // if true, request was accepted.
-      "status": "success",
-      "status_code": 202, // http status code
-      "message": "OK",
-  }
-
-  {
-      "success": false, // error will be present in message
-      "status": "fail",
-      "status_code": 500, // http status code
-      "message": "error message",
-  }
-  ```
-</CodeGroup>
-
 ## Bulk API for multiple event requests
 
 You can use Bulk API to send multiple events.
 
-Use `.append()` on bulk\_events instance to add however-many-records to call in bulk.
+Use `.append()` on bulk_events instance to add however-many-records to call in bulk.
 
 <CodeGroup>
-  ```java java
-  import org.json.JSONObject;
 
-  import suprsend.Suprsend;
-  import suprsend.Event;
+```java java
+import org.json.JSONObject;
 
-  public class Event {
-    public static void main(String[] args) throws Exception {
-      trackEvent();
-    }
+import suprsend.Suprsend;
+import suprsend.Event;
+
+public class Event {
+  public static void main(String[] args) throws Exception {
+    trackEvent();
+  }
+  
+  private static Subscriber trackEvent() throws SuprsendException {
+		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
     
-    private static Subscriber trackEvent() throws SuprsendException {
-  		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
-      
-      BulkEvents bulkIns = suprClient.bulkEvents.newInstance();
-      
-      Event e1 = new Event(distinctId1, eventName1, eventProps1); //Event 1
-      Event e2 = new Event(distinctId2, eventName2, eventProps2); //Event 2
-      
-      // --- use .append on bulk instance to add one or more records
-        bulkIns.append(e1)
-        bulkIns.append(e2)
-      // OR
-        bulkIns.append(e1, e2)
-      
-      // Track event
-  		JSONObject response = bulkIns.trigger();
-  		System.out.println(response);
-  	}
-  ```
+    BulkEvents bulkIns = suprClient.bulkEvents.newInstance();
+    
+    Event e1 = new Event(distinctId1, eventName1, eventProps1); //Event 1
+    Event e2 = new Event(distinctId2, eventName2, eventProps2); //Event 2
+    
+    // --- use .append on bulk instance to add one or more records
+      bulkIns.append(e1)
+      bulkIns.append(e2)
+    // OR
+      bulkIns.append(e1, e2)
+    
+    // Track event
+		JSONObject response = bulkIns.trigger();
+		System.out.println(response);
+	}
+```
+
 </CodeGroup>
 
 <Warning>
@@ -256,81 +276,75 @@ Use `.append()` on bulk\_events instance to add however-many-records to call in 
 
 ### How SuprSend Processes the bulk API request
 
-* On calling `bulkIns.trigger()`, the SDK internally makes one-or-more Callable-chunks.
-
-* Each callable-chunk contains a subset of records, the subset calculation is based on each record's bytes-size and max allowed chunk-size, chunk-length etc.
-
-* For each callable-chunk SDK makes an HTTP call to SuprSend to register the request.
+- On calling `bulkIns.trigger()`, the SDK internally makes one-or-more Callable-chunks.
+- Each callable-chunk contains a subset of records, the subset calculation is based on each record's bytes-size and max allowed chunk-size, chunk-length etc.
+- For each callable-chunk SDK makes an HTTP call to SuprSend to register the request.
 
 ## Add file attachment in bulk API (for email)
 
 Similar to single API call, you can add file attachment to bulk API by appending the attachment filepath to each event instance in bulk API call.
 
-* Call `event.addAttachment()` for each file with an accessible URL. Ensure that file\_path is a publicly accessible URL.
+- Call `event.addAttachment()` for each file with an accessible URL. Ensure that file_path is a publicly accessible URL.
+- Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
 
-* Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
-
-Refer below example for adding attachment in bulk API call
+Response is an instance of `suprsend.BulkResponse` class. Refer below example for adding attachment in bulk API call.
 
 <CodeGroup>
-  ```java java
-  import org.json.JSONObject;
 
-  import suprsend.Suprsend;
-  import suprsend.Event;
+```java Request
+import org.json.JSONObject;
 
-  public class Event {
-    public static void main(String[] args) throws Exception {
-      trackEvent();
-    }
+import suprsend.Suprsend;
+import suprsend.Event;
+
+public class Event {
+  public static void main(String[] args) throws Exception {
+    trackEvent();
+  }
+  
+  private static Subscriber trackEvent() throws SuprsendException {
+		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
+
+    BulkEvents bulkIns = suprClient.bulkEvents.newInstance();
     
-    private static Subscriber trackEvent() throws SuprsendException {
-  		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
+    Event e1 = new Event(distinctId1, eventName1, eventProps1); //Event 1
+    // this snippet can be used to add attachment to event
+    String filePath1 = "https://www.africau.edu/images/default/sample.pdf";
+    e1.addAttachment(filePath1);
+    
+    Event e2 = new Event(distinctId2, eventName2, eventProps2); //Event 2
+    String filePath2 = "https://www.adobe.com/sample_file.pdf";
+    e1.addAttachment(filePath2);
+    
+    // --- use .append on bulk instance to add one or more records
+      bulkIns.append(e1)
+      bulkIns.append(e2)
+    // OR
+      bulkIns.append(e1, e2)
+    
+    
+    // Track event
+		JSONObject response = bulkIns.trigger();
+		System.out.println(response);
+	}
+```
 
-      BulkEvents bulkIns = suprClient.bulkEvents.newInstance();
-      
-      Event e1 = new Event(distinctId1, eventName1, eventProps1); //Event 1
-      // this snippet can be used to add attachment to event
-      String filePath1 = "https://www.africau.edu/images/default/sample.pdf";
-      e1.addAttachment(filePath1);
-      
-      Event e2 = new Event(distinctId2, eventName2, eventProps2); //Event 2
-      String filePath2 = "https://www.adobe.com/sample_file.pdf";
-      e1.addAttachment(filePath2);
-      
-      // --- use .append on bulk instance to add one or more records
-        bulkIns.append(e1)
-        bulkIns.append(e2)
-      // OR
-        bulkIns.append(e1, e2)
-      
-      
-      // Track event
-  		JSONObject response = bulkIns.trigger();
-  		System.out.println(response);
-  	}
-  ```
+
+```java Response
+// Response structure
+import suprsend.BulkResponse;
+
+BulkResponse{status: 'success' | total: 2 | success: 2 | failure: 0 | warnings: 0}
+
+BulkResponse{status: 'fail' | total: 2 | success: 0 | failure: 2 | warnings: 0}
+
+BulkResponse{status: 'partial' | total: 2 | success: 1 | failure: 1 | warnings: 0}
+```
+
 </CodeGroup>
 
 <Warning>
   Please add public accessible URL only as attachment file otherwise it will throw an error `404 not found` and workflow will not be triggered
 </Warning>
 
-**Response:**
-
-Response is an instance of `suprsend.BulkResponse` class
-
-<CodeGroup>
-  ```java java
-  // Response structure
-  import suprsend.BulkResponse;
-
-  BulkResponse{status: 'success' | total: 2 | success: 2 | failure: 0 | warnings: 0}
-
-  BulkResponse{status: 'fail' | total: 2 | success: 0 | failure: 2 | warnings: 0}
-
-  BulkResponse{status: 'partial' | total: 2 | success: 1 | failure: 1 | warnings: 0}
-  ```
-</CodeGroup>
-
-***
+---

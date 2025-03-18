@@ -1,113 +1,118 @@
 ---
 title: "Broadcast"
-description: "Method to trigger broadcast messages using java SDK"
+description: "Method to trigger broadcast messages using Java SDK"
 ---
 
 You can use this method to send instant notifications to a list of users.
 
 ## Pre-requisites
 
-* [Create a list of users](/docs/lists-java)
-
-## Data Structure of Broadcast body
-
-Brodcast body with all possible configurations
-
-<CodeGroup>
-  ```json json
-  broadcast_body = {
-    "list_id": "_list_id_",
-    "template": "_template_slug_",
-    "notification_category": "_",
-    "channels": [],
-    "delay": "_time_delay_",
-    "trigger_at": "_ISO_timestamp_",
-    "data": {
-      "key1": "value1",
-      "key2": "value2"
-
-    }
-  ```
-</CodeGroup>
-
-Broadcast body field description:
-
-| Parameter                   | Description                                                                                                                                                                                                                                                                     | Format                                                                         | Obligation  |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ----------- |
-| **`list_id`**               | list of users that you want to send broadcast messages to.                                                                                                                                                                                                                      | *text*                                                                         | *Mandatory* |
-| **`template`**              | It is the unique slug of the template created on SuprSend platform. You can get this slug by clicking on the clipboard icon next to the Template name on SuprSend templates page. It is the same for all channels                                                               | *text*                                                                         | *Mandatory* |
-| **`notification_category`** | You can understand more about them in the [Notification Category](/docs/notification-category) documentation                                                                                                                                                                    | system / transactional / promotional                                           | *Mandatory* |
-| **`channels`**              | User channels on which the broadcast messages to be sent. If not provided, it will trigger message on all available channels in user profile.**Currently, broadcast is supported in iospush and androidpush channel**. So, please specify these channels in your broadcast body | *comma-separated-string*                                                       | *Optional*  |
-| **`delay`**                 | Broadcast will be halted for the time mentioned in delay, and become active once the delay period is over.                                                                                                                                                                      | **XX**d**XX**h**XX**m**XX**s or if its number (n) then delay is in seconds (n) | *Optional*  |
-| **`trigger_at`**            | Trigger broadcast on a specific date-time                                                                                                                                                                                                                                       | date string in ISO 8601 eg. "2021-08-27T20:14:51.643Z"                         | *Optional*  |
-| **`data`**                  | variable data defined in templates                                                                                                                                                                                                                                              | *JSON* "data": \{ "key": \{ "key": "value", "key": "value" } },                | *Optional*  |
-
-### Sample broadcast body
-
-<CodeGroup>
-  ```python python
-  broadcast_body = {
-    "list_id": "bulk_list",
-    "template": "purchase-confirmation",
-    "notification_category": "transactional",
-    "channels": ["iospush"],
-    # "delay": 30,
-    # "trigger_at": "2022-12-27T11:14:51.643Z",
-    "data": {
-      "amount": "$100",
-      "product_name": "Medicines"
-    }
-  ```
-</CodeGroup>
+- [Create a list of users](/docs/lists-java)
 
 ## Triggering Broadcast
 
 You can trigger broadcast using `suprClient.subscriberLists.broadcast()` method.
 
 <CodeGroup>
-  ```java java
-  import org.json.JSONObject;
 
-  import suprsend.Suprsend;
-  import suprsend.SuprsendAPIException;
-  import suprsend.SubscriberListBroadcast;
-  import suprsend.SuprsendValidationError;
+```java Request [Method]
+import org.json.JSONObject;
 
-  public class Lists {
-    public static void main(String[] args) throws Exception {
-      broadcast();
-    }
+import suprsend.Suprsend;
+import suprsend.SuprsendAPIException;
+import suprsend.SubscriberListBroadcast;
+import suprsend.SuprsendValidationError;
+
+public class Lists {
+  public static void main(String[] args) throws Exception {
+    broadcast();
+  }
+  
+  private static Subscriber broadcast() throws SuprsendException {
+        Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
+        
+    // Create broadcast body
+    String listId = "anjali_id_1";
+        String templateSlug = "test_karthick";
+        String notifCategory = "transactional";
+        //String delay = "30";
+        //String triggerAt = "2023-03-06T18:56:51.643Z";
+        //String idempKey = "__idempotency_key__";
+        //String brandId = "__brand_id__";
     
-    private static Subscriber broadcast() throws SuprsendException {
-          Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
-          
-      // Create broadcast body
-      String listId = "anjali_id_1";
-          String templateSlug = "test_karthick";
-          String notifCategory = "transactional";
-          //String delay = "30";
-          //String triggerAt = "2023-03-06T18:56:51.643Z";
-          //String idempKey = "__idempotency_key__";
-          //String brandId = "__brand_id__";
-      
-          // To send broadcast on a particular channel 
-          //ArrayList<String> channels =  new ArrayList<>(Arrays.asList("androidpush","email"));
-      JSONObject body = new JSONObject().put("list_id",listId)
-        .put("template",templateSlug)
-        .put("notification_category",notifCategory)
-        .put("data", new JSONObject()
-             .put("link_suffix", "https://s3.amazonaws.com/unroll-images-production/projects%2F22692%2F1630591176038-322170")
-             .put("first_name", "Joe"))
+        // To send broadcast on a particular channel 
+        //ArrayList<String> channels =  new ArrayList<>(Arrays.asList("androidpush","email"));
+    JSONObject body = new JSONObject().put("list_id",listId)
+      .put("template",templateSlug)
+      .put("notification_category",notifCategory)
+      .put("data", new JSONObject()
+           .put("link_suffix", "https://s3.amazonaws.com/unroll-images-production/projects%2F22692%2F1630591176038-322170")
+           .put("first_name", "Joe"))
 
-          // 
-          SubscriberListBroadcast broadcastIns = new SubscriberListBroadcast(body);
-      
-          // Broadcast with idempotency key and brand id
-          // SubscriberListBroadcast broadcastIns = new SubscriberListBroadcast(body, idempKey, brandId);
-          JSONObject res = suprClient.subscriberLists.broadcast(broadcastIns);
-          System.out.println(res);
-      }
-  ```
+        // 
+        SubscriberListBroadcast broadcastIns = new SubscriberListBroadcast(body);
+    
+        // Broadcast with idempotency key and brand id
+        // SubscriberListBroadcast broadcastIns = new SubscriberListBroadcast(body, idempKey, brandId);
+        JSONObject res = suprClient.subscriberLists.broadcast(broadcastIns);
+        System.out.println(res);
+    }
+```
+
+
+```java Sample
+import org.json.JSONObject;
+import suprsend.Suprsend;
+import suprsend.SuprsendAPIException;
+import suprsend.SubscriberListBroadcast;
+
+public class BroadcastExample {
+    public static void main(String[] args) {
+        try {
+            Suprsend suprClient = new Suprsend("_workspace_key_", "_workspace_secret_");
+
+            JSONObject broadcastBody = new JSONObject();
+            broadcastBody.put("list_id", "application_abandoned");
+            broadcastBody.put("template", "complete_application");
+            broadcastBody.put("notification_category", "promotional");
+
+            JSONObject data = new JSONObject();
+            data.put("page_no", "2");
+            broadcastBody.put("data", data);
+
+            SubscriberListBroadcast inst = new SubscriberListBroadcast(broadcastBody);
+            JSONObject resp = suprClient.subscriberLists().broadcast(inst);
+
+            System.out.println(resp);
+        } catch (SuprsendAPIException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+
+```java Response
+{
+  'success': True, 
+  'status': 'success', 
+  'status_code': 202, 
+  'message': 'OK'
+}
+```
+
 </CodeGroup>
 
-***
+Broadcast body field description:
+
+| Parameter             | Description                                                                                                                                                                                 |
+| :-------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| list_id               | list of users that you want to send broadcast messages to.                                                                                                                                  |
+| template              | Add template slug here. You can get this slug by clicking on the clipboard icon next to the Template name on SuprSend templates page. It is the same for all channels                       |
+| notification_category | Preference Category to apply user preference settings while sending. Root categories - system / transactional / promotional                                                                 |
+| data                  |                                                                                                                                                                                             |
+| channels              | Specify channels if you don't want to send notification of all live channels in the template. Available channel keys - email, sms, whatsapp, androidpush, iospush, ms_teams, slack, webpush |
+| delay                 |                                                                                                                                                                                             |
+| trigger_at            | Trigger broadcast on a specific date-time. Pass in ISO 8601 timestamp (eg. "2021-08-27T20:14:51.643Z")                                                                                      |
+
+---

@@ -61,7 +61,51 @@ print(res)
 
 </CodeGroup>
 
-## Edit an object (using helper methods) \[Recommended\]
+## Edit an object
+
+There are 2 ways in which you can edit an object data.
+
+- Build edit payload yourself
+- Use helper methods provided by SDK (Recommended)
+
+### Edit an object (build edit payload yourself)
+
+Use this to modify an object, typically for removing channels or unsetting properties. The payload will follow the same structure as the [Object Edit API](https://docs.suprsend.com/reference/edit-object-profile)
+
+<CodeGroup>
+
+```python Request
+res = supr_client.objects.edit
+("object_type", "object_id", {"operations": [{"$set": {"company_name": "ABC company"}}]})
+
+print(res)
+```
+
+
+```python Response
+{
+   "object_type":"departments",
+   "id":"engineering",
+   "subscriptions_count":0,
+   "properties":{
+      "name":"John Doe"
+   },
+   "created_at":"2025-03-14T15:31:59.151061+00:00",
+   "updated_at":"2025-03-14T15:31:59.182616+00:00",
+   "$inbox":[
+      {
+         "value":"75Ev_m8yln0N_i1iXXXXXXr2eNOE_4ROXXXXXX1TgTc",
+         "id_provider":"suprsend",
+         "status":"active",
+         "perma_status":"active"
+      }
+   ]
+}
+```
+
+</CodeGroup>
+
+### Edit an object (using helper methods) [Recommended]
 
 To edit object, you need to first fetch object instance, call all the update methods and save changes using `objects.edit` method.
 
@@ -109,7 +153,7 @@ print(res)
 List of available methods:
 
 <AccordionGroup>
-  <Accordion title="Add channels" defaultOpen="false">
+  <Accordion title="Add Channels Helper Method" defaultOpen="false">
     Use `object_ins.add\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\*` method(s) to add channels
 
     ```python
@@ -175,7 +219,7 @@ List of available methods:
     print(res)
     ```
   </Accordion>
-  <Accordion title="Remove channels" defaultOpen="false">
+  <Accordion title="Remove Channels Helper Method" defaultOpen="false">
     Use `object_ins.remove\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\*` method(s) to remove channels from an object
 
     ```python
@@ -241,7 +285,7 @@ List of available methods:
     print(res)
     ```
   </Accordion>
-  <Accordion title="Remove channel types" defaultOpen="false">
+  <Accordion title="Remove Channels in bulk Helper Method" defaultOpen="false">
     This method will delete/unset all values in specified channel for object (ex: remove all emails attached to object).
 
     ```python
@@ -367,43 +411,6 @@ List of available methods:
   </Accordion>
 </AccordionGroup>
 
-## Edit an object (build edit payload yourself)
-
-Use this to modify an object, typically for removing channels or unsetting properties. The payload will follow the same structure as the [Object Edit API](https://docs.suprsend.com/reference/edit-object-profile)
-
-<CodeGroup>
-
-```python Request
-res = supr_client.objects.edit
-("object_type", "object_id", {"operations": [{"$set": {"company_name": "ABC company"}}]})
-
-print(res)
-```
-
-
-```python Response
-{
-   "object_type":"departments",
-   "id":"engineering",
-   "subscriptions_count":0,
-   "properties":{
-      "name":"John Doe"
-   },
-   "created_at":"2025-03-14T15:31:59.151061+00:00",
-   "updated_at":"2025-03-14T15:31:59.182616+00:00",
-   "$inbox":[
-      {
-         "value":"75Ev_m8yln0N_i1iXXXXXXr2eNOE_4ROXXXXXX1TgTc",
-         "id_provider":"suprsend",
-         "status":"active",
-         "perma_status":"active"
-      }
-   ]
-}
-```
-
-</CodeGroup>
-
 ## List Objects
 
 List objects for an `object_type`. You can also pass listing options in the payload which includes `limit`,`before`,`after`
@@ -491,14 +498,17 @@ print(res)
 <CodeGroup>
 
 ```python Request
-res = supr_client.objects.create_subscriptions("object_type", "object_id", {
-  "recipients": [
-		"distinct_id_1", {
-			"object_type": "teams", 
-			"object_id": "product"
-		}],
-  "properties": {"type": "members"}
-})
+res = supr_client.objects.create_subscriptions(
+    "object_type",
+    "object_id",
+    {
+        "recipients": [
+            "distinct_id_1",
+            {"object_type": "teams", "object_id": "product"},
+        ],
+        "properties": {"type": "members"},
+    },
+)
 
 print(res)
 ```
@@ -589,14 +599,17 @@ print(res)
 ```python Request
 res = supr_client.objects.delete_subscriptions
 (
-  "object_type", "object_id", {
-    "recipients": [
-		"distinct_id_1", {
-			"object_type": "departments", 
-			"object_id": "engineering"}]
-  })
+    "object_type",
+    "object_id",
+    {
+        "recipients": [
+            "distinct_id_1",
+            {"object_type": "departments", "object_id": "engineering"},
+        ]
+    },
+)
 
-print(res) 
+print(res)
 ```
 
 

@@ -1,0 +1,696 @@
+---
+title: "New file"
+description: "Description of your new file."
+---
+
+## Understanding Objects in Suprsend
+
+Objects represent non-user entities such as organizations, teams, roles, and projects and are used to send notification to channels or groups belonging to such entities or group of users who are subscribed to these entities. Understand more about objects [<u>here</u>](https://docs.suprsend.com/docs/objects).
+
+## Upsert (create/update) an object
+
+Create or update an object
+
+<CodeGroup>
+
+```java Request
+import org.json.JSONObject;
+import suprsend.Suprsend;
+
+public class ObjectEdit {
+  public static void main(String[] args) throws Exception {
+    objectEditInstance();
+  }
+
+  public static void getSuprClient() throws Exception {
+    Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
+    return suprsendClient;
+  }
+
+  public static void objectEditInstance() throws Exception {
+    Suprsend suprsendClient = getSuprClient();
+    // Instiantiate object
+    String objectType = "__objecttype__";
+    String objectId = "__objectid__";
+
+    // Object Payload to upsert properties and communication channels
+    JSONObject payload = new JSONObject()
+      .put("name", "John Doe");
+    .put("$email", "john@example.com");
+
+    JSONObject object = suprClient.objects.upsert(objectType, objectId, payload);
+    System.out.println(object);
+  }
+}
+```
+
+
+```java Sample Response
+{
+   "object_type":"departments",
+   "id":"engineering",
+   "subscriptions_count":0,
+   "properties":{
+      "key1": "val1"
+      },
+   "created_at":"2025-01-20T19:21:42.030343+00:00",
+   "updated_at":"2025-02-14T14:06:05.928675+00:00",
+   "$inbox":[
+      {
+         "value":"H4iGeGSHyXXXXXXSeuBb_PJGXXXgWu_LsXXXXXyiw",
+         "id_provider":"suprsend",
+         "status":"active",
+         "perma_status":"active"
+      }
+   ],
+	"$email":[
+      {
+         "value":"abc@example.com",
+         "status":"active",
+         "perma_status":"active"
+      }
+   ]
+}
+```
+
+</CodeGroup>
+
+## Edit an object
+
+There are 2 ways in which you can edit an object data.
+
+- Build edit payload yourself
+- Use helper methods provided by SDK (Recommended)
+
+### 1. Build edit payload yourself
+
+Use this to modify an object, typically for removing channels or unsetting properties. The payload will follow the same structure as the [<u>Object Edit</u>](https://docs.suprsend.com/reference/edit-object-profile) API.
+
+<CodeGroup>
+
+```java Request
+import org.json.JSONObject;
+import suprsend.Suprsend;
+
+
+public class ObjectEdit {
+
+  public static void objectEditInstance() throws Exception {
+    Suprsend suprsendClient = getSuprClient();
+    
+    // Instiantiate object
+    String objectType = "__objecttype__";
+    String objectId = "__objectid__";
+
+    // Object Payload
+    JSONObject payload = new JSONObject().put("operations",
+				new JSONObject[] { new JSONObject().put("$remove", new JSONObject().put("name", "John Doe")) });
+    
+		JSONObject object = suprClient.objects.edit(objectType, objectId, payload);
+		System.out.println(object);
+  }
+}
+```
+
+
+```java Response
+{
+   "object_type":"departments",
+   "id":"engineering",
+   "subscriptions_count":0,
+   "properties":{
+      "name":"John Doe"
+   },
+   "created_at":"2025-03-14T15:31:59.151061+00:00",
+   "updated_at":"2025-03-14T15:31:59.182616+00:00",
+   "$inbox":[
+      {
+         "value":"75Ev_m8yln0N_i1iXXXXXXr2eNOE_4ROXXXXXX1TgTc",
+         "id_provider":"suprsend",
+         "status":"active",
+         "perma_status":"active"
+      }
+   ]
+}
+```
+
+</CodeGroup>
+
+### 2. Edit using helper methods [Recommended]
+
+It is possible to use the SDK's helper methods to perform edit operations on an object.
+
+For this, first create object instance then call any of the helper methods mentioned below and finally save the changes.
+
+<CodeGroup>
+
+```java Request
+import org.json.JSONObject;
+import suprsend.Suprsend;
+import suprsend.ObjectEdit;
+
+public class ObjectEdit {
+
+  public static void objectEditInstance() throws Exception {
+    Suprsend suprsendClient = getSuprClient();
+
+    //Create Object Instance
+    String objectType = "__objecttype__";
+    String objectId = "__objectid__";
+    ObjectEdit object_ins = suprClient.objects.getInstance(objectType, objectId);
+
+    // Add channels
+    object_ins.addEmail("example@example.com");
+    object_ins.addSms("+919999999999");
+
+    // Call edit api
+    JSONObject res = suprClient.objects.edit(object_ins);
+    System.out.println(res);
+  }
+}
+```
+
+
+```java Response
+{
+   "object_type":"departments",
+   "id":"engineering",
+   "subscriptions_count":0,
+   "properties":{
+      "$preferred_language":"en",
+      "$timezone":"America/Los_Angeles",
+      "company_name":"ABC company"
+   },
+   "created_at":"2025-03-04T08:34:58.061696+00:00",
+   "updated_at":"2025-03-14T14:40:21.467156+00:00",
+   "$inbox":[
+      {
+         "value":"dHvPs6pmUXXXXXXTAsfM2yroXXXX2CXZOtjXXXXXX8",
+         "id_provider":"suprsend",
+         "status":"active",
+         "perma_status":"active"
+      }
+   ]
+}
+```
+
+</CodeGroup>
+
+<Accordion title="Add Channels Helper Method" defaultOpen="false">
+  Use `object_ins.add_*` method(s) to add user channels in a profile
+
+  <CodeGroup>
+
+  ```java Request (method)
+  // Add Email
+  object_ins.addEmail("example@example.com");
+  
+  //Add SMS
+  object_ins.addSms("+919999999999");
+  
+  //Add Whatsapp
+  object_ins.addWhatsapp("+919999999999");
+  
+  // Add Androidpush token.Pass the vendor as 2nd param.
+  object_ins.addAndroidpush("androidpush_fcm_token__","fcm");
+  
+  // Add iospush token 
+  object_ins.addIospush("__iospush_apns_token__");
+  
+  // Add Slack using user email id
+  JSONObject slackIdent = new JSONObject()
+    .put("access_token", "xoxb-XXXXXXXX")
+    .put("email", "user@example.com");
+  object_ins.addSlack(slackIdent);
+  
+  // Add Slack using member_id of the user if known
+  JSONObject slackIdent = new JSONObject()
+    .put("access_token", "xoxb-XXXXXXXX")
+    .put("user_id", "U03XXXXXXXX");
+  object_ins.addSlack(slackIdent);
+  
+  // Add Slack channel_id
+  JSONObject slackIdent = new JSONObject()
+    .put("access_token", "xoxb-XXXXXXXX")
+    .put("channel_id", "C04XXXXXXXX");
+  object_ins.addSlack(slackIdent);
+  
+  // Add Slack incoming webhook
+  JSONObject slackIdent = new JSONObject()
+    .put("incoming_webhook", new JSONObject().put("url", "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"))
+  object_ins.addSlack(slackIdent); 
+  
+  // Add Webpush token json (VAPID)
+  JSONObject webpush = new JSONObject()
+    .put("endpoint", "__end_point__")
+    .put("expirationTime", "")
+    .put("keys", new JSONObject()
+         .put("p256dh", "__p256dh__")
+         .put("auth", "__auth_key__"));
+  object_ins.addWebpush(webpush, "vapid");
+  ```
+
+  </CodeGroup>
+</Accordion>
+
+<Accordion title="Remove Channels Helper Method" defaultOpen="false">
+  Use `object_ins.remove_*` method(s) to remove channels from an object profile
+
+  <CodeGroup>
+
+  ```java Request (method)
+  // Remove Email
+  object_ins.removeEmail("example@example.com");
+  
+  //Remove SMS
+  object_ins.removeSms("+919999999999");
+  
+  //Remove Whatsapp
+  object_ins.removeWhatsapp("+919999999999");
+  
+  // Remove Androidpush token.Pass the vendor as 2nd param.
+  object_ins.removeAndroidpush("androidpush_fcm_token__","fcm");
+  
+  // Remove iospush token 
+  object_ins.removeIospush("__iospush_apns_token__");
+  
+  // Remove Slack using user email id
+  JSONObject slackIdent = new JSONObject()
+    .put("access_token", "xoxb-XXXXXXXX")
+    .put("email", "user@example.com");
+  object_ins.removeSlack(slackIdent);
+  
+  // Remove Slack using member_id of the user if known
+  JSONObject slackIdent = new JSONObject()
+    .put("access_token", "xoxb-XXXXXXXX")
+    .put("user_id", "U03XXXXXXXX");
+  object_ins.removeSlack(slackIdent);
+  
+  // Remove Slack channel_id
+  JSONObject slackIdent = new JSONObject()
+    .put("access_token", "xoxb-XXXXXXXX")
+    .put("channel_id", "C04XXXXXXXX");
+  object_ins.removeSlack(slackIdent);
+  
+  // Remove Slack incoming webhook
+  JSONObject slackIdent = new JSONObject()
+    .put("incoming_webhook", new JSONObject().put("url", "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"))
+    object_ins.removeSlack(slackIdent); 
+  
+  // Remove Webpush token json (VAPID)
+  JSONObject webpush = new JSONObject()
+    .put("endpoint", "__end_point__")
+    .put("expirationTime", "")
+    .put("keys", new JSONObject()
+         .put("p256dh", "__p256dh__")
+         .put("auth", "__auth_key__"));
+  object_ins.removeWebpush(webpush, "vapid");
+  
+  ```
+
+  </CodeGroup>
+</Accordion>
+
+<Accordion title="Remove Channels in bulk Helper Method" defaultOpen="false">
+  If you need to delete/unset all emails (or any other channel) of an object, you can call `object_ins.unset()` method on the object instance. The method accepts the channel key/s (a single key or list of keys)
+
+  <CodeGroup>
+
+  ```java Request (method)
+  object_ins.unset("$email");
+  object_ins.unset(Arrays.asList(new String[] { "$sms", "$email" }));
+  
+  // available channel keys - 
+  //{"$email","$whatsapp","$sms","$androidpush","$iospush","$webpush","$slack","$ms_teams"}
+  ```
+
+  </CodeGroup>
+</Accordion>
+
+<Accordion title="Set Preferred language" icon="sparkles">
+  <CodeGroup>
+
+  ```java Request
+  object_ins.setPreferredLanguage("es")
+  ```
+
+  </CodeGroup>
+</Accordion>
+
+<Accordion title="Set Preferred Timezone" icon="sparkles">
+  <CodeGroup>
+
+  ```java Request
+  object_ins.setTimezone("America/Los_Angeles");
+  ```
+
+  </CodeGroup>
+</Accordion>
+
+**Advanced Configuration - Set Object Properties**
+
+You can use SuprSend Python SDK to set advanced object properties, which will help in creating a object profile.
+
+<AccordionGroup>
+  <Accordion title="Set" defaultOpen="false">
+    Set is used to set the custom property or properties. The given name and value will be assigned to the object, overwriting an existing property with the same name if present. It can take key as first param, value as second param for setting single object property or object for setting multiple object properties.
+
+    <CodeGroup>
+
+    ```java Request
+    //set single property
+    object_ins.set("prop1", "val1");
+    
+    //set multiple properties
+    JSONObject objectsProperties = new JSONObject()
+      .put("prop2", "val2")
+      .put("number", 20)
+    object_ins.set(objectsProperties);
+    ```
+
+    </CodeGroup>
+  </Accordion>
+  <Accordion title="Set Once" defaultOpen="false">
+    Works just like `object_ins.set`, except it will not overwrite existing property values. This is useful for properties like _First login date_
+
+    <CodeGroup>
+
+    ```java Request
+    //single property
+    object_ins.setOnce("first_login", "2021-11-02");
+    
+    //multiple properties
+    JSONObject objectsProperties = new JSONObject()
+      .put("first_login", "2021-11-02")
+      .put("DOB", "1991-10-02");
+    object_ins.setOnce(objectsProperties);
+    ```
+
+    </CodeGroup>
+  </Accordion>
+  <Accordion title="Increment" defaultOpen="false">
+    Add the given amount to an existing property on the object. If the object does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
+
+    <CodeGroup>
+
+    ```java Request
+    //single property
+    object_ins.increment("login_count", 1);
+    
+    //multiple properties
+    JSONObject objectsProperties = new JSONObject()
+      .put("login_count", 1)
+      .put("remaining_credits", -1);
+    object_ins.increment(objectsProperties);
+    ```
+
+    </CodeGroup>
+  </Accordion>
+  <Accordion title="Append" defaultOpen="false">
+    This method will append a value to the list for a given property.
+
+    <CodeGroup>
+
+    ```java Request
+    //append single property
+    object_ins.append("array", "k1");
+    
+    //append multiple properties
+    JSONObject objectsProperties = new JSONObject()
+      .put("wishlist", "iphone12")
+      .put("products", "tenancy");
+    object_ins.append(objectsProperties);
+    ```
+
+    </CodeGroup>
+  </Accordion>
+  <Accordion title="Remove" defaultOpen="false">
+    This method will remove a value from the list for a given property.
+
+    <CodeGroup>
+
+    ```java Request
+    //append single property
+    object_ins.remove("array", "k1");
+    
+    //append multiple properties
+    JSONObject objectsProperties = new JSONObject()
+      .put("wishlist", "iphone12")
+      .put("products", "tenancy");
+    object_ins.remove(objectsProperties);
+    ```
+
+    </CodeGroup>
+  </Accordion>
+  <Accordion title="Unset" defaultOpen="false">
+    This will remove a property permanently from properties.
+
+    <CodeGroup>
+
+    ```java Request
+    //unset single channel or property
+    object_ins.unset("$email");
+    
+    //unset multiple channels or properties
+    object_ins.unset(Arrays.asList(new String[] { "$sms", "wishlist" }));
+    ```
+
+    </CodeGroup>
+
+    | Parameters        | Type          | Description                                                       |
+    | :---------------- | :------------ | :---------------------------------------------------------------- |
+    | **key**           | string        | This property provided will be deleted from object properties     |
+    | **property_list** | array[string] | If list is given all properties included in list will be removed. |
+  </Accordion>
+</AccordionGroup>
+
+---
+
+<Warning>
+  After calling `add_*/remove_*/unset` methods, don't forget to call `object_ins.save()`. On call of save(), SDK sends the request to SuprSend platform to update the Object Profile.
+</Warning>
+
+## List Objects
+
+List objects for an `object_type`. You can also pass listing options in the payload which includes `limit`,`before`,`after`
+
+<CodeGroup>
+
+```java Request
+import org.json.JSONObject;
+import suprsend.Suprsend;
+
+public class ObjectAPI {
+
+  public static void ObjectList() throws Exception {
+    Suprsend suprsendClient = getSuprClient();
+
+    String objectType = "__objecttype__";
+
+    // optional params to pass limit (default=10) and cursor pointer for fetching the next set of results
+    HashMap<String, Object> opts = new HashMap<String, Object>() {
+      {
+        put("limit", 10);
+        put("after", "01HFS04E4J29KHPYRK7HT3YQQ5");
+      }
+    };
+
+    JSONObject res = suprClient.objects.list(objectType, opts);
+    System.out.println(res);
+  }
+}
+```
+
+</CodeGroup>
+
+## Get Object Details
+
+<CodeGroup>
+
+```java Request
+import org.json.JSONObject;
+import suprsend.Suprsend;
+
+public class ObjectAPI {
+
+  public static void ObjectGet() throws Exception {
+    Suprsend suprsendClient = getSuprClient();
+
+    String objectType = "__objecttype__";
+    String objectId = "__objectid__";
+
+    JSONObject res = suprClient.objects.get(objectType, objectId);
+    System.out.println(res);
+  }
+}
+```
+
+</CodeGroup>
+
+## Create Subscriptions
+
+<CodeGroup>
+
+```java Request
+import org.json.JSONObject;
+import suprsend.Suprsend;
+
+public class ObjectAPI {
+
+  public static void ObjectCreateSubscriptions() throws Exception {
+    Suprsend suprsendClient = getSuprClient();
+
+    String objectType = "__objecttype__";
+		String objectId = "__objectid__";
+		JSONObject payload = new JSONObject().put("recipients",
+				Arrays.asList("__recipient_id_1__", new JSONObject().put("distinct_id", "__recipient_id_2__"),
+						new JSONObject().put("object_type", "__objecttype__").put("id", "__objectid_2_")));
+		
+    JSONObject res = suprClient.objects.createSubscriptions(objectType, objectId, payload);
+		System.out.println(res);
+  }
+}
+```
+
+</CodeGroup>
+
+## List Subscriptions
+
+<CodeGroup>
+
+```java Request
+import org.json.JSONObject;
+import suprsend.Suprsend;
+
+public class ObjectAPI {
+
+  public static void ObjectGetSubscriptions() throws Exception {
+    Suprsend suprsendClient = getSuprClient();
+
+    String objectType = "__objecttype__";
+		String objectId = "__objectid__";
+    
+    // optional params to pass limit (default=10) and cursor pointer for fetching the next set of results
+    HashMap<String, Object> opts = new HashMap<String, Object>() {
+			{
+				put("limit", 10);
+				put("after", "01HFS04E4J29KHPYRK7HT3YQQ5");
+			}
+		};
+		
+    JSONObject res = suprClient.objects.getSubscriptions(objectType, objectId, opts);
+		System.out.println(res);
+  }
+}
+```
+
+</CodeGroup>
+
+## Remove Object Subscription
+
+<CodeGroup>
+
+```java Request
+import org.json.JSONObject;
+import suprsend.Suprsend;
+
+public class ObjectAPI {
+
+  public static void ObjectDeleteSubscriptions() throws Exception {
+    Suprsend suprsendClient = getSuprClient();
+
+    String objectType = "__objecttype__";
+		String objectId = "__objectid__";
+    JSONObject payload = new JSONObject().put("recipients",
+				Arrays.asList("__recipient_id_1__", new JSONObject().put("distinct_id", "__recipient_id_2__"),
+						new JSONObject().put("object_type", "__objecttype__").put("id", "__objectid_2_")));
+		
+    JSONObject res = suprClient.objects.deleteSubscriptions(objectType, objectId, payload);
+		System.out.println(res);
+  }
+}
+```
+
+</CodeGroup>
+
+## Get list of objects subscribed by object
+
+An object can subscribe to other objects. Use this method to get the list of all objects that the current object has subscribed to.
+
+<CodeGroup>
+
+```java Request
+import org.json.JSONObject;
+import suprsend.Suprsend;
+
+public class ObjectAPI {
+
+  public static void GetObjectsSubscribedTo() throws Exception {
+    Suprsend suprsendClient = getSuprClient();
+
+    String objectType = "__objecttype__";
+    String objectId = "__objectid__";
+
+    // optional params to pass limit (default=10) and cursor pointer for fetching the next set of results
+    HashMap<String, Object> opts = new HashMap<String, Object>() {
+      {
+        put("limit", 10);
+        put("after", "01HFS04E4J29KHPYRK7HT3YQQ5");
+      }
+    };
+
+    JSONObject res = suprClient.objects.getObjectsSubscribedTo(objectType, objectId, opts);
+    System.out.println(res);
+  }
+}
+```
+
+</CodeGroup>
+
+## Delete Object
+
+<CodeGroup>
+
+```java Request
+import org.json.JSONObject;
+import suprsend.Suprsend;
+
+public class ObjectAPI {
+
+  public static void ObjectDelete() throws Exception {
+    Suprsend suprsendClient = getSuprClient();
+
+    String objectType = "__objecttype__";
+    String objectId = "__objectid__";
+
+    JSONObject res = suprClient.objects.delete(objectType, objectId);
+    System.out.println(res);
+  }
+}
+```
+
+</CodeGroup>
+
+### Bulk Delete Object
+
+<CodeGroup>
+
+```java Request
+import org.json.JSONObject;
+import suprsend.Suprsend;
+
+public class ObjectAPI {
+
+  public static void ObjectBulkDelete() throws Exception {
+    Suprsend suprsendClient = getSuprClient();
+
+    String objectType = "__objecttype__";
+    JSONObject payload = new JSONObject().put("object_ids", Arrays.asList("__objectid__"));
+
+    JSONObject res = suprClient.objects.bulkDelete(objectType, payload);
+    System.out.println(res);
+  }
+}
+```
+
+</CodeGroup>

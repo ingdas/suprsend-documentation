@@ -1,6 +1,6 @@
 ---
 title: "Tenants"
-description: "This document covers methods to manage tenants using python SDK"
+description: "This document covers methods to manage tenants using the Node SDK"
 ---
 
 Tenants (previously named as brands) are used for whitelabelling notifications, personliazing template content or capturing admin preferences for another entity/organization. Tenants are workspace-level entities and by default, a tenant with `tenant_id="default"` (representing your organization) is created your workspace. Read more about tenants [here](/docs/tenants).
@@ -51,15 +51,14 @@ response.then((res) => console.log("response", res));
 ### Field Description:
 
 | Field                                 | Description                                                                                                                                                               |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| tenant_id (mandatory)                 | max 64 characters and should contains alphanumeric characters(a-z, 0-9), hyphen (-) and underscode(\_).                                                                   |
+| :------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| tenant_id (mandatory)                 | max 64 characters and should contains alphanumeric characters(a-z, 0-9), hyphen (-) and underscode(_).                                                                    |
 | tenant_name (mandatory)               | name of the tenant.                                                                                                                                                       |
-| colors (primary, secondary, tertiary) |                                                                                                                                                                           |
-| social_links                          |                                                                                                                                                                           |
+| colors (primary, secondary, tertiary) | used while designing templates. If not provided `default` tenant colour will be picked.                                                                                   |
+| social_links                          | social links to your tenant. Pass `""` if you want to remove existing link.                                                                                               |
 | properties                            | Custom properties associated with the tenant. Update operation is upsert (new properties are added to existing one's and if key is already present, value is overridden). |
-|                                       |                                                                                                                                                                           |
 
-All properties of the tenant can be referred as `{{$tenant.prop}}` (handlebars) or `data\\\\\\\["tenant"\\\\\\\].prop` in JSONNET format.
+All properties of the tenant can be referred as `{{$tenant.prop}}` (handlebars) or `data["tenant"].prop` in JSONNET format.
 
 ### Get Tenant
 

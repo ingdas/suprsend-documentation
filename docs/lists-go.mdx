@@ -1,116 +1,231 @@
 ---
 title: "Lists"
-description: "Methods to create and manage lists using go SDK"
+description: "Methods to create and manage lists using Go SDK"
 ---
 
-List methods lets you manage a list and subscribers in that list. You can then send bulk messages to all the subscribers in the list with a single API call.
+The Lists SDK methods lets you create / manage list of subscribers. You can then send [broadcast](/docs/broadcast) to all the users in the list or create a workflow that triggers when a new user enters / exits list.
 
-## Create list
+## Create / Update List
+
+You can use `supr_client.subscribers_list.create` method to create a new list
 
 <CodeGroup>
-  ```go go
-  package main
 
-  import (
-    "context"
-    "log"
+```go Request
+package main
 
-    suprsend "github.com/suprsend/suprsend-go"
-  )
+import (
+  "context"
+  "log"
 
-  func main() {
-    // Initialize SDK
-  	opts := []suprsend.ClientOption{
-      // suprsend.WithDebug(true),
+  suprsend "github.com/suprsend/suprsend-go"
+)
+
+func main() {
+  // Initialize SDK
+	opts := []suprsend.ClientOption{
+    // suprsend.WithDebug(true),
+  }
+  suprClient, err := suprsend.NewClient("__api_key__", "__api_secret__", opts...)
+  if err != nil {
+    log.Println(err)
+  }
+	ctx := context.Background()
+  // ================= Create subscriber list
+	subscriberListCreated, err := suprClient.SubscriberLists.Create(ctx, &suprsend.SubscriberListCreateInput{
+		ListId:          "users-with-prepaid-vouchers-1", // max length 64 characters
+		ListName:        "Users With Prepaid Vouchers above $250",
+		ListDescription: "Users With Prepaid Vouchers above $250",
+	})
+	if err != nil {
+		log.Fatalln(err)
+	}
+	log.Println(subscriberListCreated)
+}
+```
+
+
+```go Response
+{
+   "list_id":"_list_id_",
+   "list_name":"_list_name_",
+   "list_description":"_some sample description for the list_",
+   "list_type":"static_list",
+   "subscribers_count":0,
+   "source":"None",
+   "is_readonly":false,
+   "status":"active",
+   "track_user_entry":false,
+   "track_user_exit":false,
+   "requested_for_delete":false,
+   "created_at":"2025-03-14T13:42:45.641000Z",
+   "updated_at":"2025-03-14T13:42:45.641000Z",
+   "drafts":"None"
+}
+```
+
+</CodeGroup>
+
+<Note>
+  Guidelines on defining the list_id
+
+  - `list_id` is case-insensitive. Suprsend first converts list_id to lowercase before storing it or doing any sort of comparison on it.
+  - `list_id `can be of max 64 characters.
+  - It can contain characters [a-z0-9_-] i.e. alphanumeric characters, _(underscore) and -(hyphen).
+</Note>
+
+## Get list data
+
+You can get the latest information of a list using `supr_client.subscribers_list.get` method.
+
+<CodeGroup>
+
+```go Request
+subscriberListData, err := suprClient.SubscriberLists.Get(ctx, "_list_id_")
+```
+
+
+```go Response
+{
+   "list_id":"_list_id_",
+   "list_name":"_list_name_",
+   "list_description":"_some sample description for the list_",
+   "list_type":"static_list",
+   "subscribers_count":0,
+   "source":"None",
+   "is_readonly":false,
+   "status":"active",
+   "track_user_entry":false,
+   "track_user_exit":false,
+   "requested_for_delete":false,
+   "created_at":"2025-03-14T13:42:45.641000Z",
+   "updated_at":"2025-03-14T13:42:45.641000Z",
+   "drafts":"None"
+}
+```
+
+</CodeGroup>
+
+## Get all lists
+
+To get the data of all the lists created in your workspace, use `supr_client.subscribers_list.get_all()`  method
+
+<CodeGroup>
+
+```go Request
+allSubscriberList, err := suprClient.SubscriberLists.GetAll(ctx, &suprsend.SubscriberListAllOptions{)) // default minit 20
+allSubscriberList, err := suprClient.SubscriberLists.GetAll(ctx, &suprsend.SubscriberListAllOptions{Limit: 10, Offset: 0}) // limit 10
+ //  max limit 1000
+```
+
+
+```go Response
+{
+  "meta": {
+    "count": 14,
+    "limit": 20,
+    "offset": 0
+  },
+  "results": [
+    {
+      "list_id": "newsletter_subscribers",
+      "list_name": "Newsletter Subscribers",
+      "list_description": "all users who opted in to receive product updates",
+      "list_type": "static_list",
+      "subscribers_count": 0,
+      "source": "None",
+      "is_readonly": false,
+      "status": "active",
+      "track_user_entry": false,
+      "track_user_exit": false,
+      "requested_for_delete": false,
+      "created_at": "2025-01-14T13:42:45.641000Z",
+      "updated_at": "2025-01-14T13:42:45.641000Z",
+      "drafts": "None"
+    },
+    {
+      "list_id": "abandoned_application",
+      "list_name": "Signups abandoned application",
+      "list_description": "Users who didn’t finish application",
+      "list_type": "static_list",
+      "subscribers_count": 0,
+      "source": "None",
+      "is_readonly": false,
+      "status": "active",
+      "track_user_entry": true,
+      "track_user_exit": true,
+      "requested_for_delete": false,
+      "created_at": "2025-02-14T13:42:45.641000Z",
+      "updated_at": "2025-02-14T13:42:45.641000Z",
+      "drafts": "None"
     }
-    suprClient, err := suprsend.NewClient("__api_key__", "__api_secret__", opts...)
-    if err != nil {
-      log.Println(err)
-    }
-  	ctx := context.Background()
-    // ================= Create subscriber list
-  	subscriberListCreated, err := suprClient.SubscriberLists.Create(ctx, &suprsend.SubscriberListCreateInput{
-  		ListId:          "users-with-prepaid-vouchers-1", // max length 64 characters
-  		ListName:        "Users With Prepaid Vouchers above $250",
-  		ListDescription: "Users With Prepaid Vouchers above $250",
-  	})
-  	if err != nil {
-  		log.Fatalln(err)
-  	}
-  	log.Println(subscriberListCreated)
-  }
-  ```
+	...
+  ]
+}
+```
+
 </CodeGroup>
 
-| Property                     | Description                                                                                             |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------- |
-| list\_id                     | max 64 characters and should contains alphanumeric characters(a-z, 0-9), hyphen (-) and underscode(\_). |
-| list\_name (Optional)        | Name of the list. This is for your reference and can be referred to understand what this list is for.   |
-| list\_description (Optional) | Description of the list to identify what type of users belong to this list.                             |
+## Add Subscribers to the list
 
-## Get list details
+Use `supr_client.subscribers_list.add()` to add list subscribers. There is no limit to the number of subscribers that you can add to a list.
 
 <CodeGroup>
-  ```go go
-  subscriberListData, err := suprClient.SubscriberLists.Get(ctx, "_list_id_")
-  ```
 
-  ```go Response
-  {
-  	"list_id": "list-id",
-  	"list_name": "List Name",
-    "updated_at": "2022-12-18T10:40:27.268417+00:00",
-  	"list_description": "List description"
-  }
-  ```
+```go Request
+addDistinctIds := []string{"distinct_id_1", "distinct_id_2"}
+addResponse, err := suprClient.SubscriberLists.Add(ctx, "users-with-prepaid-vouchers-1", addDistinctIds)
+if err != nil {
+  log.Fatalln(err)
+}
+log.Println(addResponse)
+```
+
+
+```go Response
+{
+   "success":true
+}
+```
+
 </CodeGroup>
 
-## Get list of lists
+## Remove Subscribers from the list
+
+You can remove subscribers from the list using `supr_client.subscribers_list.remove()`
 
 <CodeGroup>
-  ```go go
-  allSubscriberList, err := suprClient.SubscriberLists.GetAll(ctx, &suprsend.SubscriberListAllOptions{)) // default minit 20
-  allSubscriberList, err := suprClient.SubscriberLists.GetAll(ctx, &suprsend.SubscriberListAllOptions{Limit: 10, Offset: 0}) // limit 10
-   //  max limit 1000
-  ```
+
+```go Request
+removeDistinctIds := []string{"distinct_id_1", "distinct_id_2"}
+removeResponse, err := suprClient.SubscriberLists.Remove(ctx, "users-with-prepaid-vouchers-1", removeDistinctIds)
+if err != nil {
+  log.Fatalln(err)
+}
+log.Println(removeResponse)
+```
+
+
+```go Sample Response
+{
+   "success":true
+}
+```
+
 </CodeGroup>
 
-## Add subscribers to list
+## **Delete list**
 
 <CodeGroup>
-  ```go go
-  addDistinctIds := []string{"distinct_id_1", "distinct_id_2"}
-  addResponse, err := suprClient.SubscriberLists.Add(ctx, "users-with-prepaid-vouchers-1", addDistinctIds)
-  if err != nil {
-    log.Fatalln(err)
-  }
-  log.Println(addResponse)
-  ```
-</CodeGroup>
 
-## Remove subscribers from list
+```go Request
+deleteListResp, err := suprClient.SubscriberLists.Delete(ctx, "users-with-prepaid-vouchers-1")
+if err != nil {
+  log.Fatalln(err)
+}
+log.Println("delete list resp: ", deleteListResp)
+```
 
-<CodeGroup>
-  ```go go
-  removeDistinctIds := []string{"distinct_id_1", "distinct_id_2"}
-  removeResponse, err := suprClient.SubscriberLists.Remove(ctx, "users-with-prepaid-vouchers-1", removeDistinctIds)
-  if err != nil {
-    log.Fatalln(err)
-  }
-  log.Println(removeResponse)
-  ```
-</CodeGroup>
-
-## Delete list
-
-<CodeGroup>
-  ```go go
-  deleteListResp, err := suprClient.SubscriberLists.Delete(ctx, "users-with-prepaid-vouchers-1")
-  if err != nil {
-    log.Fatalln(err)
-  }
-  log.Println("delete list resp: ", deleteListResp)
-  ```
 </CodeGroup>
 
 ## Replace users from the list
@@ -122,79 +237,84 @@ In case you want to refresh list with a new set of users completely, you can rep
     This method will create a draft version of the list where you can add the new set of users to replace users.
 
     <CodeGroup>
-      ```go go
-      // start sync
-      newVersion, err := suprClient.SubscriberLists.StartSync(ctx, "users-with-prepaid-vouchers-1")
-      if err != nil {
-        log.Fatalln(err)
-      }
-      log.Println("start sync resp: ", newVersion)
 
-      versionId := newVersion.VersionId
-      ```
+    ```go Request
+    // start sync
+    newVersion, err := suprClient.SubscriberLists.StartSync(ctx, "users-with-prepaid-vouchers-1")
+    if err != nil {
+      log.Fatalln(err)
+    }
+    log.Println("start sync resp: ", newVersion)
+    
+    versionId := newVersion.VersionId
+    ```
+
     </CodeGroup>
   </Step>
-
   <Step title="Add Subscribers to draft list">
     You can use this method to add subscribers to List draft version created in Step 1. You'll get `version_id` in start sync response.
 
     <CodeGroup>
-      ```go go
-      // ================= Add users to a draft list (with versionId)
-      addDistinctIds := []string{"id-399999", "id-399998"}
-      addResponse, err := suprClient.SubscriberLists.AddToVersion(ctx, "users-with-prepaid-vouchers-1", versionId, addDistinctIds)
-      if err != nil {
-        log.Fatalln(err)
-      }
-      log.Println("add to version resp:", addResponse)
-      ```
+
+    ```go Request
+    // ================= Add users to a draft list (with versionId)
+    addDistinctIds := []string{"id-399999", "id-399998"}
+    addResponse, err := suprClient.SubscriberLists.AddToVersion(ctx, "users-with-prepaid-vouchers-1", versionId, addDistinctIds)
+    if err != nil {
+      log.Fatalln(err)
+    }
+    log.Println("add to version resp:", addResponse)
+    ```
+
     </CodeGroup>
   </Step>
-
   <Step title="Remove Subscribers from draft list">
     You can use this method to remove subscribers from List draft version created in Step 1. You'll get `version_id` in start sync response.
 
     <CodeGroup>
-      ```go go
-      // ================= remove users from a list
-      removeDistinctIds := []string{"distinct_id_1", "distinct_id_2"}
-      removeResponse, err := suprClient.SubscriberLists.RemoveFromVersion(ctx, "users-with-prepaid-vouchers-1", versionId, removeDistinctIds)
-      if err != nil {
-        log.Fatalln(err)
-      }
-      log.Println("remove from version resp: ", removeResponse)
-      ```
+
+    ```go Request
+    // ================= remove users from a list
+    removeDistinctIds := []string{"distinct_id_1", "distinct_id_2"}
+    removeResponse, err := suprClient.SubscriberLists.RemoveFromVersion(ctx, "users-with-prepaid-vouchers-1", versionId, removeDistinctIds)
+    if err != nil {
+      log.Fatalln(err)
+    }
+    log.Println("remove from version resp: ", removeResponse)
+    ```
+
     </CodeGroup>
   </Step>
-
   <Step title="Finish Sync to make the draft version live">
     Once your subscribers are updated in the list, use this method to finish sync and make the draft version updated in above steps live.
 
     <CodeGroup>
-      ```go go
-      // finish sync
-      finishSyncResp, err := suprClient.SubscriberLists.FinishSync(ctx, "users-with-prepaid-vouchers-1", versionId)
-      if err != nil {
-        log.Fatalln(err)
-      }
-      log.Println("finish sync resp: ", finishSyncResp)
-      ```
+
+    ```go Request
+    // finish sync
+    finishSyncResp, err := suprClient.SubscriberLists.FinishSync(ctx, "users-with-prepaid-vouchers-1", versionId)
+    if err != nil {
+      log.Fatalln(err)
+    }
+    log.Println("finish sync resp: ", finishSyncResp)
+    ```
+
     </CodeGroup>
   </Step>
 </Steps>
 
-## Delete Draft list
+### **Delete Draft list**
 
 You can also delete draft list if it's created by mistake.
 
 <CodeGroup>
-  ```go go
-  deleteVersionResp, err := suprClient.SubscriberLists.DeleteVersion(ctx, "users-with-prepaid-vouchers-1", tempListVersion.VersionId)
-  if err != nil {
-    log.Fatalln(err)
-  }
-  log.Println("delete version resp: ", deleteVersionResp)
-  ```
-</CodeGroup>
 
-***
+```go Request
+deleteVersionResp, err := suprClient.SubscriberLists.DeleteVersion(ctx, "users-with-prepaid-vouchers-1", tempListVersion.VersionId)
+if err != nil {
+  log.Fatalln(err)
+}
+log.Println("delete version resp: ", deleteVersionResp)
+```
+
+</CodeGroup>

@@ -1,0 +1,151 @@
+---
+title: "Tenants API"
+description: "Guide to create / update tenants using Go SDK"
+---
+
+Tenants (previously named as brands) are used for whitelabelling notifications, personliazing template content or capturing admin preferences for another entity/organization. Tenants are workspace-level entities and by default, a tenant with `tenant_id="default"` (representing your organization) is created your workspace. Read more about tenants [here](/docs/tenants).
+
+## Create / Update Tenant
+
+This method will create a new tenant or update an existing tenant.
+
+<CodeGroup>
+
+```go Request (methods)
+tenantPayload := &suprsend.Tenant{
+  TenantName:      suprsend.String("Tenant Name"),
+  Logo:           suprsend.String("Tenant logo url"),
+  PrimaryColor:   suprsend.String("#FFFFFF"),
+  SecondaryColor: suprsend.String("#000000"),
+  TertiaryColor:  nil,
+  SocialLinks: &suprsend.TenantSocialLinks{
+    Facebook: suprsend.String("https://facebook.com/tenant"),
+  },
+  Properties: map[string]interface{}{
+    "k1": "tenant settings 1",
+    "k2": "tenant settings 2",
+  },
+}
+
+res, err := suprClient.Tenants.Upsert(context.Background(), "__tenant_id__", tenantPayload)
+if err != nil {
+  log.Fatalln(err)
+}
+log.Println(res)
+```
+
+</CodeGroup>
+
+### Get Tenant
+
+<CodeGroup>
+
+```go Request (methods)
+tenant1, err := suprClient.Tenants.Get(context.Background(), "__tenant_id__")
+if err != nil {
+  log.Fatalln(err)
+}
+log.Println(tenant1)
+```
+
+
+```go Response
+{
+   "tenant_id":"tenant_id",
+   "tenant_name":"ABC Company",
+   "logo":"https://logo_url.png",
+   "timezone":"America/New_York",
+   "blocked_channels":[
+      "whatsapp",
+      "email"
+   ],
+   "embedded_preference_url":"https://app.suprsend.com/preferences",
+   "hosted_preference_domain":"preferences.suprsend.com",
+   "primary_color":"#0751E8",
+   "secondary_color":"#e308e3",
+   "tertiary_color":"#1EE9F1",
+   "social_links":{
+      "website":"https://www.suprsend.com/",
+      "facebook":"",
+      "linkedin":"",
+      "twitter":"",
+      "instagram":"",
+      "medium":"",
+      "discord":"",
+      "telegram":"",
+      "youtube":""
+   },
+   "properties":{
+      "address":"5678 Market Street Suite 300 San Francisco, CA 94103 USA"
+   },
+   "updated_at":"2025-02-27T10:21:15.235666Z"
+}
+```
+
+</CodeGroup>
+
+### List Tenants
+
+By default, `limit=20`. The maximum value for `limit` is `1000`.
+
+<CodeGroup>
+
+```go Request (methods)
+tenantsList, err := suprClient.Tenants.List(context.Background(), &suprsend.TenantListOptions{Limit: 10})
+if err != nil {
+  log.Fatalln(err)
+}
+log.Println(tenantsList)
+```
+
+
+```go Response
+{
+   "meta":{
+      "count":28,
+      "limit":20,
+      "offset":0
+   },
+   "results":[
+      {
+         "tenant_id":"tenant_01",
+         "tenant_name":"ABC Company",
+         "logo":"https://logo.url",
+         ...
+         "updated_at":"2025-03-13T18:16:35.744843Z"
+      },
+	  {
+         "tenant_id":"tenant_02",
+         "tenant_name":"CDE Company",
+         "logo":"https://logo.url",
+         ...
+         "updated_at":"2025-03-13T18:16:35.744843Z"
+      }
+	...
+   ]
+}
+```
+
+</CodeGroup>
+
+## Add tenant in Workflow
+
+<CodeGroup>
+
+```go Request (methods)
+wf := suprsend.NewWorkflow(workflowBody, "_tenant_id_")
+```
+
+</CodeGroup>
+
+## Add tenant in Event
+
+<CodeGroup>
+
+```go Request (methods)
+event := suprsend.NewEvent(distinctId, eventName, properties, "_tenant_id_")
+```
+
+</CodeGroup>
+
+---

@@ -1,255 +1,223 @@
 ---
-title: "Tenants/Brands"
-description: "Methods to manage tenants using Java SDK"
+title: "Tenants"
+description: "This document covers methods to manage tenants using Java SDK"
 ---
 
-Tenants (previously named as brands) are used for personalizing communication on behalf of some other entity/organization.
+Tenants (previously named as brands) are used for whitelabelling notifications, personliazing template content or capturing admin preferences for another entity/organization. Tenants are workspace-level entities and by default, a tenant with `tenant_id="default"` (representing your organization) is created your workspace. Read more about tenants [here](/docs/tenants).
 
-In SuprSend, Tenants are workspace level entity. By default, SuprSend creates a tenant with `tenant_id="default"` (representing your organization) in each of your workspaces. You can create more Tenants using one of our backend SDKs.
+## Create / Update Tenant
 
-### Data structure of Tenant:
+This method will create a new tenant or update an existing tenant.
 
 <CodeGroup>
-  ```json json
-  {
-  	"tenant_id": "br-01",
-  	"tenant_name": "Awesome Brand",
-  	"logo": "https://ik.imagekit.io/l0quatz6utm/suprsend/staging/media/suprsend-only-logo_c8aa27faef118418e8c5bd7b31a1cafc74e09200.png",
-  	"primary_color": "#ff0000",
-  	"secondary_color": "#00ff00",
-  	"tertiary_color": "#0000ff",
-  	{
-  	"timezone": "America/New_York",
-  	"blocked_channels": [] //e.g ["sms", "whatsapp"]
-    } 
-  	"social_links": {
-  		"website": "https://suprsend.com",
-  		"facebook": "",
-  		"linkedin": "",
-  		"twitter": "",
-  		"instagram": "",
-  		"medium": "",
-  		"discord": "",
-  		"telegram": "",
-  		"youtube": "",
-  	},
-  	"embedded_preference_url": "",
-    "hosted_preference_domain": "",
-    "properties": {
-      "prop1": "value1",
-      "prop2": { "prop3": ["value2"]}
+
+```java Request
+import org.json.JSONObject;
+
+import suprsend.Suprsend;
+import suprsend.SuprsendAPIException;
+
+public class Tenants {
+  public static void main(String[] args) throws Exception {
+    updateTenant();
+  }
+  
+  private static Subscriber updateTenant() throws SuprsendException {
+		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
+		
+    // Create Tenant data JSON
+    String tenantId = "br-01";
+    JSONObject payload = new JSONObject()
+      .put("tenant_name", "awesome tenant")
+      .put("logo", "https://ik.imagekit.io/l0quatz6utm/suprsend/staging/media/suprsend-only-logo_c8aa27faef118418e8c5bd7b31a1cafc74e09200.png")
+      .put("primary_color", "#ff0000")
+      .put("secondary_color", "#0000ff")
+      .put("tertiary_color", "#00ffff")
+      .put("social_links", new JSONObject()
+           .put("website", "https://www.company.com")
+           .put("youtube", "https://www.company.com/youtube")
+           .put("twitter", "https://www.company.com/twitter")
+           .put("facebook", "")
+           .put("linkedin", "")
+           .put("instagram", "")
+           .put("discord", "")
+           .put("medium", "")
+           .put("telegram", "")
+          )
+      .put("properties", new JSONObject()
+           .put("address", "my company address")
+          )
+      ;
+    try {
+      JSONObject res = suprClient.tenants.upsert(tenantId, payload);
+      System.out.println(res);
+    } catch (SuprsendException e) {
+      System.out.println(e);
     }
-  ```
+  }
+	}
+```
+
 </CodeGroup>
 
 ### Field Description:
 
-| Field                                        | **Description**                                                                                                                                                                                                                                                                         |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| tenant\_id (\*mandatory)                     | tenant-id can be of max 64 characters. It can contain characters \[a-z0-9\_-] i.e. alphanumeric characters, \_(underscore) and -(hyphen). tenant\_id is case-insensitive. Suprsend will first converts tenant\_id to lowercase before storing it or doing any sort of comparison on it. |
-| tenant\_name (\*mandatory)                   | Name of the tenant                                                                                                                                                                                                                                                                      |
-| logo (optional)                              | url of the tenant logo                                                                                                                                                                                                                                                                  |
-| tenant colors (primary, secondary, tertiary) | tenant colors settings are mainly used while designing templates. If you don't provide any of the colors for the tenant, SuprSend will assume you want to use the default values, so color settings will automatically be set to the color settings of `default` tenant.                |
-| social\_links: (optional)                    | urls of social media accounts of the tenant                                                                                                                                                                                                                                             |
+| Field                                 | Description                                                                                                                                                               |
+| :------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| tenant_id (mandatory)                 | max 64 characters and should contains alphanumeric characters(a-z, 0-9), hyphen (-) and underscode(_).                                                                    |
+| tenant_name (mandatory)               | name of the tenant.                                                                                                                                                       |
+| colors (primary, secondary, tertiary) |                                                                                                                                                                           |
+| social_links                          |                                                                                                                                                                           |
+| properties                            | Custom properties associated with the tenant. Update operation is upsert (new properties are added to existing one's and if key is already present, value is overridden). |
+|                                       |                                                                                                                                                                           |
 
-<Warning>
-  While updating a social link, if you pass its value as null, then SuprSend will ignore it. If you really want to remove the value you must the value="" (instead of null) e.g.&#x20;
+All properties of the tenant can be referred as `{{$tenant.prop}}` (handlebars) or `data["tenant"].prop` in JSONNET format.
 
+### Get Tenant
 
+<CodeGroup>
 
-  If you want to remove social\_link url for `facebook`, you must pass `facebook=""` \{ "social\_links": \{ "facebook": "" } }
-</Warning>
+```java Request
+import org.json.JSONObject;
 
-#### properties:
+import suprsend.Suprsend;
+import suprsend.SuprsendAPIException;
 
-Custom properties associated with the tenants/brands. Update operation on properties works like upsert on 1st-level keys (i.e. if top level key doesn't already exists, then it will added, otherwise its value will be replace by new value. All other key-value pair will remain unchanged). e.g 1st update: `{"properties": {"k1": "v1", "k2": 1.0}}` 2nd update:`{"properties": {"k1": "v2", "k3": {"nested_k": "v"}}}` after these 2 updates, value for properties will be `{ "k1": "v2", "k2": 1.0, "k3": { "nested_k": "v" } }`
-
-## Accessing Tenant using suprsend-java-sdk
-
-<Steps>
-  <Step title="Upsert Tenant (Create a new Tenant OR Update an existing Tenant)" stepNumber="1">
-    <CodeGroup>
-      ```java Java
-      import org.json.JSONObject;
-
-      import suprsend.Suprsend;
-      import suprsend.SuprsendAPIException;
-
-      public class Brands {
-        public static void main(String[] args) throws Exception {
-          updateBrand();
-        }
-        
-        private static Subscriber updateBrand() throws SuprsendException {
-      		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
-      		
-          // Create Brand data JSON
-          String brandId = "br-01";
-          JSONObject payload = new JSONObject()
-            .put("brand_name", "awesome brand")
-            .put("logo", "https://ik.imagekit.io/l0quatz6utm/suprsend/staging/media/suprsend-only-logo_c8aa27faef118418e8c5bd7b31a1cafc74e09200.png")
-            .put("primary_color", "#ff0000")
-            .put("secondary_color", "#0000ff")
-            .put("tertiary_color", "#00ffff")
-            .put("social_links", new JSONObject()
-                 .put("website", "https://www.company.com")
-                 .put("youtube", "https://www.company.com/youtube")
-                 .put("twitter", "https://www.company.com/twitter")
-                 .put("facebook", "")
-                 .put("linkedin", "")
-                 .put("instagram", "")
-                 .put("discord", "")
-                 .put("medium", "")
-                 .put("telegram", "")
-                )
-            .put("properties", new JSONObject()
-                 .put("address", "my company address")
-                )
-            ;
-          try {
-            JSONObject res = suprClient.brands.upsert(brandId, payload);
+public class Tenants {
+  public static void main(String[] args) throws Exception {
+    getTenant();
+  }
+  
+  private static Subscriber getTenant() throws SuprsendException {
+		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
+		
+   try {
+            String tenantId = "_tenant_id_";
+            // String tenantId = "default";
+            JSONObject res = suprClient.tenants.get(tenantId);
             System.out.println(res);
-          } catch (SuprsendException e) {
+        } catch (SuprsendException e) {
             System.out.println(e);
-          }
         }
-      	}
-      ```
-    </CodeGroup>
-  </Step>
+	}
+```
 
-  <Step title="Get Tenant data" stepNumber="2">
-    <CodeGroup>
-      ```java Java
-      import org.json.JSONObject;
 
-      import suprsend.Suprsend;
-      import suprsend.SuprsendAPIException;
+```java Response
+{
+	"tenant_id": "tenant-id",
+	"tenant_name": "Tenant Name",
+	"logo": "https://logo.url",
+	"primary_color": "#ff0000",
+	"secondary_color": "#00ff00",
+	"tertiary_color": "#0000ff",
+	"social_links": {
+		"website": "",
+		"facebook": "",
+		"linkedin": "",
+		"twitter": "",
+		"instagram": "",
+		"medium": "",
+		"discord": "",
+		"telegram": "",
+		"youtube": "",
+	},
+	"properties": {
+		"prop1": "value1",
+		"prop2": "value2"
+	}
+}
+```
 
-      public class Tenants {
-        public static void main(String[] args) throws Exception {
-          getTenant();
-        }
-        
-        private static Subscriber getTenant() throws SuprsendException {
-      		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
-      		
-         try {
-                  String tenantId = "_tenant_id_";
-                  // String tenantId = "default";
-                  JSONObject res = suprClient.tenants.get(tenantId);
-                  System.out.println(res);
-              } catch (SuprsendException e) {
-                  System.out.println(e);
-              }
-      	}
-      ```
-    </CodeGroup>
+</CodeGroup>
 
-    **Response:**
+### List Tenants
 
-    &#x20;
+By default, `limit=20`. The maximum value for `limit` is `1000`.
 
-    <CodeGroup>
-      ```json json
-      {
-      	"tenant_id": "tenant-id",
-      	"tenant_name": "tenant Name",
-      	"logo": "https://logo.url",
-      	"primary_color": "#ff0000",
-      	"secondary_color": "#00ff00",
-      	"tertiary_color": "#0000ff",
-      	"social_links": {
-      		"website": "",
-      		"facebook": "",
-      		"linkedin": "",
-      		"twitter": "",
-      		"instagram": "",
-      		"medium": "",
-      		"discord": "",
-      		"telegram": "",
-      		"youtube": "",
-      	},
-      	"properties": {
-      		"prop1": "value1",
-      		"prop2": "value2"
-      	}
+<CodeGroup>
+
+```java Request
+import org.json.JSONObject;
+
+import suprsend.Suprsend;
+import suprsend.SuprsendAPIException;
+
+public class Tenants {
+  public static void main(String[] args) throws Exception {
+    getTenant();
+  }
+  
+  private static Subscriber getTenant() throws SuprsendException {
+		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
+		
+    try {
+      JSONObject res = suprClient.tenants.list();
+      
+      //Get list with offset = 10 and limit = 20
+      //JSONObject res = suprClient.tenants.list(20,10);
+      
+      System.out.println(res);
+    } catch (SuprsendException e) {
+      System.out.println(e);
+    }
+	}
+```
+
+
+```java Response
+{
+  "meta": {
+  	"limit": 20,
+    "offset": 0,
+    "count": 1
+  },
+  "results": [
+    {
+      "tenant_id": "tenant-id",
+      "tenant_name": "Tenant Name",
+      "logo": "https://logo.url",
+      "primary_color": "#ff0000",
+      "secondary_color": "#00ff00",
+      "tertiary_color": "#0000ff",
+      "social_links": {
+        "website": "",
+        "facebook": "",
+        "linkedin": "",
+        "twitter": "",
+        "instagram": "",
+        "medium": "",
+        "discord": "",
+        "telegram": "",
+        "youtube": "",
+      },
+      "properties": {
+        "prop1": "value1",
+        "prop2": "value2"
       }
-      ```
-    </CodeGroup>
-  </Step>
+    }
+  ]
+}
+```
 
-  <Step title="Get Tenants list" stepNumber="3">
-    By default `limit=20` . Value for limit must be \< 1000
+</CodeGroup>
 
-    <CodeGroup>
-      ```java Java
-      import org.json.JSONObject;
+## Add tenant in Workflow
 
-      import suprsend.Suprsend;
-      import suprsend.SuprsendAPIException;
+<CodeGroup>
 
-      public class Brands {
-        public static void main(String[] args) throws Exception {
-          getBrand();
-        }
-        
-        private static Subscriber getBrand() throws SuprsendException {
-      		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
-      		
-          try {
-            JSONObject res = suprClient.brands.list();
-            
-            //Get list with offset = 10 and limit = 20
-            //JSONObject res = suprClient.brands.list(20,10);
-            
-            System.out.println(res);
-          } catch (SuprsendException e) {
-            System.out.println(e);
-          }
-      	}
-      ```
-    </CodeGroup>
+```java Request
+Workflow wf = new Workflow(workflowBody, "_tenant_id_");
+```
 
-    Response:
+</CodeGroup>
 
-    <CodeGroup>
-      ```json json
-      {
-        "meta": {
-        	"limit": 20,
-          "offset": 0,
-          "count": 1
-        },
-        "results": [
-          {
-            "brand_id": "brand-id",
-            "brand_name": "Brand Name",
-            "logo": "https://logo.url",
-            "primary_color": "#ff0000",
-            "secondary_color": "#00ff00",
-            "tertiary_color": "#0000ff",
-            "social_links": {
-              "website": "",
-              "facebook": "",
-              "linkedin": "",
-              "twitter": "",
-              "instagram": "",
-              "medium": "",
-              "discord": "",
-              "telegram": "",
-              "youtube": "",
-            },
-            "properties": {
-              "prop1": "value1",
-              "prop2": "value2"
-            }
-          }
-        ]
-      }
-      ```
-    </CodeGroup>
-  </Step>
-</Steps>
+## Add tenant in Event
 
-***
+<CodeGroup>
+
+```java Request
+Event event = new Event(distinctId, eventName, properties, "_tenant_id_");
+```
+
+</CodeGroup>

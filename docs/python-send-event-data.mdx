@@ -82,13 +82,11 @@ print(response
 
 </CodeGroup>
 
-| Parameter       | Description                                      | Type       | Obligation |
-| --------------- | ------------------------------------------------ | ---------- | ---------- |
-|                 |                                                  | string     |            |
-|                 |                                                  | string     |            |
-|                 |                                                  | Dictionary |            |
-|                 |                                                  | string     |            |
-|                 |                                                  | string     |            |
+| Parameter     | Description                                                                                                                                         | Format                    | Obligation  |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- | ----------- |
+| `distinct_id` | `distinct_id` of subscriber performing the event                                                                                                    | int, bigint, string, UUID | _mandatory_ |
+| `event_name`  | string identifier for the event like `product_purchased`                                                                                            | string                    | _mandatory_ |
+| `properties`  | a dictionary representing event attributes like `first_name` Event properties can be used to pass template variables in case of event based trigger | Dictionary                | _optional_  |
 
 <Warning>
   **Event naming guidelines:**
@@ -132,6 +130,24 @@ event.add_attachment(file_path)
 
 response = supr_client.track_event(event)
 print(response)
+```
+
+
+```python Response
+# Response structure
+{
+    "success": true, // if true, request was accepted.
+    "status": "success",
+    "status_code": 202, // http status code
+    "message": "OK",
+}
+
+{
+    "success": false, // error will be present in message
+    "status": "fail",
+    "status_code": 500, // http status code
+    "message": "error message",
+}
 ```
 
 </CodeGroup>
