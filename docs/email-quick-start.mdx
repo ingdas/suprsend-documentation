@@ -11,17 +11,11 @@ description: "This is a quick setup guide to start sending email notifications w
   <Step title="Start testing in Sandbox workspace" stepNumber="2">
     You'll see 3 workspaces in your SuprSend account: Sandbox, Staging and Production. Workspaces can be switched from top navigation bar.
 
-    * **Sandbox**
+    * **Sandbox** is setup for quick testing with sample workflow, a sample user with your registered email and pre-configured channels for quick testing. It's ideal for quick exploration and testing and is available for limited period.
 
-      is setup for quick testing with sample workflow, a sample user with your registered email and pre-configured channels for quick testing. It's ideal for quick exploration and testing and is available for limited period.
+    * **Staging** is your development workspace. You'll do all your iterations and testing in this workspace before pushing it to production.
 
-    * **Staging**
-
-      is your development workspace. You'll do all your iterations and testing in this workspace before pushing it to production.
-
-    * **Production**
-
-      workspace is where you'll configure your live notifications and sync your actual product users. We do not recommend making changes directly in your production workspace. It will safeguard you from accidentally sending a test notification to your production users.
+    * **Production** workspace is where you'll configure your live notifications and sync your actual product users. We do not recommend making changes directly in your production workspace. It will safeguard you from accidentally sending a test notification to your production users.
   </Step>
 
   <Step title="Create a workflow" stepNumber="3">
@@ -37,8 +31,18 @@ description: "This is a quick setup guide to start sending email notifications w
 
        * [By emitting an event](/docs/trigger-workflow#event-based-trigger)(note: the recipient needs to be pre-created for event-based triggers).
 
-    2. **Delivery node**- Delivery nodes represent the channels where users will receive notifications. You can use [multi-channel](/docs/delivery-multi-channel) nodes to send messages across multiple channels, though it’s generally better to use [smart channel routing](/docs/smart-delivery) to notify users sequentially rather than bombarding them on all channels at once.**- Template** in delivery node contains the content of the notification. You can add both static and dynamic content sourced from user properties or trigger payloads. We use handlebars as our email templating language. You can add dynamic content as`{{var}}`. Add trigger data in the **mock** to get variable auto-suggestions during editing.
-       Ensure to publish the template before using it in a workflow. [Learn more about how to design email template here](/docs/email).
+    2. **Delivery node** - Delivery nodes represent the channels where users will receive notifications. You can use:
+
+          [multi-channel](/docs/delivery-multi-channel) nodes, to send messages across multiple channels, 
+
+          [smart channel routing](/docs/smart-delivery), to notify users sequentially rather than bombarding them on all channels at once (though it’s generally better to use).
+
+          **-  Template** in delivery node contains the content of the notification. You can add both static and dynamic content sourced from user properties or trigger payloads. We use handlebars as our Whatsapp templating language. You can add dynamic content as `{{var}}`.
+
+          Add trigger data in the **mock** to get variable auto-suggestions during editing.
+          Ensure to publish the template before using it in a workflow.
+
+          [Learn more about how to design email template here](/docs/email).
 
     ![](https://files.readme.io/e5b9db7-template_edit.gif)
 
@@ -87,7 +91,7 @@ description: "This is a quick setup guide to start sending email notifications w
       '
       ```
 
-      ```python python
+      ```python Python
       from suprsend import Event
       from suprsend import WorkflowTriggerRequest
 
@@ -118,7 +122,7 @@ description: "This is a quick setup guide to start sending email notifications w
       print(response)
       ```
 
-      ```node node
+      ```Javascript Node
       const {Suprsend, WorkflowTriggerRequest} = require("@suprsend/node-sdk");
       const supr_client = new Suprsend("_workspace_key_", "_workspace_secret_");
 
@@ -146,7 +150,7 @@ description: "This is a quick setup guide to start sending email notifications w
       response.then(res => console.log("response", res));
       ```
 
-      ```go go
+      ```go Go
       package main
 
       import (
@@ -198,7 +202,7 @@ description: "This is a quick setup guide to start sending email notifications w
       }
       ```
 
-      ```java java
+      ```java Java
       package test;
 
       import java.io.IOException;
@@ -260,8 +264,9 @@ description: "This is a quick setup guide to start sending email notifications w
   </Step>
 
   <Step title="Push to Production" stepNumber="7">
-    In SuprSend, each environment is isolated, meaning workflows, users, and vendors are configured separately in testing and production workspaces. Follow this [go live checklist](/docs/go-live-checklist) to setup things in production once you are done testing.
+    In SuprSend, each environment is isolated, meaning workflows, users, and vendors are configured separately in testing and production workspaces. 
   </Step>
 </Steps>
+Follow this [go live checklist](/docs/go-live-checklist) to setup things in production once you are done testing.
 
 ***

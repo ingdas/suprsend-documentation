@@ -13,7 +13,7 @@ description: "This is a quick setup guide to start sending Inbox notifications w
   </Step>
 
   <Step title="Start testing in Sandbox workspace">
-    <Info>
+    <Note>
       📘 You can test the entire notification flow (follow steps 4-6) without integrating Inbox in Sandbox workspace. All the notifications sent to your registered email ID in Sandbox will show up in the top bell icon.&#x20;
 
 
@@ -23,7 +23,7 @@ description: "This is a quick setup guide to start sending Inbox notifications w
 
 
       You can directly integrate Inbox in your product ([follow step 7](/docs/inbox-quick-start#7-integrate-inbox-in-your-product)) and test the notification directly inside your product. For that, you'll have to test the flow in staging workspace.
-    </Info>
+    </Note>
 
     **Different workspaces and their usage:**
 
@@ -49,7 +49,18 @@ description: "This is a quick setup guide to start sending Inbox notifications w
 
        * [By emitting an event](/docs/trigger-workflow#event-based-trigger): You can trigger these events from your frontend application or from your backend systems, depending on the use-case. (note: the recipient needs to be pre-created for event-based triggers).
 
-    2. **Delivery node** - Delivery nodes represent the channels where users will receive notifications. You can use [multi-channel](/docs/delivery-multi-channel) nodes to send messages across multiple channels, though it’s generally better to use [smart channel routing](/docs/smart-delivery) to notify users sequentially rather than bombarding them on all channels at once.**- Template** in delivery node contains the content of the notification. You can add both static and dynamic content sourced from user properties or trigger payloads. We use handlebars as our Inbox templating language. You can add dynamic content as `{{var}}`. Add trigger data in the **mock** to get variable auto-suggestions during editing.Ensure to publish the template before using it in a workflow. [Learn more about how to design In-app Inbox template here](/docs/in-app-inbox-template).
+    2. **Delivery node** - Delivery nodes represent the channels where users will receive notifications. You can use:
+
+          [multi-channel](/docs/delivery-multi-channel) nodes, to send messages across multiple channels,
+
+          [smart channel routing](/docs/smart-delivery), to notify users sequentially rather than bombarding them on all channels at once (though it’s generally better to use).
+
+          **-  Template** in delivery node contains the content of the notification. You can add both static and dynamic content sourced from user properties or trigger payloads. We use handlebars as our Whatsapp templating language. You can add dynamic content as `{{var}}`.
+
+          Add trigger data in the **mock** to get variable auto-suggestions during editing.
+          Ensure to publish the template before using it in a workflow.
+
+          [Learn more about how to design In-app Inbox template here](/docs/in-app-inbox-template).
 
     ![](https://files.readme.io/e5b9db7-template_edit.gif)
 
