@@ -19,47 +19,27 @@ description: "This is a quick setup guide to start sending Whatsapp notification
   </Step>
 
   <Step title="Create a workflow" icon={3} stepNumber="3">
-    Workflow houses the automation logic of your notification. Each workflow starts with a trigger, processes the defined logic, and sends one or more messages to the end user. You can create a workflow from SuprSend dashboard by clicking on **"+ Create workflow"** button on the [workflows tab](https://app.suprsend.com/en/sandbox/workflows).
+    Workflow houses the automation logic of your notification. Each workflow starts with a trigger, processes the defined logic, and sends one or more messages to the end user. You can create a workflow from SuprSend dashboard by clicking on **`+ Create workflow`** button on the [workflows tab](https://app.suprsend.com/en/sandbox/workflows).
 
     ![](/images/docs/d78be2d-image.png)
 
     To design a workflow, you need:
 
-    1. **A Trigger point**
+    1. **A Trigger point** - Trigger initiates the workflow. You can initiate it
 
-       \- Trigger initiates the workflow. You can initiate it
+       * [Using the direct workflow API](/docs/trigger-workflow#triggering-workflow-via-api), where you can include recipient channel information, preferences, and actor details directly in the trigger.
 
-       * [Using the direct workflow API](/docs/trigger-workflow#triggering-workflow-via-api)
+       * [By emitting an event](/docs/trigger-workflow#event-based-trigger) (note: the recipient needs to be pre-created for event-based triggers).
 
-         , where you can include recipient channel information, preferences, and actor details directly in the trigger.
+    2. **Delivery node** - Delivery nodes represent the channels where users will receive notifications. You can use
 
-       * [By emitting an event](/docs/trigger-workflow#event-based-trigger)
+       [multi-channel](/docs/delivery-multi-channel) nodes, to send messages across multiple channels, though it’s generally better to use
 
-         (note: the recipient needs to be pre-created for event-based triggers).
+       [smart channel routing](/docs/smart-delivery), to notify users sequentially rather than bombarding them on all channels at once.
 
-    2. **Delivery node**
+       **-  Template** in delivery node contains the content of the notification. You can add both static and dynamic content sourced from user properties or trigger payloads. We use handlebars as our Whatsapp templating language. You can add dynamic content as `{{var}}`
 
-       \- Delivery nodes represent the channels where users will receive notifications. You can use
-
-       [multi-channel](/docs/delivery-multi-channel)
-
-       nodes to send messages across multiple channels, though it’s generally better to use
-
-       [smart channel routing](/docs/smart-delivery)
-
-       to notify users sequentially rather than bombarding them on all channels at once.
-
-       **-  Template**
-
-       in delivery node contains the content of the notification. You can add both static and dynamic content sourced from user properties or trigger payloads. We use handlebars as our Whatsapp templating language. You can add dynamic content as
-
-       `{{var}}`
-
-       . Add trigger data in the
-
-       **mock**
-
-       to get variable auto-suggestions during editing.
+       . Add trigger data in the **mock** to get variable auto-suggestions during editing.
        Ensure to publish the template before using it in a workflow.
 
        [Learn more about how to design Whatsapp template here](/docs/whatsapp)
@@ -68,7 +48,7 @@ description: "This is a quick setup guide to start sending Whatsapp notification
 
     ![](https://files.readme.io/e5b9db7-template_edit.gif)
 
-    1. **Functional nodes (Optional)**
+    3. **Functional nodes (Optional)**
 
        \- These are the logic nodes in the workflow. You can use it to add delay, batch multiple notifications in a summary or add conditional branches in the workflow.
 
@@ -76,7 +56,7 @@ description: "This is a quick setup guide to start sending Whatsapp notification
   </Step>
 
   <Step title="Trigger the workflow" icon={4} stepNumber="4">
-    You can trigger a test workflow directly from dashboard by clicking on **"`Test`"** button in your workflow editor or **"`Commit`"** changes to trigger it from your code. We follow Git like versioning for workflow changes, so you need to commit your changes to trigger new workflow via the API. You can [check all methods of triggering workflow here](/docs/trigger-workflow).
+    You can trigger a test workflow directly from dashboard by clicking on '**`Test`**' button in your workflow editor or **"`Commit`"** changes to trigger it from your code. We follow Git like versioning for workflow changes, so you need to commit your changes to trigger new workflow via the API. You can [check all methods of triggering workflow here](/docs/trigger-workflow).
 
     To trigger a workflow, you need:
 
