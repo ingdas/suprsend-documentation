@@ -32,7 +32,7 @@ We support [headings](https://www.markdownguide.org/basic-syntax/#headings), [bo
 
 ### Tags
 
-You can add tags to filter and organize notifications inside [multiple tabs](/docs/multi-tabs). Other than tags, you can filter out tabs based on [notification category](/docs/notification-category) or notification read status. For example, show all `unread` notifications with `mentions` tag inside **Mentions** tab.
+You can add tags to filter and organize notifications inside [multiple tabs](/docs/multi-tabs). Other than tags, you can filter out tabs based on [notification category](/docs/notification-category) or notification read status. For example, show all `unread` notifications with `mentions` tag inside `Mentions` tab.
 
 <Frame caption="Inbox with tabs - All, mentions and replies">
   <img src="/images/docs/1c56c00-image.png" />
@@ -92,15 +92,15 @@ There will always be the case where you would require to add dynamic content to 
   </Step>
 
   <Step title="Using variables in the templates">
-    Once the variables are declared, you can use them while designing the android push template. We support `handlebarsjs` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: `**{{variable_name}}**`
+    Once the variables are declared, you can use them while designing the android push template. We support `handlebarsjs` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: `{{variable_name}}`
 
     If you have declared the variables in the global 'Mock data' button, then they will come as auto-suggestions when you type a curly bracket `{`. This will remove the chances of errors like variable mismatch at the time of template rendering.
 
-    Note that you will be able to enter a variable name even when you have not declared it inside the 'Variables' button.&#x20;
+    Note that you will be able to enter a variable name even when you have not declared it inside the `Variables` button.&#x20;
 
     To manually enter the variable name, follow the [handlerbarsjs guide here](https://handlebarsjs.com/guide/#what-is-handlebars).
 
-    Below is an example of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the 'Templates' section:
+    Below is an example of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the `Templates` section:
 
     <CodeGroup>
       ```json json
@@ -141,8 +141,8 @@ There will always be the case where you would require to add dynamic content to 
         To refer to an array element, enter in format `{{var1.[*index*].var2}}. Eg. to refer to `product\_name`of the first element of the array`array, enter `` {{array.[0].product_name}}` ``
       </Step>
 
-      <Step title="Step 3">
-        If you have any space in the variable name, enclose it in square bracket `{{event.[first name]}}`
+      <Step title="In case of a space inside your variable name:">
+        Enclose your variable name in square bracket as shown here: `{{event.[first name]}}`
       </Step>
     </Steps>
 
@@ -150,7 +150,7 @@ There will always be the case where you would require to add dynamic content to 
 
     If you cannot see your variable being rendered with the sample value, check one of the following:
 
-    1. Make sure you have entered the variable name and the sample value in the **Variables** button.
+    1. Make sure you have entered the variable name and the sample value in the `Variables` button.
 
     2. Make sure you have entered the correct variable name in the template, as per the `handlebarsjs` guideline.
 

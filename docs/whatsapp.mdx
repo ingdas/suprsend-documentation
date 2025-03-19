@@ -8,13 +8,13 @@ This section is a step-by-step guide on how to design and publish Whatsapp notif
 
 You can design the template with a simple form editor tool. You can add variables with `Handlebarsjs` language. You can see how the message will look in the preview section on the right side.
 
-Once designed, save the Whatsapp template by clicking on the **Save Draft** button. When you are ready, you can **Publish Draft** by providing a name to the version. This will create a version in 'Pending Approval' state.
+Once designed, save the Whatsapp template by clicking on the `Save Draft` button. When you are ready, you can `Publish Draft` by providing a name to the version. This will create a version in `Pending Approval` state.
 
 Whatsapp requires a template approval process, where every template has to be submitted to Whatsapp for approval, where Whatsapp reviews and either Approves or Rejects the message.
 
 SuprSend handles the Whatsapp approval process for you. All you have to do is create a template on SuprSend while following [Whatsapp template guidelines](/docs/whatsapp-template-guidelines), and we'll send an email to you as soon as Whatsapp approves / rejects the template.
 
-Based on the approval status, the published template version's state will move to 'Live' or 'Rejected'. Once the version goes 'Live', you can use the template to send messages to your users.
+Based on the approval status, the published template version's state will move to `Live` or `Rejected`. Once the version goes `Live`, you can use the template to send messages to your users.
 
 ![](/images/docs/4c18ffe-Screenshot_2022-08-11_at_5.11.03_PM.png "Screenshot 2022-08-11 at 5.11.03 PM.png")
 
@@ -24,10 +24,10 @@ Based on the approval status, the published template version's state will move t
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Template Category**                          | Category of the template as defined by whatsapp. Choose the category which is most relevant for your message content. For example - if you are sending a message informing the user about his/her doctor appointment, select the category as *Appointment Update*. In case you are not able to find the relevant category for your message, select *Alert Update*                                                  |
 | **Type**                                       | Type of the message template - `MEDIA/TEXT`. You can select one of the options.                                                                                                                                                                                                                                                                                                                                    |
-| **Header**\*(Type - TEXT)\*                    | Header of the message shown in bold in your whatsapp message Small message text box. You can add upto 60 characters in this field*Emojis are not supported in header*                                                                                                                                                                                                                                              |
-| **Header -> Media Type**\*(Type - MEDIA)\*     | Media type of the header - Document(.pdf) / Image (.jpg, .png) / Video (.mp4). You can select one the media types based on the type of content that you want to add in the message                                                                                                                                                                                                                                 |
-| **Header -> Media File URL**\*(Type - MEDIA)\* | Add the Public URL of the document that you want to send. You can add dynamic URL by adding variables in the URL link, like this -[http://s3.amazonaws.com/\{\{url\_params}}](http://s3.amazonaws.com/%7B%7Burl_params%7D%7D) or \{\{url\_link}}                                                                                                                                                                   |
-| **Header -> Document Name**\*(Type - MEDIA)\*  | *Valid only for media type - Document (.pdf)* This is the name of the document that will be visible to your user. Will be shown as "Untitled" if not added. You can add variable in media file as \{\{file\_name}}                                                                                                                                                                                                 |
+| **Header**\(Type - TEXT)\                    | Header of the message shown in bold in your whatsapp message Small message text box. You can add upto 60 characters in this field*Emojis are not supported in header*                                                                                                                                                                                                                                              |
+| **Header -> Media Type**\(Type - MEDIA)\     | Media type of the header - Document(.pdf) / Image (.jpg, .png) / Video (.mp4). You can select one the media types based on the type of content that you want to add in the message                                                                                                                                                                                                                                 |
+| **Header -> Media File URL**\(Type - MEDIA)\ | Add the Public URL of the document that you want to send. You can add dynamic URL by adding variables in the URL link, like this -[http://s3.amazonaws.com/\{\{url\_params}}](http://s3.amazonaws.com/%7B%7Burl_params%7D%7D) or `\{\{url\_link}}`                                                                                                                                                                   |
+| **Header -> Document Name**\(Type - MEDIA)\  | *Valid only for media type - Document (.pdf)* This is the name of the document that will be visible to your user. Will be shown as "Untitled" if not added. You can add variable in media file as \{\{file\_name}}                                                                                                                                                                                                 |
 | **Body**                                       | Large message text box. Can add multi-line texts. Use handlebarsjs to add variables.                                                                                                                                                                                                                                                                                                                               |
 | **Footer**                                     | Small message text box. You can add upto 60 characters in this field*Variables are not supported in footer*                                                                                                                                                                                                                                                                                                        |
 | **Buttons**                                    | Button type to be added - Call to Action / Quick Reply. Select **"None"** if you don't require buttons                                                                                                                                                                                                                                                                                                             |
@@ -64,7 +64,7 @@ There will always be the case where you would require to add dynamic content to 
   </Step>
 
   <Step title="Using variables in the templates" icon={2} stepNumber="2">
-    Once the variables are declared, you can use them while designing the android push template. We support `handlebarsjs` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: `**{{variable_name}}**`
+    Once the variables are declared, you can use them while designing the android push template. We support `handlebarsjs` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: `{{variable_name}}`
 
 
 
@@ -108,45 +108,17 @@ There will always be the case where you would require to add dynamic content to 
       ```
     </CodeGroup>
 
-    1. To enter a nested variable, enter in the format 
+    1. To enter a nested variable, enter in the format `{{var1.var2.var3}}`. Eg. to refer to city in the example above, you need to enter `{{event.location.city}}`
 
-       `{{var1.var2.var3}}`
+    2. To refer to an array element, enter in format `{{var1.[_index_].var2}}. Eg. to refer to ` product_name `of the first element of the array` array `, enter ` `\{{array.[0].product_name}}`
 
-       . Eg. to refer to city in the example above, you need to enter 
-
-       `{{event.location.city}}`
-
-    2. To refer to an array element, enter in format 
-
-       `{{var1.[_index_].var2}}. Eg. to refer to `
-
-       product_name
-
-       `of the first element of the array`
-
-       array
-
-       `, enter `
-
-       `\{{array.[0].product_name}}`
-
-    3. If you have any space in the variable name, enclose it in square bracket 
-
-       `{{event.[first name]}}`
-
+    3. If you have any space in the variable name, enclose it in square bracket `{{event.[first name]}}` 
+    
     You will be able to see the sample values in the Preview section, as well as in the Live version when you publish a draft. If you cannot see your variable being rendered with the sample value, check one of the following:
 
-    1. Make sure you have entered the variable name and the sample value in the 
+    1. Make sure you have entered the variable name and the sample value in the `Variables` button.
 
-       **Variables**
-
-        button.
-
-    2. Make sure you have entered the correct variable name in the template, as per the 
-
-       `handlebarsjs`
-
-        guideline.
+    2. Make sure you have entered the correct variable name in the template, as per the `handlebarsjs` guideline.
 
     ![](/images/docs/9142527-Screenshot_2022-07-05_at_10.47.18_AM.png "Screenshot 2022-07-05 at 10.47.18 AM.png")
 

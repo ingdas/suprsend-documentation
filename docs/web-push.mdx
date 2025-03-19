@@ -30,13 +30,13 @@ There will always be the case where you would be required to add dynamic content
   </Step>
 
   <Step title="Using variables in the templates:">
-    Once the variables are declared, you can use them while designing the web push template. We support `handlebarsjs` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: `**{{variable_name}}**`
+    Once the variables are declared, you can use them while designing the web push template. We support `handlebarsjs` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: `{{variable_name}}`
 
     If you have declared the variables in the global 'Variables' button, then they will come as auto-suggestions when you type a curly bracket `{`. This will remove the chances of error like variable mismatch at the time of template rendering.
 
-    Note that you will be able to enter a variable name even when you have not declared it inside the 'Variables' button. To manually enter the variable name, follow the [handlerbarsjs guide here](https://handlebarsjs.com/guide/#what-is-handlebars).
+    Note that you will be able to enter a variable name even when you have not declared it inside the `Variables` button. To manually enter the variable name, follow the [handlerbarsjs guide here](https://handlebarsjs.com/guide/#what-is-handlebars).
 
-    Below are some examples of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the 'Templates' section:
+    Below are some examples of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the `Templates` section:
 
     <CodeGroup>
       ```json json
@@ -76,7 +76,7 @@ There will always be the case where you would be required to add dynamic content
 
     You will be able to see the sample values in the Preview section, as well as in the Live version when you publish a draft. If you cannot see your variable being rendered with the sample value, check one of the following:
 
-    1. Make sure you have entered the variable name and the sample value in the**Variables**button.
+    1. Make sure you have entered the variable name and the sample value in the `Variables` button.
 
     2. Make sure you have entered the correct variable name in the template, as per the`handlebarsjs`guideline.
 

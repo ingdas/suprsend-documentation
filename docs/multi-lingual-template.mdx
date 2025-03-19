@@ -3,7 +3,7 @@ title: "Adding Languages in template"
 description: "Step-by-Step process to handle multiple languages in the template"
 ---
 
-SuprSend allows you to create notifications in multiple languages in the same template. Once the languages are added, SuprSend will pick the preferred language from user's profile and send the message as per the user's language. You can set user preferred language using our [python](/docs/python-create-user-profile#set-preferred-language) or [node](/docs/node-create-user-profile#set-preferred-language) SDK
+SuprSend allows you to create notifications in multiple languages in the same template. Once the languages are added, SuprSend will pick the preferred language from user's profile and send the message as per the user's language. You can set user preferred language using our [Python](/docs/python-create-user-profile#set-preferred-language) or [Node](/docs/node-create-user-profile#set-preferred-language) SDK
 
 English is the default fallback language. So users with no language preference set or preferred language for which content is not present in template will get the notification in English language.
 
@@ -11,7 +11,7 @@ You can enable multi-lingual templates by simply following the below steps:
 
 <Steps>
   <Step title="Add Languages">
-    In any template, English (en) language in enabled by default. To add other languages, click on "Language" button on the top right side of template editor.
+    In any template, English (en) language in enabled by default. To add other languages, click on `Language` button on the top right side of template editor.
 
     ![](/images/docs/900b12b-lang_button.png)
 
@@ -19,7 +19,7 @@ You can enable multi-lingual templates by simply following the below steps:
 
     ![](https://files.readme.io/f3b4017-ezgif.com-gif-maker_5.gif)
 
-    You'll also see **"Auto Translate"** option on top of the language modal. Enable it if you want SuprSend to translate the English content in your preferred language. [See how auto translation works](/docs/how-auto-translation-works)
+    You'll also see `Auto Translate` option on top of the language modal. Enable it if you want SuprSend to translate the English content in your preferred language. [See how auto translation works](/docs/how-auto-translation-works)
   </Step>
 
   <Step title="Add content for each language and Save">
@@ -31,11 +31,11 @@ You can enable multi-lingual templates by simply following the below steps:
   </Step>
 
   <Step title="Publish Languages">
-    After making the changes, click on Publish draft button.
+    After making the changes, click on `Publish draft button`.
 
     ![](/images/docs/5fa1c5c-lang_publish.png)
 
-    Add a relevant version name and Click on "Next"
+    Add a relevant version name and Click on `Next`.
 
     ![](/images/docs/d2818ad-version_name.png)
 
@@ -44,7 +44,8 @@ You can enable multi-lingual templates by simply following the below steps:
     ![](/images/docs/0307e31-final_publish.png)
 
     <Warning>
-      If you see an error message below any language (Spanish in above image), that means there are some missing fields in the template form for that language. You'll not be able to publish the language with incomplete information. You can go back, add the missing fields for that language and publish it again or skip this language and publish.
+      If you see an error message below any language (Spanish in above image), that means there are some missing fields in the template form for that language. You'll not be able to publish the language with incomplete information. 
+      You can go back, add the missing fields for that language and publish it again or skip this language and publish.
     </Warning>
 
     That's it. Published languages can now be seen in the live version.

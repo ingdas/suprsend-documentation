@@ -7,13 +7,16 @@ description: "This section is a step-by-step guide on how to design and publish 
 
 You can design SMS template on SuprSend with a simple form editor tool. You can add variables with `Handlebarsjs` language. You can check how the message will look in the preview section on the right side.
 
-The SMS template has 3 parts - **Message type** (Transactional, Promotional, Engagement), **Header** (template headers added in the SMS integration settings) and **Body** (SMS template is added here).
+The SMS template has 3 parts - 
+    - **Message type** (Transactional, Promotional, Engagement), 
+    - **Header** (template headers added in the SMS integration settings), 
+    - **Body** (SMS template is added here).
 
 Once designed, you can save the SMS template by clicking on "Save" button. When you are ready, you can Publish Draft by providing a name to the version. This will create a version in 'Pending Approval' state.
 
 Every SMS template goes through an approval process, where the templates are submitted to the registered DLT portal for review, where the SMS is reviewed based on the **DLT guidelines** and SMS either gets approved or rejected.
 
-SuprSend handles the template approval process for you. All you have to do is create a template on SuprSend while following DLT template guidelines, and wait for the approval / rejection of template. Accordingly, the published template version's state will move to 'Live' or 'Rejected'. Once the version goes 'Live', you can use the template to send to your users.
+SuprSend handles the template approval process for you. All you have to do is create a template on SuprSend while following DLT template guidelines, and wait for the approval / rejection of template. Accordingly, the published template version's state will move to `Live` or `Rejected`. Once the version goes `Live`, you can use the template to send to your users.
 
 ![](/images/docs/cff11fd-SMS_Notification_template.png "SMS Notification template.png")
 
@@ -21,7 +24,7 @@ SuprSend handles the template approval process for you. All you have to do is cr
 
 | Field        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Message Type | There are 3 types of message - 1. **Transactional** - Service implicit or Informative messages which are triggered corresponding to a user's action either done at the time of sending the message or based on past data. All other OTPs other than bank OTPs also fall in this category. *eg - delivery updates, E-commerce website OTPs etc.* 2. **Promotional** - All the marketing related messages where we have not taken any explicit consent from the user. *eg - messages sent to promote or sell a product* 3. **Engagement** - Service Explicit or Engagement messages which are triggered to re-engage the users back to platform like promoting new features and offers. *eg - new feature promotion, discount offer messages to existing customers etc.* |
+| Message Type | There are 3 types of message - (1) **Transactional** - Service implicit or Informative messages which are triggered corresponding to a user's action either done at the time of sending the message or based on past data. All other OTPs other than bank OTPs also fall in this category. *eg - delivery updates, E-commerce website OTPs etc.* (2) **Promotional** - All the marketing related messages where we have not taken any explicit consent from the user. *eg - messages sent to promote or sell a product* (3) **Engagement** - Service Explicit or Engagement messages which are triggered to re-engage the users back to platform like promoting new features and offers. *eg - new feature promotion, discount offer messages to existing customers etc.* |
 | Header       | Header should be registered with DLT. Separate headers would be there for all the message types                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | Body         | SMS template added here should follow DLT template guidelines. Click here to view all DLT guidelines                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
@@ -48,13 +51,13 @@ There will always be the case where you would be required to add dynamic content
   </Step>
 
   <Step title="Using variables in the templates:">
-    Once the variables are declared, you can use them while designing template for any channel. We support `handlebarsjs` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: **\`\{\{variable\_name}}**
+    Once the variables are declared, you can use them while designing template for any channel. We support `handlebarsjs` to add variables in the template. As a general rule, all the variables have to be entered within double curly brackets: `{{variable\_name}}`
 
-    If you have declared the variables and added sample data in the global 'Mock data' button, then they will come as auto-suggestions when you type a curly bracket `{`. This will remove the chances of error like variable mismatch at the time of template rendering.
+    If you have declared the variables and added sample data in the global `Mock data` button, then they will come as auto-suggestions when you type a curly bracket `{`. This will remove the chances of error like variable mismatch at the time of template rendering.
 
-    Note that you will be able to enter a variable name even when you have not declared it inside the 'Variables' button. To manually enter the variable name, follow the [handlerbarsjs guide here](https://handlebarsjs.com/guide/#what-is-handlebars).
+    Note that you will be able to enter a variable name even when you have not declared it inside the `Variables` button. To manually enter the variable name, follow the [handlerbarsjs guide here](https://handlebarsjs.com/guide/#what-is-handlebars).
 
-    Below are some examples of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the 'Templates' section:
+    Below are some examples of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the `Templates` section:
 
     <CodeGroup>
       ```json json
@@ -90,25 +93,9 @@ There will always be the case where you would be required to add dynamic content
 
     To enter a nested variable, enter in the format `{{var1.var2.var3}}`. Eg. to refer to city in the example above, you need to enter `{{event.location.city}}`
 
-    * If you have any space in the variable name, enclose it in square bracket 
+    * If you have any space in the variable name, enclose it in square bracket `{{event.[first name]}}`
 
-      `{{event.[first name]}}`
-
-    * To refer to an array element, enter in format 
-
-      `{{var1.[index].var2}}`
-
-      . Eg. to refer to 
-
-      `product_name`
-
-       of the first element of the array 
-
-      `array`
-
-      , enter 
-
-      `{{array.[0].product_name}}`
+    * To refer to an array element, enter in format `{{var1.[index].var2}}` . Eg. to refer to `product_name` of the first element of the array `array` , enter `{{array.[0].product_name}}`
   </Step>
 </Steps>
 

@@ -17,7 +17,9 @@ A workflow comprises a series of steps that, when executed in sequence, form the
 
 ## Notification Categories
 
-Each workflow is associated with a notification category. Notification category is used to group related workflows together and are also used for users to set their preferences across a group of workflows. For example, all shipment related notifications can be grouped under a category `Delivery updates` and user can then chose to turn off these notifications on email and just receive these updates on push channel. This preference setting will automatically apply to all workflows with category `Delivery updates`. You can know more about [notification categories here](/docs/notification-category).
+Each workflow is associated with a notification category. Notification category is used to group related workflows together and are also used for users to set their preferences across a group of workflows. For example, all shipment related notifications can be grouped under a category `Delivery updates` and user can then chose to turn off these notifications on email and just receive these updates on push channel. 
+
+This preference setting will automatically apply to all workflows with category `Delivery updates`. You can know more about [notification categories here](/docs/notification-category).
 
 ## Designing a workflow
 
@@ -58,7 +60,7 @@ Workflows created on SuprSend dashboard can be [triggered via event call](/docs/
 For transactional usecases such as OTP, authentication, and verification notifications, where dynamic user channel information or sensitive data needs to be passed at the time of sending, you can pass all data and recipient information directly in a single API. This method doesn't require user creation beforehand to trigger notification and can be used if you are migrating your existing notifications to SuprSend. Below is an example payload illustrating a dynamic workflow setup for an OTP notification.
 
 <CodeGroup>
-  ```python python
+  ```python Python
   from suprsend import Event
   from suprsend import WorkflowTriggerRequest
 
@@ -86,7 +88,7 @@ For transactional usecases such as OTP, authentication, and verification notific
   print(response)
   ```
 
-  ```node node
+  ```node Node
   const {Suprsend, WorkflowTriggerRequest} = require("@suprsend/node-sdk");
   const supr_client = new Suprsend("_workspace_key_", "_workspace_secret_");
 
@@ -110,7 +112,7 @@ For transactional usecases such as OTP, authentication, and verification notific
   response.then(res => console.log("response", res));
   ```
 
-  ```go go
+  ```go Go
   package main
 
   import (
@@ -167,7 +169,7 @@ For transactional usecases such as OTP, authentication, and verification notific
 Below is a sample event call to trigger payment reminder workflow. These events can either be triggered by integrating one of our frontend or backend SDKs or you can also integrate with your CDP platforms like [Segment](/docs/segment) and map the events passed through these platforms as your workflow trigger.
 
 <CodeGroup>
-  ```python python
+  ```python Python
   from suprsend import Event
 
   # Track Event Example
@@ -205,7 +207,7 @@ Below is a sample event call to trigger payment reminder workflow. These events 
   response.then((res) => console.log("response", res));
   ```
 
-  ```java java
+  ```java Java
   import org.json.JSONObject;
 
   import suprsend.Suprsend;
@@ -235,7 +237,7 @@ Below is a sample event call to trigger payment reminder workflow. These events 
     }
   ```
 
-  ```go go
+  ```go Go
   ev := &suprsend.Event{
     EventName:  "Payment Pending", 
     DistinctId: "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08", 

@@ -19,7 +19,7 @@ Apart from the inbuilt helper functions, we have also created some custom helper
 
 <AccordionGroup>
   <Accordion title="default" defaultOpen={false}>
-    Can be used to add a default value if the variable values are `"", null, undefined`
+    Can be used to add a default value if the variable values are `" "` , `null` , `undefined`.
 
     **Syntax:** `{{default variable "default_value" }}`
 
@@ -27,33 +27,9 @@ Apart from the inbuilt helper functions, we have also created some custom helper
 
     **Returns:**
 
-    * Variable value if the variable value is present. For instance, the above example with data
+    * Variable value if the variable value is present. For instance, the above example with data `{"name":"Joe"}` will return `Joe`
 
-      `{"name":"Joe"}`
-
-      will return
-
-      `Joe`
-
-    * Default value if variable value is in
-
-      `"", null, undefined`
-
-      . For instance, the above example with data
-
-      `{"name":""}`
-
-      ,
-
-      `{"name":null}`
-
-      or
-
-      `{"city":"Bangalore"}`
-
-      will return
-
-      `user`
+    * Default value if variable value is in `" "` , `null` , `undefined`. For instance, the above example with data `{"name":""}`, `{"name":null}` or `{"city":"Bangalore"}` will return `user`
   </Accordion>
 
   <Accordion title="compare" defaultOpen={false}>
@@ -111,14 +87,14 @@ Apart from the inbuilt helper functions, we have also created some custom helper
 
     | Operator | Returns truthy when                             | Sample Statement       |
     | -------- | ----------------------------------------------- | ---------------------- |
-    | '=='     | LHS equals RHS                                  | 1 '==' "1"             |
-    | '==='    | LHS value as well as data type matches with RHS | 1 '===' 1              |
-    | '>'      | LHS is greater than RHS                         | 2 '>' 1                |
-    | '\<'     | LHS is less than RHS                            | 1 '\<' 2               |
-    | '>='     | LHS is greater than equals to RHS               | 2 '>=' 2 or 3 '>=' 2   |
-    | '\<='    | LHS is less than equal to RHS                   | 2 '\<=' 2 or 1 '\<=' 2 |
-    | '!='     | LHS is not equal RHS                            | 3 '!=' 1               |
-    | '!=='    | LHS value or data type does not equal RHS       | 1 '!==' "1"            |
+    | `==`     | LHS equals RHS                                  | 1 `==` "1"             |
+    | `===`    | LHS value as well as data type matches with RHS | 1 `===` 1              |
+    | `>`      | LHS is greater than RHS                         | 2 `>` 1                |
+    | `\<`     | LHS is less than RHS                            | 1 `\<` 2               |
+    | `>=`     | LHS is greater than equals to RHS               | 2 `>=` 2 or 3 `>=` 2   |
+    | `\<=`    | LHS is less than equal to RHS                   | 2 `\<=` 2 or 1 `\<=` 2 |
+    | `!=`     | LHS is not equal RHS                            | 3 `!=` 1               |
+    | `!==`    | LHS value or data type does not equal RHS       | 1 `!==` "1"            |
 
     <Warning>
       Builtin helpers and custom helpers in handlebars can only work with nested objects if the value of parent key is present.&#x20;
@@ -255,8 +231,8 @@ Apart from the inbuilt helper functions, we have also created some custom helper
 
     | Example                   | Output                                                  |
     | ------------------------- | ------------------------------------------------------- |
-    | `{{jsonStringify this}}`  | '\{"likes":3,"comments":4,"users":\["Olivia","Steve"]}' |
-    | `{{jsonStringify users}}` | '\["Olivia","Steve"]'                                   |
+    | `{{jsonStringify this}}`  | `\{"likes":3,"comments":4,"users":\["Olivia","Steve"]}` |
+    | `{{jsonStringify users}}` | `\["Olivia","Steve"]`                                   |
 
     <CodeGroup>
       ```json Mock JSON Data
@@ -649,6 +625,6 @@ Apart from the inbuilt helper functions, we have also created some custom helper
   </Accordion>
 </AccordionGroup>
 
-We are adding further helpers to this list. If you have a use case that is not covered, ping us on [slack](https://suprsendcommunity.slack.com/ssb/redirect)
+We are adding further helpers to this list. If you have a use case that is not covered, ping us on our [Slack Support Channel](https://suprsendcommunity.slack.com/ssb/redirect)
 
 ***

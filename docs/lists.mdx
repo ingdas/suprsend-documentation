@@ -11,42 +11,49 @@ By default, SuprSend creates a list named `all_users`, which automatically inclu
 
 You can create lists using one of the following methods:
 
-<Accordion title="Programmatically using SDK / API" defaultOpen={false}>
+<Accordion title="Programmatically using SDK / API" defaultOpen="false">
   This is the most flexible way of updating users in a list. This way, you can keep the list updated in real-time. You can use [API](/reference/list-overview) or update it using backend SDK
 
-  1. [Create list using python SDK](/docs/python-lists)
-
-  2. [Create list using node SDK](/docs/node-lists)
-
-  3. [Create list using Java SDK](/docs/lists-java)
-
-  4. [Create list using Go SDK](/docs/lists-go)
+  <CardGroup cols="4">
+    <Card title="Create list using python SDK" icon="python" href="/docs/python-lists">
+      
+    </Card>
+    <Card title="Create list using node SDK" icon="js" href="/docs/node-lists">
+      
+    </Card>
+    <Card title="Create list using Java SDK" icon="java" href="/docs/lists-java">
+      
+    </Card>
+    <Card title="Create list using the Go SDK" icon="golang" href="/docs/lists-go">
+      
+    </Card>
+  </CardGroup>
 </Accordion>
 
-<Accordion title="Using third party data platforms" defaultOpen={false}>
+<Accordion title="Using third party data platforms" defaultOpen="false">
   SuprSend supports integration with 3rd party platforms to sync user and event data. You can also sync user cohorts from these platforms into lists and run campaigns on those user segments from SuprSend. We currently have integration support for below connectors:
 
-  * [Mixpanel](/docs/mixpanel)
-
+  <Card title="Mixpanel" icon="sparkles" href="/docs/mixpanel">
+    
+  </Card>
   Need support for another connector? [Please Let us know](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#/shared-invite/email)
 </Accordion>
 
-<Accordion title="From UI using CSV upload" defaultOpen={false}>
+<Accordion title="From UI using CSV upload" defaultOpen="false">
   You can also update List directly from the SuprSend dashboard. This way, marketing or product teams can send broadcasts directly from the dashboard without any tech involvement. Recommended for cases when you want to send a one-off campaign and only need the list temporarily.
 
   <Warning>
     This will only sync existing users in SuprSend database. It doesn't create new user profiles. [Refer docs](/docs/users#creating-user-profile-on-suprsend) to create user profiles
   </Warning>
-
   You'll find the option to create the list and update users on the List Tab.
 
-  * To **create a list**, click on the "**`+ New List`**" button and add the relevant information. `List ID` is the unique identifier for the list. `Name` and `Description` are just for reference so that you know what this list represents.
+  - **To create a list**, click on the `+ New List` button and add the relevant information. `List ID` is the unique identifier for the list. `Name` and `Description` are just for reference so that you know what this list represents.
 
   ![](/images/docs/d3d88c5-image.png)
 
-  You can also modify list `Name` and `Description` later by clicking on "**Modify List**" option available in the right side Kebab menu on a list.
+  You can also modify list `Name` and `Description` later by clicking on `Modify List` option available in the right side Kebab menu on a list.
 
-  * To **update users in the list**, click on the "**Update Users**" option available in the right side Kebab menu on a list. It will open a dialog like the one shown below
+  - **To** **update users in the list**, click on the `Update Users` option available in the right side Kebab menu on a list. It will open a dialog like the one shown below
 
   ![](/images/docs/a501c88-image.png)
 
@@ -54,25 +61,21 @@ You can create lists using one of the following methods:
 
   <Steps>
     <Step title="Choose the Update Function">
-      * Choose "**Add**" to add more users to an existing list of users. For example, if you are adding today's signups in the new signups list every day
-
-      * Opt for "**Replace**" to replace the current list with a completely new set of users. This is handy in situations where you need to update the list with all users who fit a criteria (like users subscribed to a topic), without needing to track individual additions.
+      - Choose `Add` to add more users to an existing list of users. For example, if you are adding today's signups in the new signups list every day
+      - Opt for `Replace` to replace the current list with a completely new set of users. This is handy in situations where you need to update the list with all users who fit a criteria (like users subscribed to a topic), without needing to track individual additions.
     </Step>
-
     <Step title="Upload CSV">
-      Upload a CSV file containing the distinct\_id of the users. Make sure that the column is labeled as `distinct_id`
+      Upload a CSV file containing the distinct_id of the users. Make sure that the column is labeled as `distinct_id`
 
       ![](https://files.readme.io/bfd7943-ezgif.com-gif-maker_7.gif)
 
-      Click on "**Update Users**" button. You can check the update progress in "**Import logs**"
+      Click on `Update Users` button. You can check the update progress in `Import logs`.
     </Step>
   </Steps>
 </Accordion>
 
-<Accordion title="Automate list sync using database connector" defaultOpen={false}>
-  You can automate your list update using data directly by writing SQL query on your database. This allows your data, product and growth teams to completely own product and engagement notifications without any development effort.&#x20;
-
-
+<Accordion title="Automate list sync using database connector" defaultOpen="false">
+  You can automate your list update using data directly by writing SQL query on your database. This allows your data, product and growth teams to completely own product and engagement notifications without any development effort.
 
   You can also use it to sync user profiles and send personalized broadcasts to users using their profile properties. See how to setup database sync [here](/docs/list-sync-via-database).
 
@@ -83,22 +86,20 @@ You can create lists using one of the following methods:
 
 You can configure events when a user enters or exits a list. For example - you have a list of users **"Active on the platform in last 7 days"**. Whenever a user exists this list, you might want to send a notification to re-engage the users. You can do so using list events. There are 2 types of list events that you can configure
 
-* **User Entry** - This will trigger a bulk event `$USER_ENTERED_LIST - <list_id>` for all new users added to the list whenever a list is updated.
+- **User Entry** - This will trigger a bulk event `$USER_ENTERED_LIST - <list_id>` for all new users added to the list whenever a list is updated.
+- **User Exit** - This will trigger a bulk event `$USER_EXITED_LIST - <list_id>` for all new users removed from the list whenever a list is updated.
 
-* **User Exit** - This will trigger a bulk event `$USER_EXITED_LIST - <list_id>` for all new users removed from the list whenever a list is updated.
-
-List events is a list property and can be updated using **Modify List** option on [SuprSend dashboard -> List page](https://app.suprsend.com/en/staging/lists) or using the [list API](/reference/create-list). Event tracking is set as false by default.
+List events is a list property and can be updated using `Modify List` option on [SuprSend dashboard -> List page](https://app.suprsend.com/en/staging/lists) or using the [list API](/reference/create-list). Event tracking is set as false by default.
 
 ![](/images/docs/caf8f79-image.png)
 
 ## Sending notification to list users
 
-* You can either setup individual workflows for list users based on [list events](/docs/lists#configure-list-events). For example, if you want to notify job seekers who were active on the platform in the last 7 days but left today.
-
-* The most recommended way to send notification to list users is via [Broadcast](/docs/broadcast). You can schedule broadcast on this list from the dashboard by clicking on "**Run Broadcast**" option or trigger it programatically via API.We recommend sending broadcasts using promotional category so you don't end up overloading transactional and system queues. Learn more about how to choose the right notification category [here](/docs/notification-category).
+- You can either setup individual workflows for list users based on [list events](/docs/lists#configure-list-events). For example, if you want to notify job seekers who were active on the platform in the last 7 days but left today.
+- The most recommended way to send notification to list users is via [Broadcast](/docs/broadcast). You can schedule broadcast on this list from the dashboard by clicking on "**Run Broadcast**" option or trigger it programatically via API.We recommend sending broadcasts using promotional category so you don't end up overloading transactional and system queues. Learn more about how to choose the right notification category [here](/docs/notification-category).
 
 <Warning>
   Avoid using individual workflows on a consecutive list update of more than 1000 users. It can add a delay in your notification queue.
 </Warning>
 
-***
+---

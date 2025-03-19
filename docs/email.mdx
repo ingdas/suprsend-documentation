@@ -7,7 +7,10 @@ description: "This section is a step-by-step guide to designing and publishing a
 
 You can start designing beautiful HTML email with the drag & drop tool provided. You can add variables with Handlebarsjs language.
 
-The email template has 3 parts - Body (permanent background), Blocks (each block contains different types of content) and Content (add Heading, Images, buttons, tables here).
+The email template has 3 parts - 
+  - **Body** (permanent background), 
+  - **Blocks** (each block contains different types of content),  
+  - **Content** (add Heading, Images, buttons, tables here).
 
 The email designed is responsive, you can see how the template looks on desktop and mobile by clicking on preview bar in bottom left corner.
 
@@ -70,23 +73,11 @@ There will always be the case where you would be required to add dynamic content
 
     Below are some examples of how to enter variables in the template design. For illustration, we are using the same sample variable names that we declared in the 'Templates' section:
 
-    1. To enter a nested variable, enter in the format
+    1. To enter a nested variable, enter in the format `{{var1.var2.var3}}`. Eg. to refer to city in the example above, you need to enter `{{event.location.city}}`
 
-       `{{var1.var2.var3}}`
+    2. If you have any space in the variable name, enclose it in square bracket `{{event.[first name]}}`
 
-       . Eg. to refer to city in the example above, you need to enter
-
-       `{{event.location.city}}`
-
-    2. If you have any space in the variable name, enclose it in square bracket
-
-       `{{event.[first name]}}`
-
-    3. To add array names, you need to use an email functionality called
-
-       **'Merge Tags'**
-
-       . Scroll below to the Merge Tags section.
+    3. To add array names, you need to use an email functionality called **Merge Tags** . Scroll below to the Merge Tags section.
 
     #### -  Auto-suggestions in Email:
 
@@ -107,19 +98,19 @@ There will always be the case where you would be required to add dynamic content
     In email, there is a difference on how to add array elements in the template, which can be used to send a list of items which could be dynamic in nature. If you have noticed, you do not get array elements in the drop-down suggestion when you type `{` In order to add array element, you will be required to necessarily use a functionality called **Merge Tags**. Follow these steps to add variable for array element in an email template:
 
     <Steps>
-      <Step title="Step 1">
+      <Step title="Write an Array Object as per the sample below:">
         Declare an array object in the **`Variables`** button. Below is a sample of variables defined. Note that variable `array` has a list of product items, with product\_name, product\_image, and product\_price as array properties. Save it.
 
         ![](/images/docs/137de20-c5f7859-Screenshot_2021-11-20_at_6.08.07_PM.png "c5f7859-Screenshot_2021-11-20_at_6.08.07_PM.png")
       </Step>
 
-      <Step title="Step 2">
+      <Step title="Pick a Row of your choice:">
         Select a **Row** in which you want to add dynamic content of an array. You will see an additional button on the bottom left corner.
 
         ![](/images/docs/1bfe489-Screenshot_2021-11-22_at_2.33.08_PM.png "Screenshot 2021-11-22 at 2.33.08 PM.png")
       </Step>
 
-      <Step title="Step 3">
+      <Step title="Select the arrays you want to add:">
         When you click on it, you will see the list of all arrays that you have declared in the global **Variables** button. Select the array whose variables you want to add in the row.
 
         ![](/images/docs/05cb7c2-Screenshot_2021-11-22_at_2.36.16_PM.png "Screenshot 2021-11-22 at 2.36.16 PM.png")
@@ -129,7 +120,7 @@ There will always be the case where you would be required to add dynamic content
         </Frame>
       </Step>
 
-      <Step title="Step 4">
+      <Step title="Select the variables of choice:">
         Once selected, you will start seeing the array elements variables in the auto-suggestions. (You can type `{` or click on 'Merge Tags' to get the suggestion values). Select the desired variable, and the row will be repeated for all the elements that come at the time of email trigger.
 
         ![](/images/docs/f9ef60f-Screenshot_2021-11-22_at_2.44.44_PM.png "Screenshot 2021-11-22 at 2.44.44 PM.png")
@@ -155,22 +146,14 @@ Here's how you can add display condition to an email block:
     ![](/images/docs/7d4a897-image.png)
   </Step>
 
-  <Step title="Select the block and click on the &#x22;Display Conditions&#x22; checkbox from quick content settings or the right-hand side content settings" stepNumber="2">
+  <Step title="Select the block and click on the 'Display Conditions' checkbox from quick content settings or the right-hand side content settings" stepNumber="2">
     ![](/images/docs/dcc458e-display_email.png)
   </Step>
 
-  <Step title="Add the condition in the editor and click on &#x22;Create new condition&#x22;" stepNumber="3">
+  <Step title="Add the condition in the editor and click on 'Create new condition'" stepNumber="3">
     * Add a relevant name and description to the condition.
 
-    * You can add condition in this format
-
-      `(condition <key> "==" <value>)`
-
-      . You can use any of the
-
-      [supported conditional operators](/docs/email#supported-conditional-operators)
-
-      in the conditional statement
+    * You can add condition in this format `(condition <key> "==" <value>)`. You can use any of the [supported conditional operators](/docs/email#supported-conditional-operators) in the conditional statement
 
     ![](/images/docs/baa3119-Group_20.png)
 
@@ -182,14 +165,14 @@ Here's how you can add display condition to an email block:
 
 | Operator | Returns truthy when                             | Sample Statement       |
 | -------- | ----------------------------------------------- | ---------------------- |
-| '=='     | LHS equals RHS                                  | 1 '==' "1"             |
-| '==='    | LHS value as well as data type matches with RHS | 1 '===' 1              |
-| '>'      | LHS is greater than RHS                         | 2 '>' 1                |
-| '\<'     | LHS is less than RHS                            | 1 '\<' 2               |
-| '>='     | LHS is greater than equals to RHS               | 2 '>=' 2 or 3 '>=' 2   |
-| '\<='    | LHS is less than equals to RHS                  | 2 '\<=' 2 or 1 '\<=' 2 |
-| '!='     | LHS is not equals RHS                           | 3 '!=' 1               |
-| '!=='    | LHS value or data type does not equal RHS       | 1 '!==' "1"            |
+| `==`    | LHS equals RHS                                  | 1 `==` "1"             |
+| `===`    | LHS value as well as data type matches with RHS | 1 `===` 1              |
+| `>`      | LHS is greater than RHS                         | 2 `>` 1                |
+| `\<`     | LHS is less than RHS                            | 1 `\<` 2               |
+| `>=`     | LHS is greater than equals to RHS               | 2 `>=` 2 or 3 `>=` 2   |
+| `\<=`    | LHS is less than equals to RHS                  | 2 `\<=` 2 or 1 `\<=` 2 |
+| `!=`     | LHS is not equals RHS                           | 3 `!=` 1               |
+| `!==`    | LHS value or data type does not equal RHS       | 1 `!==` "1"            |
 
 ### `OR` condition
 

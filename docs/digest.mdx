@@ -91,17 +91,17 @@ It is the recurring schedule when an open digest should be closed. This schedule
     ```
 
     </CodeGroup>
+    | Variable     | Type                                         | Description |
+    |-------------|----------------------------------------------|-------------|
+    | `frequency` | string (mandatory)                          | Choose from one of the below options:  **minutely**  **hourly**  **daily**  **weekly** (mandatory to pass `weekdays` in this case)  **weekly_mo2fr** (weekly on Monday to Friday)  **monthly** (mandatory to pass `monthdays` in this case) |
+    | `interval`  | integer (optional)                          | Interval at which the frequency will repeat. Interval `2` with frequency `daily` would mean repeat every 2 days. Defaults to `1` if not set. |
+    | `weekdays`  | array[] (mandatory for `weekly` frequency)  | Days of the week for weekly frequency. Pass the first 2 characters of days of the week in an array as `["su", "mo", "tu", "we", "th", "fr", "sa"]` |
+    | `monthdays` | array[map] (mandatory for `monthly` frequency) | Days of the month for monthly frequency (e.g., 1st, 3rd, and 5th Mondays of the month or 1st - 5th day of the month). Pass as `[{"pos": 1, "day": "mo"}]`, where `pos` defines the day index and `day` defines the type of day (can be referred to define the day of the week). For example, `1st,2nd day of the month` will be set as `[{"pos": 1, "day": ""},{"pos": 2, "day": ""}]`. |
+    | `time`      | string (optional)                           | Time for daily, weekly, or monthly frequency when the digest will close. Defined in hour and minute as `hh:mm`. Defaults to `00:00` if not set. |
+    | `dtstart`   | datetime (ISO-8601 format) (optional)       | Starting time from which the first schedule will be calculated. Set as `2024-08-01T10:40:50` in ISO-8601 format. Defaults to `current_timestamp` at the time of setting the schedule if not defined. |
+    | `tz_selection` | string (optional)                        | Timezone selection. `time` and `dtstart` will both be in this timezone.  - Leave empty `""` for fixed timezone  - Set to `"recipient"` if the timezone needs to be picked dynamically from user property or trigger data. |
+    | `tz_fixed`  | string (mandatory if `"tz_selection": ""`)  | Timezone to pick in case of fixed `tz_selection`. Add timezone in [IANA (TZ identifier)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) format as `America/New_York`. Defaults to `UTC` if not set. |
 
-    | Variable | Type                                  | Description |
-    | -------- | ------------------------------------- | ----------- |
-    |          | string (mandatory)                    |             |
-    |          | integer (optional)                    |             |
-    |          |                                       |             |
-    |          |                                       |             |
-    |          | string (optional)                     |             |
-    |          | datetime (ISO-8601 format) (optional) |             |
-    |          | string (optional)                     |             |
-    |          |                                       |             |
 
     ### Passing dynamic schedule for users
 
