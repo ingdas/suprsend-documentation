@@ -25,7 +25,7 @@ Recipient refers to the recipient of the target workflow. It can be:
 
 You can refer to input data variables in JSONNET format, prefixed by `data` key. The same format is followed for adding variable in actor and data field as well. Following data types are available in workflow:
 
-| Data Type      | Referring this property in JSONNET          | Description                                                                                                                                                                                                                          |
+| Data Type      | Referring in JSONNET          | Description                                                                                                                                                                                                                          |
 | -------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Input Payload  | pass as `data.<property_key>`               | This includes the data from your trigger payload and any data modified or added by nodes such as data transform, or webhook/fetch nodes before the invoke node.                                                                      |
 | Actor          | pass as `data["$actor"].<property_key>`     | Actor properties. In case of event trigger, `distinct_id` works both as actor and recipient and for inline workflow trigger, it is the `distinct_id` in actor object.                                                                |

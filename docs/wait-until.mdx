@@ -9,18 +9,16 @@ Wait Until is a conditional branch which halts the workflow until either the bra
 
 Wait Until has 2 branches - **Condition** and **Max time**. The user proceeds through the branch that is satisfied first.
 
-1. [Condition](/docs/wait-until#conditions)
-
-   User proceeds through this path when a condition is met, such as an event being triggered, user properties, or the event properties that initiated the workflow. In case of payment reminder, condition could be the event trigger of `user completing payment`.
-2. [Max time](/docs/wait-until#max-time)
-
-   This is the maximum time the user can wait for the condition to satisfy until the next step should be executed. If a person reaches the maximum wait time without achieving any other conditions, they'll progress through this branch.
+1. [Condition :](/docs/wait-until#conditions) User proceeds through this path when a condition is met, such as an event being triggered, user properties, or the event properties that initiated the workflow. In case of payment reminder, condition could be the event trigger of `user completing payment`.
+2. [Max time :](/docs/wait-until#max-time) This is the maximum time the user can wait for the condition to satisfy until the next step should be executed. If a person reaches the maximum wait time without achieving any other conditions, they'll progress through this branch.
 
 <Frame caption="Wait Until - Payment Reminder example">
   ![](/images/docs/30a5d05-image.png)
 </Frame>
 
-You can incorporate multiple **Wait Until** nodes in sequence to create a multi-step notification journey, where each notification is sent based on a specific condition being met.
+<Note>
+You can incorporate **multiple Wait Until** nodes in sequence to create a multi-step notification journey, where each notification is sent based on a specific condition being met.
+</Note>
 
 ## Conditions
 
@@ -40,56 +38,44 @@ You can define the event name and apply conditions on event properties to filter
 
 Property condition is constructed as key, operator and value. You can add multiple conditions separated by `AND`, `OR`.
 
-1. **Key**
+1. **Key:** It is the variable key in your wait until event properties.
+2. **Operator:** you can use any of the below operators to compare key and value:
 
-   It is the variable key in your wait until event properties.
-2. **Operator**
+| Operator     | Description                                                                                               |
+|-------------|-----------------------------------------------------------------------------------------------------------|
+| `==`        | Key **is equal to** value. This is a case-sensitive check.                                                |
+| `!=`        | Key **is not equal to** value. This is a case-sensitive check.                                            |
+| `>`         | Key **is greater than** value. Can be applied to integers, float values, or epoch timestamps.             |
+| `>=`        | Key **is greater than or equal to** value. Can be applied to integers, float values, or epoch timestamps. |
+| `<`         | Key **is less than** value. Can be applied to integers and float values.                                  |
+| `<=`        | Key **is less than or equal to** value. Can be applied to integers and float values.                      |
+| `contains`  | Key should be a substring or a list item in an array.                                                     |
+| `not contains` | Key should not be a substring or match any list item in an array.                                   |
+| `is empty`  | Evaluates to `true` if the key is missing, an empty string, or has a `null` value.                        |
+| `is not empty` | Key should be present and should not be an empty string or `null` value.                           |
 
-   you can use any of the below operators to compare key and value:
-
-| Operator     | Description                                                         |
-| ------------ | ------------------------------------------------------------------- |
-| ==           |                                                                     |
-| !=          |                                                                     |
-| >           |                                                                     |
-| >=         |                                                                     |
-| `<`            |                                                                     |
-| `<=`           |                                                                     |
-| contains     | key should be a substring or list item of an array.                 |
-| not contains | key should not be a substring or match any list item of an array.   |
-| is empty     |                                                                     |
-| is not empty |                                                                     |
-
-3. **Value**
-
-   Value can be fixed (static value) or dynamic (evaluated dynamically from workflow data).
+3. **Value:** Value can be fixed (static value) or dynamic (evaluated dynamically from workflow data).
 
 #### Fixed values
 
 Fixed values can be added as:
 
-1. **string**
+1. **string** - enclose within double inverted commas as `"string"`
 
-   - enclose within double inverted commas as `"string"`
+2. **number** - `1`, `1.2`
 
-2. **number**
-
-   - `1`, `1.2`
-
-3. **boolean**
-
-   - `true`, `false`
+3. **boolean** - `true`, `false`
 
 #### Dynamic values
 
 Dynamic values are evaluated based on the data available at the node input along with actor, recipient or tenant properties. Refer below table for types of dynamic values and their respective syntax.
 
-| Data Type      | Description                                                                                                                                                                   | Referring this property in condition |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| Input Payload  | This includes the data from your trigger payload and any data modified or added by nodes such as data transform, batch/digest, or webhook/fetch nodes before the branch node. |                                      |
-| Actor          |                                                                                                                                                                               |                                      |
-| Recipient      |                                                                                                                                                                               |                                      |
-| Brand / Tenant | Brand / Tenant properties. It is all the properties of the tenant_id in your workflow trigger.                                                                                |                                      |
+| Data Type      | Description                                                                                                                                                                                                                                                   | Referring this property in condition     |
+|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
+| **Input Payload**  | Includes data from your trigger payload and any data modified or added by nodes such as data transform, batch/digest, or webhook/fetch nodes before the branch node.                                                                                 | Directly specify as `key` with no prefix |
+| **Actor**         | Actor properties. In the case of an event trigger, `distinct_id` works as both actor and recipient. For an inline workflow trigger, it is the `distinct_id` in the actor object.                                                                                         | Add as `$actor.<property_key>`           |
+| **Recipient**     | Recipient properties. It is the `distinct_id` in your event trigger or the key value defined in [override recipient](https://docs.suprsend.com/docs/override-recipient-list) field. For an inline workflow trigger, it is the `distinct_id` in the recipient object. | Add as `$recipient.<property_key>`       |
+| **Brand / Tenant** | Brand/Tenant properties. These include all properties of the `tenant_id` in your workflow trigger.                                                                                                                                                                | Add as `$brand.<property_key>`            |
 
 ### Adding conditions on multiple events
 
