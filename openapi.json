@@ -247,10 +247,9 @@ paths:
                 type: object
                 properties: {}
       deprecated: false
-
   /v1/tenant/:
     get:
-      summary: Get Tenant list
+      summary: Get Tenant List
       description: API to get the list of tenants available in your workspace
       operationId: get-tenant-list
       parameters:
