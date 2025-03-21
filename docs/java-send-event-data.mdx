@@ -124,9 +124,9 @@ public class Event {
   When you create an Event or a property, please ensure that the Event Name or Property Name does not start with  or , as we have reserved these symbols for our internal events and property names.
 </Warning>
 
-## Trigger events for custom brand
+## Trigger events for custom brand/tenant
 
-If you handle communications to end users on behalf of your customers and want to send custom notifications for each brand, you can do that with the help of [brands](/docs/brands).
+If you handle communications to end users on behalf of your customers and want to send custom notifications for each brand/tenant, you can do that with the help of [brands (now called tenants)](/docs/tenants).
 
 Just pass the **brand_id** of your customer brand as **5th parameter in your event instance** like shown below and the properties of that brand will be used to replace brand variables in your template.
 

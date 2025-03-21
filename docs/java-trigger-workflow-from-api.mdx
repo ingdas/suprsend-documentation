@@ -301,7 +301,7 @@ private static JSONObject getWorkflowBody() {
 
 ## Multi-tenant notifications
 
-For cases where you want to send notifications to your enterprise customers end users, pass the `tenant_id` in your workflow instance. You can use this to dynamically manage [tenant level notification customizations](/docs/brands). This includes the ability to customize template design or content and route notifications via tenant vendors.
+For cases where you want to send notifications to your enterprise customers end users, pass the `tenant_id` in your workflow instance. You can use this to dynamically manage [tenant level notification customizations](/docs/tenants). This includes the ability to customize template design or content and route notifications via tenant vendors.
 
 <CodeGroup>
 
@@ -600,7 +600,7 @@ You can configure workflow from backend API by following below steps:
             JSONObject body = sdk.loadBody("input");
             // SDK instance
             Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE KEY");
-            Workflow wf = new Workflow(body, idempotencyKey, brandId)
+            Workflow wf = new Workflow(body, idempotencyKey, tenantId)
               
             // Trigger workflow
             JSONObject resp = suprClient.triggerWorkflow(wf);

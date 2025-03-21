@@ -64,7 +64,7 @@ You can update notification categories from [Developers -> Preference categories
 
 ### Set default preferences
 
-If user has not set preferences in a category, notifications are sent based on default preferences. Default preferences are configured in notification category. Tenant can override default preference for their users. The same can be set using [tenant preference API](/reference/update-brand-default-preference) or from tenant details page.
+If user has not set preferences in a category, notifications are sent based on default preferences. Default preferences are configured in notification category. Tenant can override default preference for their users. The same can be set using [tenant preference API](/reference/update-tenant-default-preference) or from tenant details page.
 
 You can set following default preferences at category level:
 
@@ -150,7 +150,7 @@ If you are triggering notification for a tenant, tenant default preference setti
 
 ### Resolving preference conflicts
 
-The order of precedence is always user > tenant > org (set in notification category settings). However, if you turn off notifications in a category from the [tenant page](https://app.suprsend.com/en/demo/brands), users will not receive notifications in that category.
+The order of precedence is always user > tenant > org (set in notification category settings). However, if you turn off notifications in a category from the [tenant page](https://app.suprsend.com/en/demo/tenants), users will not receive notifications in that category.
 
 ### Debugging preference evaluation in workflow runs
 
@@ -162,7 +162,7 @@ You can also track when user updated their preference by filtering on `Subscribe
 
 ## Tenant Preference
 
-In multi-tenant B2B and B2B2C products, you can use [tenant preference](/docs/brand-preference) to allow company admins setting preference for their internal team / departments or your enterprise customers setting preference for their end users.
+In multi-tenant B2B and B2B2C products, you can use [tenant preference](/docs/tenant-preference) to allow company admins setting preference for their internal team / departments or your enterprise customers setting preference for their end users.
 
 ---
 
@@ -173,7 +173,7 @@ In multi-tenant B2B and B2B2C products, you can use [tenant preference](/docs/br
     You can either create multiple sub-categories for different digest schedules, or setup digest schedule in user profile and pass dynamic schedule in workflow digest node. We will soon introduce an option to set the digest schedule directly on your preference page.
   </Accordion>
   <Accordion title="I have a use case where a company has multiple departments/roles, and the admin will set preferences for users in these departments." defaultOpen="false">
-    You can handle this with tenant preferences. Here, every tenant in SuprSend system will represent a organization, and admin will set what categories should be sent to their internal team using [tenant preference API](/reference/update-brand-default-preference).
+    You can handle this with tenant preferences. Here, every tenant in SuprSend system will represent a organization, and admin will set what categories should be sent to their internal team using [tenant preference API](/reference/update-tenant-default-preference).
   </Accordion>
   <Accordion title="What happens to existing user preference view if I change default preference setting? " defaultOpen="false">
     Changing the default preference for a category does not affect users who have already made changes to that category. For categories where users haven't made any changes will update as per new default settings.

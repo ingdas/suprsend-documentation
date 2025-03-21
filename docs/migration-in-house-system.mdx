@@ -30,7 +30,7 @@ For rest of the cases, you can go with either approaches. However, we recommend 
 - **Sync existing data and assets** - There are 3 types of data entities in SuprSend - User Data (user, preferences), its modelling (Objects, tenants) and assets (template, workflow).
   - First, sync your [users](https://docs.suprsend.com/docs/users) and their [preferences](https://docs.suprsend.com/docs/preferences). Do one time migration of existing data and setup integration to auto create new users on every profile change. Release it first so that data starts flowing into SuprSend.\
     Skip this step if you are going with inline user identification in workflow API.
-  - Setup additional data modelling for [objects](https://docs.suprsend.com/docs/objects) and [tenants](https://docs.suprsend.com/docs/brands) alongside user sync.
+  - Setup additional data modelling for [objects](https://docs.suprsend.com/docs/objects) and [tenants](https://docs.suprsend.com/docs/tenants) alongside user sync.
   - Asset migration ([templates](https://docs.suprsend.com/docs/templates) and [workflows](https://docs.suprsend.com/docs/design-workflow)) can be done on per-usecase basis. You can design these directly on SuprSend console or use APIs (_currently in beta_).
 - **Setup notification trigger**. Integrate direct [workflow API](https://docs.suprsend.com/docs/trigger-workflow#triggering-workflow-via-api) or directly pass user [triggered events](https://docs.suprsend.com/docs/trigger-workflow#event-based-trigger) if you have an existing event stream. You can compare both approaches and see which one fits your usecase better [here](https://docs.suprsend.com/docs/event-vs-api-trigger). Most companies opt for a hybrid approach—passing events for user-initiated actions while using APIs for system-generated alerts.
 
@@ -66,9 +66,9 @@ Frontend implementation can be planned in parallel but it should be released aft
     In addition to users, your system may have other entities that require notification modelling from the start. If your system only requires direct user notifications and you always know the recipient in your trigger, you can just migrate users and you are good to go. For other cases, SuprSend supports two key concepts for user modelling:
 
     <Accordion title="Tenants" icon="sparkles">
-      Use [tenants](https://docs.suprsend.com/docs/brands) when,
+      Use [tenants](https://docs.suprsend.com/docs/tenants) when,
 
-      - You are a SAAS platform where customer [notification preferences](https://docs.suprsend.com/docs/brand-preference) can be controlled by your org or end customer admin.
+      - You are a SAAS platform where customer [notification preferences](https://docs.suprsend.com/docs/tenant-preference) can be controlled by your org or end customer admin.
       - Sending notifications on behalf of customers and need to white label notification or route via customer's vendor credentials (their email address)
     </Accordion>
     <Accordion title="Objects" icon="sparkles">

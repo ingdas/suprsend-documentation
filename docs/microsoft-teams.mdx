@@ -345,12 +345,12 @@ In this documentation, we'll create an app to send direct messages to users or T
 
 ## Tenancy in Microsoft teams
 
-In scenarios where you're sending notifications on behalf of your enterprise clients, each with their own team applications for communicating with end-users, you can define distinct app configurations at the tenant level. In SuprSend, we presently identify tenants as brands.
+In scenarios where you're sending notifications on behalf of your enterprise clients, each with their own team applications for communicating with end-users, you can define distinct app configurations at the tenant level. In SuprSend, we presently identify tenants as tenants.
 
-To support this, simply include the app configuration for the brand on the vendor details page. This will override the default brand vendor at the time of sending notification. This configuration needs to be set up once, and SuprSend will seamlessly direct all notifications associated with that brand through the vendor configuration specified for the brand.
+To support this, simply include the app configuration for the tenant on the vendor details page. This will override the default tenant vendor at the time of sending notification. This configuration needs to be set up once, and SuprSend will seamlessly direct all notifications associated with that tenant through the vendor configuration specified for the tenant.
 
 > In case you don't have vendor defined for a tenant, notifications will automatically fallback to the default vendor credentials.
 
-Refer Steps to configure brand level vendor [here](/docs/tenant-vendor)
+Refer Steps to configure tenant level vendor [here](/docs/tenant-vendor)
 
 ***

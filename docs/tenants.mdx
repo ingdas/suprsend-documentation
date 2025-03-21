@@ -1,5 +1,5 @@
 ---
-title: "Brands / Tenants"
+title: "Tenants"
 description: "An overview of what tenant (previously named as brand) stands for in SuprSend and how you can manage it"
 ---
 
@@ -7,7 +7,7 @@ If you handle communications to end users on behalf of your customers, you might
 
 Tenants empower you to send personalized communication on behalf of your customers using a single API. You just have to store tenant guidelines like logo, name, colors, social links and other custom properties for your customers once and then use your tenant variables in templates to dynamically render the template for each of your customer.
 
-You can programatically create / update tenant tenant using either one of our backend SDKs ([Python](/docs/brands-python), [Node](/docs/node-brands), [Java](/docs/brands-java), [Go](/docs/brands-api-go)) or through SuprSend dashboard. We'll cover the method to create tenant using SuprSend dashboard.
+You can programatically create / update tenant tenant using either one of our backend SDKs ([Python](/docs/tenants-python), [Node](/docs/node-tenants), [Java](/docs/tenants-java), [Go](/docs/tenants-api-go)) or through SuprSend dashboard. We'll cover the method to create tenant using SuprSend dashboard.
 
 ## Creating / Updating Tenant on SuprSend Platform
 
@@ -40,15 +40,15 @@ Here are the form fields and its description
 | Social Links      | URL                                                                                                                                                  | URLs of social media accounts of the tenant It is used to render social media logos in tenant email footer. if the link is not passed, that logo will not be shown in the footer.                                                                                                                                                                                  |
 | Custom Properties | JSON                                                                                                                                                 | Custom properties associated with the tenant. The option to add custom properties is currently not available on the dashboard but you can update it using backend SDK or APIs                                                                                                                                                                                      |
 
-You can use [HTTP API](/reference/brand-overview) or manage tenants using one of our backend SDKs:
+You can use [HTTP API](/reference/tenant-overview) or manage tenants using one of our backend SDKs:
 
-1. [Update tenant using python SDK](/docs/brands-python)
+1. [Update tenant using python SDK](/docs/tenants-python)
 
-2. [Update tenant using node SDK](/docs/node-brands)
+2. [Update tenant using node SDK](/docs/node-tenants)
 
-3. [Update tenant using java SDK](/docs/brands-java)
+3. [Update tenant using java SDK](/docs/tenants-java)
 
-4. [Update tenant using go SDK](/docs/brands-api-go)
+4. [Update tenant using go SDK](/docs/tenants-api-go)
 
 ## Using Tenant Components in Templates
 
@@ -185,10 +185,10 @@ After adding the tenant variables in your template, you can add tenant\_id in yo
 
 ### Possible customizations at Tenant Level
 
-* **Custom Template Designs for Each Tenant**- You can create unique template designs for each tenant using tenant-specific properties. Refer to the [above section](/docs/brands#using-brand-components-in-templates) for details on how to implement this.
+* **Custom Template Designs for Each Tenant**- You can create unique template designs for each tenant using tenant-specific properties. Refer to the [above section](/docs/tenants#using-tenant-components-in-templates) for details on how to implement this.
 
 * **Route Tenant messages from their own vendors**- You can direct messages through a tenant's designated vendors by configuring [tenant vendors](/docs/tenant-vendor) on the vendor settings page. Messages will be sent via the vendor associated with the tenant\_id provided in the trigger. If no tenant vendor is set, the system will use the default vendor settings.
 
-* **Tenant level preference setting**: Tenants can control what notifications should be sent to their associated users and the their default preference setting. It can be used for cases where admin wants to control the notifications that their teammates receive or when you are sending notifications to multiple tenant's users and tenant wants to control the notifications their users receive, on which channels and at what frequency. [Read more about tenant preferences here](/docs/brand-preference).
+* **Tenant level preference setting**: Tenants can control what notifications should be sent to their associated users and the their default preference setting. It can be used for cases where admin wants to control the notifications that their teammates receive or when you are sending notifications to multiple tenant's users and tenant wants to control the notifications their users receive, on which channels and at what frequency. [Read more about tenant preferences here](/docs/tenant-preference).
 
 ***

@@ -9,17 +9,17 @@ Tenants (previously named as brands) represents a segment that user belongs to. 
 
 In a multi-tenant architecture, businesses can define which notification categories and channels are applicable to different tenants. For example - if you are a SAAS platform with some paid features and some of your clients have not subscribed to the paid features. You can hide notification categories related to the paid feature for those tenants.
 
-You can disable category overall preference or set channels as opt-out that are not valid for your tenants from [tenant details page on SuprSend dashboard](https://app.suprsend.com/en/staging/brands/default/brand_preference). Tenant will not be able to set preferences in the hidden categories and notification will not be sent to tenant's users in hidden categories.
+You can disable category overall preference or set channels as opt-out that are not valid for your tenants from [tenant details page on SuprSend dashboard](https://app.suprsend.com/en/staging/tenants/default/tenant_preference). Tenant will not be able to set preferences in the hidden categories and notification will not be sent to tenant's users in hidden categories.
 
 ![](/images/docs/f5dbac0aa956ee3b5b8bc801421ec7b422163dba69a6f6a025bed75c41f48ddf-image.png)
 
 ## Per-tenant default preference
 
-Tenants can set [default preferences](/reference/update-brand-default-preference) for their end users and hide the categories which are not applicable to their end user. This gives tenants control to choose which notifications are sent to their users or shown to their users for setting preferences.
+Tenants can set [default preferences](/reference/update-tenant-default-preference) for their end users and hide the categories which are not applicable to their end user. This gives tenants control to choose which notifications are sent to their users or shown to their users for setting preferences.
 
 ## Controlling preference UI for users
 
-Turning off categories or channels on tenant from [tenant preference page](https://app.suprsend.com/en/demo/brands/default/brand_preference) automatically removes it from user's preference view. Additionally, if tenants wish to further limit the categories visible to their end users, they can do so by setting `visible_to_subscriber` to `false` in the [default tenant preferences](/reference/update-brand-default-preference).
+Turning off categories or channels on tenant from [tenant preference page](https://app.suprsend.com/en/demo/tenants/default/tenant_preference) automatically removes it from user's preference view. Additionally, if tenants wish to further limit the categories visible to their end users, they can do so by setting `visible_to_subscriber` to `false` in the [default tenant preferences](/reference/update-tenant-default-preference).
 
 ## Collecting preference from tenant users
 

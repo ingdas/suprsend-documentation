@@ -30,8 +30,8 @@ SDKs are available in below languages. We'll be adding support in other language
 ## Adding preference page link in notifications
 
 <Steps>
-  <Step title="Add preference page link in brand settings page">
-    Add Embeddable Preference Page link in brand settings on SuprSend dashboard. This will automatically create a variable with key `$embedded_preference_url`. You can add this variable in your templates to add preference page link in your notifications.
+  <Step title="Add preference page link in tenant settings page">
+    Add Embeddable Preference Page link in tenant settings on SuprSend dashboard. This will automatically create a variable with key `$embedded_preference_url`. You can add this variable in your templates to add preference page link in your notifications.
 
     ![](/images/docs/c4f02b7-image.png)
   </Step>

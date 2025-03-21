@@ -29,7 +29,7 @@ properties = {
 "key2":"value2"
 } 
 
-event = Event(distinct_id=distinct_id, event_name=event_name, properties=properties, idempotency_key="__uniq_request_id__", tenant_id="default")
+event = Event(distinct_id=distinct_id, event_name=event_name, properties=properties, idempotency_key="__uniq_request_id__", brand_id="default")
 
 # Track event
 response = supr_client.track_event(event)

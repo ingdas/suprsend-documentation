@@ -47,7 +47,7 @@ Enclose your notifications component in **`SuprSend Provider`**. SuprSend hooks 
 | workspaceKey | string (Mandatory)   | You can find it in SuprSend Dashboard inside *Settings -> API Keys*.                                                                         |
 | distinctId   | string (Mandatory)   | Unique identifier for the user.                                                                                                              |
 | subscriberId | string (Mandatory)   | This is unique string for every distinctId used for authentication to inbox service. You check [generation docs](/docs/hmac-authentication). |
-| tenantId     | string (Optional)    | If you use multi-tenant architecture you can get inbox notifications for that specific tenant/brand only.                                    |
+| tenantId     | string (Optional)    | If you use multi-tenant architecture you can get inbox notifications for that specific tenant only.                                    |
 | pageSize     | number (Optional)    | Notifications to get in one api call. Used for pagination to get older notifications. Maximum allowed is 50. Defaults to 20.                 |
 | stores       | IStore\[] (Optional) | Pass stores array if you want to use [multi-tab feature](/docs/multi-tabs).                                                                  |
 
