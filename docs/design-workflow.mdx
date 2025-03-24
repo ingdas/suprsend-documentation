@@ -28,7 +28,7 @@ Workflows enable you to build complex notifications by defining whom to notify, 
 
 Additionally, you have functional nodes that adds logic, branch nodes to split execution based on conditions, and data update nodes to modify or add data and assets in SuprSend. We've explained and listed down the available workflow nodes below.
 
-### 1\. Trigger Node
+### 1. Trigger Node
 
 It is the first step of your workflow and contains information about what initiates the workflow, and related conditions. There are 3 types of workflow triggers possible:
 
@@ -40,7 +40,7 @@ Other than re-engagement notifications, most transactional workflows will either
 
 ![](/images/docs/982e348-image.png)
 
-### 2\. Delivery Nodes
+### 2. Delivery Nodes
 
 These nodes are the final steps in the workflow, responsible for delivering notifications to users. Here's a list of available delivery nodes:
 
@@ -69,7 +69,7 @@ Notification content is picked from the template, and only published and live te
 
 When the workflow reaches this node, it looks for active channels in the template and user profile, and send the notification to active user channels whose template content is live. [User preferences](/docs/preferences) are also taken into account at this stage. If the user has opted out of the given notification category or channel, it will be skipped, and corresponding errors can be seen on the[ logs page](/docs/logging).
 
-### 3\. Function Nodes
+### 3. Function Nodes
 
 Functions are logical steps in your workflow. We currently support the following functions:
 
@@ -96,7 +96,7 @@ Functions are logical steps in your workflow. We currently support the following
 
 We are adding more functions to support the complex notification use-cases. Have a use case in mind? Reach out to us in our [Slack community](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#/shared-invite/email), and we'll prioritize it.
 
-### 4\. Branch Nodes
+### 4. Branch Nodes
 
 Branches split the workflow execution into parallel flows. We currently support following branches:
 
@@ -109,7 +109,7 @@ Branches split the workflow execution into parallel flows. We currently support 
   </Card>
 </CardGroup>
 
-### 5\. Data Update Nodes
+### 5. Data Update Nodes
 
 These Nodes are used to bring in, modify or update data within workflow. Available data update nodes are:
 
