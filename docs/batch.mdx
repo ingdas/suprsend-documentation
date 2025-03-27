@@ -374,13 +374,13 @@ After data transform node, output variables will contain 3 additional keys gener
 ## Frequently Asked Questions:
 
 <AccordionGroup>
-  <Accordion title="What does this error in logs mean batch: this event was added to the running batch of a pre-existing workflow?" defaultOpen="false">
+  <Accordion title="What does this error in logs mean batch: this event was added to the running batch of a pre-existing workflow?" >
     This error indicates that the event triggering the workflow was added to the ongoing batch of an existing workflow. In the context of batched workflows, this occurrence is expected and transient, so it can be safely disregarded.
   </Accordion>
-  <Accordion title="What happens when I have multiple batch nodes in a workflow?" defaultOpen="false">
+  <Accordion title="What happens when I have multiple batch nodes in a workflow?" >
     Each batch node aggregates the event triggers that initiate the workflow and doesn't apply to the output of the batch node connected to its input. The primary impact of connected batch nodes is their cumulative effect on the delay of the notification. The delivery node utilizes the output of the last connected batch node to its input.
   </Accordion>
-  <Accordion title="Do you support per-user batch windows?" defaultOpen="false">
+  <Accordion title="Do you support per-user batch windows?" >
     You can use dynamic batch windows and pass per-user batch durations as part of the event property.
   </Accordion>
 </AccordionGroup>

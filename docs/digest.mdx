@@ -161,10 +161,10 @@ It is the recurring schedule when an open digest should be closed. This schedule
 ## Advanced Settings
 
 <AccordionGroup>
-  <Accordion title="Retain Items" defaultOpen="false">
+  <Accordion title="Retain Items" >
     Defines the number of trigger data that will be included in your Digest Batch. You have the option to display either the first n triggers or the last n triggers in your digest output. By default, the first 10 triggers are included. You can customize the number of triggers to any value between 2 and 100.
   </Accordion>
-  <Accordion title="Min Trigger Count" defaultOpen="false">
+  <Accordion title="Min Trigger Count" >
     Specifies the minimum number of triggers required to proceed with the digest. Workflow will exit and the next steps will not be executed if the number of triggers in the digest is less than this count. This is quite useful for cases where you are are sending individual alerts and also a digest of all alerts at the end of the day. Now, In this case, if only two alerts are triggered in a day, sending a digest might be unnecessary.
   </Accordion>
 </AccordionGroup>
@@ -456,16 +456,16 @@ After data transform node, output variables will contain 3 additional keys gener
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="What happens when digest schedule is changed and an existing digest is running? " defaultOpen="false">
+  <Accordion title="What happens when digest schedule is changed and an existing digest is running? " >
     Once a given batch has been opened by a workflow trigger, its window interval is immutable. The new schedule will be applicable from the next schedule.
   </Accordion>
-  <Accordion title="What happens when dynamic schedule is empty?" defaultOpen="false">
+  <Accordion title="What happens when dynamic schedule is empty?" >
     An error will occur, and the workflow will terminate. If your use case involves sending both immediate and digest notifications based on user preferences within the same workflow, and you are using a dynamic schedule for passing digest frequency, add a branch before the digest node to send an immediate alert if the schedule is empty or if the schedule variable is missing.
   </Accordion>
-  <Accordion title="What happens when wrong schedule is passed in dynamic schedule? " defaultOpen="false">
+  <Accordion title="What happens when wrong schedule is passed in dynamic schedule? " >
     When the dynamic schedule key is missing, or resolves to an invalid value, a corresponding error will be logged in workflow executions tab and further workflow execution will be skipped.
   </Accordion>
-  <Accordion title="What happens when digest node follows time window?" defaultOpen="false">
+  <Accordion title="What happens when digest node follows time window?" >
     Triggers before the Time Window start and during its open time (between start time and end time) will be accumulated in the batch. For instance, with a Time Window set from 9:00 AM to 5:00 PM UTC and a 2-hour batch window, triggers from 5:00 PM to 9:00 AM (pre-window open) and 9:00 AM to 11:00 AM (during batch window) will be batched together. So, if you have to create a digest of all events coming outside office hours and send it next day at office start time, you can achieve it with time window and batch node in series with batch open for 5 minutes (just to accumulate all events).
   </Accordion>
 </AccordionGroup>

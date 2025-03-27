@@ -56,7 +56,7 @@ print(res)
 Here's a list of all edit methods:
 
 <AccordionGroup>
-  <Accordion title="Add User Channels" defaultOpen="false">
+  <Accordion title="Add User Channels" >
     Add communication channels on which you want to notify user. Push sand Inbox tokens are automatically tracked on user identification when the corresponding frontend SDK is integrated. Other channels (Email, SMS, Slack, MS teams, Whatsapp) need to be explicitly set in user profile.
 
     Use `user.add\_\*` method(s) to add user channels.
@@ -133,7 +133,7 @@ Here's a list of all edit methods:
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Remove User Channels" defaultOpen="false">
+  <Accordion title="Remove User Channels" >
     Use `user.remove\_\*` method(s) to remove channels.
 
     <CodeGroup>
@@ -224,21 +224,21 @@ Here's a list of all edit methods:
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Set Preferred language" defaultOpen="false">
+  <Accordion title="Set Preferred language" >
     If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
 
     ```python
     user.set_preferred_language("en")
     ```
   </Accordion>
-  <Accordion title="Set preferred timezone" defaultOpen="false">
+  <Accordion title="Set preferred timezone" >
     You can set timezone of user using this method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab).
 
     ```python
     user.set_timezone("America/Los_Angeles")
     ```
   </Accordion>
-  <Accordion title="Set" defaultOpen="false">
+  <Accordion title="Set" >
     Set is used to add custom user properties. It is an upsert function, meaning any existing property value with the same key will be overwritten on subsequent updates.
 
     ```python
@@ -249,7 +249,7 @@ Here's a list of all edit methods:
     user.set({"name": "John Doe","city": "San Francisco"})
     ```
   </Accordion>
-  <Accordion title="Set Once" defaultOpen="false">
+  <Accordion title="Set Once" >
     Works just like user.set, except it will not override already existing property values. This is useful for properties like first_login_date.
 
     ```python
@@ -260,7 +260,7 @@ Here's a list of all edit methods:
     user.set_once({"first_login": "2021-11-02","signup_date": "2021-11-02"})
     ```
   </Accordion>
-  <Accordion title="Unset" defaultOpen="false">
+  <Accordion title="Unset" >
     Unset is used to remove a property key.
 
     ```python
@@ -271,7 +271,7 @@ Here's a list of all edit methods:
     user.unset(["name","city"])
     ```
   </Accordion>
-  <Accordion title="Append" defaultOpen="false">
+  <Accordion title="Append" >
     This method will append a value to the array list.
 
     ```python
@@ -282,7 +282,7 @@ Here's a list of all edit methods:
     user.append({"played_games": "game_1", "liked_games": "game_2"})
     ```
   </Accordion>
-  <Accordion title="Remove" defaultOpen="false">
+  <Accordion title="Remove" >
     This method will remove a value from the array list.
 
     ```python
@@ -293,7 +293,7 @@ Here's a list of all edit methods:
     user.remove({"played_games": "game_1", "liked_games": "game_2"})
     ```
   </Accordion>
-  <Accordion title="Increment" defaultOpen="false">
+  <Accordion title="Increment" >
     Increase or decrease integer values on consecutive action, like login count. To reduce a property, provide a negative number for the value.
 
     ```python

@@ -152,7 +152,7 @@ print(res)
 List of available methods:
 
 <AccordionGroup>
-  <Accordion title="Add Channels" defaultOpen="false">
+  <Accordion title="Add Channels" >
     Use `object_ins.add*` method(s) to add channels
 
     ```python
@@ -218,7 +218,7 @@ List of available methods:
     print(res)
     ```
   </Accordion>
-  <Accordion title="Remove Channels" defaultOpen="false">
+  <Accordion title="Remove Channels" >
     Use `object_ins.remove_*` method(s) to remove channels from an object
 
     ```python
@@ -284,7 +284,7 @@ List of available methods:
     print(res)
     ```
   </Accordion>
-  <Accordion title="Remove Channels in bulk" defaultOpen="false">
+  <Accordion title="Remove Channels in bulk" >
     This method will delete/unset all values in specified channel for object (ex: remove all emails attached to object).
 
     ```python
@@ -293,14 +293,14 @@ List of available methods:
     obj_inst.unset(channels_to_remove)
     ```
   </Accordion>
-  <Accordion title="Set preferred language" defaultOpen="false">
+  <Accordion title="Set preferred language" >
     If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
 
     ```python
     obj_inst.set_preferred_language("en")
     ```
   </Accordion>
-  <Accordion title="Set timezone" defaultOpen="false">
+  <Accordion title="Set timezone" >
     You can set timezone of user using this method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab).
 
     ```python
