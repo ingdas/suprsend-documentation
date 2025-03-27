@@ -3,17 +3,13 @@ title: "Send and Track Events"
 description: "This document will cover the method to send event to SuprSend."
 ---
 
-## Create Workflow on SuprSend Dashboard
-
-For Event based workflow trigger, you'll have to [create the workflow on SuprSend Dashboard](/docs/design-workflow). After creating workflow you can copy `Event Name` field in Trigger Node of that published workflow and use it trigger that workflow by send track event using this guide.
-
-![577](/images/docs/a245033-Screenshot_2024-05-03_at_10.59.34_PM.png)
-
 ## Send Event
+
+You can send event to Suprsend platform by using the `supr_client.track_event` method. When you call `supr_client.track_event`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance status. The actual processing/execution of event happens asynchronously.
 
 <CodeGroup>
 
-```javascript Request
+```javascript Request [Method]
 const { Suprsend, Event } = require("@suprsend/node-sdk");
 
 const supr_client = new Suprsend("_workspace_key_", "_workspace_secret_");
@@ -24,7 +20,7 @@ const properties = {
   "key2":"value2"
 }
 
-const event = new Event(distinct_id, event_name, properties, {tenant_id : "your_tenant_id", idempotency_key="__uniq_request_id__"})
+const event = new Event(distinct_id, event_name, properties, {tenant_id : "_tenant_id", idempotency_key="__uniq_request_id__"})
 
 const response  = supr_client.track_event(event) // trigger request
 response.then((res) => console.log("response", res));
@@ -74,6 +70,12 @@ response.then((res) => console.log("response", res));
 | properties                 |                                                 |
 | tenant_id (Optional)       | Tenant ID of the tenant.                        |
 | idempotency_key (Optional) |                                                 |
+
+<Warning>
+  **Event naming guidelines:**
+
+  Event Name or Property Name should not start with  or , as we have reserved these symbols for our internal events and property names.
+</Warning>
 
 ### Idempotent requests
 

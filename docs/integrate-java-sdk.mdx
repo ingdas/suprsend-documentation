@@ -7,7 +7,7 @@ description: "This document will cover SDK installation and initialization steps
 
 For SDK installation, you'll have to add the SuprSend jar file. You can include the jar using following two ways:
 
-<Accordion title="Option 1. As a Maven dependency for maven projects from downloaded jar" defaultOpen="false">
+<Accordion title="Option 1. As a Maven dependency for maven projects from downloaded jar">
   `suprsend-java-sdk` is present as a maven dependency on maven central. Add following code to your pom.xml to include the sdk
 
   <CodeGroup>
@@ -25,7 +25,7 @@ For SDK installation, you'll have to add the SuprSend jar file. You can include 
   </CodeGroup>
 </Accordion>
 
-<Accordion title="Option 2. As a jar file for non maven projects" defaultOpen="false">
+<Accordion title="Option 2. As a jar file for non maven projects">
   Click [here](https://github.com/suprsend/suprsend-java-sdk/releases/download/v0.5.0/suprsend-java-sdk-0.5.0-jar-with-dependencies.jar) to download the latest version of java SDK from releases section and add it as an External Jar in your build path. suprsend-java-sdk is available as a JAR with name - `suprsend-java-sdk-0.5.0-jar-with-dependencies.jar`
 
   <Check>
@@ -43,24 +43,22 @@ For initializing SDK, you need **WORKSPACE KEY** and **WORKSPACE SECRET**.
 
 ```java Request
 import suprsend.Suprsend;
-Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE KEY");
+Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE SECRET");
 ```
 
 </CodeGroup>
 
-Replace  and  with your workspace values. You will get both the tokens from your [Suprsend dashboard](https://app.suprsend.com/) ( section). For more details, check the [documentation on 'Workspaces'](/docs/workspace).
-
-![](/images/docs/d60fec2-Frame_58_1.png)
+Replace `WORKSPACE KEY` and `WORKSPACE SECRET` with your workspace values. You will get both the tokens from Developers -> API keys section.
 
 ## Constructor to test SDK in debug mode
 
-Constructor which allows you to view HTTP calls to Suprsend in your console. The final parameter is a boolean parameter which denotes whether value for "debug" is true or false. Default value for the same is false.
+Constructor allows you to view HTTP calls to Suprsend in your console. The final parameter is a boolean parameter which denotes whether value for "debug" is true or false. Default value for the same is false.
 
 <CodeGroup>
 
 ```java Request
 import suprsend.Suprsend;
-Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE KEY", true);
+Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE SECRET", true);
 ```
 
 </CodeGroup>

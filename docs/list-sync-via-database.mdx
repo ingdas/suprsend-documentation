@@ -96,13 +96,13 @@ You can see sync logs on [lists -> logs ](https://app.suprsend.com/en/staging/su
 
 There are 5 types of sync status:
 
--  - Logs sync has just started.
--  - Users have started syncing in the list. You'll also see the `%progress` in this case.
--  - Users are successfully synced in the list. You'll see `Total` users returned in the query, `Processed` users and `Added` users. In most cases, `added` user will be equivalent to `total` users but if it less than total users, it would mean one of 2 things:
-  - Some users were already present in the list and that's why skipped.
-  - Users were not present in SuprSend subscriber list. You can enable `Create / Update user profile` in your sync settings to avoid this scenario.
--  - These are the syncs which were skipped sync the previous sync was still in progress when the next sync interval occurs.
--  - Sync couldn't be completed due to some errors while running the query, query output doesn't have `distinct_id` column or there was no data returned in your query output. If you see any error which could be internal to SuprSend system, please reach out to our [support](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#/shared-invite/email). For failed logs, You can hover on the status or click on the sync to see errors. You can also filter to `Show only error logs`.
+-  `Created` - Logs sync has just started.
+-  `In progress` - Users have started syncing in the list. You'll also see the `%progress` in this case.
+-  `Success` - Users are successfully synced in the list. You'll see `Total` users returned in the query, `Processed` users and `Added` users. In most cases, `added` user will be equivalent to `total` users but if it less than total users, it would mean one of 2 things:
+    - Some users were already present in the list and that's why skipped.
+    - Users were not present in SuprSend subscriber list. You can enable `Create / Update user profile` in your sync settings to avoid this scenario.
+-  `Ignored` - These are the syncs which were skipped sync the previous sync was still in progress when the next sync interval occurs.
+-  `Failed` - Sync couldn't be completed due to some errors while running the query, query output doesn't have `distinct_id` column or there was no data returned in your query output. If you see any error which could be internal to SuprSend system, please reach out to our [support](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#/shared-invite/email). For failed logs, You can hover on the status or click on the sync to see errors. You can also filter to `Show only error logs`.
 
 ![](/images/docs/59235f7-image.png)
 

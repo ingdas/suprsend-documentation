@@ -1,7 +1,6 @@
 ---
 title: "Objects"
 description: "This document will cover all the methods related to objects"
-url: "/docs/python/objects"
 ---
 
 Objects represent non-user entities such as organizations, teams, roles, and projects. Understand more about objects [here](https://docs.suprsend.com/docs/objects).
@@ -153,8 +152,8 @@ print(res)
 List of available methods:
 
 <AccordionGroup>
-  <Accordion title="Add Channels Helper Method" defaultOpen="false">
-    Use `object_ins.add\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\*` method(s) to add channels
+  <Accordion title="Add Channels" defaultOpen="false">
+    Use `object_ins.add*` method(s) to add channels
 
     ```python
     obj_inst = supr_client.objects.get_edit_instance("object_type", "object_id")
@@ -219,8 +218,8 @@ List of available methods:
     print(res)
     ```
   </Accordion>
-  <Accordion title="Remove Channels Helper Method" defaultOpen="false">
-    Use `object_ins.remove\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\*` method(s) to remove channels from an object
+  <Accordion title="Remove Channels" defaultOpen="false">
+    Use `object_ins.remove_*` method(s) to remove channels from an object
 
     ```python
     obj_inst = supr_client.objects.get_edit_instance("object_type", "object_id")
@@ -285,7 +284,7 @@ List of available methods:
     print(res)
     ```
   </Accordion>
-  <Accordion title="Remove Channels in bulk Helper Method" defaultOpen="false">
+  <Accordion title="Remove Channels in bulk" defaultOpen="false">
     This method will delete/unset all values in specified channel for object (ex: remove all emails attached to object).
 
     ```python

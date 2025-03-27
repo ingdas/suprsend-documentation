@@ -15,11 +15,11 @@ Notification Categories are the category your workflow belongs to. It is used fo
 
 SuprSend has 3 broad notification categories - [System](/docs/notification-categories#system), [Transactional](/docs/notification-categories#transactional) and [Promotional](/docs/notification-categories#promotional). Notifications rules and latency settings are defined at these top level categories. You can create further [sub-categories](/docs/notification-categories#creating-sub-categories-for-preference-management) in each of these categories to power [user preferences](/docs/preferences).
 
-### -  System
+### System
 
 System notifications are the ones that are essential for your users to use your website and can't be unsubscribed by the users. These notifications are considered most time-sensitive and given the highest priority in notification send queues. Some examples are - OTP, Forgot Password and Verification emails.
 
-### -  Transactional
+### Transactional
 
 Transactional notifications are the ones that are sent in response to some user transaction or action on your platform. By default, users are subscribed to transactional notifications and not allowed to unsubscribe as they have initiated them at the first place. However, some of the transactional notifications are not so critical and can be unsubscribed as per user's wish (eg. Post likes/ comments). You can set which transactional notifications are critical and should not be allowed to unsubscribe by setting the default preference as `cant unsubscribe`.
 
@@ -33,7 +33,7 @@ As a company, you should make sure that you use strategies like [batching](/docs
   📘 Sending notifications that are not related to user transaction but are very personal to user's profile and interests, like recommended products, cart abandoned, etc could be inferred as transactional, depending on indicators like whether user is subscribed to receive them, or the way content is designed.
 </Note>
 
-### -   Promotional
+### Promotional
 
 Promotional notifications are the ones that are sent out to users to increase sales, promote products, or bring users back to your platform without user doing any interaction in the first place. These communications are generally sent in bulk, consuming a significant portion of the communication pipeline. That's why they are given the least priority in notification queue. You should always send your bulk messages and broadcasts in promotional category so that it doesn't impact the latency of your system and transactional notifications.
 

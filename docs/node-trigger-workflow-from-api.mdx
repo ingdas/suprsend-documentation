@@ -72,7 +72,7 @@ response.then(res => console.log("response", res));
 | **`recipients[].$preferred_language`**                                                                           | `string`                            | To set the recipient's preferred language. This is to support localization in notification content. You can pass the language in `ISO 639-1 2-letter` format. [Refer to all language codes here](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py).                  |
 | **`recipients[].$timezone`**                                                                                     | `string`                            | To set the recipient's timezone. Used to send notifications in the user's local timezone. You can pass the timezone in [IANA (TZ identifier)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) format.                                                                              |
 
-## Sending notification to multiple users
+### Sending notification to multiple users
 
 Recipients in workflow call is an array of `distinct_ids` or recipient objects. You can pass upto 100 recipients in a single workflow trigger. SuprSend will internally convert it into multiple workflow triggers, one for each recipient in the array.
 
@@ -105,7 +105,7 @@ Recipients in workflow call is an array of `distinct_ids` or recipient objects. 
   We recommend you to use [lists](/docs/node-lists) and [broadcast](/docs/node-broadcast) to send notifications to a user list larger than 1000 users. This approach allows bulk processing, resulting in significantly faster delivery compared to individual workflow calls. Sending individual workflows to a large set of users may introduce delays in your notification queue.
 </Note>
 
-## Identifying recipients inline
+### Identifying recipients inline
 
 One of the benefits of using direct workflow trigger is that you can identify recipients inline. You can include recipient channel information, their channel preferences, and their user properties along with the workflow trigger. Upon triggering the workflow, the recipient will be automatically created in the SuprSend database in the background. This facilitates dynamic synchronization of your user data within SuprSend and eliminates the need for any migration efforts on your end to start sending notifications from SuprSend. You can also use recipient properties in your template as `$recipient.<property>`.
 
@@ -273,7 +273,7 @@ const workflow_payload = {
 
 </CodeGroup>
 
-## Multi-tenant notifications
+### Multi-tenant notifications
 
 For cases where you want to send notifications to your enterprise customers end users, pass the `tenant_id` in your workflow instance. You can use this to dynamically manage [tenant level notification customizations](/docs/tenants). This includes the ability to customize template design or content and route notifications via tenant vendors.
 
@@ -285,7 +285,7 @@ const workflow = new WorkflowTriggerRequest(workflow_body, {tenant_id: "tenant_i
 
 </CodeGroup>
 
-## Idempotent requests
+### Idempotent requests
 
 SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives and processes a request with an idempotency_key, it will skip processing requests with same `idempotency_key` for next 24 hours. Idempotency key should be uniquely generated for each request (max 255 characters allowed). Spaces in start and end of the key will be trimmed. Here are some common approaches for generating idempotency keys:
 

@@ -3,12 +3,6 @@ title: "Objects"
 description: "This document will cover all the nodejs methods related to objects"
 ---
 
-## Pre-requisites
-
-[Integrate Node SDK](/docs/integrate-node-sdk)
-
-## Understanding Objects in Suprsend
-
 Objects in SuprSend represent non-user entities such as organizations, teams, roles, and projects. Understand more about objects from our [objects documentation](/docs/objects)
 
 ## Upsert (create/update) an object
@@ -148,7 +142,9 @@ const response = await supr_client.objects.edit(object_instance);
 
 </CodeGroup>
 
-<Accordion title="Add Channels Helper Method" defaultOpen="false">
+Here's a list of all edit helper methods:
+
+<Accordion title="Add Channels">
   Use `object_ins.add_*` method(s) to add user channels in a profile
 
   <CodeGroup>
@@ -221,7 +217,7 @@ const response = await supr_client.objects.edit(object_instance);
   </CodeGroup>
 </Accordion>
 
-<Accordion title="Remove Channels Helper Method" defaultOpen="false">
+<Accordion title="Remove Channels">
   Use `object_ins.remove_*` method(s) to remove channels from an object profile
 
   <CodeGroup>
@@ -294,7 +290,7 @@ const response = await supr_client.objects.edit(object_instance);
   </CodeGroup>
 </Accordion>
 
-<Accordion title="Remove Channels in bulk Helper Method" defaultOpen="false">
+<Accordion title="Remove Channels in bulk">
   If you need to delete/unset all emails (or any other channel) of an object, you can call `object_ins.unset()` method on the object instance. The method accepts the channel key/s (a single key or list of keys)
 
   <CodeGroup>
@@ -315,7 +311,7 @@ const response = await supr_client.objects.edit(object_instance);
   </CodeGroup>
 </Accordion>
 
-<Accordion title="Set Preferred language" icon="sparkles">
+<Accordion title="Set Preferred language">
   <CodeGroup>
 
   ```javascript Request
@@ -325,7 +321,7 @@ const response = await supr_client.objects.edit(object_instance);
   </CodeGroup>
 </Accordion>
 
-<Accordion title="Set Preferred Timezone" icon="sparkles">
+<Accordion title="Set Preferred Timezone">
   <CodeGroup>
 
   ```javascript Request
@@ -335,12 +331,7 @@ const response = await supr_client.objects.edit(object_instance);
   </CodeGroup>
 </Accordion>
 
-**Advanced Configuration - Set Object Properties**
-
-You can use SuprSend Python SDK to set advanced object properties, which will help in creating a object profile.
-
-<AccordionGroup>
-  <Accordion title="Set" defaultOpen="false">
+  <Accordion title="Set">
     Set is used to set the custom property or properties. The given name and value will be assigned to the object, overwriting an existing property with the same name if present. It can take key as first param, value as second param for setting single object property or object for setting multiple object properties.
 
     <CodeGroup>
@@ -368,7 +359,7 @@ You can use SuprSend Python SDK to set advanced object properties, which will he
       When you create a key, please ensure that the Key Name does not start with  or , as we have reserved these symbols for our internal events and property names.
     </Warning>
   </Accordion>
-  <Accordion title="Set Once" defaultOpen="false">
+  <Accordion title="Set Once">
     Works just like `object_ins.set`, except it will not overwrite existing property values. This is useful for properties like _First login date_
 
     <CodeGroup>
@@ -385,7 +376,7 @@ You can use SuprSend Python SDK to set advanced object properties, which will he
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Increment" defaultOpen="false">
+  <Accordion title="Increment">
     Add the given amount to an existing property on the object. If the object does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
 
     <CodeGroup>
@@ -402,7 +393,7 @@ You can use SuprSend Python SDK to set advanced object properties, which will he
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Append" defaultOpen="false">
+  <Accordion title="Append">
     This method will append a value to the list for a given property.
 
     <CodeGroup>
@@ -419,7 +410,7 @@ You can use SuprSend Python SDK to set advanced object properties, which will he
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Remove" defaultOpen="false">
+  <Accordion title="Remove">
     This method will remove a value from the list for a given property.
 
     <CodeGroup>
@@ -436,7 +427,7 @@ You can use SuprSend Python SDK to set advanced object properties, which will he
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Unset" defaultOpen="false">
+  <Accordion title="Unset">
     This will remove a property permanently from properties.
 
     <CodeGroup>
@@ -458,9 +449,7 @@ You can use SuprSend Python SDK to set advanced object properties, which will he
     | **key**           | string        | This property provided will be deleted from object properties     |
     | **property_list** | array[string] | If list is given all properties included in list will be removed. |
   </Accordion>
-</AccordionGroup>
 
----
 
 <Warning>
   After calling `add_*/remove_*/unset` methods, don't forget to call `object_ins.save()`. On call of save(), SDK sends the request to SuprSend platform to update the Object Profile.

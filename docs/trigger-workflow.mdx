@@ -88,7 +88,7 @@ print(response)
 ```
 
 
-```node Node
+```javascript Node
 const {Suprsend, WorkflowTriggerRequest} = require("@suprsend/node-sdk");
 const supr_client = new Suprsend("_workspace_key_", "_workspace_secret_");
 
@@ -645,8 +645,6 @@ Also, since triggers via google sheets are generally promotional notifications, 
 
 Here's a step-by-step guide on how to send notifications using google sheets:
 
-### Steps to setup notification trigger in google sheets:
-
 <Steps>
   <Step title="Create a template group on SuprSend account.">
     All the static content can be designed on the template, and all the variable data defined within `{{...}}` will be passed from the Google Sheet at the time of trigger.
@@ -679,7 +677,7 @@ Here's a step-by-step guide on how to send notifications using google sheets:
 
     <CodeGroup>
 
-    ```json json
+    ```json Appscript
     //Enter your workspace key, secret, template slug, workflow name & category
     const workspace_key = "__API_KEY__";
     const workspace_secret = "__API_SECRET__";

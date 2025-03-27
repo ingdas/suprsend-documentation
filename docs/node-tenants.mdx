@@ -48,7 +48,6 @@ response.then((res) => console.log("response", res));
 
 </CodeGroup>
 
-### Field Description:
 
 | Field                                 | Description                                                                                                                                                               |
 | :------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -60,7 +59,7 @@ response.then((res) => console.log("response", res));
 
 All properties of the tenant can be referred as `{{$tenant.prop}}` (handlebars) or `data["tenant"].prop` in JSONNET format.
 
-### Get Tenant
+## Get Tenant
 
 <CodeGroup>
 
@@ -104,7 +103,7 @@ const response = supr_client.tenants.get(tenant_id)
 
 </CodeGroup>
 
-### List Tenants
+## List Tenants
 
 By default, `limit=20`. The maximum value for `limit` is `1000`.
 

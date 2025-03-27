@@ -33,20 +33,22 @@ You can simply trigger tenant workflow by passing `tenant_id` in your workflow t
 
 When a workflow is triggered, preference is evaluated for recipient and tenant before send node. Notification is sent in categories and channels where both tenant and user preferences are `opt_in`.
 
-### -  Evaluating Recipient preferences
+<Steps>
+    <Step title="Evaluating Recipient preferences">
+    If recipient preferences are not set in a category, default tenant preference is picked. Once user preference is set in a category, any changes in the default preference of existing categories will not effect recipient preferences.
+  </Step>
 
-If recipient preferences are not set in a category, default tenant preference is picked. Once user preference is set in a category, any changes in the default preference of existing categories will not effect recipient preferences.
-
-### -  Resolving preference conflicts
-
-The order of precedence is always user > tenant > org (set in notification category settings). However, if company turns off notifications in a category or channel for a tenant, user will not get notification in that category even if they have kept their preference `ON` in that category in the past.
-
-### -  Debugging preference evaluation in workflow runs
-
-User preferences can change over time and when checking a workflow run, you need to know what was user's preferences at that time. You can view this using the step-by-step debugger in [workflow executions](https://app.suprsend.com/en/demo/logs/executions/?last_n_minutes=1440).
+  <Step title="Resolving preference conflicts">
+    The order of precedence is always user > tenant > org (set in notification category settings). However, if company turns off notifications in a category or channel for a tenant, user will not get notification in that category even if they have kept their preference `ON` in that category in the past.
+  </Step>
+  <Step title="Debugging preference evaluation in workflow runs">
+    User preferences can change over time and when checking a workflow run, you need to know what was user's preferences at that time. You can view this using the step-by-step debugger in [workflow executions](https://app.suprsend.com/en/demo/logs/executions/?last_n_minutes=1440).
 
 ![](/images/docs/e0555b827b95d61b16ba0f58fa1faa05b5109709828157df9d774fb123954516-image.png)
 
 You can also track when user updated their preference by filtering on `Subscriber preference update` in [request logs](https://app.suprsend.com/en/demo/logs/api/?last_n_minutes=1440).
 
+  </Step>
+</Steps>
+ 
 ***

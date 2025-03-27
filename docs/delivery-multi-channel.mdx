@@ -42,7 +42,7 @@ To override channels, include the channels array in event property and add the c
 
 ![](/images/docs/eb7ac2c-image.png)
 
-The expected channel values are: `\\\["email", "sms", "whatsapp", "androidpush", "iospush", "webpush", "slack", "inbox", "ms_teams"\\\]`
+The expected channel values are: `["email", "sms", "whatsapp", "androidpush", "iospush", "webpush", "slack", "inbox", "ms_teams"]`
 
 You can add channel array as a [JQ-expression](https://jqlang.github.io/jq/manual/). So, in case your channel values do not match with the one mentioned in the above table, you can transform it using the JQ-expression. Below are some examples of how to add duration key in JQ format:
 

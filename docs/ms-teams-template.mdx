@@ -17,8 +17,8 @@ You can send simple text templates using the markdown editor in teams. Variables
 | line break        | end a line with two or more spaces, and then type return (*only 1 continuous line break is supported*)           |
 | **Bold**          | `**bold text**` or `__bold text__`                                                                               |
 | *Italic*          | `_italic text_` or `*italic text*`                                                                               |
-| ***Bold Italic*** | `bold italic text` or `___bold italic text___`                                                             |
-| > Blockquotes     | `> block quote text`                                                                                             |
+| ***Bold Italic*** | `***bold italic text***` or `___bold italic text___`                                                             |
+| >Blockquotes     | `> block quote text`                                                                                             |
 | Lists             | (1) First item (2) Second item Refer more [lists format here](https://www.markdownguide.org/basic-syntax/#lists-1) |
 | `code`            | `At the command prompt, type `code`.`                                                                            |
 | Links             | `[Duck Duck Go](https://duckduckgo.com)`                                                                         |
@@ -49,7 +49,7 @@ We have also created some sample templates for a quick start. You can choose one
 
 ![](https://files.readme.io/d7495e4-ezgif.com-optimize.gif "slack_editor.gif")
 
-### Adding dynamic data in JSONNET editor
+#### Adding dynamic data in JSONNET editor
 
 To add dynamic data, first add the variable data from your event and workflow request in the `Mock data`.
 
@@ -63,23 +63,26 @@ Once the variables are declared, you can add them in the template as `data.<vari
 
 Below are some examples of how to enter variables in the JSONNET editor. We'll use the sample shown in the screenshot above as a reference point.
 
-#### 1. Add nested variable
+<AccordionGroup>
+  <Accordion title="Add nested variable">
+    To enter a nested variable, enter in the format `data.var1.var2.var3`. Eg. to refer to city in the example above, you need to enter `data.location.city`
 
-To enter a nested variable, enter in the format `data.var1.var2.var3`. Eg. to refer to city in the example above, you need to enter `data.location.city`
+  </Accordion>
 
-#### 2. Add Variable with space and special characters in variable name
+  <Accordion title="Add Variable with space and special characters in variable name">
+    If you have any space in the variable name, enclose it in square bracket `data.event['first name']` or `data[$brand].brand_name`
 
-If you have any space in the variable name, enclose it in square bracket `data.event['first name']` or `data[$brand].brand_name`
+  </Accordion>
 
-#### 3. Add Single array element
+  <Accordion title="Add Single array element">
+    To refer to an array element, enter in format `data.var[*index*].var2}}`. Eg. to refer to `product_name` of the first element of the array `array`, enter `data.array[0].product_name`
 
-To refer to an array element, enter in format `data.var[*index*].var2}}`. Eg. to refer to `product_name` of the first element of the array `array`, enter `data.array[0].product_name}}`
+  </Accordion>
 
-#### 4. Add list of array items
+  <Accordion title="Add list of array items">
+    Enter in the below format to add a dynamic list of items. In the above example, variable `array` has a list of product items, with `product_name`, and `product_price` as array properties. Below is an example code to fetch array items in a text field list:
 
-Enter in the below format to add a dynamic list of items. In the above example, variable `array` has a list of product items, with `product_name`, and `product_price` as array properties. Below is an example code to fetch array items in a text field list:
-
-<CodeGroup>
+    <CodeGroup>
   ```json JSONNET
   {
     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
@@ -101,7 +104,11 @@ Enter in the below format to add a dynamic list of items. In the above example, 
   You'll need to add mock data for the variables added in your JSONNET template to view the parsed JSON template. JSON template will throw an error in case of missing mock data for a variable
 </Warning>
 
-## Step 2: Preview Message
+  </Accordion>
+
+</AccordionGroup>
+
+## Preview Message
 
 Click on the `Load Preview` button to load the message preview.
 
@@ -109,7 +116,7 @@ Click on the `Load Preview` button to load the message preview.
 
 ![](/images/docs/c7b68e6-image.png)
 
-## Step 3. Publish the template
+## Publish the template
 
 Once finalized, you can publish the template by clicking on `Publish template` button on the draft version.
 

@@ -15,8 +15,6 @@ SuprSend identifies users with immutable `distinct_id`. It's best to map the sam
 
 To create a new user or to update an existing user, you'll have to fetch user instance. Call `supr_client.user.get_instance` to instantiate user object.
 
-When you call `user.save()`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance / failure status.
-
 <CodeGroup>
 
 ```java Request
@@ -67,23 +65,31 @@ public class UserEdit {
 
 ## Edit  User
 
-To Edit user, you need to first fetch user instance, call all the update methods and save changes using `users.async_edit` method.
+To Edit user, you need to first fetch user instance, call all the update methods and save changes using `user.save` method.
 
 <CodeGroup>
 
 ```java Request
-// Instantiate user
-String distinctId = "__distinct_id__";
-Subscriber user = suprsendClient.user.getEditInstance(distinctId);
+import org.json.JSONObject;
+import suprsend.Suprsend;
+import suprsend.Subscriber;
 
-// Call user update methods
-user.setTimezone("America/Los_Angeles");
-user.set("name", "John Doe");
+public class UserEdit {
 
-// Save Changes
-JSONObject res = suprsendClient.users.asyncEdit(user);
-System.out.println(res.toString());
-}
+  public static void updateProfile() throws Exception {
+    Suprsend suprsendClient = getSuprClient();
+    // User Edit Instance
+    String distinctID = "__distinct_id__";
+    Subscriber user = suprsendClient.user.getInstance(distinctID);
+
+    // Edit Helper methods
+    user.addEmail("example@example.com");
+    user.setTimezone("America/New_York");
+
+    // Save
+    JSONObject response = user.save();
+    System.out.println(response);
+  }
 }
 ```
 
@@ -92,10 +98,10 @@ System.out.println(res.toString());
 Here's a list of all edit methods:
 
 <AccordionGroup>
-  <Accordion title="Add User Channels" icon="sparkles">
+  <Accordion title="Add User Channels">
     Add communication channels on which you want to notify user. Push sand Inbox tokens are automatically tracked on user identification when the corresponding frontend SDK is integrated. Other channels (Email, SMS, Slack, MS teams, Whatsapp) need to be explicitly set in user profile.
 
-    Use `user.add\_\*` method(s) to add user channels.
+    Use `user.add_*` method(s) to add user channels.
 
     <CodeGroup>
 
@@ -154,8 +160,8 @@ Here's a list of all edit methods:
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Remove User Channels" icon="sparkles">
-    Use `user.remove\\\_\\\*` method(s) to remove channels.
+  <Accordion title="Remove User Channels">
+    Use `user.remove_*` method(s) to remove channels.
 
     <CodeGroup>
 
@@ -274,7 +280,7 @@ Here's a list of all edit methods:
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Set Once" defaultOpen="false">
+  <Accordion title="Set Once">
     Works just like user.set, except it will not override already existing property values. This is useful for properties like first_login_date.
 
     ```java
@@ -285,7 +291,7 @@ Here's a list of all edit methods:
     user.set_once({"first_login": "2021-11-02","signup_date": "2021-11-02"})
     ```
   </Accordion>
-  <Accordion title="Unset" defaultOpen="false">
+  <Accordion title="Unset">
     Unset is used to remove a property key.
 
     ```java
@@ -296,7 +302,7 @@ Here's a list of all edit methods:
     user.unset(["name","city"])
     ```
   </Accordion>
-  <Accordion title="Append" defaultOpen="false">
+  <Accordion title="Append">
     This method will append a value to the array list.
 
     ```java
@@ -307,7 +313,7 @@ Here's a list of all edit methods:
     user.append({"played_games": "game_1", "liked_games": "game_2"})
     ```
   </Accordion>
-  <Accordion title="Remove" defaultOpen="false">
+  <Accordion title="Remove">
     This method will remove a value from the array list.
 
     ```java
@@ -318,7 +324,7 @@ Here's a list of all edit methods:
     user.remove({"played_games": "game_1", "liked_games": "game_2"})
     ```
   </Accordion>
-  <Accordion title="Increment" defaultOpen="false">
+  <Accordion title="Increment">
     Increase or decrease integer values on consecutive action, like login count. To reduce a property, provide a negative number for the value.
 
     ```java
@@ -332,7 +338,7 @@ Here's a list of all edit methods:
 </AccordionGroup>
 
 <Warning>
-  After calling `add\_\*/remove\_\*/unset` methods, don't forget to call `JSONObject res = suprsendClient.users.asyncEdit(user);` since user edit is async update and the changes will be sent to SuprSend only after calling this method.
+  After calling `add_*/remove_*/unset` methods, don't forget to call `users.save()` since user edit is async update and the changes will be sent to SuprSend only after calling this method.
 </Warning>
 
 ## Bulk Update Users
@@ -340,8 +346,6 @@ Here's a list of all edit methods:
 There isn't any limit on number-of-records that can be added to `bulk_users` instance.
 
 Use `.append()` on bulk_users instance to add however-many-records to call in bulk.
-
-The expected response will be an instance of `suprsend.BulkResponse` class
 
 <CodeGroup>
 
@@ -363,6 +367,10 @@ bulkIns.append(u1);
 bulkIns.append(u2);
 // OR
 bulkIns.append(u1, u2);
+
+// Save
+JSONObject response = bulkIns.save();
+System.out.println(response);
 ```
 
 

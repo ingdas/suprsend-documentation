@@ -1,5 +1,5 @@
 ---
-title: "Templates"
+title: "Design Template"
 ---
 
 Templates are the content block of your notification. In SuprSend, content for all channels (SMS, email, chat, push etc.) is grouped under a single template group for simplified management. Your template can have 2 types of content:
@@ -7,17 +7,18 @@ Templates are the content block of your notification. In SuprSend, content for a
 - **Static Content** : This remains the same for all users and contains your core message or design.
 - **Dynamic Content** : These are placeholders for user or tenant-specific information, such as first names, booking amounts, appointment times, and more. The variables are populated dynamically based on the data provided in your workflow or event request.
 
-### Benefits of Templates with SuprSend:
-
-- **Unified Content Management** : Content for all channels is grouped together in a single template, making it easy to manage your content in one place.
+<Accordion title="Benefits of Using Templates with SuprSend">
+  - **Unified Content Management** : Content for all channels is grouped together in a single template, making it easy to manage your content in one place.
 - **WYSWYG editors** : Designing a template is a piece of cake with drag-and-drop and form editors. Your product managers and designers can take control of content creation without involving developers.
 - [Multi-Lingual support:](/docs/templates#adding-multiple-languages) You can add content for multiple languages in a single template and the user will receive notification in their preferred language
 - **Create white-labeled notifications for your** [tenants](/docs/tenants) **with ease** : You can create tenants for your own company and each of your tenants. Use it to dynamically change your email template styling to match the tenant's identity.
 - **Easy to iterate** : You can directly design and store templates on the SuprSend dashboard, decoupling templates from your code.
 - [Version control](/docs/templates#template-versions) : Each template change is published as a new version, so you can always track historical changes. You can also monitor user engagement for each version and retain the one that performs better. Trigger a test notification on your current live version to see the content preview on your actual device before pushing it to production.
 - **Add / Remove channels without touching code** : To add any channel to your existing template group, you need to simply design a template for that channel on SuprSend platform and publish it. Notifications will start going through that channel, with no alterations to your existing code.
+</Accordion>
 
-## Template Designer
+
+## Create Template
 
 SuprSend's template designer empowers you to create beautiful templates with easy drag-and-drop editor
 
@@ -83,7 +84,7 @@ You can get the detailed guide to design the template for each channel in their 
   </Card>
 </CardGroup>
 
-## Template Versions:
+### Template Versions
 
 SuprSend creates a new version every time you publish a template. This is to ensure that you have historical reference to all the changes done in your template. Helps with audit trails and understanding which template content performed better in terms of user engagement.
 
@@ -146,7 +147,7 @@ Other than your workflow `data` variables, you can also add other type of variab
 
 There are slight differences in variable format and placement for different templates. Checkout each channel template documentation for reference.
 
-### Preview and Publish
+## Preview and Publish
 
 You can see the notification preview on the right side of your editor for most of the channels. Variables in template are replaced with the values from '**mock data'** for preview
 
@@ -162,7 +163,7 @@ Once finalized, you can publish the template by clicking on '`Publish template`*
 
 ![](/images/docs/4314582-image.png)
 
-## Testing the template
+## Test template
 
 You can send test notifications directly from the template editor page to see how the message will appear on user's device. To send a test notification,
 
@@ -185,13 +186,13 @@ JSON data added in the global **"Mock Data"** button will be used to render vari
 
 ![](https://files.readme.io/756a565-ezgif.com-video-to-gif_1.gif)
 
-### Defining template in your workflow request
+** Defining template in your workflow request **
 
 The  serves as a unique identifier for referencing a template in [workflows created through API](/docs/trigger-workflow#triggering-workflow-via-api). To copy the slug name, click on the clipboard next to the Template name.
 
 ![](/images/docs/9ae2913-image.png)
 
-### Edit template name and other details
+** Edit template name and other details **
 
 You can edit the **template description, name, and add tags** to the template by clicking on the edit icon next to the its name.
 
@@ -200,23 +201,23 @@ You can edit the **template description, name, and add tags** to the template by
 
 ![](/images/docs/c17d0f4-image.png)
 
-### Clone template
+## Clone template
 
 To avoid designing templates from scratch, you can clone your existing templates and design on top of it.
 
 ![](https://files.readme.io/aa55ca0-ezgif.com-video-to-gif_2.gif)
 
-### Adding multiple languages
+## Adding multiple languages
 
 SuprSend allows you to create notifications in multiple languages in the same template. Once the languages are added, SuprSend will pick the preferred language from user's profile and send the message as per the user's preferred language. You can add template languages using **Language** option from the top-right corner burger menu. For more details, check [steps and guidelines on adding language](/docs/multi-lingual-template).
 
 ![](/images/docs/237c2db-image.png)
 
-### Archive template
+## Archive template
 
 You can archive your unused templates by clicking on "Archive" option from the top-right corner burger menu. Templates can't be recovered once archived.
 
-### View and filter your template list
+## View and filter your template list
 
 All of your active templates will be visible on the template listing page. You can filter your templates by `channel`, `tag`, `status` or just get the templates which were '**edited by you'**.
 
@@ -225,5 +226,3 @@ All of your active templates will be visible on the template listing page. You c
 Archived templates can be seen by clicking on `Archived` tab from the top right side options
 
 ![](/images/docs/033a92a-Screenshot_2023-09-28_at_5.25.08_PM.png)
-
----

@@ -1,5 +1,5 @@
 ---
-title: "Migrating your in-house Notification System"
+title: "Migrate in-house Notification System"
 description: "A step-by-step guide to transitioning your existing notification system to SuprSend"
 ---
 
@@ -65,13 +65,13 @@ Frontend implementation can be planned in parallel but it should be released aft
   <Step title="Modelling Additional Data Entities">
     In addition to users, your system may have other entities that require notification modelling from the start. If your system only requires direct user notifications and you always know the recipient in your trigger, you can just migrate users and you are good to go. For other cases, SuprSend supports two key concepts for user modelling:
 
-    <Accordion title="Tenants" icon="sparkles">
+    <Accordion title="Tenants">
       Use [tenants](https://docs.suprsend.com/docs/tenants) when,
 
       - You are a SAAS platform where customer [notification preferences](https://docs.suprsend.com/docs/tenant-preference) can be controlled by your org or end customer admin.
       - Sending notifications on behalf of customers and need to white label notification or route via customer's vendor credentials (their email address)
     </Accordion>
-    <Accordion title="Objects" icon="sparkles">
+    <Accordion title="Objects">
       Use [objects](https://docs.suprsend.com/docs/objects) when,
 
       - You need to notify a group of users without having to identify individual recipients in the trigger. For example, send notification to all followers or subscribers when a new content is posted on a channel or send an alert to associated users of a task on status change.
@@ -79,7 +79,7 @@ Frontend implementation can be planned in parallel but it should be released aft
     </Accordion>
   </Step>
   <Step title="Templates">
-    - If your templates are stored in your database, they can be migrated using template APIs ([___currently in beta, contact support for migration assistance___](mailto:support@suprsend.com)). We use handlebars as the templating language. So, if you have your variables in a different language, convert it into handlebars before syncing.
+    - If your templates are stored in your database, they can be migrated using template APIs (_currently in beta, [contact support](mailto:support@suprsend.com) for migration assistance_). We use handlebars as the templating language. So, if you have your variables in a different language, convert it into handlebars before syncing.
     - If templates are part of your final trigger, you can create a template with all fields set as variable and pass the corresponding content dynamically in the trigger. However, to fully leverage the platform, we recommend a one-time bulk migration of templates. This will reduce engineering overhead as it the templates will be decoupled from the code and product / design team can manage template updates independently without engineering involvement.
     - For email templates, we recommend using our visual editor to design [template](https://docs.suprsend.com/docs/templates) directly on [SuprSend console](https://app.suprsend.com/en/staging/templates). While the initial setup may take some time, it significantly simplifies future template iterations. It also enables non-engineering teams to update templates independently, reducing dependency on developers.
   </Step>

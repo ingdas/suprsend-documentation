@@ -1,15 +1,15 @@
 ---
-title: "Create User Profile"
+title: "Manage Users"
 description: "This document will cover the methods to update user information like properties and channels"
 ---
 
 ## How Suprsend identifies a user
 
-SuprSend identifies users with immutable `distinct_id`. It's best to map the same identifier in your DB with `\\\\\\\__distinct_id\\\_\\\\\\\_` in SuprSend. Do not use identifiers that can be changed like email or phone number. You can view synced users by searching `\\\\\\\__distinct_id\\\_\\\\\\\_` on [Users page](https://app.suprsend.com/en/production/users).
+SuprSend identifies users with immutable `distinct_id`. It's best to map the same identifier in your DB with `distinct_id` in SuprSend. Do not use identifiers that can be changed like email or phone number. You can view synced users by searching `distinct_id` on [Users page](https://app.suprsend.com/en/production/users).
 
 ## Create user
 
-`distinct_id` is needed to create/update user profile in SuprSend. This ID will be unique throughout workspace. So, when you call `user.save()`, SDK internally makes an API call to SuprSend, and you'll receive a response indicating the acceptance / failure status.
+To create a new user or to update an existing user, you’ll have to fetch user instance. Call `supr_client.user.get_instance` to instantiate user object.
 
 <CodeGroup>
 
@@ -68,190 +68,7 @@ response.then((res) => console.log("response", res));
 Here's a list of all edit methods:
 
 <AccordionGroup>
-  <Accordion title="Set preferred language" defaultOpen="false">
-    If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
-
-    <CodeGroup>
-
-    ```javascript Request
-    user.set_preferred_language("en")
-    ```
-
-    </CodeGroup>
-  </Accordion>
-  <Accordion title="Set preferred timezone" defaultOpen="false">
-    You can set timezone of user using this method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab).
-
-    <CodeGroup>
-
-    ```javascript /suprsend/suprsend/editor/docs-revamp-1#set-preferred-timezone
-    user.set_timezone("America/Los_Angeles")
-    ```
-
-    </CodeGroup>
-  </Accordion>
-  <Accordion title="Set" defaultOpen="false">
-    Set is used to set the custom user property or properties. The given key and value will be assigned to the user, overwriting an existing property with the same key if present.
-
-    <CodeGroup>
-
-    ```javascript Request
-    user.set(key, value)
-    user.set("name","John Doe")
-      
-    user.set({ key1: value1, key2: value2 })
-    user.set({"name": "John Doe","city": "San Francisco"})
-    ```
-
-    
-    ```javascript Example
-    user.set("name","John Doe")
-    
-    user.set({
-    	"name": "John Doe",
-    	"city": "San Francisco"
-    })
-    ```
-
-    </CodeGroup>
-
-    | Parameters | type |
-    | ---------- | ---- |
-    | key        |      |
-    | value      | any  |
-  </Accordion>
-  <Accordion title="Set Once" defaultOpen="false">
-    Works just like `user.set`, except it will not override already existing property values. This is useful for properties like first_login_date.
-
-    <CodeGroup>
-
-    ```javascript Request
-    user.set_once(key, value)
-    user.set_once("first_login","2021-11-02")
-      
-    user.set_once({ key1: value1, key2: value2 })
-    user.set_once({"first_login": "2021-11-02","signup_date": "2021-11-02"})
-    ```
-
-    
-    ```javascript Example
-    user.set_once("first_login", "2021-11-02")
-    
-    user.set_once({"first_login" : "2021-11-02", "DOB" : "1991-10-02"})
-    ```
-
-    </CodeGroup>
-  </Accordion>
-  <Accordion title="Append" defaultOpen="false">
-    This method will append a value to the list for a given property.
-
-    <CodeGroup>
-
-    ```javascript Request
-    user.append(key, value)
-    user.append("played_games", "game_1")
-    
-    user.append({ key1: value1, key2: value2 })
-    user.append({"played_games": "game_1", "liked_games": "game_2"})
-    ```
-
-    </CodeGroup>
-  </Accordion>
-  <Accordion title="Remove" defaultOpen="false">
-    This method will remove a value from the list for a given property.
-
-    <CodeGroup>
-
-    ```javascript Request
-    user.remove(key, value)
-    user.remove("played_games", "game_1")
-    
-    user.remove({ key1: value1, key2: value2 })
-    user.remove({"played_games": "game_1", "liked_games": "game_2"})
-    ```
-
-    
-    ```javascript Example
-    user.remove("played_games", "game_1")
-    
-    user.remove({"played_games": "game_1", "liked_games": "game_2"})
-    ```
-
-    </CodeGroup>
-  </Accordion>
-  <Accordion title="Increment" defaultOpen="false">
-    Add the given number to an existing property on the user. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
-
-    <CodeGroup>
-
-    ```javascript Request
-    user.increment(key, value)
-    user.increment("login_count", 1)
-    
-    user.increment({ key1: value1, key2: value2 })
-    user.increment({"login_count" : 1, "order_count" : 1})
-    ```
-
-    
-    ```javascript Example
-    user.increment("login_count", 1)
-    
-    user.increment({"login_count" : 1, "order_count" : 1})
-    ```
-
-    </CodeGroup>
-
-    | Parameters | type            |
-    | ---------- | --------------- |
-    | key        |                 |
-    | value      | number (+ or -) |
-  </Accordion>
-  <Accordion title="Unset" defaultOpen="false">
-    This will remove a property permanently from user properties.
-
-    <CodeGroup> 
-
-    ```javascript Request
-    user.unset(key)
-    user.unset("name")
-      
-    user.unset([key1, key2])
-    user.unset(["name","city"])
-    ```
-
-    
-    ```javascript Example
-    user.unset("wishlist")
-    
-    user.unset(["wishlist", "cart"])
-    ```
-
-    </CodeGroup>
-
-    | Parameters | type |
-    | ---------- | ---- |
-    | keys       |      |
-  </Accordion>
-</AccordionGroup>
-
----
-
-<Warning>
-  After calling `add\\\\\\\_\\\\\\\*/remove\\\\\\\_\\\\\\\*/unset` methods, don't forget to call the `user.save()` request. the changes will be sent to SuprSend only after calling this method.
-</Warning>
-
-## Communication channel methods
-
-Communication Channel Preference decides whether a user will receive communication on a particular channel or not. Setting Channel preferences means that whenever you are triggering a workflow, the communication will be sent on the channels set in user profile (given that the template for that channel is present in the template group).
-
-<Check>
-  **📘 Mandatory step for event based workflows:**
-
-  In event based workflows, since you only pass user's `distinct_id` in your track event call, you'll have to add channel preference first in user profile before making the call, as channels info is picked from user profile.
-</Check>
-
-<AccordionGroup>
-  <Accordion title="Add User Channels" defaultOpen="false">
+  <Accordion title="Add User Channels">
     Use `user.add\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\*` method(s) to add user channels.
 
     <CodeGroup>
@@ -319,7 +136,7 @@ Communication Channel Preference decides whether a user will receive communicati
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Remove User Channels" defaultOpen="false">
+  <Accordion title="Remove User Channels">
     Use `user.remove\\\\\\\\\\\\\\\_\\\\\\\\\\\\\\\*` method(s) to remove user channels. These methods will detach provided value from the user profile in specified channel.
 
     <CodeGroup>
@@ -387,7 +204,7 @@ Communication Channel Preference decides whether a user will receive communicati
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Remove User Channels in bulk" defaultOpen="false">
+  <Accordion title="Remove User Channels in bulk">
     This method will delete/unset all values in specified channel for user (ex: remove all emails attached to user).
 
     <CodeGroup>
@@ -409,7 +226,178 @@ Communication Channel Preference decides whether a user will receive communicati
 
     </CodeGroup>
   </Accordion>
+
+  <Accordion title="Set preferred language">
+    If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
+
+    <CodeGroup>
+
+    ```javascript Request
+    user.set_preferred_language("en")
+    ```
+
+    </CodeGroup>
+  </Accordion>
+  <Accordion title="Set preferred timezone">
+    You can set timezone of user using this method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab).
+
+    <CodeGroup>
+
+    ```javascript /suprsend/suprsend/editor/docs-revamp-1#set-preferred-timezone
+    user.set_timezone("America/Los_Angeles")
+    ```
+
+    </CodeGroup>
+  </Accordion>
+  <Accordion title="Set">
+    Set is used to set the custom user property or properties. The given key and value will be assigned to the user, overwriting an existing property with the same key if present.
+
+    <CodeGroup>
+
+    ```javascript Request
+    user.set(key, value)
+    user.set("name","John Doe")
+      
+    user.set({ key1: value1, key2: value2 })
+    user.set({"name": "John Doe","city": "San Francisco"})
+    ```
+
+    
+    ```javascript Example
+    user.set("name","John Doe")
+    
+    user.set({
+    	"name": "John Doe",
+    	"city": "San Francisco"
+    })
+    ```
+
+    </CodeGroup>
+
+    | Parameters | type |
+    | ---------- | ---- |
+    | key        |      |
+    | value      | any  |
+  </Accordion>
+  <Accordion title="Set Once">
+    Works just like `user.set`, except it will not override already existing property values. This is useful for properties like first_login_date.
+
+    <CodeGroup>
+
+    ```javascript Request
+    user.set_once(key, value)
+    user.set_once("first_login","2021-11-02")
+      
+    user.set_once({ key1: value1, key2: value2 })
+    user.set_once({"first_login": "2021-11-02","signup_date": "2021-11-02"})
+    ```
+
+    
+    ```javascript Example
+    user.set_once("first_login", "2021-11-02")
+    
+    user.set_once({"first_login" : "2021-11-02", "DOB" : "1991-10-02"})
+    ```
+
+    </CodeGroup>
+  </Accordion>
+  <Accordion title="Append">
+    This method will append a value to the list for a given property.
+
+    <CodeGroup>
+
+    ```javascript Request
+    user.append(key, value)
+    user.append("played_games", "game_1")
+    
+    user.append({ key1: value1, key2: value2 })
+    user.append({"played_games": "game_1", "liked_games": "game_2"})
+    ```
+
+    </CodeGroup>
+  </Accordion>
+  <Accordion title="Remove">
+    This method will remove a value from the list for a given property.
+
+    <CodeGroup>
+
+    ```javascript Request
+    user.remove(key, value)
+    user.remove("played_games", "game_1")
+    
+    user.remove({ key1: value1, key2: value2 })
+    user.remove({"played_games": "game_1", "liked_games": "game_2"})
+    ```
+
+    
+    ```javascript Example
+    user.remove("played_games", "game_1")
+    
+    user.remove({"played_games": "game_1", "liked_games": "game_2"})
+    ```
+
+    </CodeGroup>
+  </Accordion>
+  <Accordion title="Increment">
+    Add the given number to an existing property on the user. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
+
+    <CodeGroup>
+
+    ```javascript Request
+    user.increment(key, value)
+    user.increment("login_count", 1)
+    
+    user.increment({ key1: value1, key2: value2 })
+    user.increment({"login_count" : 1, "order_count" : 1})
+    ```
+
+    
+    ```javascript Example
+    user.increment("login_count", 1)
+    
+    user.increment({"login_count" : 1, "order_count" : 1})
+    ```
+
+    </CodeGroup>
+
+    | Parameters | type            |
+    | ---------- | --------------- |
+    | key        |                 |
+    | value      | number (+ or -) |
+  </Accordion>
+  <Accordion title="Unset">
+    This will remove a property permanently from user properties.
+
+    <CodeGroup> 
+
+    ```javascript Request
+    user.unset(key)
+    user.unset("name")
+      
+    user.unset([key1, key2])
+    user.unset(["name","city"])
+    ```
+
+    
+    ```javascript Example
+    user.unset("wishlist")
+    
+    user.unset(["wishlist", "cart"])
+    ```
+
+    </CodeGroup>
+
+    | Parameters | type |
+    | ---------- | ---- |
+    | keys       |      |
+  </Accordion>
 </AccordionGroup>
+
+---
+
+<Warning>
+  After calling `add*/remove*/unset` methods, don't forget to call the `user.save()` request. the changes will be sent to SuprSend only after calling this method.
+</Warning>
 
 ## Bulk API for updating multiple user profiles
 

@@ -80,28 +80,37 @@
             "docs/best-practises-for-batching-digest"
           ]
         },
+        {
+          "group": "Plan Your Integration",
+          "pages": [
+            "docs/migrating-your-existing-notifications",
+            "docs/event-vs-api-trigger",
+            "docs/migrate-from-magicbell-to-suprsend"
+          ]
+        },
         "docs/go-live-checklist",
-        "docs/security",
-        "docs/migrate-from-magicbell-to-suprsend"
+        "docs/security"
       ]
     },
     {
       "group": "CORE CONCEPTS",
       "pages": [
-        "docs/templates",
         {
           "group": "Templates",
           "pages": [
             "docs/templates",
-            "docs/push-notification",
-            "docs/email",
-            "docs/whatsapp",
-            "docs/web-push",
-            "docs/sms-template",
-            "docs/ios-push-template",
-            "docs/in-app-inbox-template",
-            "docs/slack-template",
-            "docs/ms-teams-template",
+            {"group": "Channel Editors",
+            "pages":[
+              "docs/email",
+              "docs/whatsapp",
+              "docs/web-push",
+              "docs/sms-template",
+              "docs/ios-push-template",
+              "docs/in-app-inbox-template",
+              "docs/slack-template",
+              "docs/ms-teams-template",
+              "docs/push-notification"
+              ]},
             "docs/testing-the-template",
             "docs/handlebars-helpers",
             "docs/multi-lingual-template"
@@ -133,11 +142,13 @@
       "group": "WORKFLOW BUILDER",
       "pages": [
         "docs/design-workflow",
-        "docs/throttle",
-        "docs/override-recipient-list",
-        "docs/delivery-single-channel",
+        {
+          "group": "Node List",
+          "pages": [
+            "docs/delivery-single-channel",
         "docs/delivery-multi-channel",
         "docs/smart-delivery",
+        "docs/override-recipient-list",
         "docs/delay",
         "docs/batch",
         "docs/digest",
@@ -150,7 +161,13 @@
         "docs/add-remove-from-list",
         "docs/subcribe-unsubscribe-from-object",
         "docs/update-user-profile",
-        "docs/invoke-workflow",
+        "docs/invoke-workflow"]
+        },
+        {
+          "group": "Workflow Settings",
+          "pages": [
+            "docs/throttle"]
+        },
         "docs/trigger-workflow",
         "docs/tenant-workflows"
       ]
@@ -158,17 +175,15 @@
     {
       "group": "SUPRSEND BACKEND SDK",
       "pages": [
-        "docs/python-sdk",
         {
           "group": "Python SDK",
           "pages": [
-            "docs/python-sdk",
             "docs/integrate-python-sdk",
             "docs/python-create-user-profile",
-            "docs/objects-python-sdk",
+            "docs/python-objects",
             "docs/python-send-event-data",
             "docs/python-trigger-workflow-from-api",
-            "docs/tenants-python",
+            "docs/python-tenants",
             "docs/python-lists",
             "docs/python-broadcast"
           ]
@@ -176,7 +191,6 @@
         {
           "group": "Node.js SDK",
           "pages": [
-            "docs/nodejs-sdk",
             "docs/integrate-node-sdk",
             "docs/node-create-user-profile",
             "docs/objects-node-sdk",
@@ -190,7 +204,6 @@
         {
           "group": "Java SDK",
           "pages": [
-            "docs/java-sdk",
             "docs/integrate-java-sdk",
             "docs/java-create-user-profile",
             "docs/java-send-event-data",

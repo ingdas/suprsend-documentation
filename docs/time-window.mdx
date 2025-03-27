@@ -37,15 +37,7 @@ Time window has 3 inputs
 
 2. **Time**: Define the time within the selected days when the notification should be sent. This is calculated based on the recipient’s timezone.
 
-3. **Timezone:** Set the timezone for the Time specified. You can set recipient's timezone here which will be dynamically calculated for each recipient. You can set recipient timezone in recipient profile with: 
-
-   `$timezone`
-
-    key in HTTP API or 
-
-   `user.set_timezone()`
-
-    method from your backend or Frontend SDKs. 
+3. **Timezone:** Set the timezone for the Time specified. You can set recipient's timezone here which will be dynamically calculated for each recipient. You can set recipient timezone in recipient profile with `$timezone` key in HTTP API or `user.set_timezone()` method from your backend or Frontend SDKs. 
     
     Timezones should be in [IANA (TZ identifier)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) format, such as `America/New_York`.
 

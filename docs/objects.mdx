@@ -1,5 +1,5 @@
 ---
-title: "Objects"
+title: "Manage Objects"
 description: "Learn about objects and how you can model your notifications using objects"
 ---
 
@@ -34,9 +34,9 @@ Objects largely follows the same schema and profile update methods as user. You 
 
 [Object creation API ->](/reference/create-update-objects)
 
-<Steps>
-  <Step title="Creating objects in a separate API call before trigger:">
-    1. This is an ideal approach for updating objects especially if you are using object to send notification to its subscribers.
+<AccordionGroup>
+  <Accordion title="Creating objects in a separate API call before trigger" defaultOpen="true">
+    This is an ideal approach for updating objects especially if you are using object to send notification to its subscribers.
 
     <CodeGroup>
 
@@ -59,7 +59,7 @@ Objects largely follows the same schema and profile update methods as user. You 
     ```
 
     
-    ```javascript NodeJs
+    ```javascript Node
     const {Suprsend} = require("@suprsend/node-sdk");
     
     // Initialize SDK
@@ -101,8 +101,8 @@ Objects largely follows the same schema and profile update methods as user. You 
     ```
 
     </CodeGroup>
-  </Step>
-  <Step title="Adding objects inline in workflow trigger:">
+  </Accordion>
+  <Accordion title="Adding objects inline in workflow trigger">
     Objects are generally defined inline if you are sending notification to object as a recipient and need to add its channels or properties in the trigger.
 
     <CodeGroup>
@@ -139,7 +139,7 @@ Objects largely follows the same schema and profile update methods as user. You 
     ```
 
     
-    ```javascript NodeJs
+    ```javascript Node
     const {Suprsend, WorkflowTriggerRequest} = require("@suprsend/node-sdk");
     
     // Initialize SDK
@@ -208,8 +208,8 @@ Objects largely follows the same schema and profile update methods as user. You 
     </CodeGroup>
 
     ### 
-  </Step>
-</Steps>
+  </Accordion>
+</AccordionGroup>
 
 ## Object Subscribers
 
@@ -254,7 +254,7 @@ curl --request POST \
 ```
 
 
-```javascript NodeJs
+```javascript Node
 const {Suprsend} = require("@suprsend/node-sdk");
 
 // Initialize SDK
@@ -318,7 +318,7 @@ print(obj)
 
 </CodeGroup>
 
-### Triggering Workflow
+## Trigger Workflow
 
 You can trigger workflow on the created object by passing object_type and id as recipient in [API based trigger](/docs/trigger-workflow#triggering-workflow-via-api). Event trigger doesn't support triggering on objects.
 
@@ -352,7 +352,7 @@ curl --location 'https://hub.suprsend.com/trigger/' \
 ```
 
 
-```javascript NodeJs
+```javascript Node
 const {Suprsend, WorkflowTriggerRequest} = require("@suprsend/node-sdk");
 
 // Initialize SDK
@@ -416,13 +416,11 @@ print(res)
 
 </CodeGroup>
 
-### Updating Object Profile and Preferences
+## Update Object Profile and Preferences
 
 You can update channels, properties, and preferences for an object in the same way as for a user. These updates apply when sending notifications to the object itself as the recipient. Object profiles can be modified in the SuprSend UI for testing purposes, or programmatically through the object [upsert API](/reference/create-update-objects) or [edit operations API](/reference/edit-object-profile). Updating [object preferences](/reference/update-object-preference) follows the same approach as updating user preferences: in the API call, you pass the identifier as `:object_type/:id` instead of `:distinct_id`.
 
-<Card title="Refer all object APIs " icon="sparkles" href="/reference/create-update-objects">
-  
-</Card>
+[Refer all object APIs]("/reference/create-update-objects")
 
 
 ---
