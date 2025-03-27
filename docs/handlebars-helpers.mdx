@@ -10,621 +10,624 @@ Apart from the inbuilt helper functions, we have also created some custom helper
 <Warning>
   **Not supported in SMS and Whatsapp:**
 
-
-
   Since, SMS (in India) and Whatsapp require pre-approved templates to send messages, we can't support conditional content rendering in SMS and Whatsapp templates. You can use handlebars helpers if you are sending SMS in US with vendors like Twilio and Messagebird.
 </Warning>
 
 ## SuprSend Handlebars Helpers:
 
-<AccordionGroup>
-  <Accordion title="default" defaultOpen={false}>
-    Can be used to add a default value if the variable values are `" "` , `null` , `undefined`.
+### default
 
-    **Syntax:** `{{default variable "default_value" }}`
+Can be used to add a default value if the variable values are `" "` , `null` , `undefined`.
 
-    **Example:** `{{default name "user" }}`
+<CodeGroup>
 
-    **Returns:**
+``` Syntax
+{{default variable "default_value" }}
+```
 
-    * Variable value if the variable value is present. For instance, the above example with data `{"name":"Joe"}` will return `Joe`
 
-    * Default value if variable value is in `" "` , `null` , `undefined`. For instance, the above example with data `{"name":""}`, `{"name":null}` or `{"city":"Bangalore"}` will return `user`
-  </Accordion>
+``` Example
+{{default name "user" }}
+```
 
-  <Accordion title="compare" defaultOpen={false}>
-    Can be used to show some content in the template based on a condition. For email, you can use [display condition](/docs/email#display-blocks-based-on-condition) to show or hide a particular content block
+</CodeGroup>
 
+> **Returns:**
+>
+> - Variable value if the variable value is present. For instance, the above example with data `{"name":"Joe"}` will return `Joe`
+> - Default value if variable value is in `" "` , `null` , `undefined`. For instance, the above example with data `{"name":""}`, `{"name":null}` or `{"city":"Bangalore"}` will return `user`
 
+### compare
 
-    **Syntax:**
+Can be used to show some content in the template based on a condition. For email, you can use [display condition](/docs/email#display-blocks-based-on-condition) to show or hide a particular content block
 
+<CodeGroup>
 
+```handlebars Syntax
+{{#compare name '==' "Mike"}}
+true_block
+{{else}}
+false_block
+{{/compare}}
+```
 
-    <CodeGroup>
-      ```handlebars handlebars
-      {{#compare name '==' "Mike"}}
-      true_block
-      {{else}}
-      false_block
-      {{/compare}}
-      ```
-    </CodeGroup>
 
+```Example Example
+Example-1: with else statement
+{{#compare candidate_count '==' 1}}
+is
+{{else}}
+are
+{{/compare}}
 
+Example-2: without else statement
+{{#compare candidate_count '==' 1}}
+is
+{{/compare}}
+```
 
-    **Example:**
+</CodeGroup>
 
+> **Returns:**
+>
+> - Returns  if the condition inside compare statement returns truthy value. For instance, the above example with data`{"candidate_count":1}`will return`is`
+> - Returns  (in case else statement is present) if the condition inside compare statement returns falsy value. For instance, Example-1 with data`{"candidate_count":3}`will return`are`
+> - or Returns  if the else statement is not present. For instance, Example-2 with data`{"candidate_count":3}`will not return anything
 
+**Supported Conditional operators in compare statement:**
 
-    <CodeGroup>
-      ```handlebars handlebars
-      Example-1: with else statement
-      {{#compare candidate_count '==' 1}}
-      is
-      {{else}}
-      are
-      {{/compare}}
+| Operator | Returns truthy when                             | Sample Statement       |
+| :------- | :---------------------------------------------- | :--------------------- |
+| `==`     | LHS equals RHS                                  | 1 `==` "1"             |
+| `===`    | LHS value as well as data type matches with RHS | 1 `===` 1              |
+| `>`      | LHS is greater than RHS                         | 2 `>` 1                |
+| `\<`     | LHS is less than RHS                            | 1 `\<` 2               |
+| `>=`     | LHS is greater than equals to RHS               | 2 `>=` 2 or 3 `>=` 2   |
+| `\<=`    | LHS is less than equal to RHS                   | 2 `\<=` 2 or 1 `\<=` 2 |
+| `!=`     | LHS is not equal RHS                            | 3 `!=` 1               |
+| `!==`    | LHS value or data type does not equal RHS       | 1 `!==` "1"            |
 
-      Example-2: without else statement
-      {{#compare candidate_count '==' 1}}
-      is
-      {{/compare}}
-      ```
-    </CodeGroup>
+<Warning>
+  Builtin helpers and custom helpers in handlebars can only work with nested objects if the value of parent key is present.
 
+  For example, `{{default place.city "San Francisco"}}` will return `"San Francisco"` only if `place` key is present, i.e., `{"place":[]}`
+</Warning>
 
+However, you can use the nested `if` condition to check if the parent is present and if so, then render nested objects value. Refer below example:
 
-    **Returns:**
+<CodeGroup>
 
-    * Returns ***`true_block`*** if the condition inside compare statement returns truthy value. For instance, the above example with data`{"candidate_count":1}`will return`is`
+```text Sample text
+{{#if place}}
+  {{default place.city "San Francisco"}}
+{{else}}
+  San Francisco
+{{/if}}
 
-    * Returns ***`false_block`*** (in case else statement is present) if the condition inside compare statement returns falsy value. For instance, Example-1 with data`{"candidate_count":3}`will return`are`
+{{#if person.address}}
+  {{#if person.address.current}}
+    {{{default person.address.current.city "Los Angeles"}}
+  {{/if}}
+{{/if}}
+```
 
-    * or Returns ***`no value`*** if the else statement is not present. For instance, Example-2 with data`{"candidate_count":3}`will not return anything
+</CodeGroup>
 
-    **Supported Conditional operators in compare statement:**
+### each
 
-    | Operator | Returns truthy when                             | Sample Statement       |
-    | -------- | ----------------------------------------------- | ---------------------- |
-    | `==`     | LHS equals RHS                                  | 1 `==` "1"             |
-    | `===`    | LHS value as well as data type matches with RHS | 1 `===` 1              |
-    | `>`      | LHS is greater than RHS                         | 2 `>` 1                |
-    | `\<`     | LHS is less than RHS                            | 1 `\<` 2               |
-    | `>=`     | LHS is greater than equals to RHS               | 2 `>=` 2 or 3 `>=` 2   |
-    | `\<=`    | LHS is less than equal to RHS                   | 2 `\<=` 2 or 1 `\<=` 2 |
-    | `!=`     | LHS is not equal RHS                            | 3 `!=` 1               |
-    | `!==`    | LHS value or data type does not equal RHS       | 1 `!==` "1"            |
+You can iterate over a static or dynamic length list using each helper. Inside the block, you add the array object key which you want to iterate over.
 
-    <Warning>
-      Builtin helpers and custom helpers in handlebars can only work with nested objects if the value of parent key is present.&#x20;
+<CodeGroup>
 
+```handlebars Syntax
+{{#each array_object}}
+{{variable_key}}
+{{/each}}
+```
 
 
-      For example, `{{default place.city "San Francisco"}}` will return `"San Francisco"` only if `place` key is present, i.e., `{"place":[]}`
-    </Warning>
+```json Mock JSON Data
+{{#each admins}}
+{{name}} 
+{{/each}}
+```
 
 
+```File Response Return
+{
+  "admins":[
+    {
+      "name":"steve",
+      "id":"1",
+      "city":"Palo Alto"
+    },
+    {
+      "name":"Olivia",
+      "id":2,
+      "city":"Houston"
+    }
+  ]
+}
+```
 
-    However, you can use the nested `if` condition to check if the parent is present and if so, then render nested objects value.&#x20;
+</CodeGroup>
 
+> **Returns:**  Above example for below mock data will return `steve Olivia`
 
+### datetime-format
 
-    Refer below example:
+Returns a formatted date string. This helper will throw error if an invalid date is provided.
 
+<CodeGroup>
 
+```Syntax Syntax
+{{datetime-format variable "format string" "timezone"}}
+```
 
-    <CodeGroup>
-      ```text text
-      {{#if place}}
-        {{default place.city "San Francisco"}}
-      {{else}}
-        San Francisco
-      {{/if}}
 
-      {{#if person.address}}
-        {{#if person.address.current}}
-          {{{default person.address.current.city "Los Angeles"}}
-        {{/if}}
-      {{/if}}
-      ```
-    </CodeGroup>
-  </Accordion>
+```json Mock JSON Data
+{
+  "date":"2023-09-26T00:00:00Z"
+}
+```
 
-  <Accordion title="each" defaultOpen={false}>
-    You can iterate over a static or dynamic length list using each helper. Inside the block, you add the array object key which you want to iterate over.
+</CodeGroup>
 
+| parameter         | Obligation  | description                                                                                                                                                                                                                                                              |
+| :---------------- | :---------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **variable**      | _mandatory_ | should be a date or timestamp. It will throw an error for invalid date format. To get today's date (date on which template is getting rendered) you can use `"now"` string.                                                                                              |
+| **format string** | _mandatory_ | date string defining the format in which date should be printed. See all [formatting options here](https://momentjs.com/docs/#/displaying/format/). For example **"dddd, MMMM Do YYYY, h:mm:ss a"** will return datetime as **"Sunday, February 14th 2010, 3:25:50 pm"** |
+| **timezone**      | _optional_  | you can add timezone as a third parameter to convert time in a given timezone. See the list of [all possible timezones here](https://support.sendwithus.com/jinja/jinja_time/#complete-list-of-all-available-timezones)                                                  |
 
+**Examples:**
 
-    **Syntax:**
+| Example                                                      | Output                            |
+| :----------------------------------------------------------- | :-------------------------------- |
+| `{{datetime-format date "ddd, MMM Do YYYY, h:mm:ss a"}}`     | `Tue, Sep 26th 2023, 12:00:00 am` |
+| `{{datetime-format date "[Today is] dddd"}}`                 | `Today is Tuesday`                |
+| `{{datetime-format date "Do MMMM, YYYY" "America/Chicago"}}` | `25th September, 2023`            |
 
+### jsonStringify
 
+Coverts any type of JSON input to a string. Can be used to print JSON and array directly in templates without having to convert it into individual strings. One of the common usecase is to pass complete JSON in Inbox template -\> custom JSON field to generate custom UI.
 
-    <CodeGroup>
-      ```handlebars handlebars
-      {{#each array_object}}
-      {{variable_key}}
-      {{/each}}
-      ```
-    </CodeGroup>
+<CodeGroup>
 
+```Syntax Syntax
+{{jsonStringify variable}}
+```
 
 
-    **Example:**
+```json Mock JSON Data
+{
+  "likes":3,
+  "comments":4,
+  "users":["Olivia","Steve"]
+}
+```
 
+</CodeGroup>
 
+<Note>
+  variable should be a valid JSON input.
+</Note>
 
-    <CodeGroup>
-      ```handlebars handlebars
-      {{#each admins}}
-      {{name}} 
-      {{/each}}
-      ```
-    </CodeGroup>
+**Examples:**
 
+| Example                   | Output                                                  |
+| :------------------------ | :------------------------------------------------------ |
+| `{{jsonStringify this}}`  | `\{"likes":3,"comments":4,"users":\["Olivia","Steve"]}` |
+| `{{jsonStringify users}}` | `\["Olivia","Steve"]`                                   |
 
+### lowercase
 
-    **Returns:** Above example for below mock data will return `steve Olivia`
+This handlebar helper is used to convert string to lowercase. If non string values are provided empty string `''` is returned.
 
+<CodeGroup>
 
+```Syntax Syntax
+{{lowercase "string"}}
+```
 
-    <CodeGroup>
-      ```json json
-      {
-        "admins":[
-          {
-            "name":"steve",
-            "id":"1",
-            "city":"Palo Alto"
-          },
-          {
-            "name":"Olivia",
-            "id":2,
-            "city":"Houston"
-          }
-        ]
-      }
-      ```
-    </CodeGroup>
-  </Accordion>
+</CodeGroup>
 
-  <Accordion title="datetime-format" defaultOpen={false}>
-    Returns a formatted date string. This helper will throw error if an invalid date is provided.
+### uppercase
 
-    **Syntax:** `{{datetime-format variable "format string" "timezone"}}`
+This handlebar helper is used to convert string to uppercase. If non string values are provided empty string `''` is returned.
 
-    | parameter         | Obligation  | description                                                                                                                                                                                                                                                              |
-    | ----------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-    | **variable**      | *mandatory* | should be a date or timestamp. It will throw an error for invalid date format. To get today's date (date on which template is getting rendered) you can use `"now"` string.                                                                                              |
-    | **format string** | *mandatory* | date string defining the format in which date should be printed. See all [formatting options here](https://momentjs.com/docs/#/displaying/format/). For example **"dddd, MMMM Do YYYY, h:mm:ss a"** will return datetime as **"Sunday, February 14th 2010, 3:25:50 pm"** |
-    | **timezone**      | *optional*  | you can add timezone as a third parameter to convert time in a given timezone. See the list of [all possible timezones here](https://support.sendwithus.com/jinja/jinja_time/#complete-list-of-all-available-timezones)                                                  |
+<CodeGroup>
 
-    **Examples:**
+```Syntax Syntax
+{{uppercase "string"}}
+```
 
-    | Example                                                      | Output                            |
-    | ------------------------------------------------------------ | --------------------------------- |
-    | `{{datetime-format date "ddd, MMM Do YYYY, h:mm:ss a"}}`     | `Tue, Sep 26th 2023, 12:00:00 am` |
-    | `{{datetime-format date "[Today is] dddd"}}`                 | `Today is Tuesday`                |
-    | `{{datetime-format date "Do MMMM, YYYY" "America/Chicago"}}` | `25th September, 2023`            |
+</CodeGroup>
 
-    <CodeGroup>
-      ```json Mock JSON Data
-      {
-        "date":"2023-09-26T00:00:00Z"
-      }
-      ```
-    </CodeGroup>
-  </Accordion>
+### capitalize
 
-  <Accordion title="jsonStringify" defaultOpen={false}>
-    Coverts any type of JSON input to a string. Can be used to print JSON and array directly in templates without having to convert it into individual strings. One of the common usecase is to pass complete JSON in Inbox template -> custom JSON field to generate custom UI.
+This handlebar helper is used to capitalize the first character in provided string. If non string values are provided empty string `''` is returned.
 
+<CodeGroup>
 
+```Syntax Syntax
+{{capitalize "string"}}
+```
 
-    **Syntax:** `{{jsonStringify variable}}`
-
-    variable should be a valid JSON input.
-
-
-
-    **Examples:**
-
-    | Example                   | Output                                                  |
-    | ------------------------- | ------------------------------------------------------- |
-    | `{{jsonStringify this}}`  | `\{"likes":3,"comments":4,"users":\["Olivia","Steve"]}` |
-    | `{{jsonStringify users}}` | `\["Olivia","Steve"]`                                   |
-
-    <CodeGroup>
-      ```json Mock JSON Data
-      {
-        "likes":3,
-        "comments":4,
-        "users":["Olivia","Steve"]
-      }
-      ```
-    </CodeGroup>
-  </Accordion>
-
-  <Accordion title="lowercase" defaultOpen={false}>
-    This handlebar helper is used to convert string to lowercase. If non string values are provided empty string `''` is returned.
-
-
-
-    **Syntax:** `{{lowercase "string"}}`
-  </Accordion>
-
-  <Accordion title="uppercase" defaultOpen={false}>
-    This handlebar helper is used to convert string to uppercase. If non string values are provided empty string `''` is returned.
-
-
-
-    **Syntax:** `{{uppercase "string"}}`
-  </Accordion>
-
-  <Accordion title="capitalize" defaultOpen={false}>
-    This handlebar helper is used to capitalize the first character in provided string. If non string values are provided empty string `''` is returned.
-
-
-
-    **Syntax:** `{{capitalize "string"}}`
-  </Accordion>
-</AccordionGroup>
+</CodeGroup>
 
 ## SuprSend Math Operators:
 
-<AccordionGroup>
-  <Accordion title="add" defaultOpen={false}>
-    Returns the sum of two operands. Both input values should be numbers, else it will throw an error.
+### add
+
+Returns the sum of two operands. Both input values should be numbers, else it will throw an error.
+
+<CodeGroup>
+
+```Syntax Syntax
+{{add number1 number2}}
+```
 
 
+```json Mock JSON Data
+{
+  "likes":3,
+  "comments":4
+}
+```
 
-    **Syntax:** `{{add number1 number2}}`
+</CodeGroup>
 
+**Examples:**
 
+| Example                  | Output |
+| :----------------------- | :----- |
+| `{{add 9 4}}`            | `13`   |
+| `{{add likes comments}}` | `7`    |
 
-    **Examples:**
+### subtract
 
-    | Example                  | Output |
-    | ------------------------ | ------ |
-    | `{{add 9 4}}`            | `13`   |
-    | `{{add likes comments}}` | `7`    |
+Returns the difference between two operands. Both input values should be numbers, else it will throw an error.
 
-    <CodeGroup>
-      ```json Mock JSON Data
-      {
-        "likes":3,
-        "comments":4
-      }
-      ```
-    </CodeGroup>
-  </Accordion>
+<CodeGroup>
 
-  <Accordion title="subtract" defaultOpen={false}>
-    Returns the difference between two operands. Both input values should be numbers, else it will throw an error.
-
-
-
-    **Syntax:** `{{subtract number1 number2}}`
+``` Syntax
+{{subtract number1 number2}}
+```
 
 
+```json Mock JSON Data
+{
+  "likes":3,
+  "comments":4
+}
+```
 
-    **Examples:**
+</CodeGroup>
 
-    | Example                | Output |
-    | ---------------------- | ------ |
-    | `{{subtract 9 4}}`     | `5`    |
-    | `{{subtract likes 1}}` | `2`    |
+**Examples:**
 
-    <CodeGroup>
-      ```json Mock JSON Data
-      {
-        "likes":3,
-        "comments":4
-      }
-      ```
-    </CodeGroup>
-  </Accordion>
+| Example                | Output |
+| :--------------------- | :----- |
+| `{{subtract 9 4}}`     | `5`    |
+| `{{subtract likes 1}}` | `2`    |
 
-  <Accordion title="multiply" defaultOpen={false}>
-    Returns the product of two operands. Both input values should be numbers, else it will throw an error.
+### multiply
 
+Returns the product of two operands. Both input values should be numbers, else it will throw an error.
 
+<CodeGroup>
 
-    **Syntax:** `{{multiply number1 number2}}`
-
-
-
-    **Examples:**
-
-    | Example                           | Output |
-    | --------------------------------- | ------ |
-    | `{{multiply 9 4}}`                | `36`   |
-    | `{{multiply ARR billing_months}}` | `3600` |
-
-    <CodeGroup>
-      ```json Mock JSON Data
-      {
-        "ARR":300,
-        "billing_months":12
-      }
-      ```
-    </CodeGroup>
-  </Accordion>
-
-  <Accordion title="divide" defaultOpen={false}>
-    Returns the quotient of the left operand divided by the right operand. Both input values should be numbers; else it will throw an error.
+``` Syntax
+{{multiply number1 number2}}
+```
 
 
+```json Mock JSON Data
+{
+  "ARR":300,
+  "billing_months":12
+}
+```
 
-    **Syntax:** `{{divide dividend divisor}}`
+</CodeGroup>
 
+**Examples:**
 
+| Example                           | Output |
+| :-------------------------------- | :----- |
+| `{{multiply 9 4}}`                | `36`   |
+| `{{multiply ARR billing_months}}` | `3600` |
 
-    **Examples:**
+### divide
 
-    | Example                                | Output |
-    | -------------------------------------- | ------ |
-    | `{{divide 14 4}}`                      | `3.5`  |
-    | `{{divide total_bill billing_months}}` | `300`  |
+Returns the quotient of the left operand divided by the right operand. Both input values should be numbers; else it will throw an error.
 
-    <CodeGroup>
-      ```json Mock JSON Data
-      {
-        "total_bill":3600,
-        "billing_months":12
-      }
-      ```
-    </CodeGroup>
-  </Accordion>
+<CodeGroup>
 
-  <Accordion title="round" defaultOpen={false}>
-    Returns the value of a number rounded to the nearest integer. The input value should be a number; else it will throw an error.
-
-
-
-    **Syntax:** `{{round number}}`
+``` Syntax
+{{divide dividend divisor}}
+```
 
 
+```json Mock JSON Data
+{
+  "total_bill":3600,
+  "billing_months":12
+}
+```
 
-    **Examples:**
+</CodeGroup>
 
-    | Example                   | Output |
-    | ------------------------- | ------ |
-    | `{{round 12.5}}`          | `13`   |
-    | `{{round (divide 15 4)}}` | `4`    |
-  </Accordion>
+**Examples:**
 
-  <Accordion title="mod" defaultOpen={false}>
-    Returns the remainder left over when one operand is divided by a second operand. It always takes the sign of the dividend. This helper will throw an error if it encounters an input value that is not a number or if the divisor is 0.
+| Example                                | Output |
+| :------------------------------------- | :----- |
+| `{{divide 14 4}}`                      | `3.5`  |
+| `{{divide total_bill billing_months}}` | `300`  |
+
+### round
+
+Returns the value of a number rounded to the nearest integer. The input value should be a number; else it will throw an error.
+
+<CodeGroup>
+
+``` Syntax
+{{round number}}
+```
+
+</CodeGroup>
+
+**Examples:**
+
+| Example                   | Output |
+| :------------------------ | :----- |
+| `{{round 12.5}}`          | `13`   |
+| `{{round (divide 15 4)}}` | `4`    |
+
+### mod
+
+Returns the remainder left over when one operand is divided by a second operand. It always takes the sign of the dividend. This helper will throw an error if it encounters an input value that is not a number or if the divisor is 0.
+
+<CodeGroup>
+
+``` Syntax
+{{mod dividend divisor}}
+```
 
 
+```json Mock JSON Data
+{
+   "total_bill":3600,
+   "billing_months":12
+}
+```
 
-    **Syntax:** `{{mod dividend divisor}}`
+</CodeGroup>
 
+**Examples:**
 
-
-    **Examples:**
-
-    | Example                             | Output |
-    | ----------------------------------- | ------ |
-    | `{{mod 14 4}}`                      | `2`    |
-    | `{{mod total_bill billing_months}}` | `0`    |
-
-    <CodeGroup>
-      ```json Mock JSON Data
-      {
-        "total_bill":3600,
-        "billing_months":12
-      }
-      ```
-    </CodeGroup>
-  </Accordion>
-</AccordionGroup>
+| Example                             | Output |
+| :---------------------------------- | :----- |
+| `{{mod 14 4}}`                      | `2`    |
+| `{{mod total_bill billing_months}}` | `0`    |
 
 ## SuprSend Array Operators
 
-<AccordionGroup>
-  <Accordion title="unique" defaultOpen={false}>
-    Returns unique items in an array
+### unique
+
+Returns unique items in an array.
+
+<CodeGroup>
+
+``` Syntax
+{{unique variable "key_string" }}
+```
 
 
-
-    **Syntax:** `{{unique variable "key_string" }}`
-
-    | parameter       | description                                                                                                                                                             |
-    | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | **variable**    | should be an array. If not helper function will throw an error.                                                                                                         |
-    | **key\_string** | mandatory only if items in the array are objects. If a *unique* operation needs to be performed on nested objects, then object notation *(a.b or a\['b'])* can be used. |
-
-    **Examples:**
-
-    | Example                                          | Output                                 |
-    | ------------------------------------------------ | -------------------------------------- |
-    | `{{unique email }}`                              | `joe@abc.com, steve@abc.com` |
-    | `{{unique array "city" }}`                       | `San Francisco, Austin`                |
-    | `{{unique personal_details "name.first_name" }}` | `john, mike`                           |
-
-    <CodeGroup>
-      ```json Mock JSON Data
-      {
-        "array": [
-          {
-            "city": "San Francisco",
-            "name": "Mike"
-          },
-          {
-            "city": "Austin",
-            "name": "Juliana"
-          },
-          {
-            "city": "Austin",
-            "name": "Nova"
-          }
-        ],
-        "personal_details": [
-          {
-            "name": {
-              "first_name": "john",
-              "last_name": "doe"
-            }
-          },
-          {
-            "name": {
-              "first_name": "mike",
-              "last_name": "waz"
-            }
-          }
-        ],
-        "email": [
-          "joe@abc.com",
-          "steve@abc.com",
-          "joe@abc.com"
-        ]
+```json Mock JSON Data
+{
+  "array": [
+    {
+      "city": "San Francisco",
+      "name": "Mike"
+    },
+    {
+      "city": "Austin",
+      "name": "Juliana"
+    },
+    {
+      "city": "Austin",
+      "name": "Nova"
+    }
+  ],
+  "personal_details": [
+    {
+      "name": {
+        "first_name": "john",
+        "last_name": "doe"
       }
-      ```
-    </CodeGroup>
-  </Accordion>
-
-  <Accordion title="itemAt" defaultOpen={false}>
-    Returns item at a particular index in the array. It can be useful in scenarios where you want to display a message like `liked by Mike and 3 others`.
-
-
-
-    **Syntax:** `{{itemAt variable index }}`
-
-    | Parameter    | Description                                                        |
-    | ------------ | ------------------------------------------------------------------ |
-    | **variable** | should be an array else the helper function will throw an error.   |
-    | **index**    | should be an integer else the helper function will throw an error. |
-
-    **Examples:**
-
-    | Example              | Output              |
-    | -------------------- | ------------------- |
-    | `{{itemAt email 1}}` | `steve@abc.com` |
-
-    <CodeGroup>
-      ```json Mock JSON
-      {
-        "array": [
-          {
-            "city": "San Francisco",
-            "name": "Mike"
-          },
-          {
-            "city": "Austin",
-            "name": "Juliana"
-          },
-          {
-            "city": "Austin",
-            "name": "Nova"
-          }
-        ],
-        "email":["joe@abc.com","steve@abc.com","joe@abc.com"]
+    },
+    {
+      "name": {
+        "first_name": "mike",
+        "last_name": "waz"
       }
-      ```
-    </CodeGroup>
+    }
+  ],
+  "email": [
+    "joe@abc.com",
+    "steve@abc.com",
+    "joe@abc.com"
+  ]
+}
+```
 
-    <Info>
-      **Note:**&#x20;
+</CodeGroup>
 
-      This helper only works with an array of primitive data types like string, boolean, etc. If you have an array with objects in it, you can combine it with a unique helper to return the indexed value of a particular key inside the object. For instance, `{{itemAt (unique array "city") 0}}` in above mock will return `San Francisco`.
-    </Info>
-  </Accordion>
+| parameter      | description                                                                                                                                                            |
+| :------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **variable**   | should be an array. If not helper function will throw an error.                                                                                                        |
+| **key_string** | mandatory only if items in the array are objects. If a _unique_ operation needs to be performed on nested objects, then object notation _(a.b or a['b'])_ can be used. |
 
-  <Accordion title="join" defaultOpen={false}>
-    Concatenates all the values in an array, using a specified separator string between each value.
+**Examples:**
 
+| Example                                          | Output                       |
+| :----------------------------------------------- | :--------------------------- |
+| `{{unique email }}`                              | `joe@abc.com, steve@abc.com` |
+| `{{unique array "city" }}`                       | `San Francisco, Austin`      |
+| `{{unique personal_details "name.first_name" }}` | `john, mike`                 |
 
+### itemAt
 
-    **Syntax:** `{{join variable "separator"}}`
+Returns item at a particular index in the array. It can be useful in scenarios where you want to display a message like `liked by Mike and 3 others`.
 
-    | Parameter     | Description                                                                                                                                         |
-    | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | **variable**  | should be an array and items in the array should be of primitive data types like string, number, etc, else the helper function will throw an error. |
-    | **separator** | should be string else by default separator `,` will be used. If not provided `,` is used.                                                           |
+<CodeGroup>
 
-    **Examples:**
-
-    | Example                | Output                                                      |
-    | ---------------------- | ----------------------------------------------------------- |
-    | `{{join email }}`      | `joe@abc.com , steve@abc.com , joe@abc.com` |
-    | `{{join email ' - '}}` | `joe@abc.com - steve@abc.com - joe@abc.com` |
-
-    <CodeGroup>
-      ```json Mock JSON
-      {
-        "array": [
-          {
-            "city": "San Francisco",
-            "name": "Mike"
-          },
-          {
-            "city": "Austin",
-            "name": "Juliana"
-          },
-          {
-            "city": "Austin",
-            "name": "Nova"
-          }
-        ],
-        "email":["joe@abc.com","steve@abc.com","joe@abc.com"]
-      }
-      ```
-    </CodeGroup>
+``` Syntax
+{{itemAt variable index }}
+```
 
 
+```json Mock JSON Data
+{
+  "array": [
+    {
+      "city": "San Francisco",
+      "name": "Mike"
+    },
+    {
+      "city": "Austin",
+      "name": "Juliana"
+    },
+    {
+      "city": "Austin",
+      "name": "Nova"
+    }
+  ],
+  "email":["joe@abc.com","steve@abc.com","joe@abc.com"]
+}
+```
 
-    **Note:**
+</CodeGroup>
 
-    This helper only works with an array of primitive data types like string, boolean, etc. If you have an array with objects in it, you can combine them with a unique helper to join the value of a particular key inside the object. For instance, `{{join (unique array "city")}}` in above mock will return `San Francisco, Austin`
-  </Accordion>
+| Parameter    | Description                                                        |
+| :----------- | :----------------------------------------------------------------- |
+| **variable** | should be an array else the helper function will throw an error.   |
+| **index**    | should be an integer else the helper function will throw an error. |
 
-  <Accordion title="length" defaultOpen={false}>
-    Can be used to get the number of items in an array or the character length of a string. It can be useful in scenarios where you want to display a message like `your post has got 100 likes`.
+**Examples:**
+
+| Example              | Output          |
+| :------------------- | :-------------- |
+| `{{itemAt email 1}}` | `steve@abc.com` |
+
+<Note>
+  **Note:** 
+
+  This helper only works with an array of primitive data types like string, boolean, etc. If you have an array with objects in it, you can combine it with a unique helper to return the indexed value of a particular key inside the object. For instance, `{{itemAt (unique array "city") 0}}` in above mock will return `San Francisco`.
+</Note>
+
+### join
+
+Concatenates all the values in an array, using a specified separator string between each value.
+
+<CodeGroup>
+
+``` Syntax
+{{join variable "separator"}}
+```
 
 
+```json Mock JSON Data
+{
+  "array": [
+    {
+      "city": "San Francisco",
+      "name": "Mike"
+    },
+    {
+      "city": "Austin",
+      "name": "Juliana"
+    },
+    {
+      "city": "Austin",
+      "name": "Nova"
+    }
+  ],
+  "email":["joe@abc.com","steve@abc.com","joe@abc.com"]
+}
+```
 
-    **Syntax:** `{{length variable}}`
+</CodeGroup>
 
-    | Property     | Description                                                                                                |
-    | ------------ | ---------------------------------------------------------------------------------------------------------- |
-    | **variable** | should be an array or string to get the actual count of items in the variable provided, else it returns 0. |
+| Parameter     | Description                                                                                                                                         |
+| :------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **variable**  | should be an array and items in the array should be of primitive data types like string, number, etc, else the helper function will throw an error. |
+| **separator** | should be string else by default separator `,` will be used. If not provided `,` is used.                                                           |
 
-    **Examples:**
+**Examples:**
 
-    | Example             | Output |
-    | ------------------- | ------ |
-    | `{{length array}}`  | 3      |
-    | `{{length name}}`   | 6      |
-    | `{{length active}}` | 0      |
+| Example                | Output                                      |
+| :--------------------- | :------------------------------------------ |
+| `{{join email }}`      | `joe@abc.com , steve@abc.com , joe@abc.com` |
+| `{{join email ' - '}}` | `joe@abc.com - steve@abc.com - joe@abc.com` |
 
-    <CodeGroup>
-      ```json Mock JSON
-      {
-        "array": [
-          {
-            "city": "San Francisco",
-            "name": "Mike"
-          },
-          {
-            "city": "Austin",
-            "name": "Juliana"
-          },
-          {
-            "city": "Austin",
-            "name": "Nova"
-          }
-        ],
-        "email":["joe@abc.com","steve@abc.com","joe@abc.com"],
-        "name":"Justin",
-        "active":true
-      }
-      ```
-    </CodeGroup>
-  </Accordion>
-</AccordionGroup>
+<Note>
+  **Note:**
 
-We are adding further helpers to this list. If you have a use case that is not covered, ping us on our [Slack Support Channel](https://suprsendcommunity.slack.com/ssb/redirect)
+  This helper only works with an array of primitive data types like string, boolean, etc. If you have an array with objects in it, you can combine them with a unique helper to join the value of a particular key inside the object. For instance, `{{join (unique array "city")}}` in above mock will return `San Francisco, Austin`
+</Note>
 
-***
+### length
+
+Can be used to get the number of items in an array or the character length of a string. It can be useful in scenarios where you want to display a message like `your post has got 100 likes`.
+
+<CodeGroup>
+
+``` Syntax
+{{length variable}}
+```
+
+
+```json Mock JSON Data
+{
+  "array": [
+    {
+      "city": "San Francisco",
+      "name": "Mike"
+    },
+    {
+      "city": "Austin",
+      "name": "Juliana"
+    },
+    {
+      "city": "Austin",
+      "name": "Nova"
+    }
+  ],
+  "email":["joe@abc.com","steve@abc.com","joe@abc.com"],
+  "name":"Justin",
+  "active":true
+}
+```
+
+</CodeGroup>
+
+| Property     | Description                                                                                                |
+| :----------- | :--------------------------------------------------------------------------------------------------------- |
+| **variable** | should be an array or string to get the actual count of items in the variable provided, else it returns 0. |
+
+**Examples:**
+
+| Example             | Output |
+| :------------------ | :----- |
+| `{{length array}}`  | 3      |
+| `{{length name}}`   | 6      |
+| `{{length active}}` | 0      |
+
+<Check>
+  We are adding further helpers to this list. If you have a use case that is not covered, ping us on our [Slack Support Channel](https://suprsendcommunity.slack.com/ssb/redirect)
+</Check>
+
+
+---
