@@ -122,7 +122,7 @@
         "docs/notification-category",
         {
           "group": "Preferences",
-          "pages": ["docs/preferences", "docs/tenant-preference"]
+          "pages": ["docs/user-preferences", "docs/tenant-preference"]
         },
         "docs/tenants",
         {
@@ -314,6 +314,7 @@
       "group": "PREFERENCE CENTRE",
       "pages": [
         "docs/overview-preference-page",
+        "docs/embedded-preference-centre",
         "docs/preferences-javascript",
         "docs/preferences-angular",
         "docs/preferences-react-headless"

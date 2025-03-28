@@ -55,7 +55,7 @@ except (SuprsendAPIException,SuprsendValidationError) as ex:
 
   - `list_id` is case-insensitive. Suprsend first converts list_id to lowercase before storing it or doing any sort of comparison on it.
   - `list_id `can be of max 64 characters.
-  - It can contain characters \[a-z0-9\_-\] i.e. alphanumeric characters, \_(underscore) and -(hyphen).
+  - It can contain characters [a-z0-9\_-] i.e. alphanumeric characters, \_(underscore) and -(hyphen).
 </Note>
 
 ## Get list data
@@ -234,4 +234,102 @@ except (SuprsendAPIException, SuprsendValidationError) as ex:
 
 </CodeGroup>
 
-### 
+## Delete List
+
+You can delete a list using the `supr_client.subscribers_list.delete()` method.
+
+<CodeGroup>
+
+```python Request
+from suprsend import SubscriberListBroadcast, SuprsendAPIException, SuprsendValidationError
+from suprsend import Suprsend
+
+# Initialize SDK
+supr_client = Suprsend("workspace_key", "workspace_secret")
+
+try:
+    data = supr_client.subscriber_lists.delete("_list_id_")
+    print(data)
+
+except (SuprsendAPIException, SuprsendValidationError) as ex:
+    print(ex)
+```
+
+
+```python Response
+{
+   "success": true,
+   "message": "List deleted successfully"
+}
+```
+
+</CodeGroup>
+
+Deleting a list is a permanent action and cannot be undone or restored.
+
+## Replace Users in List
+
+If you want to refresh a list completely with a new set of users, you can replace users by creating a draft version of the list and updating users in it.
+
+<Warning>
+  Use this method only if you want to completely overwrite the list members.
+</Warning>
+
+<Steps>
+  <Step title="Start Sync to create a draft version of the list">
+    This method will create a draft version of the list where you can add the new set of users to replace existing users.
+
+    <CodeGroup>
+
+    ```python Request
+    data = supr_client.subscriber_lists.start_sync("_list_id_") 
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Add Subscribers to the draft list">
+    You can use this method to add subscribers to the list's draft version created in Step-1. You'll get `version_id` in the start sync response.
+
+    <CodeGroup>
+
+    ```python Request
+    data = supr_client.subscriber_lists.add_to_version("_list_id_", "01HHCTXXXXXXXXXXX", ["_distinct_id1_", "_distinct_id2_"])
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Remove Subscribers from the draft list">
+    You can use this method to remove subscribers from the list's draft version created in Step-1. You'll get `version_id` in the start sync response.
+
+    <CodeGroup>
+
+    ```python Request
+    data = supr_client.subscriber_lists.remove_from_version("_list_id_", "01HHCTXXXXXXXXXXX", ["_distinct_id1_", "_distinct_id2_"])
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Finish Sync to make the draft version live">
+    Once your subscribers are updated in the list, use this method to finish sync and make the draft version updated in the above steps live.
+
+    <CodeGroup>
+
+    ```python Request
+    data = supr_client.subscriber_lists.finish_sync("_list_id_", "01HHCTXXXXXXXXXXX")
+    ```
+
+    </CodeGroup>
+  </Step>
+</Steps>
+
+### Delete Draft List
+
+You can also delete the draft list if it was created by mistake.
+
+<CodeGroup>
+
+```python Request
+data = supr_client.subscriber_lists.delete_version("_list_id_", "01HHCTXXXXXXXXXXX")
+```
+
+</CodeGroup>

@@ -1,6 +1,6 @@
 ---
 title: "Lists"
-description: "Methods to create and manage lists using Java SDK"
+description: "Methods to create and manage lists using java SDK"
 ---
 
 The Lists SDK methods lets you create / manage list of subscribers. You can then send [broadcast](/docs/broadcast) to all the users in the list or create a workflow that triggers when a new user enters / exits list.
@@ -57,7 +57,7 @@ public class Lists {
 
   - `list_id` is case-insensitive. Suprsend first converts list_id to lowercase before storing it or doing any sort of comparison on it.
   - `list_id `can be of max 64 characters.
-  - It can contain characters [a-z0-9_-] i.e. alphanumeric characters, _(underscore) and -(hyphen).
+  - It can contain characters [a-z0-9\_-] i.e. alphanumeric characters, \_(underscore) and -(hyphen).
 </Note>
 
 ## Get list data
@@ -252,6 +252,111 @@ public class Lists {
 {
    "success":true
 }
+```
+
+</CodeGroup>
+
+## Delete List
+
+You can delete a subscriber list using the `supr_client.subscriberLists.delete()` method.
+
+<CodeGroup>
+
+```java Request
+import org.json.JSONObject;
+
+import suprsend.Suprsend;
+import suprsend.SuprsendAPIException;
+import suprsend.SubscriberListBroadcast;
+import suprsend.SuprsendValidationError;
+
+public class Lists {
+  public static void main(String[] args) throws Exception {
+    deleteList();
+  }
+  
+  private static void deleteList() throws SuprsendException {
+    Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
+    
+    try {
+      String listId = "_list_id_";
+      JSONObject res = suprsendClient.subscriberLists.delete(listId);
+      System.out.println(res);
+    } catch (SuprsendException e) {
+      System.out.println(e);
+    }
+  }
+}
+```
+
+
+```java Response
+{
+   "success": true
+}
+```
+
+</CodeGroup>
+
+## Replace Users in the List
+
+In case you want to refresh a list with a new set of users completely, you can replace users by creating a draft version of the list and updating users in it.
+
+<Steps>
+  <Step title="Start Sync to create draft version of the list">
+    This method will create a draft version of the list where you can add the new set of users to replace users.
+
+    <CodeGroup>
+
+    ```java Request
+    JSONObject data = suprClient.subscriberLists.startSync("_list_id_");
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Add Subscribers to draft list">
+    Add subscribers to the draft version created in Step-1. You'll get `version_id` in the Start Sync response. 
+
+    <CodeGroup>
+
+    ```java Request
+    JSONObject data = suprClient.subscriberLists.addToVersion("_list_id_", "01HHCTXXXXXXXXXXX", Arrays.asList("_user_id_1", "_user_id_2"));
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Remove Subscribers from draft list">
+    Remove subscribers from the draft version created in Step-1.
+
+    <CodeGroup>
+
+    ```java Request
+    JSONObject data = suprClient.subscriberLists.removeFromVersion("_list_id_", "01HHCTXXXXXXXXXXX", Arrays.asList("_user_id_1", "_user_id_2"));
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Finish Sync to make the draft version live">
+    Finalize the sync and make the draft version live.
+
+    <CodeGroup>
+
+    ```java Request
+    JSONObject data = suprClient.subscriberLists.finishSync("_list_id_", "01HHCTXXXXXXXXXXX");
+    ```
+
+    </CodeGroup>
+  </Step>
+</Steps>
+
+### Delete Draft List
+
+You can also delete a draft list if it was created by mistake.
+
+<CodeGroup>
+
+```java Request
+JSONObject data = suprClient.subscriberLists.deleteVersion("_list_id_", "01HHCTXXXXXXXXXXX");
 ```
 
 </CodeGroup>

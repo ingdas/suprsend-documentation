@@ -32,9 +32,9 @@ Additionally, you have functional nodes that adds logic, branch nodes to split e
 
 It is the first step of your workflow and contains information about what initiates the workflow, and related conditions. There are 3 types of workflow triggers possible:
 
-1. List entry / exit: Starts the workflow when a user enters or exists a [list](https://docs.suprsend.com/docs/lists).
-2. Event Stream: Starts the workflow when one of the linked events is sent to SuprSend.
-3. Workflow API: Here, you explicitly call a workflow using its workflow-slug, specifying the workflow and recipients directly in the API request.
+1. **List entry / exit:** Starts the workflow when a user enters or exists a [list](https://docs.suprsend.com/docs/lists).
+2. **Event Stream:** Starts the workflow when one of the linked events is sent to SuprSend.
+3. **Workflow API:** Here, you explicitly call a workflow using its workflow-slug, specifying the workflow and recipients directly in the API request.
 
 Other than re-engagement notifications, most transactional workflows will either be triggered by passing an event or using workflow API. Compare event vs workflow API here.
 
@@ -134,13 +134,13 @@ This is where basic workflow details like name, description and tags go. You can
 
 ![](/images/docs/bd4ac3f-image.png)
 
-| Field                 | Description                                                                                                                                  |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| Name                  |                                                                                                                                              |
-| Description           | You can use this field to add more details about your workflow like the notification logic. For example - Send 1 hour before the appointment |
-| Notification Category |                                                                                                                                              |
-| Tags                  |                                                                                                                                              |
-| Throttle              |                                                                                                                                              |
+| Field                 | Obligation  | Description |
+|----------------------|------------|-------------|
+| **Name**              | _\*mandatory_ | Unique name of the workflow. The workflow name should be easily identifiable for your reference at a later stage. For example - `Appointment Reminder`. You can also use event name as your workflow name if there is only one workflow linked to that event. |
+| **Description**       | _optional_  | You can use this field to add more details about your workflow like the notification logic. For example - `Send 1 hour before the appointment`. |
+| **Notification Category** | _\*mandatory_ | [Notification category] ("https://docs.suprsend.com/docs/notification-category") is used to group related workflows together and are also used for users to set their preferences across a group of workflows. There are 3 notification categories by default: `transactional` (user action-based alerts), `promotional` (marketing notifications), and `system` (time-sensitive notifications like OTP and authentication codes). |
+| **Tags**              | _optional_  | Tags are used to group related workflows together. For example, all booking-related workflows can be tagged as `Booking`. |
+| **Throttle**         | _optional_  | You can use throttle to limit the number of workflow executions per user in a given time window. [Know more about throttle here] ("https://docs.suprsend.com/docs/throttle") . |
 
 ### Change Node name and Description
 
