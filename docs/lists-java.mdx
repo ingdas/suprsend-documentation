@@ -7,7 +7,7 @@ The Lists SDK methods lets you create / manage list of subscribers. You can then
 
 ## Create / Update List
 
-You can use `supr_client.subscribers_list.create` method to create a new list
+You can use `suprClient.subscriberLists.create` method to create a new list
 
 <CodeGroup>
 
@@ -30,7 +30,7 @@ public class Lists {
     // Create List JSON payload
     JSONObject payload = new JSONObject().put("list_id", "_list_id_");
                                          .put("list_name", "_list_name_ ");
-    																		 .put("list_description", "_some sample description for the list_");
+    		                            .put("list_description", "_some sample description for the list_");
         try {
             JSONObject res = suprClient.subscriberLists.create(payload);
             System.out.println(res);
@@ -62,34 +62,15 @@ public class Lists {
 
 ## Get list data
 
-You can get the latest information of a list using `supr_client.subscribers_list.get` method.
+You can get the latest information of a list using  `suprClient.subscriberLists.get`  method.
 
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
-
-import suprsend.Suprsend;
-import suprsend.SuprsendAPIException;
-import suprsend.SubscriberListBroadcast;
-import suprsend.SuprsendValidationError;
-
-public class Lists {
-  public static void main(String[] args) throws Exception {
-    getList();
-  }
-  
-  private static Subscriber getList() throws SuprsendException {
-		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
-	
-    try {
-            String listId = "_list_id_";
-            JSONObject res = suprClient.subscriberLists.get(listId);
-            System.out.println(res);
-        } catch (SuprsendException e) {
-            System.out.println(e);
-        }
-	}
+  ...
+  String listId = "_list_id_";
+  JSONObject res = suprClient.subscriberLists.get(listId);
+  System.out.println(res);
 ```
 
 
@@ -106,36 +87,18 @@ public class Lists {
 
 ## Get all lists
 
-To get the data of all the lists created in your workspace, use `supr_client.subscribers_list.get_all()`  method
+To get the data of all the lists created in your workspace, use `suprClient.subscriberLists.getAll()`  method
 
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
+  ...
+    // To get the list of 20 subscriber lists
+  JSONObject res = suprClient.subscriberLists.getAll();
 
-import suprsend.Suprsend;
-import suprsend.SuprsendAPIException;
-import suprsend.SubscriberListBroadcast;
-import suprsend.SuprsendValidationError;
-
-public class Lists {
-  public static void main(String[] args) throws Exception {
-    getList();
-  }
-  
-  private static Subscriber getList() throws SuprsendException {
-		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
-		
-    try {
-             // To get the list of 20 subscriber lists
-            JSONObject res = suprClient.subscriberLists.getAll();
-      			// Get list with offset = 10 and limit = 20
-            // JSONObject res = suprClient.subscriberLists.getAll(20,10);
-            System.out.println(res);
-        } catch (SuprsendException e) {
-            System.out.println(e);
-        }
-	}
+  // Get list with offset = 10 and limit = 20
+  // JSONObject res = suprClient.subscriberLists.getAll(20,10);
+  System.out.println(res);
 ```
 
 
@@ -167,39 +130,22 @@ public class Lists {
 
 ## Add Subscribers to the list
 
-Use `supr_client.subscribers_list.add()` to add list subscribers. There is no limit to the number of subscribers that you can add to a list.
+Use `suprClient.subscriberLists.add()` to add list subscribers. There is no limit to the number of subscribers that you can add to a list.
 
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
-
-import suprsend.Suprsend;
-import suprsend.SuprsendAPIException;
-import suprsend.SubscriberListBroadcast;
-import suprsend.SuprsendValidationError;
-
-public class Lists {
-  public static void main(String[] args) throws Exception {
-    subscriberAdd();
-  }
   
-  private static Subscriber subscriberAdd() throws SuprsendException {
-		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
-		
-    //Add one or more distinct ids in the list
-    String distinctId1 = "id-1";
-    String distinctId2 = "id-2";
-    String distinctId3 = "id-3";
-    ArrayList<String> distinctIds = new ArrayList<>(Arrays.asList(distinctId1,distinctId2,distinctId3));
-    try {
-      String listId = "l-001";
-      JSONObject res = suprClient.subscriberLists.add(listId, distinctIds);
-      System.out.println(res);
-    } catch (SuprsendException e) {
-      System.out.println(e);
-    }
-	}
+  //Add one or more distinct ids in the list
+  String distinctId1 = "id-1";
+  String distinctId2 = "id-2";
+  String distinctId3 = "id-3";
+  ArrayList<String> distinctIds = new ArrayList<>(Arrays.asList(distinctId1,distinctId2,distinctId3));
+  try {
+    String listId = "l-001";
+    JSONObject res = suprClient.subscriberLists.add(listId, distinctIds);
+    System.out.println(res);
+  }
 ```
 
 
@@ -213,38 +159,21 @@ public class Lists {
 
 ## Remove Subscribers from the list
 
-You can remove subscribers from the list using `supr_client.subscribers_list.remove()`
+You can remove subscribers from the list using `suprClient.subscriberLists.remove()`
 
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
-
-import suprsend.Suprsend;
-import suprsend.SuprsendAPIException;
-import suprsend.SubscriberListBroadcast;
-import suprsend.SuprsendValidationError;
-
-public class Lists {
-  public static void main(String[] args) throws Exception {
-    subscriberRemove();
-  }
-  
-  private static Subscriber subscriberAdd() throws SuprsendException {
-		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
 		
-    //Add one or more distinct ids in the list
-    String distinctId1 = "id-1";
-    String distinctId2 = "id-2";
-    ArrayList<String> distinctIds = new ArrayList<>(Arrays.asList(distinctId1,distinctId2,distinctId3));
-    try {
-      String listId = "l-001";
-      JSONObject res = suprClient.subscriberLists.remove(listId, distinctIds);
-      System.out.println(res);
-    } catch (SuprsendException e) {
-      System.out.println(e);
-    }
-	}
+  //Add one or more distinct ids in the list
+  String distinctId1 = "id-1";
+  String distinctId2 = "id-2";
+  ArrayList<String> distinctIds = new ArrayList<>(Arrays.asList(distinctId1,distinctId2,distinctId3));
+  try {
+    String listId = "l-001";
+    JSONObject res = suprClient.subscriberLists.remove(listId, distinctIds);
+    System.out.println(res);
+  }
 ```
 
 

@@ -13,8 +13,6 @@ Apart from the inbuilt helper functions, we have also created some custom helper
   Since, SMS (in India) and Whatsapp require pre-approved templates to send messages, we can't support conditional content rendering in SMS and Whatsapp templates. You can use handlebars helpers if you are sending SMS in US with vendors like Twilio and Messagebird.
 </Warning>
 
-## SuprSend Handlebars Helpers:
-
 ### default
 
 Can be used to add a default value if the variable values are `" "` , `null` , `undefined`.
@@ -255,7 +253,7 @@ This handlebar helper is used to capitalize the first character in provided stri
 
 </CodeGroup>
 
-## SuprSend Math Operators:
+## Math Operators:
 
 ### add
 
@@ -411,7 +409,7 @@ Returns the remainder left over when one operand is divided by a second operand.
 | `{{mod 14 4}}`                      | `2`    |
 | `{{mod total_bill billing_months}}` | `0`    |
 
-## SuprSend Array Operators
+## Array Operators
 
 ### unique
 

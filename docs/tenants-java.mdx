@@ -60,8 +60,6 @@ public class Tenants {
 
 </CodeGroup>
 
-### Field Description:
-
 | Field                                 | Description                                                                                                                                                               |
 | :------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `tenant_id` (mandatory)                 | max 64 characters and should contains alphanumeric characters(a-z, 0-9), hyphen (-) and underscode(_). tenant_id is case-insensitive. Suprsend will first converts tenant_id to lowercase before storing it or doing any sort of comparison on it.                                                                    |
@@ -72,7 +70,7 @@ public class Tenants {
 
 All properties of the tenant can be referred as `{{$tenant.prop}}` (handlebars) or `data["tenant"].prop` in JSONNET format.
 
-### Get Tenant
+## Get Tenant
 
 <CodeGroup>
 
@@ -92,7 +90,6 @@ public class Tenants {
 		
    try {
             String tenantId = "_tenant_id_";
-            // String tenantId = "default";
             JSONObject res = suprClient.tenants.get(tenantId);
             System.out.println(res);
         } catch (SuprsendException e) {
@@ -130,7 +127,7 @@ public class Tenants {
 
 </CodeGroup>
 
-### List Tenants
+## List Tenants
 
 By default, `limit=20`. The maximum value for `limit` is `1000`.
 
@@ -206,7 +203,7 @@ public class Tenants {
 <CodeGroup>
 
 ```java Request
-Workflow wf = new Workflow(workflowBody, "_tenant_id_");
+WorkflowTriggerRequest wf = new WorkflowTriggerRequest(body, tenantId);
 ```
 
 </CodeGroup>
@@ -216,7 +213,7 @@ Workflow wf = new Workflow(workflowBody, "_tenant_id_");
 <CodeGroup>
 
 ```java Request
-Event event = new Event(distinctId, eventName, properties, "_tenant_id_");
+Event e = new Event(distinctId, eventName, eventProps, , brandId);
 ```
 
 </CodeGroup>
