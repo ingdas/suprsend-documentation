@@ -75,33 +75,15 @@ All properties of the tenant can be referred as `{{$tenant.prop}}` (handlebars) 
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
-
-import suprsend.Suprsend;
-import suprsend.SuprsendAPIException;
-
-public class Tenants {
-  public static void main(String[] args) throws Exception {
-    getTenant();
-  }
-  
-  private static Subscriber getTenant() throws SuprsendException {
-		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
-		
-   try {
-            String tenantId = "_tenant_id_";
-            JSONObject res = suprClient.tenants.get(tenantId);
-            System.out.println(res);
-        } catch (SuprsendException e) {
-            System.out.println(e);
-        }
-	}
+String tenantId = "_tenant_id_";
+JSONObject res = suprClient.tenants.get(tenantId);
+System.out.println(res);
 ```
 
 
 ```java Response
 {
-	"tenant_id": "tenant-id",
+	"tenant_id": "_tenant_id_",
 	"tenant_name": "Tenant Name",
 	"logo": "https://logo.url",
 	"primary_color": "#ff0000",
@@ -134,30 +116,12 @@ By default, `limit=20`. The maximum value for `limit` is `1000`.
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
+JSONObject res = suprClient.tenants.list();
 
-import suprsend.Suprsend;
-import suprsend.SuprsendAPIException;
+//Get list with offset = 10 and limit = 20
+//JSONObject res = suprClient.tenants.list(20,10);
 
-public class Tenants {
-  public static void main(String[] args) throws Exception {
-    getTenant();
-  }
-  
-  private static Subscriber getTenant() throws SuprsendException {
-		Suprsend suprsendClient = new Suprsend("_workspace_key_", "_workspace_secret_");
-		
-    try {
-      JSONObject res = suprClient.tenants.list();
-      
-      //Get list with offset = 10 and limit = 20
-      //JSONObject res = suprClient.tenants.list(20,10);
-      
-      System.out.println(res);
-    } catch (SuprsendException e) {
-      System.out.println(e);
-    }
-	}
+System.out.println(res);
 ```
 
 
