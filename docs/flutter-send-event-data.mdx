@@ -9,7 +9,9 @@ description: "This document will cover the method to send event to Suprsend plat
 
 ## Sending Events to SuprSend
 
-Events can be used to trigger workflows created on SuprSend dashboard. You can send Events from your app to SuprSend platform by using `suprsend.track()` method. Event properties can be used to pass dynamic data in trigger to apply logic in the workflow or replace template variables.
+You can setup events on user actions in your app and configure workflows on top of it that triggers when the corresponding event is passed through App. Variables added in the template or workflow should be passed as event `properties`
+
+You can send Events from your app to SuprSend platform by using `suprsend.track()` method.
 
 <CodeGroup>
   ```javascript Dart

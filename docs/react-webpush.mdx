@@ -5,11 +5,13 @@ description: "This will guide you through integration steps of webpush in react 
 
 ## Integration Steps
 
-### 1. Integration of SuprSendProvider
+<Steps>
+<Step title="Integration of SuprSendProvider">
 
 Please follow this guide to integrate [SuprSendProvider](https://docs.suprsend.com/docs/react-1#suprsendprovider) in your application. Pass `vapidKey` prop to `SuprSendProvider`. You can find it in *`SuprSendDashboard --> Vendors --> WebPush`*.
 
-### 2. Add ServiceWorker file
+</Step>
+<Step title="Add ServiceWorker file">
 
 Service worker file is the background worker script which handles push notifications.
 
@@ -21,12 +23,15 @@ Create `serviceworker.js` file such that it should be publicly accessible from
   initSuprSend(YOUR_PUBLIC_API_KEY); // replace publicApiKey with your value
   ```
 </CodeGroup>
+</Step>
 
-### 3. Accessing webpush methods using useSuprSendClient hook
+<Step title="Accessing webpush methods using useSuprSendClient hook">
 
 All available webpush methods can be accessed using SuprSend client instance. You can get the SuprSend client instance using [useSuprSendClient](https://docs.suprsend.com/docs/react-1#usesuprsendclient) hook.
 
-### 4. Register Push
+</Step>
+
+<Step title="Register Push">
 
 Call `registerPush` in your code, which will perform following tasks:
 
@@ -46,6 +51,8 @@ Call `registerPush` in your code, which will perform following tasks:
 
 **NOTE:** This method should be called on user action like button click for better UX, don't call this on page load.
 
+</Step>
+</Steps>
 ## Other available methods
 
 ### Check for permission

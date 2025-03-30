@@ -1,27 +1,20 @@
 ---
-title: "Create User Profile"
+title: "Manage Users"
 description: "This document will cover the methods to create a user and set communication channel preferences along with push notification token"
 ---
 
-## Pre-requisites
-
-[Integrate Android SDK](/docs/integrate-android-sdk)
-
 ## How Suprsend identifies a user
 
-Suprsend identifies Users by unique identifier `distinct_id`. The identifier for a user is important as we use this key to create user profile and all the information related to a user, like channel preferences, is attached to that profile. It's best to send the user's `distinct_id` from your DB to map it across different devices and platforms. You can view user profile by searching `distinct_id` on [Subscribers page](https://app.suprsend.com/en/production/subscribers).
+SuprSend identifies users with immutable `distinct_id`. It's best to map the same identifier in your DB with `distinct_id` in SuprSend. Do not use identifiers that can be changed like email or phone number. You can view synced users by searching `distinct_id` on [Users page](https://app.suprsend.com/en/production/users).
 
-<Note>
-  **Please note:** you cannot change a user's id once it has been set, so we recommend you use a non-transient id like a primary key rather than a phone number or email address.
-</Note>
+## Identify user and Set Push token
 
 <Steps>
   <Step title="Create/Identify a new user" stepNumber="1">
-    You can identify a user using `ssApi.identify()` method.
-
+    You can identify a user using `ssApi.identify()` method. Androidpush token is automatically set in user's profile when this method is called. 
     Call this method as soon as you know the identity of user, that is after login authentication. If you don't call this method, user will be identified using distinct\_id (uuid) that sdk generates internally.
 
-    When you call this method, we internally create an event called **`$user_login`**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
+    We internally create an event called **`$user_login`**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
 
     <CodeGroup>
       ```kotlin kotlin
@@ -53,8 +46,9 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
       Don't forget to call reset on user logout. If not called, user id will not reset and multiple tokens and channels will get added to the user\_id who logged in first on the device.
     </Warning>
   </Step>
+</Steps>
 
-  <Step title="Set Communication Channel preferences" stepNumber="3">
+  ## Set Communication Channels
     You can send communication channel details of a user to the SuprSend SDK. We will store the channel details in the user profile. This will allow us to send communications to a user on the channels available for that user whenever there is any communication trigger.
 
     <AccordionGroup>
@@ -94,8 +88,10 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
         </CodeGroup>
       </Accordion>
     </AccordionGroup>
+  
+  
 
-    **<u>Advanced Configuration - Set User Properties:</u>**<u> </u>
+   ## Set User Properties
 
     You can use SuprSend SDK to set advanced user properties, which will help in creating a user profile. You can use these properties to create user cohorts on SuprSend's platform with future releases.
 
@@ -231,7 +227,6 @@ Suprsend identifies Users by unique identifier `distinct_id`. The identifier for
         </CodeGroup>
       </Accordion>
     </AccordionGroup>
-  </Step>
-</Steps>
+
 
 ***

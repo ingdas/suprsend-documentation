@@ -5,7 +5,7 @@ description: "This guide explains about integrating InApp feed functionality in 
 
 **NOTE:** Refer type definitions for this guide [here](https://github.com/suprsend/suprsend-web-sdk/blob/main/src/interface.ts) .
 
-### Initialise feed client
+## Initialise feed client
 
 Using SuprSend client instance create Feed client instance.
 
@@ -22,9 +22,9 @@ interface IFeedOptions {
 
 If you are passing `tenant_id` in feed, make sure to pass scope key while creating [userToken](/docs/client-authentication#2-creating-signed-user-jwt-token) else 403 error will be thrown due to scope mismatching.
 
-### Feed client
+## Feed client
 
-#### Get Feed Data
+### Get Feed Data
 
 This returns notification store which contains list of notifications and other meta data like page information etc. You can call this anytime to get updated store data.
 
@@ -32,13 +32,13 @@ This returns notification store which contains list of notifications and other m
 const feedData: IFeedData = feedClient.data;
 ```
 
-#### Initialise socket for realtime update
+### Initialise socket for realtime update
 
 ```typescript
 feedClient.initializeSocketConnection();
 ```
 
-#### Fetching notification data
+### Fetching notification data
 
 This method will get first page of notifications from SuprSend server and set data in notification store.
 
@@ -46,7 +46,7 @@ This method will get first page of notifications from SuprSend server and set da
 feedClient.fetch();
 ```
 
-#### Fetch more notifications
+### Fetch more notifications
 
 This method will get next page of notifications from SuprSend server and set data in notification store.
 
@@ -54,7 +54,7 @@ This method will get next page of notifications from SuprSend server and set dat
 feedClient.fetchNextPage();
 ```
 
-#### Listening for updates to store
+### Listening for updates to store
 
 Whenever there is update in notification store (ex: on new notification or existing notification state updated) this event is fired by library. You can listen to this event and update your local state so that UI of you application is refreshed.
 
@@ -64,7 +64,7 @@ feedClient.emitter.on('feed.store_update', (updatedStoreData: IFeedData) => {
 });
 ```
 
-#### Listening for new notification
+### Listening for new notification
 
 In case you want to show toast notification on receiving new notification you can use this listener.
 
@@ -77,7 +77,7 @@ feedClient.emitter.on(
 );
 ```
 
-#### Removing Feed
+### Removing Feed
 
 This will remove feed client data and abort socket connection. Additionally calling `suprSendClient.reset` method during logout will also remove all feedClient instances attached SuprSend client instance.
 
@@ -85,7 +85,7 @@ This will remove feed client data and abort socket connection. Additionally call
 feedClient.remove();
 ```
 
-#### Other methods
+### Other methods
 
 ```typescript
 // If stores are used, this method will change active store
@@ -117,7 +117,7 @@ await feedClient.markAllAsRead()
 await feedClient.markBulkAsSeen(notificationIds: string[])
 ```
 
-### Example
+## Example
 
 For understanding purpose we have added current simple example in react. You could refer this headless example and design the feed in your Angular or Vue.js etc. If you want to implement in react please refer `@suprsend/react-core` or `@suprsend/react`
 

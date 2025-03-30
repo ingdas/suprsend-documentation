@@ -7,23 +7,13 @@ In this section, we'll cover how to send events to the Suprsend platform for bot
 
 ## Pre-requisites
 
-1. [Integrate Android SDK](/docs/integrate-android-sdk)
+[Create User](/docs/android-create-user)
 
-2. [Create User Profile](/docs/android-create-user)
 
-3. [Create Template on SuprSend platform](/docs/templates)- if you want to trigger workflow by passing the event
+## Send Event
 
-4. [Create Workflow on SuprSend Platform](/docs/workflows)- if you want to trigger workflow by passing the event
-
-## Create Workflow on SuprSend Platform
-
-For Event based workflow trigger, you'll have to [Create the Workflow on SuprSend Platform](/docs/workflows).
-
-![577](/images/docs/d95d579-Frame_2.png "Frame 2.png")
-
-## Sending Events to SuprSend
-
-Once the workflow is configured, you can pass the `Event Name` ( `GROCERY_PURCHASED` in above example) defined in workflow configuration from your SDK and the related workflow will be triggered. Variables added in the template should be passed as event `properties`
+You can setup events on user actions in your app and configure workflows on top of it that triggers when the corresponding event is passed through App.
+Variables added in the template or workflow should be passed as event `properties`
 
 You can send Events from your app to SuprSend platform by using `ssApi.track()` method
 
@@ -45,7 +35,7 @@ You can send Events from your app to SuprSend platform by using `ssApi.track()` 
 <Warning>
   **Naming Guideline:**
 
-  When you create an Event or a property, please ensure that the Event Name or Property Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
+  Event Name or Property Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
 </Warning>
 
 ### System Events tracked by SuprSend
@@ -144,7 +134,7 @@ Special events are some best use case events defined by SuprSend. You could call
   </CodeGroup>
 </Accordion>
 
-#### 3. Flush Events
+### 3. Flush Events
 
 SuprSend SDK automatically flushes events at an interval of 5 seconds, and on certain activities like app relaunch, etc. If you wish to flush a time sensitive event to SuprSend immediately, you can use the `suprSendApi.flush()` method.
 

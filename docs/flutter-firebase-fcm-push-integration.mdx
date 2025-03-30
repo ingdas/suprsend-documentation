@@ -7,6 +7,7 @@ description: "This will guide you to integrate FCM push notifications in android
   Example integration project can be found [here](<https://github.com/suprsend/suprsend-flutter-sdk/tree/main/example&#xA;>).
 </Tip>
 
+## Integration Steps
 <Steps>
   <Step title="Create a Firebase project in the firebase console" stepNumber="1">
     To start sending notifications from FCM, you'll have to first create a firebase project. Create a firebase project and application in [firebase console](https://firebase.google.com/) with your applications package name which you can find in *`AndroidManifest.xml`*
@@ -98,7 +99,7 @@ description: "This will guide you to integrate FCM push notifications in android
   </Step>
 </Steps>
 
-### **Targeting Android 13 (API-33)**
+### Targeting Android 13 (API-33)
 
 In Android13 (API 33) or higher [notification permission](https://developer.android.com/develop/ui/views/notifications/notification-permission) will be disabled by default so permission needs to be asked to enable notifications if you are targeting android 13 users. You can follow [this doc](https://developer.android.com/about/versions/13/setup-sdk) to update to support Andriod 13(API 33), if not already supported. Please test the application as well as upgrading to API 33 may causes breaking changes.
 

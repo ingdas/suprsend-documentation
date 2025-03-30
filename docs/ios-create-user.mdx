@@ -1,23 +1,21 @@
 ---
-title: "Create User Profile"
+title: "Manage Users"
 description: "This document will cover the methods to create a user and set communication channel preferences along with push notification token"
 ---
 
 ## How Suprsend identifies a user
 
-Suprsend identifies Users by unique identifier `distinct_id`. The identifier for a user is important as we use this key to create a user profile and all the information related to a user, like channel preferences, is attached to that profile. It's best to send the users`distinct_id` from your database to map it across different devices and platforms. You can view the user profile by searching `distinct_id` on the Subscribers page in SuprSend Dashboard.
+SuprSend identifies users with immutable `distinct_id`. It's best to map the same identifier in your DB with `distinct_id` in SuprSend. Do not use identifiers that can be changed like email or phone number. You can view synced users by searching `distinct_id` on [Users page](https://app.suprsend.com/en/production/users).
 
-**Please note:** You cannot change a user's ID once it has been set, so we recommend you use a non-transient ID like a primary key rather than a phone number or email address.
-
-## Manage Users
+## Identify user and Set Push token
 
 <Steps>
   <Step title="Create/Identify a new user">
-    You can identify a user using the`SuprSend.shared.identify()` method.
+  You can identify a user using the`SuprSend.shared.identify()` method. iospsuh token is automatically set in user's profile when this method is called. 
+    Call this method as soon as you know the identity of user, that is after login authentication. If you don't call this method, user will be identified using distinct\_id (uuid) that sdk generates internally.
 
-    Call this method as soon as you know the identity of a user, that is after login authentication. If you don't call this method, the user will be identified using distinct\_id (UUID) that SDK generates internally.
+    We internally create an event called **`$user_login`**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
 
-    When you call this method, we internally create an event called **$user\_login**. You can see this event on the SuprSend workflows event list and you can configure a workflow on it.
 
     <CodeGroup>
       ```kotlin Swift

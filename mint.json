@@ -239,13 +239,13 @@
             "docs/js-webpush",
             "docs/js-preferences",
             "docs/js-events-and-user-methods",
-            "docs/js-migration-from-v1"
+            "/docs/js-migration-from-v1",
+            "docs/js-inapp-feed"
           ]
         },
         {
           "group": "Android",
           "pages": [
-            "docs/android-sdk",
             "docs/integrate-android-sdk",
             "docs/android-create-user",
             "docs/android-send-event-data",
@@ -255,34 +255,49 @@
         {
           "group": "iOS",
           "pages": [
-            "docs/ios-sdk",
             "docs/integrate-ios-sdk",
             "docs/ios-create-user",
-            "docs/ios-push-integration-2"
+            "docs/ios-push-integration"
           ]
         },
         {
           "group": "React Native",
           "pages": [
-            "docs/react-native",
-            "docs/integrate-react-native-sdk-android",
-            "docs/integrate-react-native-sdk-ios",
+            "docs/react-native-android-integration",
+            "docs/react-native-ios-integration",
             "docs/react-native-create-user",
             "docs/react-native-send-event-data",
-            "docs/react-native-apns-push",
-            "docs/react-native-firebase-fcm-push-integration"
+            "docs/react-native-ios-push-integration",
+            "docs/react-native-androidpush-integration"
           ]
         },
         {
           "group": "Flutter",
           "pages": [
-            "docs/flutter",
             "docs/integrate-flutter-sdk-android",
             "docs/integrate-flutter-sdk-ios",
             "docs/flutter-create-user",
             "docs/flutter-send-event-data",
             "docs/flutter-apns-push",
             "docs/flutter-firebase-fcm-push-integration"
+          ]
+        },
+        {
+          "group": "React",
+          "pages": [
+            "docs/react-webpush",
+            "docs/preference-react-sdk",
+            "docs/react-events-and-user-methods",
+            {
+            "group": "InApp Feed",
+            "pages": [
+              "docs/react-in-app-feed",
+              "docs/react-full-screen-or-sidesheet-notifications-feed",
+            "docs/react-customising-feed",
+            "docs/react-sdk-headless-feed",
+            "docs/react-toast-notifications"
+            ]
+          }
           ]
         }
       ]
@@ -292,12 +307,14 @@
       "pages": [
         "docs/inbox-overview",
         "docs/hmac-authentication",
+        "docs/multi-tabs",
         {
           "group": "React",
           "pages": [
             "docs/inbox-react",
             "docs/react-customize-inbox",
-            "docs/headless-inbox"
+            "docs/headless-inbox",
+            "docs/react-migration-guide"
           ]
         },
         "docs/inbox-react-native",
@@ -306,14 +323,12 @@
           "group": "Angular",
           "pages": ["docs/inbox-angular", "docs/angular-customize-inbox"]
         },
-        "docs/multi-tabs",
         "docs/embeddable-inbox"
       ]
     },
     {
       "group": "PREFERENCE CENTRE",
       "pages": [
-        "docs/overview-preference-page",
         "docs/embedded-preference-centre",
         "docs/preferences-javascript",
         "docs/preferences-angular",
