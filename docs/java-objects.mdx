@@ -3,13 +3,11 @@ title: "Objects"
 description: "This document will cover all the Java methods related to objects"
 ---
 
-## Understanding Objects in Suprsend
-
-Objects represent non-user entities such as organizations, teams, roles, and projects and are used to send notification to channels or groups belonging to such entities or group of users who are subscribed to these entities. Understand more about objects [<u>here</u>](https://docs.suprsend.com/docs/objects).
+Objects in SuprSend represent non-user entities such as organizations, teams , roles, and projects. Understand more about objects from our [objects documentation](/docs/objects)
 
 ## Upsert (create/update) an object
 
-Create or update an object
+Object updating is an upsert function, meaning it would always override existing key values on further updates. Object id and type is mandatory to create object. You can optionally pass object properties (to use in template or workflow condition) or channel information (send notification on object channels) in the payload. 
 
 <CodeGroup>
 
@@ -30,13 +28,13 @@ public class ObjectEdit {
   public static void objectEditInstance() throws Exception {
     Suprsend suprsendClient = getSuprClient();
     // Instiantiate object
-    String objectType = "__objecttype__";
-    String objectId = "__objectid__";
+    String objectType = "departments";
+    String objectId = "engineering";
 
     // Object Payload to upsert properties and communication channels
     JSONObject payload = new JSONObject()
-      .put("name", "John Doe");
-    .put("$email", "john@example.com");
+      .put("k1", "value1");
+      .put("$email", "devs@abc.com");
 
     JSONObject object = suprClient.objects.upsert(objectType, objectId, payload);
     System.out.println(object);
@@ -51,7 +49,7 @@ public class ObjectEdit {
    "id":"engineering",
    "subscriptions_count":0,
    "properties":{
-      "key1": "val1"
+      "k1": "value1"
       },
    "created_at":"2025-01-20T19:21:42.030343+00:00",
    "updated_at":"2025-02-14T14:06:05.928675+00:00",
@@ -65,7 +63,7 @@ public class ObjectEdit {
    ],
 	"$email":[
       {
-         "value":"abc@example.com",
+         "value":"devs@abc.com",
          "status":"active",
          "perma_status":"active"
       }
@@ -84,7 +82,7 @@ There are 2 ways in which you can edit an object data.
 
 ### 1. Build edit payload yourself
 
-Use this to modify an object, typically for removing channels or unsetting properties. The payload will follow the same structure as the [<u>Object Edit</u>](https://docs.suprsend.com/reference/edit-object-profile) API.
+Use this to modify an object, typically for removing channels or unsetting properties. The payload will follow the same structure as the [Object Edit](https://docs.suprsend.com/reference/edit-object-profile) API.
 
 <CodeGroup>
 
@@ -99,12 +97,12 @@ public class ObjectEdit {
     Suprsend suprsendClient = getSuprClient();
     
     // Instiantiate object
-    String objectType = "__objecttype__";
-    String objectId = "__objectid__";
+    String objectType = "departments";
+    String objectId = "engineering";
 
     // Object Payload
     JSONObject payload = new JSONObject().put("operations",
-				new JSONObject[] { new JSONObject().put("$remove", new JSONObject().put("name", "John Doe")) });
+				new JSONObject[] { new JSONObject().put("$set", new JSONObject().put("k2", "value2")) });
     
 		JSONObject object = suprClient.objects.edit(objectType, objectId, payload);
 		System.out.println(object);
@@ -119,7 +117,8 @@ public class ObjectEdit {
    "id":"engineering",
    "subscriptions_count":0,
    "properties":{
-      "name":"John Doe"
+      "k1": "value1",
+      "k2": "value2"
    },
    "created_at":"2025-03-14T15:31:59.151061+00:00",
    "updated_at":"2025-03-14T15:31:59.182616+00:00",
@@ -154,14 +153,14 @@ public class ObjectEdit {
   public static void objectEditInstance() throws Exception {
     Suprsend suprsendClient = getSuprClient();
 
-    //Create Object Instance
-    String objectType = "__objecttype__";
-    String objectId = "__objectid__";
+    //Fetch Object Instance
+    String objectType = "departments";
+    String objectId = "engineering";
     ObjectEdit object_ins = suprClient.objects.getInstance(objectType, objectId);
 
-    // Add channels
-    object_ins.addEmail("example@example.com");
-    object_ins.addSms("+919999999999");
+    // Call object update methods
+    object_ins.set("company_name", "ABC company");
+    object_ins.setTimezone("America/Los_Angeles");
 
     // Call edit api
     JSONObject res = suprClient.objects.edit(object_ins);
@@ -177,7 +176,6 @@ public class ObjectEdit {
    "id":"engineering",
    "subscriptions_count":0,
    "properties":{
-      "$preferred_language":"en",
       "$timezone":"America/Los_Angeles",
       "company_name":"ABC company"
    },
@@ -196,8 +194,8 @@ public class ObjectEdit {
 
 </CodeGroup>
 
-<Accordion title="Add Channels Helper Method" >
-  Use `object_ins.add_*` method(s) to add user channels in a profile
+<Accordion title="Add Channels" >
+  Use `object_ins.add*` method(s) to add user channels in a profile
 
   <CodeGroup>
 
@@ -253,8 +251,8 @@ public class ObjectEdit {
   </CodeGroup>
 </Accordion>
 
-<Accordion title="Remove Channels Helper Method" >
-  Use `object_ins.remove_*` method(s) to remove channels from an object profile
+<Accordion title="Remove Channels" >
+  Use `object_ins.remove*` method(s) to remove channels from an object profile
 
   <CodeGroup>
 
@@ -311,8 +309,8 @@ public class ObjectEdit {
   </CodeGroup>
 </Accordion>
 
-<Accordion title="Remove Channels in bulk Helper Method" >
-  If you need to delete/unset all emails (or any other channel) of an object, you can call `object_ins.unset()` method on the object instance. The method accepts the channel key/s (a single key or list of keys)
+<Accordion title="Remove Channels in bulk" >
+  This method will delete/unset all values in specified channel for object (ex: remove all emails attached to object).
 
   <CodeGroup>
 
@@ -327,7 +325,9 @@ public class ObjectEdit {
   </CodeGroup>
 </Accordion>
 
-<Accordion title="Set Preferred language" icon="language" iconType="solid">
+<Accordion title="Set Preferred language">
+If you want to send notification in user's preferred language, you can set it by passing [language code](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) in this method. This is useful especially for the applications which offer vernacular or multi-lingual support.
+
   <CodeGroup>
 
   ```java Request
@@ -337,7 +337,9 @@ public class ObjectEdit {
   </CodeGroup>
 </Accordion>
 
-<Accordion title="Set Preferred Timezone" icon="earth-americas" iconType="solid">
+<Accordion title="Set Preferred Timezone">
+You can set timezone of user using this method. Value for timezone must be from amongst the [IANA timezones](https://data.iana.org/time-zones/tzdb-2024a/zonenow.tab).
+
   <CodeGroup>
 
   ```java Request
@@ -347,65 +349,43 @@ public class ObjectEdit {
   </CodeGroup>
 </Accordion>
 
-**Advanced Configuration - Set Object Properties**
-
-You can use SuprSend Python SDK to set advanced object properties, which will help in creating a object profile.
-
-<AccordionGroup>
-  <Accordion title="Set" >
-    Set is used to set the custom property or properties. The given name and value will be assigned to the object, overwriting an existing property with the same name if present. It can take key as first param, value as second param for setting single object property or object for setting multiple object properties.
+<Accordion title="Set" >
+    Set any custom property using this method. It will shallow merge existing properties with new values. Key shouldn't start with `$` or `ss`.
 
     <CodeGroup>
 
     ```java Request
     //set single property
-    object_ins.set("prop1", "val1");
+    object_ins.set(key, value);
+    object_ins.set("company_name", "ABC company");
     
     //set multiple properties
     JSONObject objectsProperties = new JSONObject()
-      .put("prop2", "val2")
-      .put("number", 20)
+      .put("company_name", "ABC company")
+      .put("city", "San Francisco")
     object_ins.set(objectsProperties);
     ```
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Set Once" >
-    Works just like `object_ins.set`, except it will not overwrite existing property values. This is useful for properties like _First login date_
+
+  <Accordion title="Unset" >
+    Remove any custom property key using this method.
 
     <CodeGroup>
 
     ```java Request
-    //single property
-    object_ins.setOnce("first_login", "2021-11-02");
+    //unset single property
+    object_ins.unset(key);
+    object_ins.unset("company_name");
     
-    //multiple properties
-    JSONObject objectsProperties = new JSONObject()
-      .put("first_login", "2021-11-02")
-      .put("DOB", "1991-10-02");
-    object_ins.setOnce(objectsProperties);
+    //unset multiple properties
+    object_ins.unset(Arrays.asList(new String[] { "$sms", "wishlist" }));
     ```
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Increment" >
-    Add the given amount to an existing property on the object. If the object does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
 
-    <CodeGroup>
-
-    ```java Request
-    //single property
-    object_ins.increment("login_count", 1);
-    
-    //multiple properties
-    JSONObject objectsProperties = new JSONObject()
-      .put("login_count", 1)
-      .put("remaining_credits", -1);
-    object_ins.increment(objectsProperties);
-    ```
-
-    </CodeGroup>
-  </Accordion>
   <Accordion title="Append" >
     This method will append a value to the list for a given property.
 
@@ -442,33 +422,46 @@ You can use SuprSend Python SDK to set advanced object properties, which will he
 
     </CodeGroup>
   </Accordion>
-  <Accordion title="Unset" >
-    This will remove a property permanently from properties.
+
+  <Accordion title="Set Once" >
+    Works just like `object_ins.set`, except it will not overwrite existing property values. This is useful for properties like _First login date_
 
     <CodeGroup>
 
     ```java Request
-    //unset single channel or property
-    object_ins.unset("$email");
+    //single property
+    object_ins.setOnce("first_login", "2021-11-02");
     
-    //unset multiple channels or properties
-    object_ins.unset(Arrays.asList(new String[] { "$sms", "wishlist" }));
+    //multiple properties
+    JSONObject objectsProperties = new JSONObject()
+      .put("first_login", "2021-11-02")
+      .put("DOB", "1991-10-02");
+    object_ins.setOnce(objectsProperties);
+    ```
+
+    </CodeGroup>
+  </Accordion>
+  <Accordion title="Increment" >
+    Add the given amount to an existing property on the object. If the object does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number for the value.
+
+    <CodeGroup>
+
+    ```java Request
+    //single property
+    object_ins.increment("login_count", 1);
+    
+    //multiple properties
+    JSONObject objectsProperties = new JSONObject()
+      .put("login_count", 1)
+      .put("remaining_credits", -1);
+    object_ins.increment(objectsProperties);
     ```
 
     </CodeGroup>
 
-    | Parameters        | Type          | Description                                                       |
-    | :---------------- | :------------ | :---------------------------------------------------------------- |
-    | **key**           | string        | This property provided will be deleted from object properties     |
-    | **property_list** | array[string] | If list is given all properties included in list will be removed. |
   </Accordion>
-</AccordionGroup>
 
 ---
-
-<Warning>
-  After calling `add_*/remove_*/unset` methods, don't forget to call `object_ins.save()`. On call of save(), SDK sends the request to SuprSend platform to update the Object Profile.
-</Warning>
 
 ## List Objects
 
@@ -477,28 +470,20 @@ List objects for an `object_type`. You can also pass listing options in the payl
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
-import suprsend.Suprsend;
 
-public class ObjectAPI {
+String objectType = "__objecttype__";
 
-  public static void ObjectList() throws Exception {
-    Suprsend suprsendClient = getSuprClient();
-
-    String objectType = "__objecttype__";
-
-    // optional params to pass limit (default=10) and cursor pointer for fetching the next set of results
-    HashMap<String, Object> opts = new HashMap<String, Object>() {
-      {
-        put("limit", 10);
-        put("after", "01HFS04E4J29KHPYRK7HT3YQQ5");
-      }
-    };
-
-    JSONObject res = suprClient.objects.list(objectType, opts);
-    System.out.println(res);
+// optional params to pass limit (default=10) and cursor pointer for fetching the next set of results
+HashMap<String, Object> opts = new HashMap<String, Object>() {
+  {
+    put("limit", 10);
+    put("after", "01HFS04E4J29KHPYRK7HT3YQQ5");
   }
-}
+};
+
+
+JSONObject res = suprClient.objects.list(objectType, opts);
+System.out.println(res);
 ```
 
 </CodeGroup>
@@ -508,21 +493,13 @@ public class ObjectAPI {
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
-import suprsend.Suprsend;
 
-public class ObjectAPI {
+String objectType = "__objecttype__";
+String objectId = "__objectid__";
 
-  public static void ObjectGet() throws Exception {
-    Suprsend suprsendClient = getSuprClient();
+JSONObject res = suprClient.objects.get(objectType, objectId);
+System.out.println(res);
 
-    String objectType = "__objecttype__";
-    String objectId = "__objectid__";
-
-    JSONObject res = suprClient.objects.get(objectType, objectId);
-    System.out.println(res);
-  }
-}
 ```
 
 </CodeGroup>
@@ -532,24 +509,16 @@ public class ObjectAPI {
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
-import suprsend.Suprsend;
 
-public class ObjectAPI {
+String objectType = "__objecttype__";
+String objectId = "__objectid__";
+JSONObject payload = new JSONObject().put("recipients",
+    Arrays.asList("__recipient_id_1__", new JSONObject().put("distinct_id", "__recipient_id_2__"),
+        new JSONObject().put("object_type", objectType).put("id", objectId)));
 
-  public static void ObjectCreateSubscriptions() throws Exception {
-    Suprsend suprsendClient = getSuprClient();
+JSONObject res = suprClient.objects.createSubscriptions(objectType, objectId, payload);
+System.out.println(res);
 
-    String objectType = "__objecttype__";
-		String objectId = "__objectid__";
-		JSONObject payload = new JSONObject().put("recipients",
-				Arrays.asList("__recipient_id_1__", new JSONObject().put("distinct_id", "__recipient_id_2__"),
-						new JSONObject().put("object_type", "__objecttype__").put("id", "__objectid_2_")));
-		
-    JSONObject res = suprClient.objects.createSubscriptions(objectType, objectId, payload);
-		System.out.println(res);
-  }
-}
 ```
 
 </CodeGroup>
@@ -559,29 +528,20 @@ public class ObjectAPI {
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
-import suprsend.Suprsend;
 
-public class ObjectAPI {
+String objectType = "__objecttype__";
+String objectId = "__objectid__";
 
-  public static void ObjectGetSubscriptions() throws Exception {
-    Suprsend suprsendClient = getSuprClient();
-
-    String objectType = "__objecttype__";
-		String objectId = "__objectid__";
-    
-    // optional params to pass limit (default=10) and cursor pointer for fetching the next set of results
-    HashMap<String, Object> opts = new HashMap<String, Object>() {
-			{
-				put("limit", 10);
-				put("after", "01HFS04E4J29KHPYRK7HT3YQQ5");
-			}
-		};
-		
-    JSONObject res = suprClient.objects.getSubscriptions(objectType, objectId, opts);
-		System.out.println(res);
+// optional params to pass limit (default=10) and cursor pointer for fetching the next set of results
+HashMap<String, Object> opts = new HashMap<String, Object>() {
+  {
+    put("limit", 10);
+    put("after", "01HFS04E4J29KHPYRK7HT3YQQ5");
   }
-}
+};
+
+JSONObject res = suprClient.objects.getSubscriptions(objectType, objectId, opts);
+System.out.println(res);
 ```
 
 </CodeGroup>
@@ -591,24 +551,16 @@ public class ObjectAPI {
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
-import suprsend.Suprsend;
 
-public class ObjectAPI {
+String objectType = "__objecttype__";
+String objectId = "__objectid__";
+JSONObject payload = new JSONObject().put("recipients",
+    Arrays.asList("__recipient_id_1__", new JSONObject().put("distinct_id", "__recipient_id_2__"),
+        new JSONObject().put("object_type", "__objecttype__").put("id", "__objectid_child_")));
 
-  public static void ObjectDeleteSubscriptions() throws Exception {
-    Suprsend suprsendClient = getSuprClient();
+JSONObject res = suprClient.objects.deleteSubscriptions(objectType, objectId, payload);
+System.out.println(res);
 
-    String objectType = "__objecttype__";
-		String objectId = "__objectid__";
-    JSONObject payload = new JSONObject().put("recipients",
-				Arrays.asList("__recipient_id_1__", new JSONObject().put("distinct_id", "__recipient_id_2__"),
-						new JSONObject().put("object_type", "__objecttype__").put("id", "__objectid_2_")));
-		
-    JSONObject res = suprClient.objects.deleteSubscriptions(objectType, objectId, payload);
-		System.out.println(res);
-  }
-}
 ```
 
 </CodeGroup>
@@ -620,29 +572,21 @@ An object can subscribe to other objects. Use this method to get the list of all
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
-import suprsend.Suprsend;
 
-public class ObjectAPI {
+String objectType = "__objecttype__";
+String objectId = "__objectid__";
 
-  public static void GetObjectsSubscribedTo() throws Exception {
-    Suprsend suprsendClient = getSuprClient();
-
-    String objectType = "__objecttype__";
-    String objectId = "__objectid__";
-
-    // optional params to pass limit (default=10) and cursor pointer for fetching the next set of results
-    HashMap<String, Object> opts = new HashMap<String, Object>() {
-      {
-        put("limit", 10);
-        put("after", "01HFS04E4J29KHPYRK7HT3YQQ5");
-      }
-    };
-
-    JSONObject res = suprClient.objects.getObjectsSubscribedTo(objectType, objectId, opts);
-    System.out.println(res);
+// optional params to pass limit (default=10) and cursor pointer for fetching the next set of results
+HashMap<String, Object> opts = new HashMap<String, Object>() {
+  {
+    put("limit", 10);
+    put("after", "01HFS04E4J29KHPYRK7HT3YQQ5");
   }
-}
+};
+
+JSONObject res = suprClient.objects.getObjectsSubscribedTo(objectType, objectId, opts);
+System.out.println(res);
+
 ```
 
 </CodeGroup>
@@ -652,21 +596,13 @@ public class ObjectAPI {
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
-import suprsend.Suprsend;
 
-public class ObjectAPI {
+String objectType = "__objecttype__";
+String objectId = "__objectid__";
 
-  public static void ObjectDelete() throws Exception {
-    Suprsend suprsendClient = getSuprClient();
+JSONObject res = suprClient.objects.delete(objectType, objectId);
+System.out.println(res);
 
-    String objectType = "__objecttype__";
-    String objectId = "__objectid__";
-
-    JSONObject res = suprClient.objects.delete(objectType, objectId);
-    System.out.println(res);
-  }
-}
 ```
 
 </CodeGroup>
@@ -676,21 +612,13 @@ public class ObjectAPI {
 <CodeGroup>
 
 ```java Request
-import org.json.JSONObject;
-import suprsend.Suprsend;
 
-public class ObjectAPI {
+String objectType = "__objecttype__";
+JSONObject payload = new JSONObject().put("object_ids", Arrays.asList("__objectid__"));
 
-  public static void ObjectBulkDelete() throws Exception {
-    Suprsend suprsendClient = getSuprClient();
+JSONObject res = suprClient.objects.bulkDelete(objectType, payload);
+System.out.println(res);
 
-    String objectType = "__objecttype__";
-    JSONObject payload = new JSONObject().put("object_ids", Arrays.asList("__objectid__"));
-
-    JSONObject res = suprClient.objects.bulkDelete(objectType, payload);
-    System.out.println(res);
-  }
-}
 ```
 
 </CodeGroup>

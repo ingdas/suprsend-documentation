@@ -1,5 +1,5 @@
 ---
-title: "Tenants API"
+title: "Tenants"
 description: "Guide to create / update tenants using Go SDK"
 ---
 
@@ -11,7 +11,7 @@ This method will create a new tenant or update an existing tenant.
 
 <CodeGroup>
 
-```go Request (methods)
+```go Request
 tenantPayload := &suprsend.Tenant{
   TenantName:      suprsend.String("Tenant Name"),
   Logo:           suprsend.String("Tenant logo url"),
@@ -36,12 +36,12 @@ log.Println(res)
 
 </CodeGroup>
 
-### Get Tenant
+## Get Tenant
 
 <CodeGroup>
 
-```go Request (methods)
-tenant1, err := suprClient.Tenants.Get(context.Background(), "__tenant_id__")
+```go Request
+tenant1, err := suprClient.Tenants.Get(context.Background(), "tenant_id")
 if err != nil {
   log.Fatalln(err)
 }
@@ -84,13 +84,13 @@ log.Println(tenant1)
 
 </CodeGroup>
 
-### List Tenants
+## List Tenants
 
 By default, `limit=20`. The maximum value for `limit` is `1000`.
 
 <CodeGroup>
 
-```go Request (methods)
+```go Request
 tenantsList, err := suprClient.Tenants.List(context.Background(), &suprsend.TenantListOptions{Limit: 10})
 if err != nil {
   log.Fatalln(err)
@@ -132,8 +132,11 @@ log.Println(tenantsList)
 
 <CodeGroup>
 
-```go Request (methods)
-wf := suprsend.NewWorkflow(workflowBody, "_tenant_id_")
+```go Request
+wf := &suprsend.WorkflowTriggerRequest{
+    Body: wfReqBody,
+    TenantId: "tenant_id"
+  }
 ```
 
 </CodeGroup>
@@ -142,8 +145,13 @@ wf := suprsend.NewWorkflow(workflowBody, "_tenant_id_")
 
 <CodeGroup>
 
-```go Request (methods)
-event := suprsend.NewEvent(distinctId, eventName, properties, "_tenant_id_")
+```go Request
+ev := &suprsend.Event{
+  EventName:  "__event_name__",
+  DistinctId: "__distinct_id__",
+  Properties: map[string]interface{}{...},
+  TenantId: "tenant_id"
+}
 ```
 
 </CodeGroup>

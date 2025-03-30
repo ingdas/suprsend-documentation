@@ -84,7 +84,7 @@ print(response)
 
 | Parameter     | Description                                                                                                                                         | Format                    | Obligation  |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- | ----------- |
-| `distinct_id` | `distinct_id` of subscriber performing the event                                                                                                    | int, bigint, string, UUID | _mandatory_ |
+| `distinct_id` | `distinct_id` of user performing the event                                                                                                    | int, bigint, string, UUID | _mandatory_ |
 | `event_name`  | string identifier for the event like `product_purchased`                                                                                            | string                    | _mandatory_ |
 | `properties`  | a dictionary representing event attributes like `first_name` Event properties can be used to pass template variables in case of event based trigger | Dictionary                | _optional_  |
 

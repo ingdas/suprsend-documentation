@@ -3,11 +3,11 @@ title: "Objects"
 description: "This document will cover all the nodejs methods related to objects"
 ---
 
-Objects in SuprSend represent non-user entities such as organizations, teams, roles, and projects. Understand more about objects from our [objects documentation](/docs/objects)
+Objects in SuprSend represent non-user entities such as organizations, teams , roles, and projects. Understand more about objects from our [objects documentation](/docs/objects)
 
 ## Upsert (create/update) an object
 
-Create or update an object
+Object updating is an upsert function, meaning it would always override existing key values on further updates. Object id and type is mandatory to create object. You can optionally pass object properties (to use in template or workflow condition) or channel information (send notification on object channels) in the payload.
 
 <CodeGroup>
 

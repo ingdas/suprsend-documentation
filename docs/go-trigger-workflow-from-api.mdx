@@ -6,7 +6,7 @@ description: "Guide to configure and trigger workflow using go SDK"
 It is a unified API to trigger workflow and doesn't require user creation before hand to trigger notification. Recommended for platforms transitioning their existing notifications to SuprSend. If you are using our frontend SDKs to configure notifications and passing events and user properties from third-party data platforms like Segment, then [event-based trigger](/docs/go-send-event-data) would be a better choice.
 
 <Check>
-  Available in SDK version >= v0.5.1.
+  Available in SDK version >= v0.5.1
 </Check>
 
 ## Payload Schema
@@ -46,7 +46,7 @@ func triggerWorkflowAPI(suprClient *suprsend.Client) {
         "$email": []string{"abc@example.com"},
         "name":"recipient_1",
         "$preferred_language": "en",
-				"$timezone": "America/New_York"
+		    "$timezone": "America/New_York"
       },
     },
     // # data can be any json / serializable python-dictionary
@@ -72,13 +72,22 @@ func triggerWorkflowAPI(suprClient *suprsend.Client) {
 }
 ```
 
+```go Response
+{
+    "success": true, // if true, request was accepted.
+    "status": "success",
+    "status_code": 202, // http status code
+    "message": "OK",
+}
+```
+
 </CodeGroup>
 
 | Property                         | Type                               | Description                                                                                                                                                                                                                                                                                                         |
 | -------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | workflow                         | string                             | Slug of designed workflow on SuprSend dashboard. You'll get the slug from workflow settings.                                                                                                                                                                                                                        |
 | actor (_optional_)               | string / object                    | Includes distinct_id and properties of the user who performed the action. You can use it for [cross-user notifications](/docs/go-trigger-workflow-from-api#sending-cross-user-notifications) where you need to include actor properties in notification template. Actor properties can be added as `$actor.<prop>`. |
-| recipients                       | array of string / array of objects | List of users who need to be notified. You can add upto 100 recipients in a workflow trigger. You can either pass recipients as an array of `distinct_ID` (if user is pre-synced in SuprSend database) or [define recipient information inline](/docs/go-trigger-workflow-from-api#identifying-recipients-inline).  |
+| recipients                       | array of string / array of objects | List of users or objects who need to be notified. You can add upto 100 recipients in a workflow trigger. You can either pass recipients as an array of `distinct_ID` (if user is pre-synced in SuprSend database) or [define recipient information inline](/docs/go-trigger-workflow-from-api#identifying-recipients-inline).  |
 | data                             | object                             | variable data required to render dynamic template content or workflow properties such as dynamic delay or channel override in send node.                                                                                                                                                                            |
 | tenant_id                        | string                             | unique identifier of the [brand / tenant](/docs/tenants)                                                                                                                                                                                                                                                             |
 | idempotency_key                  | string                             | unique identifier of the request. We'll be returning idempotency_key in our [outbound webhook response](/docs/outbound-webhook). You can use it to map notification statuses and replies in your system.                                                                                                            |
@@ -91,8 +100,8 @@ Recipients in workflow call is an array of `distinct_ids` or recipient objects. 
 
 <CodeGroup>
 
-```json Request
-"recipients": [
+```go Request
+"recipients": []map[string]interface{}{
       {
         "distinct_id": "id1",
         "$email":["abc@example.com"],
@@ -103,10 +112,10 @@ Recipients in workflow call is an array of `distinct_ids` or recipient objects. 
         "$email":["abc@example.com"],
         "name":"recipient_2"
       }
-    ]
+}
 
 ---- OR ------
-"recipients": ["id1","id2"]
+"recipients": []string{"id1","id2"}
 ```
 
 </CodeGroup>
@@ -126,13 +135,15 @@ This is how the complete recipient object with look like
 <CodeGroup>
 
 ```json Request
-{
-  "distinct_id": "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
-  "$email":["abc@example.com"],
-  "$channels":["email","inbox"],
-  "user_prop1":"value_1",
-  "$preferred_language":"en",
-	"$timezone": "America/New_York"
+"recipients": []map[string]interface{}{
+  {
+    "distinct_id": "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
+    "$email":["abc@example.com"],
+    "$channels":["email","inbox"],
+    "user_prop1":"value_1",
+    "$preferred_language":"en",
+    "$timezone": "America/New_York"
+  }
 }
 ```
 
@@ -147,54 +158,55 @@ This is how the complete recipient object with look like
 | $timezone                               | string                    | to set recipient's timezone. Used to send notification in user's local timezone. You can pass timezone in [IANA (TZ identifier)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) format.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | *                                       | key-value pair            | You can pass other user properties to render dynamic template content in key-value pair as `"user_prop1":"value1"` . Extra properties will be set in subscriber profile (as subscriber properties) which can then be used in the template as `$recipient.<property>`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
-### Add User Communication Channel
+#### Add User Communication Channel
+You can add channels in recipient map as shown below:
 
 <CodeGroup>
 
-```json Request
+```go Request
 "$email":["abc@example.com"],
 "$whatsapp":["+15555555555"],
 "$sms":["+15555555555"],
-"$androidpush": [{"token": "__android_push_token__", "provider": "fcm", "device_id": ""}],  
-"$iospush":[{"token": "__ios_push_token__", "provider": "apns", "device_id": ""}],
-"$slack": [{
+"$androidpush": map[string]interface{}{"token": "__android_push_token__", "provider": "fcm"},  
+"$iospush":map[string]interface{}{{"token": "__ios_push_token__", "provider": "apns"},
+"$slack": map[string]interface{}{
   "email": "abc@example.com",
   "access_token": "xoxb-XXXXXXXX"
-}]   // slack using email
+}   // slack using email
 
-"$slack": [{
+"$slack": map[string]interface{}{
   "user_id": "U/WXXXXXXXX",
   "access_token": "xoxb-XXXXXX"
-}] // slack using member_id
+} // slack using member_id
 
-"$slack": [{
+"$slack": map[string]interface{}{
   "channel": "CXXXXXXXX",
   "access_token": "xoxb-XXXXXX"
-}] // slack channel
+} // slack channel
 
-"$slack": [{
+"$slack": map[string]interface{}{
   "incoming_webhook": {
     "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
   }
-}] // slack incoming webhook
+} // slack incoming webhook
 
-"$ms_teams": [{
+"$ms_teams": map[string]interface{}{
   "tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
   "service_url": "https://smba.trafficmanager.net/amer",
   "conversation_id": "19:c1524d7c-a06f-456f-8abe-xxxx"
-}] // MS teams user or channel using conversation_id
+} // MS teams user or channel using conversation_id
 
-"$ms_teams": [{
+"$ms_teams": map[string]interface{}{
   "tenant_id": "c1981ab2-9aaf-xxxx-xxxx",
   "service_url": "https://smba.trafficmanager.net/amer",
   "user_id": "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"
-}] // MS teams user using user_id
+} // MS teams user using user_id
 
-"$ms_teams": [{
+"$ms_teams": map[string]interface{}{
   "incoming_webhook": {
     "url": "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
   }
-}] // MS teams incoming webhook
+} // MS teams incoming webhook
 ```
 
 </CodeGroup>
@@ -219,26 +231,28 @@ Hi recipient_1, actor_1 added 2 new comments on the annual IT report.
 
 <CodeGroup>
 
-```json Sample workflow body
-{
-  "workflow": "new_comment",
-  "actor": {
-    "distinct_id": "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08",
-    "name":"actor_1"
-  },
-  "recipients": [
-    {
-      "distinct_id": "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
-      "$email":["abc@example.com"],
-      "name":"recipient_1"
-    }
-  ],
-  "data":{
-    "doc_name": "annual IT report",
-    "date": "2024-01-01",
-    "comments":["change the date","rest looks good"]
+```go Sample workflow body
+
+wfReqBody := map[string]interface{}{
+    "workflow": "new_comment",
+    "actor": map[string]interface{}{
+      "distinct_id":  "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08",
+      "name":          "actor_1",
+    },
+    "recipients": []map[string]interface{}{
+      {
+        "distinct_id":  "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09",
+        "$email": []string{"abc@example.com"},
+        "name":"recipient_1"
+      },
+    },
+    // # data can be any json / serializable python-dictionary
+    "data": map[string]interface{}{
+      "doc_name": "annual IT report",
+      "date": "2024-01-01",
+      "comments":["change the date","rest looks good"],
+    },
   }
-}
 ```
 
 </CodeGroup>
@@ -432,6 +446,7 @@ if err != nil {
   log.Println(err)
 }
 log.Println(bulkResponse)
+}
 ```
 
 
@@ -479,7 +494,7 @@ workflowBody := {...}
 wfInstance := Workflow{Body: workflowBody}
 
 // this snippet can be used to add attachment to workflow
-err = wfInstance.AddAttachment("/home/user/billing.pdf", &suprsend.AttachmentOption{FileName: "Billing.pdf"})
+err = wfInstance.AddAttachment("https://file_path.pdf")
 if err != nil {
     log.Println(err)
 } 
@@ -488,7 +503,7 @@ if err != nil {
 </CodeGroup>
 
 <Warning>
-  A single workflow body size (including attachment) must not exceed 800KB (800 x 1024 bytes).
+  A single workflow body size (including local file attachment) must not exceed 800KB (800 x 1024 bytes). If the file is a public accessible URL, attachment size doesn't add to overall workflow size.
 </Warning>
 
 ---
@@ -573,11 +588,9 @@ For configuring a workflow from backend, you can pass following properties in yo
   Note: The actual processing/execution of workflow happens asynchronously.
 </Note>
 
-#### What happens once you get 20x response?
-
 Once your request is accepted, you can check the status of your request in the '[ SuprSend Logs](https://app.suprsend.com/en/staging/logs)' section. In the background, a workflow is created with the given workflow `name`.
 
-## Bulk API for triggering multiple workflows
+### Bulk trigger multiple dynamic workflows
 
 Bulk API allows you to send multiple workflow requests in a single call. There isn't any limit on number-of-records that can be added to bulk_workflows instance. Use `.Append()` on `BulkWorkflows` instance to add however-many-records to call in bulk.
 

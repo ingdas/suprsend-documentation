@@ -1,27 +1,16 @@
 ---
 title: "Send and Track Events"
-description: "This document will cover the method to send event to Suprsend platform"
+description: "This document will cover the  method to send event to Suprsend platform"
 ---
+
 
 ## Pre-requisites
 
-1. [Integrate Go SDK](/docs/integrate-go-sdk)
-2. [Create User Profile](/docs/go-create-user-profile)
-3. [Create Template on SuprSend platform](/docs/templates)- if you want to trigger workflow by passing the event
-4. [Create Workflow on SuprSend Platform](/docs/design-workflow)- if you want to trigger workflow by passing the event
-
-## Create Workflow on SuprSend Platform
-
-For Event based workflow trigger, you'll have to [create the workflow on SuprSend Platform](/docs/design-workflow). Once the workflow is created, you can pass the `EventName` ( `GROCERY_PURCHASED` in below example) defined in workflow configuration with the help of `suprClient.TrackEvent` method. Variables added in the template should be passed as event `Properties`
-
-![577](/images/docs/d95d579-Frame_2.png)
+[Create User Profile](/docs/go-create-user-profile)
 
 ## Send Event
 
-You can send event to Suprsend platform by using the `suprClient.TrackEvent` method.
-
-When you call `suprClient.TrackEvent`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll receive an error message if something fails
-
+You can send event to Suprsend platform by using the `supr_client.track_event` method. When you call `supr_client.track_event`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance status. The actual processing/execution of event happens asynchronously.
 <CodeGroup>
 
 ```go Request
@@ -31,13 +20,7 @@ ev := &suprsend.Event{
   Properties: map[string]interface{}{
     "k1": "v1",
   },
-  IdempotencyKey: "123456"
-}
-
-// Add attachment (If needed) by calling .AddAttachment
-err = ev.AddAttachment("~/Downloads/attachment.pdf", &suprsend.AttachmentOption{FileName: "My Attachment.pdf"})
-if err != nil {
-  log.Println(err)
+  IdempotencyKey: "_unique_request_id_"
 }
 
 // Send event to Suprsend by calling .TrackEvent
@@ -65,12 +48,6 @@ ev := &suprsend.Event{
     IdempotencyKey: "abcd-1234-abc6"
   }
   
-  // Add attachment (If needed) by calling .AddAttachment
-  err = ev.AddAttachment("~/Downloads/attachment.pdf", &suprsend.AttachmentOption{FileName: "My Attachment.pdf"})
-  if err != nil {
-    log.Println(err)
-  }
-  
   // Send event to Suprsend by calling .TrackEvent
   _, err = suprClient.TrackEvent(ev)
   if err != nil {
@@ -82,16 +59,16 @@ ev := &suprsend.Event{
 ```go Response
 // Response structure
 {
-    "success": True, # if true, request was accepted.
+    "success": True, // if true, request was accepted.
     "status": "success",
-    "status_code": 202, # http status code
+    "status_code": 202, // http status code
     "message": "OK",
 }
 
 {
-    "success": False, # error will be present in message
+    "success": False, // error will be present in message
     "status": "fail",
-    "status_code": 500, # http status code
+    "status_code": 500, // http status code
     "message": "error message",
 }
 ```
@@ -106,37 +83,137 @@ ev := &suprsend.Event{
 | `IdempotencyKey` | `idempotency_key` is the unique identifier for an event, and expires in 24 hours.                                                                   | string     | optional    |
 
 <Warning>
-  **Event Naming Guidlines:**
+  **Event naming guidelines:**
 
-  When you create an Event or a property, please ensure that the Event Name or Property Name does not start with  or , as we have reserved these symbols for our internal events and property names.
+  Event Name or Property Name should not start with  or , as we have reserved these symbols for our internal events and property names.
 </Warning>
 
-<Note>
-  **Note: **EventName in Track event method should exactly match the Event name added in Workflow configurations
-</Note>
+### Idempotent requests
+
+SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives and processes a request with an idempotency_key, it will skip processing requests with same `idempotency_key` for next 24 hours. You can use this key to track webhooks related to workflow notifications.
+
+Idempotency key should be unique that you generate for each request. You may use any string up to 255 characters in length. Any space at start and end of the key will be trimmed.
+
+Here are some common approaches for assigning idempotency keys:
+
+- **Generate a random UUID** for each request.
+- **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like `user147-new-comment-1687437670`
+- **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
+
+## Add file attachment in event (for email)
+
+To add one or more Attachments to a Notification (viz. Email), you can just append the filepath of attachment to the event instance.
+
+- Call `event.AddAttachment()` for each file with an accessible URL.
+- Ensure that file_path is a publicly accessible URL. Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
+
+<CodeGroup>
+
+```go Request
+ev := &suprsend.Event{
+  EventName:  "invoice_generated",
+  DistinctId: "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08",
+  Properties: map[string]interface{}{...}
+}
+
+// Add attachment (If needed) by calling .AddAttachment
+err = ev.AddAttachment("https://www.adobe.com/sample_file.pdf")
+if err != nil {
+  log.Println(err)
+}
+
+// Send event to Suprsend by calling .TrackEvent
+_, err = suprClient.TrackEvent(ev)
+if err != nil {
+  log.Fatalln(err)
+}
+```
+
+
+```go Response
+# Response structure
+{
+    "success": true, // if true, request was accepted.
+    "status": "success",
+    "status_code": 202, // http status code
+    "message": "OK",
+}
+
+{
+    "success": false, // error will be present in message
+    "status": "fail",
+    "status_code": 500, // http status code
+    "message": "error message",
+}
+```
+
+</CodeGroup>
+
+<Warning>
+  Please add public accessible URL only as attachment file otherwise it will throw an error `404 not found` and workflow will not be triggered
+</Warning>
+
 
 ## Bulk API for multiple event requests
 
-You can use Bulk API to send multiple events.
+You can use Bulk API to send multiple events. Use .Append() on bulk_events instance to add however-many-records to call in bulk.
 
-Use `.Append()` on bulk_events instance to add however-many-records to call in bulk. Response is an instance of `suprsend.BulkResponse` type
+
 
 <CodeGroup>
 
 ```go Request
 ev1 := &suprsend.Event{
-  EventName:  "__event_name__",
-  DistinctId: "__distinct_id__",
+  EventName:  "__event_name1__",
+  DistinctId: "__distinct_id1__",
   Properties: map[string]interface{}{
     "k1": "v1",
-  },
-  IdempotencyKey: ""
+  }
 }
 
 ev2 := &suprsend.Event{
-  EventName:  "__event_name__",
-  DistinctId: "__distinct_id__",
-  IdempotencyKey: ""
+  EventName:  "__event_name2__",
+  DistinctId: "__distinct_id2__"
+}
+
+// Create bulkEvents instance
+bulkIns := suprClient.BulkEvents.NewInstance()
+
+// Add all events to bulk Instance
+bulkIns.Append(ev1, ev2)
+
+// call trigger to send all these events to SuprSend
+bulkResponse, err := bulkIns.Trigger()
+if err != nil {
+  log.Fatalln(err)
+}
+log.Println(bulkResponse)
+```
+
+```go With Email attachment
+ev1 := &suprsend.Event{
+  EventName:  "__event_name1__",
+  DistinctId: "__distinct_id1__",
+  Properties: map[string]interface{}{
+    "k1": "v1",
+  }
+}
+
+//Add Email Attachment to event 1
+err = ev.AddAttachment("https://file_path_1.pdf")
+if err != nil {
+  log.Println(err)
+}
+
+ev2 := &suprsend.Event{
+  EventName:  "__event_name2__",
+  DistinctId: "__distinct_id2__"
+}
+
+//Add Email Attachment to event 2
+err = ev.AddAttachment("https://file_path_2.pdf")
+if err != nil {
+  log.Println(err)
 }
 
 // Create bulkEvents instance
@@ -155,8 +232,6 @@ log.Println(bulkResponse)
 
 
 ```go Response
-// Response structure
-
 suprsend.BulkResponse{
   Status : "success",
   Total : 10, // number of records sent in bulk
@@ -183,15 +258,5 @@ suprsend.BulkResponse{
 ```
 
 </CodeGroup>
-
-### How SuprSend Processes the bulk API request
-
-- On calling
-
-  `bulkIns.Trigger()`
-
-  , the SDK internally makes one-or-more Callable-chunks.
-- Each callable-chunk contains a subset of records, the subset calculation is based on each record's bytes-size and max allowed chunk-size, chunk-length etc.
-- For each callable-chunk SDK makes an HTTP call to SuprSend to register the request.
 
 ---

@@ -206,6 +206,7 @@
           "pages": [
             "docs/integrate-java-sdk",
             "docs/java-create-user-profile",
+            "docs/java-objects",
             "docs/java-send-event-data",
             "docs/java-trigger-workflow-from-api",
             "docs/tenants-java",
@@ -216,12 +217,11 @@
         {
           "group": "Go SDK",
           "pages": [
-            "docs/go-sdk",
             "docs/integrate-go-sdk",
             "docs/go-create-user-profile",
             "docs/go-send-event-data",
             "docs/go-trigger-workflow-from-api",
-            "docs/tenants-api-go",
+            "docs/tenants-go",
             "docs/lists-go",
             "docs/broadcast-go"
           ]
