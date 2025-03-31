@@ -342,7 +342,6 @@
         {
           "group": "Email Integrations",
           "pages": [
-            "docs/email-vendor-integration",
             "docs/sendgrid",
             "docs/amazon-ses",
             "docs/mailgun",
@@ -354,7 +353,6 @@
         {
           "group": "SMS Integrations",
           "pages": [
-            "docs/sms-vendor-integration",
             "docs/acl-sinch",
             "docs/twilio",
             "docs/karix-sms",
@@ -366,14 +364,12 @@
         {
           "group": "Android Push",
           "pages": [
-            "docs/android-push-vendor-integration",
             "docs/firebase-fcm-androidpush"
           ]
         },
         {
           "group": "Whatsapp Integrations",
           "pages": [
-            "docs/whatsapp-vendor-integration",
             "docs/karix-whatsapp",
             "docs/gupshup-whatsapp",
             "docs/exotel",
@@ -385,7 +381,6 @@
         {
           "group": "Chat Integrations",
           "pages": [
-            "docs/chat-vendor-integration",
             "docs/slack",
             "docs/microsoft-teams"
           ]
@@ -541,14 +536,8 @@
             "reference/get-object-full-preference"
         ]
         },
-        {
-          "group": "Update Tenant Preferences",
-          "pages": ["reference/update-tenant-default-preference"]
-        },
-        {
-          "group": "Get Tenant Preferences",
-          "pages": ["reference/get-tenant-category-preferences"]
-        }
+        "reference/update-tenant-default-preference",
+        "reference/get-tenant-category-preferences"
       ]
     },
     {
@@ -581,6 +570,10 @@
     {
       "name": "API Reference",
       "url": "/reference"
+    },
+    {
+      "name": "Changelog",
+      "url": "/changelog"
     }
   ],
   "footerSocials": {

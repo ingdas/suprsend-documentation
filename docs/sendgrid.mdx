@@ -7,19 +7,8 @@ This section is a step by step guide to select Sendgrid as your email service pr
 
 ## Sendgrid integration on SuprSend account
 
-On the SuprSend dashboard, follow the steps as below:
+On the SuprSend dashboard, go to vendor page from side panel and click Email -> Sendgrid from the list of Vendors. This will open vendor details page as shown below:
 
-1. Select Vendors from the left panel
-
-2. Select 'Email' as the channel from the list
-
-3. Select the communication category from the list - System, Transactional, Promotional
-
-4. Select 'Sendgrid' from the list of Vendors
-
-![](/images/docs/ef29b03-Sendgrid.png "Sendgrid.png")&#x9;
-
-1. On the Vendor Settings page, enter the details in the vendor form:
 
 ![1942](/images/docs/f216396-Screenshot_2022-01-19_at_1.22.39_PM.png "Screenshot 2022-01-19 at 1.22.39 PM.png")
 
@@ -51,9 +40,19 @@ Engagement Data: select all
 
 ## How to add Unsubscription link in email
 
-It is advisable to give your recipients the ability to unsubscribe from emails. First, it is required by the [CAN-Spam Act](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business). Second, if you don’t give them this option, they are more likely to click on the spam complaint button, which will cause more harm than allowing them to unsubscribe. Finally, many ESPs look for unsubscribe links and are more likely to filter your email if they don’t have them.
+It's recommended to allow recipients to unsubscribe from emails. You can either:
 
-To add "Unsubscribe" link in your email, refer to the section: [Unsubscribe via Subscription Tracking](https://docs.sendgrid.com/ui/sending-email/subscription-tracking#how-do-i-just-add-an-unsubscribe-link)
+1. **Use your vendor's unsubscribe link** by enabling **Unsubscribes** in *Sending → Domain settings (Tracking section)*. This opts users out of all emails from that vendor.
+
+2. **Use SuprSend’s** [**hosted preference page** ](/docs/preferences#hosted-preference-page)for more granular control, allowing users to manage preferences per category while also reducing unnecessary vendor API calls for opt-outs.
+
+![](/images/docs/afc5e04-Screenshot_2022-07-09_at_11.15.03_PM.png "Screenshot 2022-07-09 at 11.15.03 PM.png")
+
+**Why it's important to give unsubscribe option in email?**
+
+First, it is required by the [CAN-Spam Act](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business). Second, if you don’t give them this option, they are more likely to click on the spam complaint button, which will cause more harm than allowing them to unsubscribe. Finally, many ESPs look for unsubscribe links and are more likely to filter your email if they don’t have them.
+
+***
 
 ## Migrating Email templates from Sendgrid
 
@@ -117,18 +116,3 @@ If you have used sendgrid design library to design email templates and planning 
 
 After publishing the template, you can test template using ["Test template"](https://docs.suprsend.com/docs/testing-the-template) functionality on the template editor.
 
-## How to add Unsubscription link in email
-
-It's recommended to allow recipients to unsubscribe from emails. You can either:
-
-1. **Use your vendor's unsubscribe link** by enabling **Unsubscribes** in *Sending → Domain settings (Tracking section)*. This opts users out of all emails from that vendor.
-
-2. **Use SuprSend’s** [**hosted preference page** ](/docs/preferences#hosted-preference-page)for more granular control, allowing users to manage preferences per category while also reducing unnecessary vendor API calls for opt-outs.
-
-![](/images/docs/afc5e04-Screenshot_2022-07-09_at_11.15.03_PM.png "Screenshot 2022-07-09 at 11.15.03 PM.png")
-
-**Why it's important to give unsubscribe option in email?**
-
-First, it is required by the [CAN-Spam Act](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business). Second, if you don’t give them this option, they are more likely to click on the spam complaint button, which will cause more harm than allowing them to unsubscribe. Finally, many ESPs look for unsubscribe links and are more likely to filter your email if they don’t have them.
-
-***

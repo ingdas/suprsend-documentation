@@ -7,31 +7,20 @@ This section is a step by step guide to setup Mailjet as your email service prov
 
 ## Mailjet integration on SuprSend account
 
-<Steps>
-  <Step title="On the SuprSend dashboard, follow the steps as below:">
-    1. Select **Vendors** from the left panel
+On the SuprSend dashboard, go to vendor page from side panel and click Email -> Mailjet from the list of Vendors. This will open vendor details page as shown below:
 
-    2. Select **Email** as the channel from the list
+![](/images/docs/8863183-image.png)
 
-    3. Choose a notification category from the list: **System**, **Transactional**, or **Promotional**. You have the option to add different vendors in each notification category. This helps you to manage different messaging queues at vendor end based on the criticality of notification and doesn't let your marketing or promotional notifications to impact the deliverability of critical system notifications, such as OTPs or verification messages.
+| Form Field             | Description                                                                                                                                                                                                                                                                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nickname               | You can give any name which may help you to identify this account easily                                                                                                                                                                                                                                                                                |
+| API Key                | You will get from the API key management section in your Mailjet account settings. This is a mandatory field. SuprSend will use this key to route emails through your Mailjet account. Check [below section](/docs/postmark#how-to-get-a-server-token-from-postmark) on how to get your API and Secret Key.                                             |
+| Secret Key             | Secret generate along with your API key. You will get this from API key management section in your Mailjet account settings. This is a mandatory field. SuprSend will use this token to route emails through your Mailjet account. Check [below section](/docs/postmark#how-to-get-a-server-token-from-postmark) on how to get your API and Secret Key. |
+| From Name              | Default 'From Name' that email will go from. You can override this in the individual template.*eg. SuprSend*                                                                                                                                                                                                                                            |
+| From Email             | Default 'From Name' that email will go from. You can override this in the individual template. *eg. \[support@suprsend.com]]\(mailto:support@suprsend.com)* From email domain should be verified by Mailjet.                                                                                                                                            |
+| Reply Email            | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. \[support@suprsend.com]]\(mailto:support@suprsend.com)*                                                                                                                                                                                |
+| Price per notification | This is the amount you pay per email notification to Mailjet. It helps us to calculate, estimate and optimise your cost spent on notifications. We use this cost to set the order of channels in smart routing where routing rule is `optimize on cost`.                                                                                                |
 
-    4. Select **Mailjet** from the list of Vendors
-
-    ![](/images/docs/8863183-image.png)
-  </Step>
-
-  <Step title="On the Mailjet Integration settings page, enter following details.">
-    | Form Field             | Description                                                                                                                                                                                                                                                                                                                                             |
-    | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | Nickname               | You can give any name which may help you to identify this account easily                                                                                                                                                                                                                                                                                |
-    | API Key                | You will get from the API key management section in your Mailjet account settings. This is a mandatory field. SuprSend will use this key to route emails through your Mailjet account. Check [below section](/docs/postmark#how-to-get-a-server-token-from-postmark) on how to get your API and Secret Key.                                             |
-    | Secret Key             | Secret generate along with your API key. You will get this from API key management section in your Mailjet account settings. This is a mandatory field. SuprSend will use this token to route emails through your Mailjet account. Check [below section](/docs/postmark#how-to-get-a-server-token-from-postmark) on how to get your API and Secret Key. |
-    | From Name              | Default 'From Name' that email will go from. You can override this in the individual template.*eg. SuprSend*                                                                                                                                                                                                                                            |
-    | From Email             | Default 'From Name' that email will go from. You can override this in the individual template. *eg. \[support@suprsend.com]]\(mailto:support@suprsend.com)* From email domain should be verified by Mailjet.                                                                                                                                            |
-    | Reply Email            | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. \[support@suprsend.com]]\(mailto:support@suprsend.com)*                                                                                                                                                                                |
-    | Price per notification | This is the amount you pay per email notification to Mailjet. It helps us to calculate, estimate and optimise your cost spent on notifications. We use this cost to set the order of channels in smart routing where routing rule is `optimize on cost`.                                                                                                |
-  </Step>
-</Steps>
 
 ## How to get API and Secret key from Mailjet
 
@@ -75,13 +64,7 @@ SuprSend's webhook URL: [`https://hub.suprsend.com/webhook/mailjet/`](https://hu
 
 ## How to add Unsubscription link in email
 
-It's recommended to allow recipients to unsubscribe from emails. You can either:
-
-1. **Use your vendor's unsubscribe link** by enabling **Unsubscribes** in *Sending → Domain settings (Tracking section)*. This opts users out of all emails from that vendor.
-
-2. **Use SuprSend’s** [**hosted preference page** ](/docs/preferences#hosted-preference-page)for more granular control, allowing users to manage preferences per category while also reducing unnecessary vendor API calls for opt-outs.
-
-![](/images/docs/afc5e04-Screenshot_2022-07-09_at_11.15.03_PM.png "Screenshot 2022-07-09 at 11.15.03 PM.png")
+You can directly add unsubscription link in your email using [`$hosted_preference_url`](/docs/preferences#hosted-preference-page) variable in your template. This link directs users to the [SuprSend preference page](/docs/preferences). With SuprSend preference setting, you have the flexibility to create multiple notification categories based on the type of notifications. This allows users to opt-out of specific notification categories, providing them with granular control over their preferences compared to other email services where they can only opt-out from all marketing communications at once.
 
 **Why it's important to give unsubscribe option in email?**
 

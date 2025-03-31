@@ -4,395 +4,509 @@ description: "This section describes how to integrate user preferences functiona
 ---
 
 <Warning>
-  **Preferences changes in @suprsend/web-sdk version >=2.0.0**
+  **Preferences changes in  `@suprsend/web-sdk` version >=2.0.0
 
-
-
-  In `@suprsend/web-sdk@2.0.0` we have revamped SDK. The whole structure of preferences have been changed from SDK side. Please upgrade to newer versions. Old version of documentation for preference is available [here](https://docs.suprsend.com/v1.2.1/docs/angular).
+  In `@suprsend/web-sdk@2.0.0` we have revamped SDK. The whole structure of preferences have been changed from SDK side. Please upgrade to newer versions. Old version of documentation for preference is available [here](https://docs.suprsend.com/v1.2.1/docs/angular).
 </Warning>
-
-This document will cover the methods to integrate [User Preferences](/docs/preferences) in your Angular Applications. Your users will be able to specify their notification preferences using this page. With SuprSend, the user can set preferences at 3 levels - **communication channel**, **notification category**, and **selected channels inside a category**. We'll cover methods to read and update data at all 3 levels.
-
-There's an [example code](https://github.com/suprsend/angular-example) to add our pre-defined UI at the end of this documentation. This is how a typical preference page will look like
-
-![](/images/docs/bfca7a0-User_Preference_Page.png)
-
-All the data points and functions are same as Javascript application
 
 ## Pre-requisites
 
-* [Integrate Javascript SDK](/docs/integrate-java-sdk)
+- [Integrate Javascript SDK](https://docs.suprsend.com/docs/javascript-sdk)
+- [Identify user on login](https://docs.suprsend.com/docs/javascript-sdk#2-authenticate-user) and [reset on logout](https://docs.suprsend.com/docs/javascript-sdk#3-reset-user) to ensure that preference changes are tagged to the correct user
+- [Configure notification categories](https://docs.suprsend.com/docs/preferences#creating--updating-notification-categories) on SuprSend dashboard
+- [Understanding of the preference data structure and methods](https://docs.suprsend.com/docs/js-preferences)
 
-* [Identify user on login](/docs/java-create-user#how-suprsend-identifies-a-user) and [reset on logout](/docs/java-create-user#step-2--call-reset-to-clear-user-data-on-log-out) to ensure that preference changes are tagged to the correct user
+## Example Implementation
 
-* [Configure notification categories](/docs/preferences#creating--updating-notification-categories) on SuprSend dashboard
-
-* [Understanding of the preference data structure and methods](/docs/preferences-javascript)
+Github Repository for this example implementation can be found here: ("https://github.com/suprsend/angular-example")
 
 ## Integration
 
-All preference methods and properties are available under ***suprsend.user.preferences*** instance. Here's a reference of all the properties and methods available in this instance. Please read to [javascript documentation](/docs/preferences-javascript#integration) to understand all these methods and properties in detail
+There will be 3 components in example implementation:
 
-## Read Preferences data
+- preference
+- channel-level-preferences 
+- category-level-preferences
 
-There will be 3 components: preference, channel-level-preferences, and category-level-preferences. preference will be the main component and inside it, there will be an instance property that contains user preference data. Whenever there's an update we will update the latest preference data in the same state for the component to rerender.
+### Preference component setup
 
-<CodeGroup>
-  ```javascript preference.component.ts
-  import suprsend from "@suprsend/web-sdk";
+**preference** will be the main component and inside it, there will be a property (preferencesData) that contains full user preference data. Whenever there's an update we will update the latest preference data in the preferencesData so that component to rerender. We already created [SuprSend service ](https://github.com/suprsend/angular-example/blob/master/src/app/suprsend.service.ts)to access SuprSend client everywhere in the application which is used to call methods.
 
-  // this is main component
-  @Component({
-    selector: 'app-preference',
-    templateUrl: './preference.component.html',
-    styleUrls: ['./preference.component.css'],
-  })
-  export class PreferenceComponent implements OnInit {
-    preferencesData: any = null;
-    
-    ...
-    
-  }
-  ```
-</CodeGroup>
+Call [getPreferences](https://docs.suprsend.com/docs/js-preferences#get-preferences-data) method to get the preferences data for the already identified user. This method is used to get full user preferences data from the SuprSend. This method should be called first before any update methods. Calling this method will make an API call and returns a preference response, which you can store in your instance property **preferenceData** if there is no error.
 
-<Steps>
-  <Step title="Get Preference data">
-    After adding the component, call ***suprsend.user.preferences.get\_preferences()*** method to get the preferences data for the already identified user. This method is used to get full user preferences data from the SuprSend. This method should be called first before any update methods. Calling this method will make an API call and returns a preference response, which you can store in your instance property ***preferenceData*** if there is no error.
-  </Step>
+After that we configure 2 [event listeners](https://docs.suprsend.com/docs/js-preferences#event-listeners) `preferences_updated` and `preferences_error` to listen to updates in preference data and errors.
 
-  <Step title="Configure Event Listeners">
-    After calling ***get\_preferences***, call these 2 event listeners
+Our Main component **preference** has 2 child components one for Category-level preference section and other for Overall Channel-level preference section.
 
-    1. [preferences\_updated](/docs/preferences-javascript#preferences_updated) - This event is fired when you get a successful response after calling `get_preferences` method. In the callback, you will get the latest preference data as a parameter. You can use this data to update the latest preference data in the existing instance property ***preferenceData*** for the component to render.
+```javascript preference.component.ts
+import { SuprsendService } from '../suprsend.service';
 
-    2. [preferences\_error](/docs/preferences-javascript#preferences_error) - When there are validation errors or API errors SDK will fire ***preferences\_error*** event. In the callback, you will then get error-related information as a parameter.
+@Component({...})
+export class PreferenceComponent implements OnInit {
+  preferencesData: any = null;
+  
+  constructor(private router: Router, private ssService: SuprsendService) {}
 
-    <CodeGroup>
-      ```typescript preference.component.ts
-      @Component({...})
-      export class PreferenceComponent implements OnInit {
-        preferencesData: any = null;
-
-        ngOnInit(): void {
-          suprsend.user.preferences.get_preferences().then((resp) => {
-            if (resp.error) {
-              console.log(resp.message);
-            } else {
-              this.preferencesData = resp;
-            }
-          });
-      		
-      		// listen for update in preferences data
-          suprsend.emitter.on('preferences_updated', (preferenceData) => {
-            this.preferencesData = { ...preferenceData };
-          });
-
-          // listen for errors
-          suprsend.emitter.on('preferences_error', (error) => {
-            console.log('ERROR:', error);
-          });
-        }
+  ngOnInit(): void {
+    // before getting preferences make sure to call identify method
+    this.ssService.ssClient.user.preferences.getPreferences().then((resp) => {
+      if (resp.status === 'error') {
+        console.log(resp.error);
+      } else {
+        this.preferencesData = resp.body;
       }
-      ```
-    </CodeGroup>
-  </Step>
-</Steps>
+    });
+		
+    // listen for update in preferences data
+    this.ssService.ssClient.emitter.on(
+      'preferences_updated',
+      (preferenceData) => { this.preferencesData = { ...preferenceData.body } } );
 
-## Show Preference data on the UI
+    // listen for errors
+    this.ssService.ssClient.emitter.on('preferences_error', (error) => {
+      console.log('ERROR:', error);
+    });
+  }
+}
+```
+```typescript preference.component.html
+<p *ngIf="!this.preferencesData">Loading...</p>
 
-Preferences data is of 2 types:
+<div *ngIf="this.preferencesData" class="main-div">
+  <h3 class="main-header">Notification Preferences</h3> 
 
-1. [Category Preference](/docs/angular) - User can set preferences at overall category level or select specific channels in a category from this section.
+  <!-- notification category level preferences -->
+  <app-category-level-preferences [preferencesData]="this.preferencesData"></app-category-level-preferences>
 
-<Frame caption="Category Preference">
-  <img src="/images/docs/e8980ca-image.png" />
-</Frame>
+  <!-- overall channel level preferences -->
+  <app-channel-level-preferences [preferencesData]="this.preferencesData"></app-channel-level-preferences>
+</div>
+```
+```css preference.component.css
+.main-div {
+  margin: 24px;
+}
 
-1. [Channel Preferences](/docs/angular#show-channel-level-preference-section-on-the-ui) - User can set preferences at overall channel level from this section.
+.main-header {
+  margin-bottom: 24px;
+}
 
-<Frame caption="Channel Preference">
-  <img src="/images/docs/b28f0a2-image.png" />
-</Frame>
+p,
+h3 {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-### Code block to Render Header and Blank state
+```
 
-Our Main component ***preference*** has 2 child components one for each type of preference.
-
-<CodeGroup>
-  ```typescript preference.component.html
-  <p *ngIf="!this.preferencesData">Loading...</p>
-
-  <div *ngIf="this.preferencesData" class="main-div">
-    <h3 class="main-header">Notification Preferences</h3> 
-
-    <!-- notification category level preferences -->
-    <app-category-level-preferences [preferencesData]="this.preferencesData"></app-category-level-preferences>
-
-    <!-- channel level preferences -->
-    <app-channel-level-preferences [preferencesData]="this.preferencesData"></app-channel-level-preferences>
-  </div>
-  ```
-</CodeGroup>
-
-### Show Category level Preference section on the UI
+### Category level Preference section
 
 In category-level preferences, you'll have to fetch the data from 3 parts:
 
-* **Section** - to show sections like "Product Updates" in below example
-
-* **Category** - to show categories and their overall status like "Refunds" in below example
-
-* **CategoryChannel** - to show communication channels inside the category and their status
+- **[Section](https://docs.suprsend.com/docs/js-preferences#11-sections)** - to show sections like "Product Updates" in below example
+- **[Category](https://docs.suprsend.com/docs/js-preferences#12-categories-sections---sub-categories)** - to show categories and their overall status like "Refunds" in below example
+- **[CategoryChannel](https://docs.suprsend.com/docs/js-preferences#13-category-channels-sections---sub-categories---channels)** - to show communication channels inside the category and their status
 
 ![](/images/docs/3b8ee51-image.png)
 
 Below are the steps to render category preference UI:
 
-1. Loop through the property ***preferenceData.sections*** for showing sections, show sub-categories inside each section, and show subcategory's channels inside each sub-category.
-
-2. Add a ***switch*** button next to each sub-category for opting in and out of the category. Add ***checkbox*** components in sub-category channels for opting in and out of category-channel. You can use any third-party npm package to import these components or design your own component.
-
-3. To update category preference on the click of the switch button, call ***update\_category\_preference*** method and if no error is received in response, update the latest data in the instance property. For preference state `opt-in` set the switch state as **on** and **off** for the `opt-out` state.
+1. Loop through the property _**preferenceData.sections**_  for showing sections, show sub-categories inside each section, and show subcategory's channels inside each sub-category.
+2. Add a  **_switch_** button next to each sub-category for opting in and out of the category. Add **_checkbox_** components in sub-category channels for opting in and out of category-channel. You can use any third-party npm package to import these components or design your own component.
+3. To update category preference on the click of the switch button, call **[updateCategoryPreference](https://docs.suprsend.com/docs/js-preferences#update-category-preference)** method and if no error is received in response, update the latest data in the instance property. For preference state `opt-in` set the switch state as **on** and **off** for the `opt-out` state.
 
 ![](/images/docs/1742b8c-image.png)
 
-1. To update category-channel preference on the click of checkbox next to each channel, call the ***update\_channel\_preference\_in\_category*** method. Update the latest data in the instance property if no error is received in response. For preference state `opt-in` set the checkbox state as **checked** and **unchecked** for the `opt-out` state.
+
+4. To update category-channel preference on the click of checkbox next to each channel, call the **[updateChannelPreferenceInCategory](https://docs.suprsend.com/docs/js-preferences#update-channel-preference-in-category)** method. Update the latest data in the instance property if no error is received in response. For preference state `opt-in` set the checkbox state as **checked** and **unchecked** for the `opt-out` state. 
 
 ![](/images/docs/a0cf6ad-image.png)
 
-### Code block to Render Category section
 
-<CodeGroup>
-  ```typescript category-level-preferences.component.ts
-  import { Component, Input } from '@angular/core';
-  import suprsend, { PreferenceOptions } from '@suprsend/web-sdk';
+```typescript category-level-preferences.component.ts
+import { Component, Input } from '@angular/core';
+import { PreferenceOptions } from '@suprsend/web-sdk';
+import { SuprsendService } from '../suprsend.service';
 
-  @Component({
-    selector: 'app-category-level-preferences',
-    templateUrl: './category-level-preferences.component.html',
-    styleUrls: ['./category-level-preferences.component.css'],
-  })
-  export class CategoryLevelPreferencesComponent {
-    @Input() public preferencesData: any;
+@Component({
+  selector: 'app-category-level-preferences',
+  templateUrl: './category-level-preferences.component.html',
+  styleUrls: ['./category-level-preferences.component.css'],
+})
+export class CategoryLevelPreferencesComponent {
+  @Input() public preferencesData: any;
+  
+  constructor(private ssService: SuprsendService) {}
 
-    handleCategoryPreferenceChange(e: boolean, subcategory: string) {
-      const resp = suprsend.user.preferences.update_category_preference(
+  async handleCategoryPreferenceChange(e: boolean, subcategory: string) {
+    const resp =
+      await this.ssService.ssClient.user.preferences.updateCategoryPreference(
         subcategory,
         e ? PreferenceOptions.OPT_IN : PreferenceOptions.OPT_OUT
       );
-      if (resp.error) {
-        console.log(resp.message);
-      } else {
-        this.preferencesData = { ...resp };
-      }
-    }
-
-    handleChannelPreferenceInCategoryChange(channel: any, category: string) {
-      if (!channel.is_editable) return;
-
-      const resp =
-        suprsend.user.preferences.update_channel_preference_in_category(
-          channel.channel,
-          channel.preference === PreferenceOptions.OPT_IN
-            ? PreferenceOptions.OPT_OUT
-            : PreferenceOptions.OPT_IN,
-          category
-        );
-      if (resp.error) {
-        console.log(resp.message);
-      } else {
-        this.preferencesData = { ...resp };
-      }
+    if (resp.error) {
+      console.log(resp.error);
+    } else {
+      this.preferencesData = { ...resp.body };
     }
   }
-  ```
-</CodeGroup>
 
+  async handleChannelPreferenceInCategoryChange(
+    channel: any,
+    category: string
+  ) {
+    if (!channel.is_editable) return;
+
+    const resp =
+      await this.ssService.ssClient.user.preferences.updateChannelPreferenceInCategory(
+        channel.channel,
+        channel.preference === PreferenceOptions.OPT_IN
+          ? PreferenceOptions.OPT_OUT
+          : PreferenceOptions.OPT_IN,
+        category
+      );
+    if (resp.status === 'error') {
+      console.log(resp.error);
+    } else {
+      this.preferencesData = { ...resp.body };
+    }
+  }
+}
+```
 <CodeGroup>
-  ```typescript category-level-preferences.component.html
-  <div
-    *ngFor="let section of this.preferencesData.sections"
-    class="cat-container"
-  >
-    <div *ngIf="section.name">
-      <div class="section-name-container">
-        <p class="section-name-text">{{ section.name }}</p>
-        <p class="section-description-text">{{ section.description }}</p>
-      </div>
+```typescript category-level-preferences.component.html
+<div
+  *ngFor="let section of this.preferencesData.sections"
+  class="cat-container"
+>
+  <div *ngIf="section.name">
+    <div class="section-name-container">
+      <p class="section-name-text">{{ section.name }}</p>
+      <p class="section-description-text">{{ section.description }}</p>
     </div>
-    <div *ngFor="let subcategory of section.subcategories">
-      <div class="subcategory-container">
-        <div class="subcategory-top-div">
-          <div>
-            <p class="subcategory-name">{{ subcategory.name }}</p>
-            <p class="subcategory-description">{{ subcategory.description }}</p>
-          </div>
-          <ui-switch
-            size="small"
-            color="#2463eb"
-            [disabled]="!subcategory.is_editable"
-            [checked]="subcategory.preference === 'opt_in'"
-            (change)="
-              handleCategoryPreferenceChange($event, subcategory.category)
-            "
-          ></ui-switch>
+  </div>
+  <div *ngFor="let subcategory of section.subcategories">
+    <div class="subcategory-container">
+      <div class="subcategory-top-div">
+        <div>
+          <p class="subcategory-name">{{ subcategory.name }}</p>
+          <p class="subcategory-description">{{ subcategory.description }}</p>
         </div>
+        <ui-switch
+          size="small"
+          color="#2463eb"
+          [disabled]="!subcategory.is_editable"
+          [checked]="subcategory.preference === 'opt_in'"
+          (change)="
+            handleCategoryPreferenceChange($event, subcategory.category)
+          "
+        ></ui-switch>
+      </div>
 
-        <div class="subcategory-channel-container">
-          <div
-            *ngFor="let channel of subcategory.channels"
-            class="category-channel-checkbox"
+      <div class="subcategory-channel-container">
+        <div
+          *ngFor="let channel of subcategory.channels"
+          class="category-channel-checkbox"
+        >
+          <input
+            type="checkbox"
+            [id]="subcategory.category + '-' + channel.channel"
+            [disabled]="!channel.is_editable"
+            [checked]="channel.preference === 'opt_in'"
+            (change)="
+              handleChannelPreferenceInCategoryChange(
+                channel,
+                subcategory.category
+              )
+            "
+          />
+          <label
+            class="category-channel-label"
+            [for]="subcategory.category + '-' + channel.channel"
+            >{{ channel.channel }}</label
           >
-            <input
-              type="checkbox"
-              [id]="subcategory.category + '-' + channel.channel"
-              [disabled]="!channel.is_editable"
-              [checked]="channel.preference === 'opt_in'"
-              (change)="
-                handleChannelPreferenceInCategoryChange(
-                  channel,
-                  subcategory.category
-                )
-              "
-            />
-            <label
-              class="category-channel-label"
-              [for]="subcategory.category + '-' + channel.channel"
-              >{{ channel.channel }}</label
-            >
-          </div>
         </div>
       </div>
     </div>
   </div>
-  ```
-</CodeGroup>
+</div>
 
-### Show Channel level Preference section on the UI
+```
+</CodeGroup>
+```css category-level-preferences.component.css
+.cat-container {
+  margin-bottom: 24px;
+}
+
+.section-name-container {
+  background-color: #fafbfb;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  margin-bottom: 18px;
+}
+
+.section-name-text {
+  font-size: 18px;
+  font-weight: 500;
+  color: #3d3d3d;
+}
+
+.section-description-text {
+  color: #6c727f;
+}
+
+p,
+label {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.subcategory-channel-container {
+  display: flex;
+  gap: 10;
+  margin-top: 12px;
+}
+
+.subcategory-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #3d3d3d;
+}
+
+.subcategory-top-div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subcategory-container {
+  border-bottom: 1px solid #d9d9d9;
+  padding-bottom: 12px;
+  margin-top: 18px;
+}
+
+.subcategory-description {
+  color: #6c727f;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.category-channel-checkbox {
+  margin-right: 20px;
+}
+
+.category-channel-label {
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+```
+
+### Channel level Preference section
 
 Below are the steps to render channel preference UI:
 
-1. Loop through the property ***preferenceData.channel\_preferences*** for showing channels and for every channel item we will show an option to select preference using radio buttons.
-
-2. Add a **radio** button next, against channel level options for switching from `all` to `required` preference in channel.
-
-3. To update channel preference on the click of the radio button, call ***update\_overall\_channel\_preference*** method, and if no error is received in response, update the latest data in the state.
+1. Loop through the property **preferenceData.channel_preferences** for showing channels and for every channel item we will show an option to select preference using radio buttons.
+2. Add a  radio button next, against channel level options for switching from `all` to `required` preference in channel.
+3. To update channel preference on the click of the radio button, call **[updateOverallChannelPreference](https://docs.suprsend.com/docs/js-preferences#update-overall-channel-preference)** method, and if no error is received in response, update the latest data in the state.
 
 ![](/images/docs/5574d6f-channel-update_1.png)
 
-### Code block to Render Channel section
 
-<CodeGroup>
-  ```typescript channel-level-preferences.component.ts
-  import { Component, Input } from '@angular/core';
-  import suprsend, { ChannelLevelPreferenceOptions } from '@suprsend/web-sdk';
+```typescript channel-level-preferences.component.ts
+import { Component, Input } from '@angular/core';
+import { ChannelLevelPreferenceOptions } from '@suprsend/web-sdk';
+import { SuprsendService } from '../suprsend.service';
 
-  @Component({
-    selector: 'app-channel-level-preferences',
-    templateUrl: './channel-level-preferences.component.html',
-    styleUrls: ['./channel-level-preferences.component.css'],
-  })
-  export class ChannelLevelPreferencesComponent {
-    @Input() public preferencesData: any;
+@Component({
+  selector: 'app-channel-level-preferences',
+  templateUrl: './channel-level-preferences.component.html',
+  styleUrls: ['./channel-level-preferences.component.css'],
+})
+export class ChannelLevelPreferencesComponent {
+  @Input() public preferencesData: any;
 
-    handleChange(channel: string, preference: string) {
-      const preferenceStatus =
-        preference === 'ALL'
-          ? ChannelLevelPreferenceOptions.ALL
-          : ChannelLevelPreferenceOptions.REQUIRED;
-      const resp = suprsend.user.preferences.update_overall_channel_preference(
+  constructor(private ssService: SuprsendService) {}
+
+  async handleChange(channel: string, preference: string) {
+    const preferenceStatus =
+      preference === 'ALL'
+        ? ChannelLevelPreferenceOptions.ALL
+        : ChannelLevelPreferenceOptions.REQUIRED;
+    const resp =
+      await this.ssService.ssClient.user.preferences.updateOverallChannelPreference(
         channel,
         preferenceStatus
       );
-      if (resp.error) {
-        console.log(resp.message);
-      } else {
-        this.preferencesData = { ...resp };
-      }
+    if (resp.status === 'error') {
+      console.log(resp.error);
+    } else {
+      this.preferencesData = { ...resp.body };
     }
   }
-  ```
-</CodeGroup>
+}
 
-<CodeGroup>
-  ```typescript channel-level-preferences.component.html
+```
+```typescript channel-level-preferences.component.html
+<div>
+  <div class="channel-header-div">
+    <p class="channel-header-p">What notifications to allow for channel?</p>
+  </div>
   <div>
-    <div class="channel-header-div">
-      <p class="channel-header-p">What notifications to allow for channel?</p>
-    </div>
-    <div>
-      <div *ngFor="let channel of this.preferencesData.channel_preferences">
-        <div class="channel-container">
-          <p class="channel-channel-text">{{ channel.channel }}</p>
-          <p
-            class="channel-help-text"
-            *ngIf="channel.is_restricted; else allText"
-          >
-            Allow required notifications only
-          </p>
-          <ng-template #allText
-            ><p class="channel-help-text">Allow all notifications</p>
-          </ng-template>
+    <div *ngFor="let channel of this.preferencesData.channel_preferences">
+      <div class="channel-container">
+        <p class="channel-channel-text">{{ channel.channel }}</p>
+        <p
+          class="channel-help-text"
+          *ngIf="channel.is_restricted; else allText"
+        >
+          Allow required notifications only
+        </p>
+        <ng-template #allText
+          ><p class="channel-help-text">Allow all notifications</p>
+        </ng-template>
 
-          <div class="channel-radio-container">
-            <p class="channel-radio-pref-text">
-              {{ channel.channel }} Preferences
-            </p>
-            <div class="radio-grp">
-              <div class="radio-grp-2">
-                <div class="radio-grp-container">
-                  <div>
-                    <input
-                      type="radio"
-                      [checked]="!channel.is_restricted"
-                      name="all-{{ channel.channel }}"
-                      id="all-{{ channel.channel }}"
-                      (change)="handleChange(channel.channel, 'ALL')"
-                    />
-                  </div>
-                  <label class="all-label" for="all-{{ channel.channel }}">
-                    All
-                  </label>
+        <div class="channel-radio-container">
+          <p class="channel-radio-pref-text">
+            {{ channel.channel }} Preferences
+          </p>
+          <div class="radio-grp">
+            <div class="radio-grp-2">
+              <div class="radio-grp-container">
+                <div>
+                  <input
+                    type="radio"
+                    [checked]="!channel.is_restricted"
+                    name="all-{{ channel.channel }}"
+                    id="all-{{ channel.channel }}"
+                    (change)="handleChange(channel.channel, 'ALL')"
+                  />
                 </div>
-                <p class="channel-radiohelp-text">
-                  Allow All Notifications, except the ones that I have turned off
-                </p>
+                <label class="all-label" for="all-{{ channel.channel }}">
+                  All
+                </label>
               </div>
-              <div>
-                <div class="radio-grp-container">
-                  <div>
-                    <input
-                      type="radio"
-                      name="required-{{ channel.channel }}"
-                      id="required-{{ channel.channel }}"
-                      [checked]="channel.is_restricted"
-                      (change)="handleChange(channel.channel, 'REQUIRED')"
-                    />
-                  </div>
-                  <label
-                    class="required-label"
-                    for="required-{{ channel.channel }}"
-                  >
-                    Required
-                  </label>
+              <p class="channel-radiohelp-text">
+                Allow All Notifications, except the ones that I have turned off
+              </p>
+            </div>
+            <div>
+              <div class="radio-grp-container">
+                <div>
+                  <input
+                    type="radio"
+                    name="required-{{ channel.channel }}"
+                    id="required-{{ channel.channel }}"
+                    [checked]="channel.is_restricted"
+                    (change)="handleChange(channel.channel, 'REQUIRED')"
+                  />
                 </div>
-                <p class="channel-radiohelp-text">
-                  Allow only important notifications related to account and
-                  security settings
-                </p>
+                <label
+                  class="required-label"
+                  for="required-{{ channel.channel }}"
+                >
+                  Required
+                </label>
               </div>
+              <p class="channel-radiohelp-text">
+                Allow only important notifications related to account and
+                security settings
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  ```
-</CodeGroup>
+</div>
 
-## Example Code to Render Full Preference Page
+```
+```Text channel-level-preferences.component.css
+.channel-header-div {
+  background-color: #fafbfb;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  margin-bottom: 18px;
+}
 
-You can refer to our [angular-example](https://github.com/suprsend/angular-example) GitHub repository to get check the full code.
+.channel-header-p {
+  font-size: 18px;
+  font-weight: 500;
+  color: #3d3d3d;
+}
 
-***
+p,
+label {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.channel-container {
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  padding: 12px 24px;
+  margin-bottom: 24px;
+}
+
+.channel-channel-text {
+  font-size: 18px;
+  font-weight: 500;
+  color: #3d3d3d;
+}
+
+.channel-help-text {
+  color: #6c727f;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.channel-radio-container {
+  margin-top: 12px;
+  margin-left: 24px;
+}
+
+.channel-radio-pref-text {
+  color: #3d3d3d;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 18px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.channel-radiohelp-text {
+  color: #6c727f;
+  font-size: 14px;
+  margin-left: 32px;
+  margin-top: 4px;
+}
+
+.label-required {
+  margin-left: 12px;
+}
+
+.radio-grp {
+  margin-top: 12px;
+}
+
+.radio-grp-2 {
+  margin-bottom: 8px;
+}
+
+.radio-grp-container {
+  display: flex;
+  align-items: center;
+}
+.all-label {
+  margin-left: 12px;
+  cursor: pointer;
+}
+
+.required-label {
+  margin-left: 12px;
+  cursor: pointer;
+}
+
+```

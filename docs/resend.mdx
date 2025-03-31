@@ -7,27 +7,7 @@ This section is a step by step guide to add Resend as your email service provide
 
 ## Resend integration on SuprSend account
 
-**Step-1: O**n the SuprSend dashboard, follow the steps as below:
-
-<Steps>
-  <Step title="Go to vendors tab from the side navigation panel. Select 'Email' channel" />
-
-  <Step title="Select the relevant notification category from the list">
-    [Reference Link to Notification Category](/docs/notification-category)
-
-    * **System** for time-sensitive notifications like OTP, Forgot Password and Verification emails. These notifications can't be unsubscribed by the users and are given the highest priority in notification send queues.
-
-    * **Transactional** notifications are sent in response to some user transaction or action on your platform like Payment Confirmation, booking confirmation, Post shared / liked, and reminders. They are second in priority in notification queues after system notifications. [Know more about transactional category](/docs/notification-category#transactional).
-
-    * **Promotional** notifications are sent out to users to increase sales, promote products, or bring users back to your platform like newsletters, announcements, upcoming sale or event, deals and discounts etc. These communications are generally sent in bulk, consuming a significant portion of the communication pipeline. That's why they are given the least priority in notification queue.
-  </Step>
-
-  <Step title="Select 'Resend' from the list of Vendors">
-    ![](/images/docs/f949509-image.png)
-  </Step>
-</Steps>
-
-**Step-2:** On the Settings, enter the details:
+On the SuprSend dashboard, go to vendor page from side panel and click Email -> Resend from the list of Vendors. This will open vendor details page as shown below:
 
 ![](https://files.readme.io/00da130-image.png)
 
@@ -66,7 +46,7 @@ Go to the webhook tab from side navigation on your resend account and add SuprSe
 
 You can directly add unsubscription link in your email using [`$hosted_preference_url`](/docs/preferences#hosted-preference-page) variable in your template. This link directs users to the [SuprSend preference page](/docs/preferences). With SuprSend preference setting, you have the flexibility to create multiple notification categories based on the type of notifications. This allows users to opt-out of specific notification categories, providing them with granular control over their preferences compared to other email services where they can only opt-out from all marketing communications at once.
 
-## Why it's important to give unsubscribe option in email?
+**Why it's important to give unsubscribe option in email?**
 
 First, it is required by the [CAN-Spam Act](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business). Second, if you don’t give them this option, they are more likely to click on the spam complaint button, which will cause more harm than allowing them to unsubscribe. Finally, many ESPs look for unsubscribe links and are more likely to filter your email if they don’t have them.
 
