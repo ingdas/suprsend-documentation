@@ -1,9 +1,9 @@
 ---
-description: "SuprSend's Official Documentation for Updates "
-title: "Changelog"
+description: "New updates and improvements"
+title: "Product Updates"
 ---
 
-<Update label="13 Feb 2025">
+<Update label="07 Feb 2025">
   ## Workflow - Relative Delay and Batch window
 
   Added the ability to set relative delays and batch windows in workflows. Previously, delays were fixed or dynamic, with the time difference always being based on the current time. With this update, you can now define delays relative to a future timestamp, often provided by your trigger payload.
@@ -23,7 +23,7 @@ title: "Changelog"
   * In Inbox drop-in popover component, in mobile view actions menu icon (3 dots icon) only appears on touching notification. After the bugfix, the actions menu icon will appear on all notifications in mobile view by default, removing extra touch interaction.
 </Update>
 
-<Update label="12 February 2025">
+<Update label="31 Jan 2025">
   ## Nested Objects - Choose the fan out depth
 
   Previously, when triggering workflows in [nested object hierarchies](/docs/subscriptions#adding-nested-object-hierarchies) (where one object subscribes to another), notifications would automatically fan out up to two levels—sending notification to object, its direct subscribers, and child object subscribers.
@@ -61,7 +61,7 @@ title: "Changelog"
   * Added support to trigger multi-lingual templates in [broadcast](/docs/broadcast)
 </Update>
 
-<Update label="12 February 2025">
+<Update label="12 Feb 2025">
   ## Batch - Flush First Item Immediately
 
 
@@ -74,7 +74,7 @@ title: "Changelog"
   You can find this option in **batch -> advanced configuration**.
 </Update>
 
-<Update label="12 February 2025">
+<Update label="29 Jan 2025">
   ## New handlebars helpers - jsonParse and jsonPath
 
   We’ve added handlebars helpers to seamlessly handle JSON strings in the template editor:
@@ -90,7 +90,7 @@ title: "Changelog"
   * Added support for handlebars helper in [display condition](/docs/email#display-blocks-based-on-condition).
 </Update>
 
-<Update label="11 February 2025">
+<Update label="27 Jan 2025">
   ## List entry/exit events in trigger
 
   You can now trigger a workflow when a user enters or leaves a list. Use this in the Wait Until node to stop reminders or dynamically route users in a workflow on list updates. Earlier, you could achieve the same by enabling event tracking on list updates. Now, you can simply add this logic in workflow without making any changes in list.
@@ -106,7 +106,7 @@ title: "Changelog"
   * \[SDK] We have exposed [object management methods](/docs/objects-node-sdk) in Node SDK
 </Update>
 
-<Update label="11 February 2025">
+<Update label="20 Jan 2025">
   ## Inbox 2.0 - better authentication, Inapp feed component and seen interaction
 
   Happy to announce a major update in our Inbox SDK. Now, you can directly export and embed Inapp feed component and seamlessly create Fullscreen or Side sheet Inbox experience.
@@ -128,13 +128,13 @@ title: "Changelog"
   If you are on the older SDK version, we recommend you to move on the new version as all future developments will be done on the new SDK.
 </Update>
 
-<Update label="11 January 2025">
+<Update label="15 Jan 2025">
   ## Interaction Observer: Seen Tracking in Inbox
 
   We’re excited to introduce Interaction Observer support in the Inbox, enabling smarter tracking of notification seen state. Now, notifications will be automatically marked as "seen" when they come in user's scroll view.
 </Update>
 
-<Update label="9 January 2025">
+<Update label="10 Jan 2025">
   ## Enhanced Broadcast Observability
 
   We’ve done a major revamp to our [Broadcast logging](https://app.suprsend.com/en/production/logs/broadcast) and monitoring, designed to give you greater control and transparency over your broadcast executions.
@@ -152,7 +152,7 @@ title: "Changelog"
   * **Detailed Broadcast Summaries**: Access a comprehensive summary of each broadcast run directly from the listing page, similar to workflow execution logs.
 </Update>
 
-<Update label="3 December 2024">
+<Update label="5 Jan 2025">
   ## Athena database connector
 
   We’ve added Athena to our list of database connectors, enabling you to sync and create dynamic user lists directly from your S3 database. Since Athena can be set up on top of S3, it’s an excellent way to consolidate data from multiple sources and run queries on the unified dataset without the need for complex ETL pipelines.
@@ -160,7 +160,7 @@ title: "Changelog"
   ![](https://files.readme.io/327ab9a18551d786e30ac4fbb7bf5e2ec9389e50c779aca5696702b1b9cd8a33-image.png)
 </Update>
 
-<Update label="3 December 2024">
+<Update label="27 Nov 2024">
   ## New workflow node: Invoke Workflow
 
   With this update, you can [invoke a workflow](/docs/invoke-workflow) from within another workflow. This is useful when the recipient list or data context changes between steps in a workflow.
@@ -174,7 +174,7 @@ title: "Changelog"
   This simplifies complex workflows and supports smooth transitions between related processes, enabling more efficient automation management.
 </Update>
 
-<Update label="3 December 2024">
+<Update label="25 Nov 2024">
   ## New workflow node: Update User Profile
 
   You can now update recipient or actor profiles directly within a workflow. This feature simplifies user profile management by enabling real-time updates as part of the workflow process.
@@ -190,7 +190,7 @@ title: "Changelog"
   2. **Update user profile based on a workflow step**: Common use cases include fetching data during the workflow to update the user profile or updating the profile when a user successfully completes a step. For instance, during onboarding, update `%completion` in user profile when they complete a step.
 </Update>
 
-<Update label="3 December 2025">
+<Update label="20 Nov 2024">
   ## Update Object subscriptions within workflow
 
   You can now dynamically update [object subscriptions](https://docs.suprsend.com/docs/subscriptions) directly within a workflow. This enhancement eliminates the need for separate API calls for object update, allowing you to manage everything seamlessly within workflows.
@@ -204,7 +204,7 @@ title: "Changelog"
   When someone subscribes to a topic (like a tournament), add them as a subscriber to the corresponding tournament object. Later, just trigger tournament related events to SuprSend and the object will automatically fan out and send notification to all users subscribed to the topic.
 </Update>
 
-<Update label="3 December 2024">
+<Update label="17 Nov 2024">
   ## New workflow node: Add / Remove user in list
 
   You can now dynamically update list users as part of workflow execution. This is a step toward creating user segments based on events or workflow progression, removing the need to call the List Update API separately.
@@ -218,7 +218,7 @@ title: "Changelog"
   2. **Workflow Step-based segmentation** - Another use case is dynamically adding or removing a user from the list when they complete a workflow step. For example, in a knowledge series designed to onboard new users, remove a user from the POC list once they complete onboarding.
 </Update>
 
-<Update label="3 December 2024">
+<Update label="15 Nov 2024">
   ## Deletion APIs
 
   On customer request, added APIs to dynamically delete entities in SuprSend. Following deletion APIs are added:
@@ -238,7 +238,7 @@ title: "Changelog"
   Delete function just deletes the asset and their related data, including preferences. It doesn't have any effect on the historical workflows or broadcasts already executed. While calling the delete function, ensure no active workflows are running for the asset, else the execution will fail.
 </Update>
 
-<Update label="3 December 2024">
+<Update label="14 Nov 2024">
   ## User Merge API: Merge duplicate users into one
 
   Happy to announce [user merge API](/reference/merge-users) to merge duplicate user identities into a single distinct\_id. This is helpful to consolidate user profiles, especially when users interact across different products or transition from anonymous to identified states.
@@ -254,7 +254,7 @@ title: "Changelog"
     Associate it with the identified user profile.
 </Update>
 
-<Update label="3 December 2024">
+<Update label="11 Nov 2024">
   ## User Management APIs
 
   Being developer first, we have made significant updates and enhancements to the User APIs for easier user management in SuprSend. Also, subscriber is renamed to users in all APIs to avoid confusion with object subscription. Here's a list of all the changes:
@@ -268,7 +268,7 @@ title: "Changelog"
   * Subscriber is renamed to user in all APIs, including user preference APIs.
 </Update>
 
-<Update label="5 November 2024">
+<Update label="7 Nov 2024">
   ## Objects: Design scalable group notifications
 
   We’re excited to introduce a powerful new capability in SuprSend: [Objects](https://docs.suprsend.com/docs/objects). Objects allow you to manage complex user relationship and notify user groups without identifying individual recipients in your trigger. Ideal for building scalable pub/sub and subscription alerting without having to maintain event to subscriber mapping in your database.&#x20;
@@ -290,7 +290,7 @@ title: "Changelog"
   If there's any usecase in object that you think is missing and needs to be solved, please reach out to our [support](mailto:support@suprsend.com).
 </Update>
 
-<Update label="1 November 2024">
+<Update label="3 Nov 2024">
   ## Datetime comparators in workflow conditions
 
   You can now compare datetime fields in [workflow conditions](https://docs.suprsend.com/docs/branch#key-value-pair). This lets you compare two timestamps where values can be:
@@ -304,7 +304,7 @@ title: "Changelog"
   ![](https://files.readme.io/c07c30409dcfd8bf250ef4ebdb50e723c1a54dfebed1d81472580fac7d7d08e0-image.png)
 </Update>
 
-<Update label="1 November 2024">
+<Update label="30 Oct 2024">
   ## Send node execution log - UI revamp
 
   The UI for multi-channel and smart routing nodes has been revamped to clearly display how the final list of channels is determined. Now, you get clear visibility into how requested channels in the trigger, override channels, and user and tenant preferences are factored together to compute the final channel list.
@@ -312,7 +312,7 @@ title: "Changelog"
   ![](https://files.readme.io/2e6fce94b39f2e764292b909b580f08d010a6e3b4616fea2c823aae39606c22a-image.png)
 </Update>
 
-<Update label="31 October 2024">
+<Update label="29 Oct 2024">
   ## Audit Logs
 
   To enhance security and transparency, we’ve introduced Audit Trail to help you monitor and track actions happening on your SuprSend console. You can use this to keep track of unwanted or malicious actions in your account.&#x20;
@@ -325,17 +325,7 @@ title: "Changelog"
   ](https://docs.suprsend.com/changelog?page=1)
 </Update>
 
-<Update label="24 October 2024">
-  ## Sample Workflow Library
-
-  With the growing number of workflow nodes, we understand that designing the optimal workflow logic can be tricky. That’s why we’ve built out a library of the most-requested, complex workflow samples to make things easier.&#x20;
-
-  Now, when you create a new workflow, you can pick from these pre-built samples right within the platform. We’ll continue adding more samples over time—if you have specific use cases, feel free to share them with us at [product@suprsend.com](mailto:product@suprsend.com), and we’ll add them in the library!
-
-  ![](https://files.readme.io/8e542a9ef2bf858ca9afa9d0f00cc6852f8c84b459eba591f27f06abde90ce62-image.png)
-</Update>
-
-<Update label="23 October 2024">
+<Update label="22 Oct 2024">
   ## Support for customizing header component in Inbox
 
   Added support for customizing the header component in inbox SDKs.
@@ -349,7 +339,17 @@ title: "Changelog"
   In `web-inbox`, you can add an extra icon beside the "Mark all as read" button at the top of the inbox popup using `headerIconUrl`. You can also execute custom logic when this icon is clicked using `headerIconClickHandler`. This feature is useful for cases like displaying settings or preferences icons, which, when clicked, take users to the respective settings or preferences pages. For more information, [refer to the documentation.](/docs/embeddable-inbox#customising-inbox)
 </Update>
 
-<Update label="1 October 2024">
+<Update label="16 Oct 2024">
+  ## Sample Workflow Library
+
+  With the growing number of workflow nodes, we understand that designing the optimal workflow logic can be tricky. That’s why we’ve built out a library of the most-requested, complex workflow samples to make things easier.&#x20;
+
+  Now, when you create a new workflow, you can pick from these pre-built samples right within the platform. We’ll continue adding more samples over time—if you have specific use cases, feel free to share them with us at [product@suprsend.com](mailto:product@suprsend.com), and we’ll add them in the library!
+
+  ![](https://files.readme.io/8e542a9ef2bf858ca9afa9d0f00cc6852f8c84b459eba591f27f06abde90ce62-image.png)
+</Update>
+
+<Update label="21 Sep 2024">
   ## Deprecated Legacy androidpush methods
 
   As part of our ongoing efforts to maintain a robust and up-to-date platform, we've made the following deprecations:
@@ -369,7 +369,7 @@ title: "Changelog"
   We appreciate your understanding and cooperation as we continue to improve our services. If you have any questions or concerns about these changes, please don't hesitate to contact our support team.
 </Update>
 
-<Update label="1 October 2024">
+<Update label="17 Sep 2024">
   ## Subscriber Page Revamp
 
   We have revamped subscriber listing page to include relevant information upfront and also, added advanced filtering options on email, phone, active channels, channel count for an entity, and more.
@@ -379,7 +379,7 @@ title: "Changelog"
   ![](https://files.readme.io/a757957996ad18eaee3c8f804b2748ce31c4bcb9bc4374d89b41a2a9ae178d68-image.png)
 </Update>
 
-<Update label="24 September 2024">
+<Update label="14 Sep 2024">
   ## Typeahead autocomplete suggestions for subscribers
 
   We’re excited to announce a major update to the platform experience with autocomplete in all subscriber search fields. Whether you’re in logs, on the subscriber page, or within testing flows, you can now receive suggestions for existing users without needing to type the full keyword. Autocomplete suggestions are available for `distinct_id`, `email`, and `phone `fields in subscriber profiles.
@@ -387,7 +387,7 @@ title: "Changelog"
   ![](https://files.readme.io/5e7d8686d014954b93f0bcd87c6860ad524d4adc4a5920b90b60f314beff76dd-ScreenRecording2024-09-24at2.17.40PM-ezgif.com-video-to-gif-converter.gif)
 </Update>
 
-<Update label="14 September 2024">
+<Update label="11 Sep 2024">
   ## Inbox - React SDK v3.4.0
 
   This update introduces improvements to action button functionality, enhancing the flexibility and customization options for developers.
@@ -399,24 +399,13 @@ title: "Changelog"
   This update significantly expands the capabilities of action buttons in the Inbox React SDK, providing developers with more tools to create rich, interactive inbox experiences.
 </Update>
 
-<Update label="12 September 2024">
+<Update label="8 Sep 2024">
   ## Slack Text editor
 
   We are happy to announce the support of text editor in slack. So, now you won't have to write complicated JSONNET template for simple text messages. The text editor supports emoji and use [handlebars](/docs/handlebars-helpers) as the templating language.
 </Update>
 
-<Update label="12 September 2024">
-  ## View and fetch list users
-
-  We’ve added a List Users tab to the lists page, giving you direct access to view all users in a list. Being API first, the same functionality is also exposed to API. Refer [GET list users API](/reference/get-subscriber-list-users) or checkout the [postman collection](https://www.postman.com/suprsend/workspace/suprsend/collection/27786422-d77a13c1-8f59-406d-9669-078a10d52521).
-
-  ![](https://files.readme.io/b9995645ad6bfa51bb4b9de937459c287d041ef2047412dcdec3d493df5dd15e-list.png)
-
-  **API Details:**
-  The API returns 20 users per response. You can retrieve additional users by using cursor-based pagination (before and after cursors).
-</Update>
-
-<Update label="10 September 2024">
+<Update label="6 Sep 2024">
   ## Web SDK v2.0
 
   We are excited to announce a major update to our `@suprsend/web-sdk`. This new version brings significant improvements in security, performance, and developer experience.
@@ -458,7 +447,47 @@ title: "Changelog"
   Thank you for your continued support and trust in SuprSend!
 </Update>
 
-<Update label="4 September 2024">
+<Update label="4 Sep 2024">
+  ## View and fetch list users
+
+  We’ve added a List Users tab to the lists page, giving you direct access to view all users in a list. Being API first, the same functionality is also exposed to API. Refer [GET list users API](/reference/get-subscriber-list-users) or checkout the [postman collection](https://www.postman.com/suprsend/workspace/suprsend/collection/27786422-d77a13c1-8f59-406d-9669-078a10d52521).
+
+  ![](https://files.readme.io/b9995645ad6bfa51bb4b9de937459c287d041ef2047412dcdec3d493df5dd15e-list.png)
+
+  **API Details:**
+  The API returns 20 users per response. You can retrieve additional users by using cursor-based pagination (before and after cursors).
+</Update>
+
+<Update label="3 Sep 2024">
+  ## Better delivery tracking in iOS
+
+  We are excited to announce significant improvements in our latest update, focusing on enhancing delivery tracking for iOS push notifications. Regardless of the application's state, you will now experience more reliable and precise delivery tracking.
+
+  We have rolled out updates for all our major SDKs. To take full advantage of these improvements, please ensure that you update your dependencies promptly.
+
+  * [iOS SDK](https://github.com/suprsend/SuprSend-iOS-SDK/releases/tag/1.0.3) - v1.0.3
+
+  * [React Native SDK](https://github.com/suprsend/suprsend-rn-sdk/releases/tag/v2.4.0) - v2.4.0
+
+  * [Flutter SDK](https://github.com/suprsend/suprsend-flutter-sdk/releases/tag/v2.2.0) - v2.2.0
+</Update>
+
+<Update label="2 Sep 2024">
+  ## Web SDK v1.5.1
+
+  We have resolved an issue where the SDK would unexpectedly generate an error message whenever the event payload contained specific emojis. This fix ensures that event processing is now stable and reliable, even when such emojis are present. [More details here](https://github.com/suprsend/suprsend-browser-sdk/releases/tag/v1.5.1)
+</Update>
+
+<Update label="30 Aug 2024">
+  ## Improvement in Workflow Listing page
+
+  * Developer testing workflows are now excluded from the Workflow List Page and search results, ensuring a cleaner and more organized workflow listing. These workflows will still be accessible through logs.
+
+  * Enhanced observability of Tenant APIs by displaying request logs on the logs page. This improvement provides better visibility and monitoring of API interactions.
+</Update>
+
+
+<Update label="27 Aug 2024">
   ## Wait Until - Add Condition on Event Property
 
   We’re excited to announce a powerful update to our Wait Until feature! You can now add multiple events and apply conditions on event properties within the Wait Until branch, allowing for more precise event filtering and targeting of the exact event required in your workflow.
@@ -478,75 +507,7 @@ title: "Changelog"
   [Refer documentation](/docs/wait-until#fixed-delay) for details on how to implement wait until node in your workflow.
 </Update>
 
-<Update label="4 September 2024" description="version 1.0">
-  ## New SMS Integration: Pinnacle
-
-  On customer demand, we are live with latest vendor Integration with Pinnacle for SMS.
-
-  [Check out vendor integration documentation](/docs/pinnacle) for setup details.
-</Update>
-
-<Update label="4 September 2024">
-  ## List Details Page
-
-  ![](https://files.readme.io/46694952a2a4cdbc8adb15ba7c96ae50bfe5aa3f042136799c0f1c10fbdbedf7-image.png)
-
-  ### Key Improvements:
-
-  * New List Details Page: Access all essential information (logs, broadcast runs, list users) and actions for a list (run broadcast, update user) in a single view, making list management much simpler.
-
-  * "Sync Now" button on query page: This will enable you to manually sync list users when required.
-
-  ### Coming Soon:
-
-  * List Users Tab and API: We’ll soon be adding a tab to see all list users. The same functionality will also be exposed to hub APIs to fetch list users.
-</Update>
-
-<Update label="4 September 2024">
-  ## Introducing Digest Node in Workflow
-
-  You can now effortlessly batch your notifications into a single, streamlined digest sent at a recurring schedule. Whether, it’s sending a summary of pending activities in a user’s account at the end of the day or personalized recommendations by fetching data from an endpoint, you can design any complicated digest usecase with ease
-
-  ![](https://files.readme.io/611d2f5d63e32393cf90f9825a4bd083f63bf1abfbfe6ca72977fd8eda4c37a1-Group_631239_1.png)
-
-  Create a personalized digest experience for your users,
-
-  * By picking [digest frequency from recipient’s preferences](/docs/digest#dynamic-schedule-send-digest-based-on-user-preference)
-
-  * Making it timezone-aware and sending digest in recipient’s timezone irrespective of where they are located across the globe.
-
-  Need help designing your digest use case? [Write back to us](mailto:support@suprsend.com) and our team of experts will be happy to help.
-</Update>
-
-<Update label="3 September 2024">
-  ## Better delivery tracking in iOS
-
-  We are excited to announce significant improvements in our latest update, focusing on enhancing delivery tracking for iOS push notifications. Regardless of the application's state, you will now experience more reliable and precise delivery tracking.
-
-  We have rolled out updates for all our major SDKs. To take full advantage of these improvements, please ensure that you update your dependencies promptly.
-
-  * [iOS SDK](https://github.com/suprsend/SuprSend-iOS-SDK/releases/tag/1.0.3) - v1.0.3
-
-  * [React Native SDK](https://github.com/suprsend/suprsend-rn-sdk/releases/tag/v2.4.0) - v2.4.0
-
-  * [Flutter SDK](https://github.com/suprsend/suprsend-flutter-sdk/releases/tag/v2.2.0) - v2.2.0
-</Update>
-
-<Update label="3 September 2024">
-  ## Web SDK v1.5.1
-
-  We have resolved an issue where the SDK would unexpectedly generate an error message whenever the event payload contained specific emojis. This fix ensures that event processing is now stable and reliable, even when such emojis are present. [More details here](https://github.com/suprsend/suprsend-browser-sdk/releases/tag/v1.5.1)
-</Update>
-
-<Update label="3 September 2024">
-  ## Improvement in Workflow Listing page
-
-  * Developer testing workflows are now excluded from the Workflow List Page and search results, ensuring a cleaner and more organized workflow listing. These workflows will still be accessible through logs.
-
-  * Enhanced observability of Tenant APIs by displaying request logs on the logs page. This improvement provides better visibility and monitoring of API interactions.
-</Update>
-
-<Update label="3 September 2024">
+<Update label="26 Aug 2024">
   ## Enhanced branching capabilities
 
   We are excited to announce significant improvements to our [branching capabilities](/docs/branch). With the addition of more data types, you can now set precise conditions on various inputs within your branches, such as actor, recipient, and tenant properties. This enhancement allows you to tailor your workflows more effectively, ensuring that each journey is as personalized and efficient as possible.
@@ -564,7 +525,31 @@ title: "Changelog"
   * Define different next steps in an onboarding checklist depending on a user’s completion percentage. Here, you can also [fetch](/docs/fetch) completion% just before sending the next reminder.
 </Update>
 
-<Update label="3 September 2024">
+<Update label="23 Aug 2024">
+  ## New SMS Integration: Pinnacle
+
+  On customer demand, we are live with latest vendor Integration with Pinnacle for SMS.
+
+  [Check out vendor integration documentation](/docs/pinnacle) for setup details.
+</Update>
+
+<Update label="20 Aug 2024">
+  ## List Details Page
+
+  ![](https://files.readme.io/46694952a2a4cdbc8adb15ba7c96ae50bfe5aa3f042136799c0f1c10fbdbedf7-image.png)
+
+  ### Key Improvements:
+
+  * New List Details Page: Access all essential information (logs, broadcast runs, list users) and actions for a list (run broadcast, update user) in a single view, making list management much simpler.
+
+  * "Sync Now" button on query page: This will enable you to manually sync list users when required.
+
+  ### Coming Soon:
+
+  * List Users Tab and API: We’ll soon be adding a tab to see all list users. The same functionality will also be exposed to hub APIs to fetch list users.
+</Update>
+
+<Update label="13 Aug 2024">
   ## Revamped workflow list page
 
   ![](https://files.readme.io/8b0fe3df5b91b978917ee9dc0a28c5e7ec8e1dd032e459657fe44b5a1f117dd3-screenshot_2024-08-14_at_5.29.20_pm.png)
@@ -580,7 +565,7 @@ title: "Changelog"
   These enhancements will help you search and manage workflows more effectively.
 </Update>
 
-<Update label="3 September 2024">
+<Update label="10 Aug 2024">
   ## Bulk Preference APIs
 
   We’ve introduced new APIs designed to simplify the migration and management of user preferences within SuprSend.
@@ -594,10 +579,27 @@ title: "Changelog"
   Along with these changes, we have also introduced a flag in GET category preference APIs `show_opt_out_channels`. Set this to `true` to see channel list in opt-out preference categories.
 </Update>
 
-<Update label="3 September 2024">
+<Update label="8 Aug 2024">
   ## New Email Integration: Mailjet
 
   On customer request, we've added **Mailjet** in our supported email vendor list. To send out emails through Mailjet, all you have to do is add your vendor credentials on SuprSend dashboard and you are good to go.
 
   Check out [vendor integration doc](/docs/mailjet) for setup details.
 </Update>
+
+<Update label="27 July 2024">
+  ## Introducing Digest Node in Workflow
+
+  You can now effortlessly batch your notifications into a single, streamlined digest sent at a recurring schedule. Whether, it’s sending a summary of pending activities in a user’s account at the end of the day or personalized recommendations by fetching data from an endpoint, you can design any complicated digest usecase with ease
+
+  ![](https://files.readme.io/611d2f5d63e32393cf90f9825a4bd083f63bf1abfbfe6ca72977fd8eda4c37a1-Group_631239_1.png)
+
+  Create a personalized digest experience for your users,
+
+  * By picking [digest frequency from recipient’s preferences](/docs/digest#dynamic-schedule-send-digest-based-on-user-preference)
+
+  * Making it timezone-aware and sending digest in recipient’s timezone irrespective of where they are located across the globe.
+
+  Need help designing your digest use case? [Write back to us](mailto:support@suprsend.com) and our team of experts will be happy to help.
+</Update>
+
