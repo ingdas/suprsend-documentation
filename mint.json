@@ -53,6 +53,32 @@
       "url": "https://www.postman.com/suprsend/suprsend/collection/16bdmwa/suprsend-apis"
     }
   ],
+  "redirects": [
+  {
+    "source": "/docs/brands-python",
+    "destination": "/docs/python-tenants"
+  },
+  {
+    "source": "/docs/node-brands",
+    "destination": "/docs/node-tenants"
+  },
+  {
+    "source": "/docs/brands-java",
+    "destination": "/docs/tenants-java"
+  },
+  {
+    "source": "/docs/brands-api-go",
+    "destination": "/docs/tenants-go"
+  },
+  {
+    "source": "/docs/inapp-feed",
+    "destination": "/docs/js-inapp-feed"
+  },
+  {
+    "source": "/docs/objects-java-sdk",
+    "destination": "/docs/java-objects"
+  } 
+  ],
   "navigation": [
     {
       "group": "GETTING STARTED",
