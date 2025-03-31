@@ -448,11 +448,11 @@
         "reference/create-update-users",
         "reference/edit-user-profile",
         "reference/get-user-profile",        
-        "reference/fetch-user-list-subscriptions",        
         "reference/fetch-user-object-subscriptions", 
+        "reference/fetch-user-list-subscriptions",        
         "reference/list-users",
-        "reference/merge-users",
-        "reference/delete-user"
+        "reference/delete-user",
+        "reference/merge-users"
       ]
     },
     {
@@ -474,29 +474,22 @@
       "group": "OBJECTS",
       "pages": [
         "reference/create-update-objects",
-        "reference/add-object-subscription",
-
-
-        "reference/get-object-by-id",
-        "reference/get-object-category-preference",
-        "reference/get-object-single-category-preference",
-
         "reference/edit-object-profile",
-
+        "reference/add-object-subscription",
+        "reference/get-object-by-id",         
         "reference/get-object-subscriptions",
-        "reference/list-object-subscriptions",
         "reference/list-objects-by-type",
-        "reference/object-preference-category",
+        "reference/list-object-subscriptions",
         "reference/delete-object",
-        "reference/delete-object-subscription"        
+        "reference/delete-object-subscription"
       ]
     },
     {
       "group": "TEMPLATES",
       "pages": [
+        "reference/get-template-list",
         "reference/get-template-details",
-        "reference/get-template-details-for-channel",
-        "reference/get-template-list"
+        "reference/get-template-details-for-channel"
       ]
     },
     {
@@ -512,44 +505,42 @@
       "group": "PREFERENCE",
       "pages": [
         {
-          "group": "Get User Preferences",
-          "pages": [
-            "reference/get-user-channel-preferences",
-            "reference/get-user-category-preferences",
-            "reference/user-category-preference",
-            "reference/get-user-full-preference"
-          ]
-        },
-        {
           "group": "Update User Preferences",
           "pages": [
             "reference/update-user-category-preference",
             "reference/update-user-channel-preference",
-            "reference/bulk-update-user-preference"
+            "reference/bulk-update-user-preference",
+            "reference/reset-user-preferences"
+          ]
+        },
+        {
+          "group": "Get User Preferences",
+          "pages": [
+            "reference/get-user-full-preference",
+            "reference/user-category-preference",
+            "reference/get-user-channel-preferences",
+            "reference/get-user-category-preferences"
+
+
+          ]
+        },
+        "reference/update-tenant-default-preference",
+        "reference/get-tenant-category-preferences",
+        {
+          "group": "Update Object Preferences",
+          "pages": [
+            "reference/object-preference-category",
+            "reference/update-object-channel-preference"
           ]
         },
         {
           "group": "Get Object Preferences",
           "pages": [
+            "reference/get-object-full-preference",
+            "reference/get-object-category-preference",
             "reference/get-object-channel-preferences",
-            "reference/get-object-full-preference"
+            "reference/get-object-single-category-preference"
         ]
-        },
-        {
-          "group": "Update Object Preferences",
-          "pages": ["reference/update-object-channel-preference"]
-        },
-        {
-          "group": "Get Tenant Preferences",
-          "pages": [
-            "reference/get-tenant-category-preferences"
-          ]
-        },
-        {
-          "group": "Update Tenant Preferences",
-          "pages": [
-            "reference/update-tenant-default-preference"
-          ]
         }
       ]
     },
@@ -557,17 +548,23 @@
       "group": "LISTS",
       "pages": [
         "reference/create-list",
-        "reference/add-user-to-list",        
-        "reference/add-subscribers-to-draft-list",
         "reference/get-all-lists",
         "reference/get-list-details",
-        "reference/get-subscriber-list",
-        "reference/remove-subscribers-from-draft-list",
+        "reference/add-user-to-list",
         "reference/remove-subscribers-from-list",
-        "reference/start-synch",        
-        "reference/finish-sync",
-        "reference/delete-list", 
-        "reference/delete-draft-list"       
+        {
+          "group": "Replace List Subscribers",
+          "pages": [
+            "reference/replace-list-subscribers",
+            "reference/start-sync",
+            "reference/add-subscribers-to-draft-list",
+            "reference/remove-subscribers-from-draft-list",
+            "reference/finish-sync",
+            "reference/delete-draft-list"
+          ]
+        },
+        "reference/get-subscriber-list",
+        "reference/delete-list"      
       ]
     },
     {
