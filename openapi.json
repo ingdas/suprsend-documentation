@@ -226,8 +226,8 @@ paths:
             type: string
           required: true
       responses:
-        '204':
-          description: '204'
+        '200':
+          description: '200'
           content:
             application/json:
               examples:
@@ -542,17 +542,18 @@ paths:
                 data:
                   type: string
                   description: Mock data to replace the template variables.
-                  default: '{
+                  default: {
                               "data": {
                                 "$attachments": [
                                   {
                                     "filename": "billing.pdf",
                                     "contentType": "application/pdf",
-                                    "data": "Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh" // this is base64 encoded content
+                                    "data": "Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh"
                                   }
                                 ]
                               }
-                            }'
+                            }
+
                   format: json
                 delivery:
                   type: object
@@ -779,7 +780,13 @@ paths:
                 data:
                   type: string
                   description: Mock data to replace the template variables.
-                  default: '{ "key": { "k1": "v1", "k2": "v2" } }'
+                  default: {
+                              "key": {
+                                "k1": "v1",
+                                "k2": "v2"
+                              }
+                            }
+                          
                   format: json
                 delay:
                   type: string
@@ -1174,7 +1181,7 @@ paths:
                   type: array
                   description: Array of subscriber_ids, uniquely identifying the subscribers to be added to the list.
                   default:
-                    - '[]'
+                    - user1
                   items:
                     type: string
       responses:
@@ -1262,169 +1269,169 @@ paths:
                   value: |-
                     {
                       "id": 2445,
-                        "name": "Grocery Purchased",
-                          "slug": "grocery-purchased",
-                            "description": null,
-                              "is_active": true,
-                                "default_language": {
-                                  "name": "English",
+                      "name": "Grocery Purchased",
+                      "slug": "grocery-purchased",
+                      "description": null,
+                      "is_active": true,
+                      "default_language": {
+                        "name": "English",
+                        "slug": "en"
+                      },
+                      "created_at": "2023-01-25T04:53:39.237291Z",
+                      "updated_at": "2023-08-28T05:06:22.461443Z",
+                      "updated_by": {
+                        "name": "Joe",
+                        "email": "joe@example.com"
+                      },
+                      "last_triggered_at": "2023-08-10T12:44:03.361158Z",
+                      "is_auto_translate_enabled": false,
+                      "enabled_languages": [
+                        "en",
+                        "hi",
+                        "kn"
+                      ],
+                      "channels": [
+                        {
+                          "id": 3944,
+                          "channel": {
+                            "name": "SMS",
+                            "slug": "sms",
+                            "is_template_approval_needed": true
+                          },
+                          "is_active": true,
+                          "is_enabled": true,
+                          "created_at": "2023-01-25T04:53:39.268299Z",
+                          "updated_at": "2023-01-25T04:53:39.404273Z",
+                          "disabled_languages": [],
+                          "versions": [
+                            {
+                              "id": 10820,
+                              "templates": [
+                                {
+                                  "id": 11866,
+                                  "language": {
+                                    "name": "English",
                                     "slug": "en"
+                                  },
+                                  "is_enabled": true,
+                                  "approval_status": "approved",
+                                  "content": {
+                                    "text": "You purchased product {#var#} worth Rs. {#var#} will reach to you {#var#}. You can track your order here: {#var#}\n- SuprSend",
+                                    "header": "SPRSND",
+                                    "example": [
+                                      "Winter Raincoat",
+                                      "INR 5",
+                                      "999",
+                                      "Bengaluru",
+                                      "https://www.google.com"
+                                    ],
+                                    "vendor_slug": "acl-sms",
+                                    "content_type": "1",
+                                    "message_type": "SERVICE_IMPLICIT",
+                                    "template_name": "purchase_made_en_v2",
+                                    "enterprise_name": "SPRSND",
+                                    "handlebars_text": "You purchased product {{event.product_name}} worth Rs. {{event.amount}} will reach to you {{event.location.city}}. You can track your order here: {{event.link}}\n- SuprSend",
+                                    "vendor_template_id": "1007xxxxxxxxxx"
+                                  },
+                                  "created_at": "2023-01-25T04:53:39.295289Z",
+                                  "updated_at": "2023-01-25T04:53:39.328651Z",
+                                  "updated_by": {
+                                    "name": "Steve",
+                                    "email": "steve@example.com"
+                                  },
+                                  "approval_cycle": {
+                                    "status": "approved",
+                                    "comment": null,
+                                    "request_received_at": "2022-03-31T10:35:51+0000",
+                                    "sent_for_approval_at": null,
+                                    "approval_status_received_at": "2022-03-31T10:43:44+0000"
+                                  },
+                                  "is_approval_needed": true,
+                                  "is_cloned_from_last_version": false
+                                }
+                              ],
+                              "status": "active",
+                              "version_tag": "1",
+                              "created_at": "2023-01-25T04:53:39.276782Z",
+                              "updated_at": "2023-01-25T04:53:39.342850Z",
+                              "updated_by": {
+                                "name": "Joe",
+                                "email": "joe@example.com"
+                              },
+                              "version_tag_user": "v1",
+                              "published_languages": [
+                                "en"
+                              ],
+                              "apparent_published_languages": [
+                                "en"
+                              ]
+                            },
+                            {
+                              "id": 10821,
+                              "templates": [
+                                {
+                                  "id": 11867,
+                                  "language": {
+                                    "name": "English",
+                                    "slug": "en"
+                                  },
+                                  "is_enabled": true,
+                                  "approval_status": "pending",
+                                  "content": {
+                                    "text": "You purchased product {#var#} worth Rs. {#var#} will reach to you {#var#}. You can track your order here: {#var#}\n- SuprSend",
+                                    "header": "SPRSND",
+                                    "example": [
+                                      "Winter Raincoat",
+                                      "INR 5",
+                                      "999",
+                                      "Bengaluru",
+                                      "https://www.google.com"
+                                    ],
+                                    "vendor_slug": "acl-sms",
+                                    "content_type": "1",
+                                    "message_type": "SERVICE_IMPLICIT",
+                                    "template_name": "purchase_made_en_v2",
+                                    "enterprise_name": "SPRSND",
+                                    "handlebars_text": "You purchased product {{event.product_name}} worth Rs. {{event.amount}} will reach to you {{event.location.city}}. You can track your order here: {{event.link}}\n- SuprSend",
+                                    "vendor_template_id": "1007017737717135821"
+                                  },
+                                  "created_at": "2023-01-25T04:53:39.367525Z",
+                                  "updated_at": "2023-01-25T04:53:39.367556Z",
+                                  "updated_by": {
+                                    "name": "Joe",
+                                    "email": "joe@example.com"
+                                  },
+                                  "approval_cycle": null,
+                                  "is_approval_needed": true,
+                                  "is_cloned_from_last_version": false
                                 },
-                                  "created_at": "2023-01-25T04:53:39.237291Z",
-                                    "updated_at": "2023-08-28T05:06:22.461443Z",
-                                      "updated_by": {
-                                        "name": "Joe",
-                                          "email": "joe@example.com"
-                                      },
-                                        "last_triggered_at": "2023-08-10T12:44:03.361158Z",
-                                          "is_auto_translate_enabled": false,
-                                            "enabled_languages": [
-                                              "en",
-                                              "hi",
-                                              "kn"
-                                            ],
-                                              "channels": [
-                                                {
-                                                  "id": 3944,
-                                                  "channel": {
-                                                    "name": "SMS",
-                                                    "slug": "sms",
-                                                    "is_template_approval_needed": true
-                                                  },
-                                                  "is_active": true,
-                                                  "is_enabled": true,
-                                                  "created_at": "2023-01-25T04:53:39.268299Z",
-                                                  "updated_at": "2023-01-25T04:53:39.404273Z",
-                                                  "disabled_languages": [],
-                                                  "versions": [
-                                                    {
-                                                      "id": 10820,
-                                                      "templates": [
-                                                        {
-                                                          "id": 11866,
-                                                          "language": {
-                                                            "name": "English",
-                                                            "slug": "en"
-                                                          },
-                                                          "is_enabled": true,
-                                                          "approval_status": "approved",
-                                                          "content": {
-                                                            "text": "You purchased product {#var#} worth Rs. {#var#} will reach to you {#var#}. You can track your order here: {#var#}\n- SuprSend",
-                                                            "header": "SPRSND",
-                                                            "example": [
-                                                              "Winter Raincoat",
-                                                              "INR 5",
-                                                              "999",
-                                                              "Bengaluru",
-                                                              "https://www.google.com"
-                                                            ],
-                                                            "vendor_slug": "acl-sms",
-                                                            "content_type": "1",
-                                                            "message_type": "SERVICE_IMPLICIT",
-                                                            "template_name": "purchase_made_en_v2",
-                                                            "enterprise_name": "SPRSND",
-                                                            "handlebars_text": "You purchased product {{event.product_name}} worth Rs. {{event.amount}} will reach to you {{event.location.city}}. You can track your order here: {{event.link}}\n- SuprSend",
-                                                            "vendor_template_id": "1007xxxxxxxxxx"
-                                                          },
-                                                          "created_at": "2023-01-25T04:53:39.295289Z",
-                                                          "updated_at": "2023-01-25T04:53:39.328651Z",
-                                                          "updated_by": {
-                                                            "name": "Steve",
-                                                            "email": "steve@example.com"
-                                                          },
-                                                          "approval_cycle": {
-                                                            "status": "approved",
-                                                            "comment": null,
-                                                            "request_received_at": "2022-03-31T10:35:51+0000",
-                                                            "sent_for_approval_at": null,
-                                                            "approval_status_received_at": "2022-03-31T10:43:44+0000"
-                                                          },
-                                                          "is_approval_needed": true,
-                                                          "is_cloned_from_last_version": false
-                                                        }
-                                                      ],
-                                                      "status": "active",
-                                                      "version_tag": "1",
-                                                      "created_at": "2023-01-25T04:53:39.276782Z",
-                                                      "updated_at": "2023-01-25T04:53:39.342850Z",
-                                                      "updated_by": {
-                                                        "name": "Joe",
-                                                        "email": "joe@example.com"
-                                                      },
-                                                      "version_tag_user": "v1",
-                                                      "published_languages": [
-                                                        "en"
-                                                      ],
-                                                      "apparent_published_languages": [
-                                                        "en"
-                                                      ]
-                                                    },
-                                                    {
-                                                      "id": 10821,
-                                                      "templates": [
-                                                        {
-                                                          "id": 11867,
-                                                          "language": {
-                                                            "name": "English",
-                                                            "slug": "en"
-                                                          },
-                                                          "is_enabled": true,
-                                                          "approval_status": "pending",
-                                                          "content": {
-                                                            "text": "You purchased product {#var#} worth Rs. {#var#} will reach to you {#var#}. You can track your order here: {#var#}\n- SuprSend",
-                                                            "header": "SPRSND",
-                                                            "example": [
-                                                              "Winter Raincoat",
-                                                              "INR 5",
-                                                              "999",
-                                                              "Bengaluru",
-                                                              "https://www.google.com"
-                                                            ],
-                                                            "vendor_slug": "acl-sms",
-                                                            "content_type": "1",
-                                                            "message_type": "SERVICE_IMPLICIT",
-                                                            "template_name": "purchase_made_en_v2",
-                                                            "enterprise_name": "SPRSND",
-                                                            "handlebars_text": "You purchased product {{event.product_name}} worth Rs. {{event.amount}} will reach to you {{event.location.city}}. You can track your order here: {{event.link}}\n- SuprSend",
-                                                            "vendor_template_id": "1007017737717135821"
-                                                          },
-                                                          "created_at": "2023-01-25T04:53:39.367525Z",
-                                                          "updated_at": "2023-01-25T04:53:39.367556Z",
-                                                          "updated_by": {
-                                                            "name": "Joe",
-                                                            "email": "joe@example.com"
-                                                          },
-                                                          "approval_cycle": null,
-                                                          "is_approval_needed": true,
-                                                          "is_cloned_from_last_version": false
-                                                        },
-
-                                                        {
-                                                          "id": 11891,
-                                                          "language": {
-                                                            "name": "French",
-                                                            "slug": "fr"
-                                                          },
-                                                          "is_enabled": true,
-                                                          "approval_status": "pending",
-                                                          "content": {
-                                                            "template_name": "grocery_purchased_hi"
-                                                          },
-                                                          "created_at": "2023-01-25T05:46:26.753095Z",
-                                                          "updated_at": "2023-01-25T05:46:26.753121Z",
-                                                          "updated_by": {
-                                                            "name": "Joe",
-                                                            "email": "joe@example.com"
-                                                          },
-                                                          "approval_cycle": null,
-                                                          "is_approval_needed": true,
-                                                          "is_cloned_from_last_version": false
-                                                        }]
-                                                    }
-                                                  ],
-                                                  "tags": []
-                                                }
-                                              ]
+                                {
+                                  "id": 11891,
+                                  "language": {
+                                    "name": "French",
+                                    "slug": "fr"
+                                  },
+                                  "is_enabled": true,
+                                  "approval_status": "pending",
+                                  "content": {
+                                    "template_name": "grocery_purchased_hi"
+                                  },
+                                  "created_at": "2023-01-25T05:46:26.753095Z",
+                                  "updated_at": "2023-01-25T05:46:26.753121Z",
+                                  "updated_by": {
+                                    "name": "Joe",
+                                    "email": "joe@example.com"
+                                  },
+                                  "approval_cycle": null,
+                                  "is_approval_needed": true,
+                                  "is_cloned_from_last_version": false
+                                }
+                              ]
+                            }
+                          ],
+                          "tags": []
+                        }
+                      ]
                     }
               schema:
                 type: object
@@ -1751,7 +1758,7 @@ paths:
                   type: array
                   description: Array of subscriber_ids, uniquely identifying the subscribers to be removed from the list.
                   default:
-                    - '[]'
+                    - user1
                   items:
                     type: string
       responses:
@@ -2395,7 +2402,7 @@ paths:
                 data:
                   type: string
                   description: variable data required to render dynamic template content or workflow properties like dynamic delay or channel override in send node.
-                  default: '{ "key": { "k1": "v1", "k2": "v2" } }'
+                  default: { "key": { "k1": "v1", "k2": "v2" } }
                   format: json
                 tenant_id:
                   type: string
@@ -2769,7 +2776,7 @@ paths:
                 RAW_BODY:
                   type: string
                   description: 'add properties and channels of object. Used when notification is triggered to object as a user. Following channel keys can be used: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`'
-                  default: '{"prop1":"val1","$email":["abc@example.com"],"$timezone":"America/New_York","$preferred_language":"en"}'
+                  default: {"prop1":"val1","$email":["abc@example.com"],"$timezone":"America/New_York","$preferred_language":"en"}
                   format: json
       responses:
         '200':
@@ -2936,8 +2943,8 @@ paths:
             type: string
           required: true
       responses:
-        '204':
-          description: '204'
+        '200':
+          description: '200'
           content:
             application/json:
               examples:
@@ -3071,12 +3078,22 @@ paths:
                 recipients:
                   type: string
                   description: you can pass upto 100 recipients in the call. Pass users directly as array of distinct_ids `["id1","id2","id3"]` or array of objects as shown in example to create user profiles inline.
-                  default: '[     {         "distinct_id": "id1",         "$email": "abc@suprsend.com"     },     {         "object_type": "teams",         "id": "devs"     } ]'
+                  default: [
+                            {
+                              "distinct_id": "id1",
+                              "$email": "abc@suprsend.com"
+                            },
+                            {
+                              "object_type": "teams",
+                              "id": "devs"
+                            }
+                          ]
+
                   format: json
                 properties:
                   type: string
                   description: properties linked to object subscription. Can be referenced under `recipient.subscription` namespace in workflow and template.
-                  default: '{"role":"developer"}'
+                  default: {"role":"developer"}
                   format: json
       responses:
         '200':
@@ -3784,7 +3801,7 @@ paths:
                 RAW_BODY:
                   type: string
                   description: 'add properties and channels of user. Following channel keys can be used: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`. There are 2 reserved properties- timezone(`$timezone`), language(`$preferred_language`). Other properties can be added at parent level as `prop1`'
-                  default: '{"prop1":"val1","$email":["abc@example.com"],"$timezone":"America/New_York","$preferred_language":"en"}'
+                  default: {"prop1":"val1","$email":["abc@example.com"],"$timezone":"America/New_York","$preferred_language":"en"}
                   format: json
       responses:
         '200':
@@ -3845,7 +3862,7 @@ paths:
                       ],
                       "$inbox": [
                         {
-                          "value": "GvpTa4xNb2l7ONzXumqHqH4Gx5bdXUjhnZmsU2elEIs",
+                          "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
                           "id_provider": "suprsend",
                           "status": "active",
                           "perma_status": "active"
@@ -3897,7 +3914,7 @@ paths:
                       properties:
                         value:
                           type: string
-                          example: GvpTa4xNb2l7ONzXumqHqH4Gx5bdXUjhnZmsU2elEIs
+                          example: GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs
                         id_provider:
                           type: string
                           example: suprsend
@@ -3913,7 +3930,11 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value:
+                    {
+                      "code": 400,
+                      "message": "User not found with distinct_id: 'user1'"
+                    }
               schema:
                 type: object
                 properties: {}
@@ -3930,8 +3951,8 @@ paths:
             type: string
           required: true
       responses:
-        '204':
-          description: '204'
+        '200':
+          description: '200'
           content:
             application/json:
               examples:
@@ -3955,7 +3976,7 @@ paths:
                       ],
                       "$inbox": [
                         {
-                          "value": "GvpTa4xNb2l7ONzXumqHqH4Gx5bdXUjhnZmsU2elEIs",
+                          "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
                           "id_provider": "suprsend",
                           "status": "active",
                           "perma_status": "active"
@@ -4007,7 +4028,7 @@ paths:
                       properties:
                         value:
                           type: string
-                          example: GvpTa4xNb2l7ONzXumqHqH4Gx5bdXUjhnZmsU2elEIs
+                          example: GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs
                         id_provider:
                           type: string
                           example: suprsend
@@ -4121,59 +4142,58 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: |-
-                    {
-                      "meta": {
-                        "count": 1104824,
-                        "limit": 10,
-                        "has_prev": false,
-                        "before": null,
-                        "has_next": true,
-                        "after": "01JBV65642CV6FEQJ93JYBME67"
-                      },
-                      "results": [
+                  value:
                         {
-                          "distinct_id": "user1",
-                          "properties": {
-                            "$preferred_language": "en",
-                            "$timezone": "America/New_York",
-                            "prop1": "val1"
+                          "meta": {
+                            "count": 1104824,
+                            "limit": 10,
+                            "has_prev": false,
+                            "before": null,
+                            "has_next": true,
+                            "after": "01JBV65642CV6FEQJ93JYBME67"
                           },
-                          "created_at": "2024-11-05T06:19:14.184143+00:00",
-                          "updated_at": "2024-11-05T06:19:14.227839+00:00",
-                          "$email": [
+                          "results": [
                             {
-                              "value": "abc@example.com",
-                              "status": "active",
-                              "perma_status": "active"
-                            }
-                          ],
-                          "$inbox": [
+                              "distinct_id": "user1",
+                              "properties": {
+                                "$preferred_language": "en",
+                                "$timezone": "America/New_York",
+                                "prop1": "val1"
+                              },
+                              "created_at": "2024-11-05T06:19:14.184143+00:00",
+                              "updated_at": "2024-11-05T06:19:14.227839+00:00",
+                              "$email": [
+                                {
+                                  "value": "abc@example.com",
+                                  "status": "active",
+                                  "perma_status": "active"
+                                }
+                              ],
+                              "$inbox": [
+                                {
+                                  "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
+                                  "id_provider": "suprsend",
+                                  "status": "active",
+                                  "perma_status": "active"
+                                }
+                              ]
+                            },
                             {
-                              "value": "GvpTa4xNb2l7ONzXumqHqH4Gx5bdXUjhnZmsU2elEIs",
-                              "id_provider": "suprsend",
-                              "status": "active",
-                              "perma_status": "active"
-                            }
-                          ]
-                        },
-                        {
-                          "distinct_id": "8b57af47-757a-49e9-8205-fb02ad7233ff",
-                          "properties": {},
-                          "created_at": "2024-11-05T03:30:04.507766+00:00",
-                          "updated_at": "2024-11-05T03:30:04.507766+00:00",
-                          "$inbox": [
-                            {
-                              "value": "K2-al0hZXlyn5IcYq8l8fgS9KrJ5ic9uEUDSSEOGBI0",
-                              "id_provider": "suprsend",
-                              "status": "active",
-                              "perma_status": "active"
+                              "distinct_id": "8b57af47-757a-49e9-8205-fb02ad7233ff",
+                              "properties": {},
+                              "created_at": "2024-11-05T03:30:04.507766+00:00",
+                              "updated_at": "2024-11-05T03:30:04.507766+00:00",
+                              "$inbox": [
+                                {
+                                  "value": "K2-al0hZXlyn5IcYq8l8fgS9KrJ5ic9uEUDSSEOGBI0",
+                                  "id_provider": "suprsend",
+                                  "status": "active",
+                                  "perma_status": "active"
+                                }
+                              ]
                             }
                           ]
                         }
-                        ...
-                       ]
-                    }
         '400':
           description: '400'
           content:
@@ -4275,7 +4295,7 @@ paths:
                       ],
                       "$inbox": [
                         {
-                          "value": "GvpTa4xNb2l7ONzXumqHqH4Gx5bdXUjhnZmsU2elEIs",
+                          "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
                           "id_provider": "suprsend",
                           "status": "active",
                           "perma_status": "active"
@@ -4327,7 +4347,7 @@ paths:
                       properties:
                         value:
                           type: string
-                          example: GvpTa4xNb2l7ONzXumqHqH4Gx5bdXUjhnZmsU2elEIs
+                          example: GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs
                         id_provider:
                           type: string
                           example: suprsend
@@ -4395,7 +4415,7 @@ paths:
                       ],
                       "$inbox": [
                         {
-                          "value": "GvpTa4xNb2l7ONzXumqHqH4Gx5bdXUjhnZmsU2elEIs",
+                          "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
                           "id_provider": "suprsend",
                           "status": "active",
                           "perma_status": "active"
@@ -4447,7 +4467,7 @@ paths:
                       properties:
                         value:
                           type: string
-                          example: GvpTa4xNb2l7ONzXumqHqH4Gx5bdXUjhnZmsU2elEIs
+                          example: GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs
                         id_provider:
                           type: string
                           example: suprsend
@@ -4755,7 +4775,7 @@ paths:
                       ],
                       "$inbox": [
                         {
-                          "value": "GvpTa4xNb2l7ONzXumqHqH4Gx5bdXUjhnZmsU2elEIs",
+                          "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
                           "id_provider": "suprsend",
                           "status": "active",
                           "perma_status": "active"
@@ -4807,7 +4827,7 @@ paths:
                       properties:
                         value:
                           type: string
-                          example: GvpTa4xNb2l7ONzXumqHqH4Gx5bdXUjhnZmsU2elEIs
+                          example: GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs
                         id_provider:
                           type: string
                           example: suprsend
