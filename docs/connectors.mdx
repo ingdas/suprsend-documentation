@@ -1,5 +1,5 @@
 ---
-title: "Connectors"
+title: "Overview"
 description: "Integrate 3rd party platforms with SuprSend"
 ---
 
@@ -15,34 +15,32 @@ With SuprSend Connectors, you can connect data from your 3rd party platforms wit
 
 There are 3 types of connectors in SuprSend: (i) Third party data source, (ii) Third party data destination and (iii) Database.
 
-**1) Third party data source:**&#x20;
-**U**sed to connect event and user data from a third party platform to power notifications or sync user cohorts (lists) in SuprSend.
+1. **Third party data source:
+**Used to connect event and user data from a third party platform to power notifications or sync user cohorts (lists) in SuprSend.
 
-* [Mixpanel](/docs/mixpanel)
+<CardGroup cols={2}>
+<Card title="Mixpanel" href="/docs/mixpanel"></Card>
+<Card title="Segment" href="/docs/segment"></Card>
+</CardGroup>
 
-* [Segment](/docs/segment)
+2. **Third party data destination:
+**Used to sync data like message templates and notification metrics that we track in SuprSend back to your data warehouse for reporting and analysis.
 
-**2) Third party data destination:**&#x20;
-Used to sync data like message templates and notification metrics that we track in SuprSend back to your data warehouse for reporting and analysis.
+<Card title="Amazon S3" href="/docs/amazon_s3"></Card>
 
-* [Amazon S3](/docs/amazon_s3)
+3. **Database:**
 
-**3) Database:**&#x20;
-
-[Database](/docs/database) connector enables you to setup notifications directly on top of the data from your data warehouse. This way data, product and growth teams can directly setup production notifications and automated marketing campaigns on the 360 degree data without doing any trade-offs on the amount of data available in click stream platforms.
+Database connector enables you to setup notifications directly on top of the data from your data warehouse. This way data, product and growth teams can directly setup production notifications and automated marketing campaigns on the 360 degree data without doing any trade-offs on the amount of data available in click stream platforms.
 
 Using database connector, you can directly sync user profiles and create lists in SuprSend with a simple SQL query, without any engineering effort. You can then use these lists to send broadcasts.
-
-* **Postgres**
-
-* **MySQL**
-
-* **Bigquery**
+<CardGroup cols={3}>
+<Card title="Postgres" href="/docs/postgres"></Card>
+<Card title="MySQL" href="/docs/mysql"></Card>
+<Card title="Bigquery" href="/docs/bigquery"></Card>
+</CardGroup>
 
 Need support for another connector? [Please Let us know](https://suprsendcommunity.slack.com/ssb/redirect)
 
 ### Add Connectors based on Workspaces
 
 Most of these platforms have different project for staging and for production. Since, each workspace in SuprSend has separate connector settings, you can connect your connector staging project with SuprSend staging workspace. Once you are done testing, connect your production project with SuprSend production workspace.
-
-***

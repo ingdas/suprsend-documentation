@@ -3,23 +3,12 @@ title: "iOS Push"
 description: "This document guides you to integrate apns push vendor on SuprSend dashboard"
 ---
 
-This section is a step-by-step guide to integrate APNs as your service provider for sending iOS Push notifications.
 
 ## Add APNs Configuration on SuprSend dashboard
 
-On the SuprSend dashboard, follow the below steps:
-
-<Steps>
-  <Step title="Select Vendors from the left panel" />
-
-  <Step title="Select 'iOS Push' as the channel from the list" />
-
-  <Step title="Select 'iOS APNs' from the list of Vendors" />
-</Steps>
+On the SuprSend dashboard, go to vendor page from side panel, select iOSpush and fill in below details. You'll get all these informations from [Apple developer account](https://developer.apple.com/account/)
 
 ![](/images/docs/f8409f2-APNs_vendor_page.png)
-
-On the Settings, enter the following configuration details. You'll get all these informations from [Apple developer account](https://developer.apple.com/account/)
 
 | Form Field       | Description                                                                                                                                                                                                                         |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -30,7 +19,7 @@ On the Settings, enter the following configuration details. You'll get all these
 | Team ID          | You'll get Team ID from your apple developer account. Refer [section below ](/docs/ios-push-vendor-integration#how-to-get-team-id)to see how to get Team ID                                                                         |
 | Bundle ID        | Bundle ID is a unique identifier of your app. SuprSend will require this key to identify your app for sending push notification.[Refer section](/docs/ios-push-vendor-integration#how-to-get-bundle-id) to see how to get Bundle ID |
 
-### Generating .p8 key file and Auth key ID
+### Generate .p8 key file and Auth key ID
 
 <Steps>
   <Step title="To generate a .p8 key file, login to your Apple developer account page">
@@ -39,8 +28,8 @@ On the Settings, enter the following configuration details. You'll get all these
     ![](/images/docs/db8afde-Frame_57_1.png)
   </Step>
 
-  <Step title="select &#x22;keys&#x22;">
-    Under Certificates, IDs & Profiles section, select **"keys"**
+  <Step title="Select `Keys`">
+    Under Certificates, IDs & Profiles section, select **"Keys"**
 
     ![](/images/docs/aa8b860-image.png)
   </Step>
@@ -68,7 +57,7 @@ The Auth Key filename will look like this: `**AuthKeyABCD1234.p8**`, the `**ABCD
 
 ### How to get Team ID
 
-You can get team ID on your [Apple developer account membership page](https://developer.apple.com/account/#/membership)
+You can get team ID from your [Apple developer account membership page](https://developer.apple.com/account/#/membership)
 
 ![](/images/docs/d2d176d-Frame_59.png)
 

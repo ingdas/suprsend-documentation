@@ -1,5 +1,5 @@
 ---
-title: "Overview"
+title: "Webhook"
 description: "Setup outbound webhook to get data of your notification events from SuprSend into your product"
 ---
 
@@ -45,14 +45,13 @@ SuprSend sends a JSON payload to a specified endpoint (URL) as soon as a notific
   </Step>
 </Steps>
 
-### Webhook Payload Structure
+## Webhook Payload Structure
 
 This is an example of the webhook payload structure. The payload contains normalized data from SuprSend as well as the vendor response received. The payload structure will be similar for all channels except for vendor response. Vendor response will contain the exact vendor response received from the vendors and will vary based on the structure of vendor response.
 
-#### Sample payload for Whatsapp Status
 
 <CodeGroup>
-  ```json json
+  ```json Whatsapp status
   {
     "channel": "whatsapp",
     "channel_value": "+15555555555",
@@ -95,16 +94,8 @@ This is an example of the webhook payload structure. The payload contains normal
     "workflow_name": "Purchase Made"
   }
   ```
-</CodeGroup>
 
-### Webhook Payload Structure for 2 way communication
-
-This is an example of the webhook payload structure for consuming user replies and sending further notifications based on the response structure. You'll get user replies in `suprsend_inbound_message` json in the webhook response. The payload contains normalized data from SuprSend as well as the vendor response received.
-
-#### Sample payload for Whatsapp User reply
-
-<CodeGroup>
-  ```json json
+  ```json Whatsapp inbound message
   {
     "channel": "whatsapp",
     "channel_value": "+15555555555",

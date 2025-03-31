@@ -13,7 +13,7 @@ description: "https://developers.facebook.com/docs/whatsapp/cloud-api/get-starte
 
 After completing the verification and accepting terms, you should be able to access [facebook developers dashboard](<https://developers.facebook.com/apps/?show_reminder=true.&#xA;>)
 
-## Setting up Whatsapp business account on Meta
+## Set up Whatsapp business account on Meta
 
 <Steps>
   <Step title="Create/add your business app on meta developers console" icon={1} stepNumber="1">
@@ -127,32 +127,7 @@ After completing the verification and accepting terms, you should be able to acc
   </Step>
 </Steps>
 
-## Migrating existing Phone number to Whatsapp Cloud API
-
-If your whatsapp business number is already registered with another BSP and you want to migrate it to whatsapp cloud API, [follow this documentation](https://developers.facebook.com/docs/whatsapp/business-management-api/guides/migrate-phone-to-different-waba/) for migration.
-
-## Adding Whatsapp cloud configuration on SuprSend App
-
-On the SuprSend dashboard, follow the steps as below:
-
-1. Select Vendors from the left panel
-
-2. Select 'Whatsapp' as the channel from the list
-
-3. Select 'Whatsapp Cloud API' from the list of Vendors. Enter details on vendor settings page
-
-![](/images/docs/1129fbf-image.png)
-
-| Form Field                       | Obligation  | Description                                                                                                                                                                                                                                                                                                                                       |
-| -------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Nickname**                     | *mandatory* | You can give any name which may help you to identify this account easily                                                                                                                                                                                                                                                                          |
-| **Phone number ID**              | *mandatory* | Phone number ID linked to your your whatsapp business number. You can get this from [App dashboard](https://developers.facebook.com/apps) (Whatsapp -> API Setup). [Refer above step](/docs/whatsapp-cloud-api#step-4-add-a-valid-business-phone-number) for more details.                                                                        |
-| **Access token**                 | *mandatory* | Access token for authenticating the whatsapp API request. You can generate a new access token by following the [step above](/docs/whatsapp-cloud-api#step-5-generate-access-token).                                                                                                                                                               |
-| **Whatsapp Business Account ID** | *mandatory* | WABA ID linked to your your whatsapp business number. This will be needs to automate the template approval process for your account. You can get this from [App dashboard](https://developers.facebook.com/apps) (Whatsapp -> API Setup). [Refer above step](/docs/whatsapp-cloud-api#step-4-add-a-valid-business-phone-number) for more details. |
-| **App ID**                       | *mandatory* | App ID linked to your your whatsapp business account. This is used to auto approve your whatsapp templates. You can get this from [App dashboard](https://developers.facebook.com/apps). Refer step 7 for more details.                                                                                                                           |
-| **Price per notification**       | *optional*  | This is the amount you pay per Whatsapp notification to Meta. It helps us to calculate, estimate and optimise your cost spent on notifications.                                                                                                                                                                                                   |
-
-## Setting Callback URL for tracking DLR response
+## Configure webhook in Meta account for automated template approval and DLR tracking
 
 One of the platform advantage of using SuprSend as a central communication system is that it shows notification analytics for all channels in your SuprSend account together.
 
@@ -165,5 +140,25 @@ Set verify token as `572bcee9-4558-45ee-bbbb-fac5cb08766d`
 on webhook fields-> manage button, subscribe to all events mentioned.
 
 ![](/images/docs/bc5b4b2-image.png)
+
+## Add vendor configuration on SuprSend
+
+On the SuprSend dashboard, go to vendor page from side panel and click Whatsapp -> Whatsapp Cloud API from the list of Vendors. This will open vendor details page as shown below:
+
+![](/images/docs/1129fbf-image.png)
+
+| Form Field                       | Obligation  | Description                                                                                                                                                                                                                                                                                                                                       |
+| -------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Nickname**                     | *mandatory* | You can give any name which may help you to identify this account easily                                                                                                                                                                                                                                                                          |
+| **Phone number ID**              | *mandatory* | Phone number ID linked to your your whatsapp business number. You can get this from [App dashboard](https://developers.facebook.com/apps) (Whatsapp -> API Setup). [Refer above step](/docs/whatsapp-cloud-api#step-4-add-a-valid-business-phone-number) for more details.                                                                        |
+| **Access token**                 | *mandatory* | Access token for authenticating the whatsapp API request. You can generate a new access token by following the [step above](/docs/whatsapp-cloud-api#step-5-generate-access-token).                                                                                                                                                               |
+| **Whatsapp Business Account ID** | *mandatory* | WABA ID linked to your your whatsapp business number. This will be needs to automate the template approval process for your account. You can get this from [App dashboard](https://developers.facebook.com/apps) (Whatsapp -> API Setup). [Refer above step](/docs/whatsapp-cloud-api#step-4-add-a-valid-business-phone-number) for more details. |
+| **App ID**                       | *mandatory* | App ID linked to your your whatsapp business account. This is used to auto approve your whatsapp templates. You can get this from [App dashboard](https://developers.facebook.com/apps). Refer step 7 for more details.                                                                                                                           |
+| **Price per notification**       | *optional*  | This is the amount you pay per Whatsapp notification to Meta. It helps us to calculate, estimate and optimise your cost spent on notifications.                                                                                                                                                                                                   |
+
+## Migrate existing Phone number to Whatsapp Cloud API
+
+If your whatsapp business number is already registered with another BSP and you want to migrate it to whatsapp cloud API, [follow this documentation](https://developers.facebook.com/docs/whatsapp/business-management-api/guides/migrate-phone-to-different-waba/) for migration.
+
 
 ***

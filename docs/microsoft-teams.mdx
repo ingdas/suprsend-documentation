@@ -11,20 +11,13 @@ To send notifications on Microsoft Teams, you'll need to create a Teams bot. Thi
 
 * [Signup for a Microsoft 365 developer program](https://developer.microsoft.com/en-us/microsoft-365/dev-program/)
 
-* Create a Teams App - Refer [section](/docs/microsoft-teams#step-1-create-teams-app) for app creation steps.
+* [Create a Teams App]("docs/microsoft-teams#create-teams-app")
 
-## Overview
-
-In this documentation, we'll create an app to send direct messages to users or Team channels. Here's an overview of the steps required to integrate and notify on Microsoft teams:
-
-<Steps>
-  <Step title=" Create Teams App">
+## Create Teams App
     You'll have to create a [Teams App](/docs/microsoft-teams#step-1-create-teams-app) to send notifications via SuprSend. User will have to add this App in their Teams workspace and channel to start getting notifications through the App. You can learn more about Apps [here](https://learn.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/teams-developer-portal).
 
-    To create the App:
-
     <Steps>
-      <Step title="Creat a MS365 Account">
+      <Step title="Creat a Microsoft 365 Account">
         First, [create a Microsoft 365 Developer Account](https://developer.microsoft.com/en-us/microsoft-365/dev-program/). Sign in If you have an existing developer account. You'll need permission to add Apps in your account. Ask your admin to assign you relevant permissions if you are using an existing account.
       </Step>
 
@@ -42,18 +35,17 @@ In this documentation, we'll create an app to send direct messages to users or T
         ![](/images/docs/fe39ac8-image.png)
       </Step>
 
-      <Step title="Now select App feature from your left panel to click on Bot." />
-
-      <Step title="If you have an existing bot, select it from the list or click on &#x22;Create a new bot&#x22;">
-        <Accordion title="Creating a New Bot" defaultOpen={false}>
-          On the [bot page](https://dev.teams.microsoft.com/bots), click on **+New Bot** and add bot name. Add a relevant bot name and **Add**.
+      <Step title="Add Bot">
+      Now select App feature from your left panel to click on Bot.
+      If you have an existing bot, select it from the list or click on Create a new bot
+      On the [bot page](https://dev.teams.microsoft.com/bots), click on **+New Bot** and add bot name. Add a relevant bot name and **Add**.
 
           ![](/images/docs/9a4ab84-image.png)
 
           Once the bot is created, you'll land on bot configuration page. Leave the endpoint blank, select "**Microsoft teams**" in the channel and create **client secret** for your bot. Save your bot secret somewhere safe. You'll need this in SuprSend vendor integration form.
 
           ![](/images/docs/a95a925-image.png)
-        </Accordion>
+
       </Step>
 
       <Step title="Get started with the Azure Portal">
@@ -102,15 +94,14 @@ In this documentation, we'll create an app to send direct messages to users or T
         ![](/images/docs/d20916c-Screenshot_2024-04-04_at_3.03.00_AM.png)
       </Step>
     </Steps>
-  </Step>
 
-  <Step title="Add Teams integration on SuprSend">
+  ## Add Teams integration on SuprSend
     Go to SuprSend dashboard -> [Microsoft teams Vendor Settings](https://app.suprsend.com/en/staging/vendors/ms_teams/ms_teams-ms_teams?brand_id=default) page. Add `Application (client) ID` and `client secret` (in Password field) generated while [creating bot in the above step](/docs/microsoft-teams#creating-a-new-bot).
 
     ![](/images/docs/0f6b463-image.png)
-  </Step>
+  
+  ## Update teams channel in user or object profile
 
-  <Step title="Update teams channel in user profile">
     The information required in the user profile is dependent on the type of message you are sending.
 
     <AccordionGroup>
@@ -286,8 +277,9 @@ In this documentation, we'll create an app to send direct messages to users or T
 
         ![](/images/docs/a6006b1-image.png)
       </Accordion>
+    </AccordionGroup>
 
-      <Accordion title="Order of Precedence" defaultOpen={false}>
+### Order of Precedence
         Microsoft teams profile should only contain `incoming_webhook->url`, or the bot configurations like `tenant_id`, `conversation_id` and `serive_url` . If there are multiple keys in `user.add_ms_teams()` call, the order of precedence is as follows:
 
         `incoming_webhook->url` > `conversation_id` > `user_id`. For example, if your add\_ms\_teams argument is as follows:
@@ -334,14 +326,12 @@ In this documentation, we'll create an app to send direct messages to users or T
         </CodeGroup>
 
         The profile will be saved as `{"incoming_webhook": { "url": "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"}}`
-      </Accordion>
-    </AccordionGroup>
-  </Step>
+    
+    
 
-  <Step title="Create Teams template">
+
+  ## Create Teams template
     Refer [teams template documentation](/docs/ms-teams-template) for step-by-step guide on how to create, preview and publish the template.
-  </Step>
-</Steps>
 
 ## Tenancy in Microsoft teams
 

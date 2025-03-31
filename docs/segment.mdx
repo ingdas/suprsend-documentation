@@ -175,18 +175,8 @@ You'll have to configure SuprSend as a destination in Segment.
 Follow below steps to configure SuprSend Destination in Segment:
 
 <Steps>
-  <Step title="Login to your Segment account. ">
-    1. Login to your Segment account. Select
-
-       **Connections**
-
-       ->
-
-       **Destinations**
-
-       from the side navigation menu and click on
-
-       **"Add Destination"**
+  <Step title="Add SuprSend as destination in your segment account">
+    1. Login to your Segment account. Select **Connections** -> **Destinations** from the side navigation menu and click on **"Add Destination"**
 
     ![](/images/docs/97a2e63-segment_1.png)
   </Step>
@@ -237,11 +227,10 @@ Follow below steps to configure SuprSend Destination in Segment:
     * In Select Mappings, add below details:
 
     > URL: [https://hub.suprsend.com/connector/segment/](https://hub.suprsend.com/connector/segment/)
-
-    > Method: `POST`
-
-    > `Authorization` in headers: `Bearer _api_key_`(Please make sure to replace "*`api_key`*" with actual api key from segment connector settings page.)
-    > ![](https://files.readme.io/8d6594d-image.png)
+      <br/> Method: `POST`
+      <br/>`Authorization` in headers: `Bearer _api_key_`(Please make sure to replace "*`api_key`*" with actual api key from segment connector settings page.)
+     
+    ![](https://files.readme.io/8d6594d-image.png)
   </Step>
 
   <Step title="Sending Test Event">
@@ -257,11 +246,7 @@ Follow below steps to configure SuprSend Destination in Segment:
   </Step>
 
   <Step title="Enable Mapping">
-    1. After successful testing,
-
-       **Save and Enable**
-
-       the mapping.
+    1. After successful testing, **Save and Enable** the mapping.
 
     ![](/images/docs/d92dc6b-image.png)
   </Step>

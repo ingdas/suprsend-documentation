@@ -440,17 +440,22 @@
       ]
     },
     {
-      "group": "MONITOring & Debugging",
+      "group": "MONITORING & DEBUGGING",
       "pages": [
         "docs/logging",
         {
           "group": "Error Guides",
           "pages": [
             "docs/error-guides",
-            "docs/androidpush-errors",
+            {
+              "group": "Delivery Failures",
+              "pages": [
+                "docs/androidpush-errors",
             "docs/gupshup-sms-errors",
             "docs/twilio-sms-errors",
             "docs/messagebird-sms-errors"
+              ]
+            }
           ]
         }
       ]

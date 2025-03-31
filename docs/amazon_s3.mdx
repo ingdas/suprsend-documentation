@@ -95,38 +95,21 @@ This integration exports individual [parquet](https://parquet.apache.org/) files
 
     1. On users page, choose the IAM user name created in step 3
 
-    2. Open the Security credentials tab, and create
-
-       **access key**
-
-       .
+    2. Open the Security credentials tab, and create **access key**.
 
        ![](/images/docs/795e47f-image.png)
 
-    3. Choose
+    3. Choose **`third party service`** and click `next`.
 
-       **`third party service`**
+    4. Next, you can add description for your reference or leave it blank. Click on the **`create access key`**
 
-       and click
+    5. **Copy the access key and secret** and store it somewhere safe. You'll not be able to retrieve this information later once you leave this modal. Add this information in SuprSend S3 connector form.
 
-       `next`
-
-       .
-
-    4. Next, you can add description for your reference or leave it blank. Click on the
-
-       **`create access key`**
-
-    5. **Copy the access key and secret**
-
-       and store it somewhere safe. You'll not be able to retrieve this information later once you leave this modal. Add this information in SuprSend S3 connector form.
-
-    6. Once copied, click on
-
-       `Done`
+    6. Once copied, click on `Done`
   </Step>
+</Steps>
 
-  <Step title="Add your S3 connector details on SuprSend" stepNumber="5">
+  ## Add your S3 connector details on SuprSend
     On SuprSend dashboard, go to **Settings -> Connectors -> Amazon S3** and fill in the required information:
 
     ![](/images/docs/3fdddd0-image.png)
@@ -140,13 +123,11 @@ This integration exports individual [parquet](https://parquet.apache.org/) files
     | AWS Secret            | This is the secret access linked to the IAM user. [Refer step 4](/docs/amazon_s3#step-4-get-access-key-id-and-secret-for-the-above-user) for steps to get secret access                                                                                                                                                                                                                                                                               |
     | Export bucket         | Name of the S3 bucket where the parquet files should be exported. [Refer step 1](/docs/amazon_s3#step-1-create-s3-bucket) to create an export bucket                                                                                                                                                                                                                                                                                                  |
     | Data points to export | Here you can choose what all information should be exported to your S3 bucket: **Notifications Status** - To sync details to the each notification - users, tenants, vendor, channel, DLR status of the notification (delivery, seen, click etc.), and failure reasons for failed notifications **Template** - To sync all templates created in SuprSend in your S3 bucket. Template sync will happen every time you are making change in the template |
-  </Step>
 
-  <Step title="Enable Sync" stepNumber="6">
     Your S3 setup is now complete. Click on **`Enable sync`** to start data export. You can pause and resume your sync anytime you want. To Pause sync for certain data points, deselect the ones not needed from "Data Points to export" and save the changes.
 
     You can also disable your entire sync by disabling the `Enable sync` button, in which case we’ll stop the export. When you enable your sync again, we send all of your historical data as if you’re starting a new integration.
-  </Step>
-</Steps>
+
+
 
 ***
