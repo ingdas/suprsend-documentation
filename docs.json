@@ -225,7 +225,7 @@
                   "docs/js-webpush",
                   "docs/js-preferences",
                   "docs/js-events-and-user-methods",
-                  "docs/js-migration-from-v1",
+                  "docs/migration-guide-from-v1",
                   "docs/js-inapp-feed"
                 ]
               },
@@ -332,6 +332,7 @@
               {
                 "group": "Email Integrations",
                 "pages": [
+                  "docs/email-vendor-integration",
                   "docs/sendgrid",
                   "docs/amazon-ses",
                   "docs/mailgun",
@@ -680,6 +681,94 @@
     {
       "source": "/docs/objects-java-sdk",
       "destination": "/docs/java-objects"
+    },
+    {
+      "source": "/docs/objects-python-sdk",
+      "destination": "/docs/python-objects"
+    },
+    {
+      "source": "/docs/preferences",
+      "destination": "/docs/user-preferences"
+    },
+    {
+      "source": "/docs/brand-preference",
+      "destination": "/docs/tenant-preference"
+    },
+    {
+      "source": "/docs/brands",
+      "destination": "/docs/tenants"
+    },
+    {
+      "source": "/docs/subcribe-unsubscribe-from-object",
+      "destination": "/docs/subscribe-unsubscribe-from-object"
+    },
+    {
+      "source": "/docs/js-migration-from-v1",
+      "destination": "/docs/migration-guide-from-v1"
+    },
+    {
+      "source": "/docs/ios-push-integration-2",
+      "destination": "/docs/ios-push-integration"
+    },
+    {
+      "source": "/docs/integrate-react-native-sdk-android",
+      "destination": "/docs/react-native-android-integration"
+    },
+    {
+      "source": "/docs/integrate-react-native-sdk-ios",
+      "destination": "/docs/react-native-ios-integration"
+    },
+    {
+      "source": "/docs/react-native-apns-push",
+      "destination": "/docs/react-native-ios-push-integration"
+    },
+    {
+      "source": "/docs/react-native-firebase-fcm-push-integration",
+      "destination": "/docs/react-native-androidpush-integration"
+    },
+    {
+      "source": "/docs/react-1",
+      "destination": "/docs/react-sdk"
+    },
+    {
+      "source": "/docs/webpush",
+      "destination": "/docs/react-webpush"
+    },
+    {
+      "source": "/docs/preferences-1",
+      "destination": "/docs/preference-react-sdk"
+    },
+    {
+      "source": "/docs/events-and-user-methods",
+      "destination": "/docs/react-events-and-user-methods"
+    },
+    {
+      "source": "/docs/inapp-feed-1",
+      "destination": "/docs/react-in-app-feed"
+    },
+    {
+      "source": "/docs/full-screen-or-sidesheet-notifications-feed",
+      "destination": "/docs/react-full-screen-or-sidesheet-notifications-feed"
+    },
+    {
+      "source": "/docs/customising-feed",
+      "destination": "/docs/react-customising-feed"
+    },
+    {
+      "source": "/docs/headless-feed",
+      "destination": "/docs/react-sdk-headless-feed"
+    },
+    {
+      "source": "/docs/toast-notifications",
+      "destination": "/docs/react-toast-notifications"
+    },
+    {
+      "source": "/docs/migration-guide",
+      "destination": "/docs/react-migration-guide"
+    },
+    {
+      "source": "/docs/overview-preference-page",
+      "destination": "/docs/embedded-preference-centre"
     }
   ]
 }
