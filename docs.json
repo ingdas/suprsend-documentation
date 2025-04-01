@@ -143,7 +143,7 @@
                   "docs/time-window",
                   "docs/data-transform",
                   "docs/add-remove-from-list",
-                  "docs/subcribe-unsubscribe-from-object",
+                  "docs/subscribe-unsubscribe-from-object",
                   "docs/update-user-profile",
                   "docs/invoke-workflow"
                 ]
@@ -271,6 +271,7 @@
               {
                 "group": "React",
                 "pages": [
+                  "docs/react-sdk",
                   "docs/react-webpush",
                   "docs/preference-react-sdk",
                   "docs/react-events-and-user-methods",

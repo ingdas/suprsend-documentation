@@ -11,6 +11,7 @@ components:
       in: header
       name: Authorization
       x-bearer-format: bearer
+      description: Bearer authentication header of the form `Bearer <token>`, where <token> is your auth token.
 security:
   - sec0: []
 paths:
