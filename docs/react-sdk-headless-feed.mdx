@@ -1,0 +1,198 @@
+---
+title: "Build your own feed UI (headless)"
+description: "A comprehensive guide to integrating a feed using React hooks to design and build a custom UI for your feed in a React app"
+---
+
+To implement your own UI for Feed in your react application we provide context providers and hooks.
+
+<Note>
+  If you are not using any of the [In-build UI components](https://github.com/suprsend/suprsend-react-sdk?tab=readme-ov-file#suprsend-react-sdk) while designing your custom UI for feed, you can use [@suprsend/react-core](https://github.com/suprsend/suprsend-react-core) SDK. These hooks and context providers are available in both `@suprsend/react-core` and `@suprsend/react` SDK's. Integration steps mentioned in this guide are also same for both.
+</Note>
+
+## Installation
+
+<CodeGroup>
+  ```javascript npm
+  npm install @suprsend/react-core
+  ```
+
+  ```
+  yarn add @suprsend/react-core
+  ```
+</CodeGroup>
+
+## Integration
+
+### SuprSendFeedProvider
+
+This provider internally creates InApp feed client instance and also removes it on unmounting. This should be called inside [SuprSendProvider](https://docs.suprsend.com/docs/react-1#suprsendprovider). FeedClient can be accessed using [useFeedClient](https://docs.suprsend.com/docs/headless-feed#usefeedclient) hook.
+
+<CodeGroup>
+  ```javascript Example.jsx
+  import { SuprSendProvider, SuprSendFeedProvider } from '@suprsend/react-core';
+  // import { SuprSendProvider, SuprSendFeedProvider } from '@suprsend/react'; // if you use our inbuilt react components
+
+  function Example() {
+    return (
+      <SuprSendProvider publicApiKey={YOUR_KEY} distinctId={YOUR_DISTINCT_ID}>
+        <SuprSendFeedProvider>
+          Your Feed Component
+        </SuprSendFeedProvider>
+      </SuprSendProvider>
+    );
+  }
+  ```
+
+  ```javascript TypeDef
+  interface SuprSendFeedProviderProps {
+    tenantId?: string;
+    pageSize?: number;
+    stores?: IStore[] | null;
+    host?: { socketHost?: string, apiHost?: string };
+  }
+  ```
+</CodeGroup>
+
+### useFeedClient
+
+This hook is used to get Feed client instance. Using this instance you can access [feed methods](https://docs.suprsend.com/docs/inapp-feed#other-methods) like mark seen, archive, read etc. Use this hook inside [SuprSendFeedProvider](https://docs.suprsend.com/docs/headless-feed#suprsendfeedprovider).
+
+<CodeGroup>
+  ```javascript Example.jsx
+  import {useFeedClient} from '@suprsend/react-core';
+  // import { useFeedClient } from '@suprsend/react'; // if you use our inbuilt react components
+
+  function MyComponent() {
+    const feedClient = useFeedClient();
+
+    return <p onClick={() => {feedClient.markAsSeen(notificationId)}>Click Me</p>
+  }
+  ```
+</CodeGroup>
+
+### useFeedData
+
+This hook returns react state that contains notification store data which includes notifications list and other meta data. This state gets updated internally when there is any update in store. Use this state to render UI in your application. Use this hook inside [SuprSendFeedProvider](https://docs.suprsend.com/docs/headless-feed#suprsendfeedprovider).
+
+<CodeGroup>
+  ```javascript Example.jsx
+  import {useFeedData} from "@suprsend/react-core"
+  // import { useFeedData } from '@suprsend/react'; // if you use our inbuilt react components
+
+
+  function MyComponent() {
+    const feedData = useFeedData();
+
+    const notificationsList = feedData.notifications;
+    return <div>{notificationsList.map(notification)=><p>{notification.n_id}</p>}</div>;
+  }
+  ```
+</CodeGroup>
+
+### **Example**
+
+<CodeGroup>
+  ```javascript Example.jsx
+  import {
+    SuprSendProvider,
+    SuprSendFeedProvider,
+    useFeedData,
+    useFeedClient,
+  } from "@suprsend/react-core";
+
+  function Example() {
+    return (
+      <SuprSendProvider
+        publicApiKey={"YOUR_PUBLIC_API_KEY"}
+        distinctId={"YOUR_DISTINCT_ID"}
+      >
+        <SuprSendFeedProvider>
+          <MyFeedComponent />
+        </SuprSendFeedProvider>
+      </SuprSendProvider>
+    );
+  }
+
+  function MyFeedComponent() {
+    const feedData = useFeedData();
+    const feedInstance = useFeedClient();
+
+    if (!feedData) return null;
+    if (feedData.apiStatus === "LOADING") return <p>Loading Data</p>;
+    if (feedData.apiStatus === "SUCCESS" && !feedData?.notifications?.length) {
+      return <p>No Notifications</p>;
+    }
+    if (feedData.notifications) {
+      return (
+        <div>
+          <div>
+            {feedData.notifications.map((notification) => {
+              return (
+                <div
+                  key={notification.n_id}
+                  onClick={() => {
+                    feedInstance.markAsRead(notification.n_id);
+                  }}
+                >
+                  {notification.n_id}
+                </div>
+              );
+            })}
+          </div>
+          {feedData.apiStatus === "FETCHING_MORE" ? (
+            <p>Loading More</p>
+          ) : (
+            <div>
+              {feedData.pageInfo.currentPage < feedData.pageInfo.totalPages && (
+                <button
+                  onClick={() => {
+                    feedInstance.fetchNextPage();
+                  }}
+                >
+                  Next
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
+    return null;
+  }
+  ```
+</CodeGroup>
+
+## Using built-in components in headless implementation
+
+We exported few inbuilt components you can use to save time while building your own UI. If you are using `@suprsend/react-core` and want to use these components please remove that package and install `@suprsend/react`, integration steps remain unchanged other than changing import statement.
+
+### NotificationCard component
+
+This is single notification card component. It will be handy if you want to implement your own UI but want to just use our notification card as it has a bit complex logic and UI.
+
+<CodeGroup>
+  ```javascript Example.jsx
+  import { NotificationCard } from '@suprsend/react';
+
+  <NotificationCard notificationData={data} />
+  ```
+
+  ```
+  interface NotificationCardProps {
+    notificationData: IRemoteNotification;
+    notificationClickHandler?: (notificationData: IRemoteNotification) => void;
+    notificationComponent?: React.FC<CustomNotificationCard>;
+    hideAvatar?: boolean;
+    themeType?: ThemeType;
+    primaryActionClickHandler?: (notification: IRemoteNotification) => void;
+    secondaryActionClickHandler?: (notification: IRemoteNotification) => void;
+    theme?: INotificationCardTheme;
+  }
+  ```
+</CodeGroup>
+
+> Please refer [Customising CSS styles](https://docs.suprsend.com/docs/customising-feed#customising-css-styles) section to view typedefs for `INotificationCardTheme`.
+
+### BodyMarkdown component
+
+This is simple div element but also supports rendering of markdown language. [Read more](https://docs.suprsend.com/docs/customising-feed#bodymarkdown-component) about the component.

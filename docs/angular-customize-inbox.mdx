@@ -1,6 +1,5 @@
 ---
-title: "Angular Inbox SDK (ngx-suprsend-inbox)"
-description: "Suggest Edits"
+title: "Depreacted Package (ngx-suprsend-inbox)"
 ---
 
 This package has been deprecated. Please use [@suprsend/web-inbox](/docs/inbox-angular)
@@ -13,7 +12,7 @@ Angular Inbox depends on **js-inbox** which provides core logic like fetching no
 
 <CodeGroup>
   ```shell npm
-  npm install @suprsend/ngx-inbox @suprsend/[email protected] @popperjs/core
+  npm install @suprsend/ngx-inbox @suprsend/abc@example.com @popperjs/core
   ```
 
   ```shell yarn
@@ -23,59 +22,79 @@ Angular Inbox depends on **js-inbox** which provides core logic like fetching no
 
 ## Integrating Inbox
 
-1. Import **SuprSendInboxModule** in *app.module.ts* and add inside **NgModule**.
+<Steps>
+  <Step title="Import SuprSendInboxModule in app.module.ts and add inside NgModule." stepNumber="1">
+    <CodeGroup>
+      ```typescript app.module.ts
+      import { SuprSendInboxModule } from '@suprsend/ngx-inbox';
 
-<CodeGroup>
-  ```typescript app.module.ts
-  import { SuprSendInboxModule } from '@suprsend/ngx-inbox';
+      @NgModule({
+        // ...
+        imports: [
+          // ...
+          SuprSendInboxModule.forRoot({
+            workspaceKey: "your workspaceKey",
+            workspaceSecret: "your workspaceSecret",
+          }),
+        ],
+        // ...
+      })
+      export class AppModule {}
+      ```
+    </CodeGroup>
+  </Step>
 
-  @NgModule({
-    // ...
-    imports: [
-      // ...
-      SuprSendInboxModule.forRoot({
-        workspaceKey: "your workspaceKey",
-        workspaceSecret: "your workspaceSecret",
-      }),
-    ],
-    // ...
-  })
-  export class AppModule {}
-  ```
-</CodeGroup>
+  <Step title="Add a Component in the template where you want to show the inbox on UI." stepNumber="2">
+    <CodeGroup>
+      ```html your-component.component.ts
+      <suprsend-inbox></suprsend-inbox>
+      ```
+    </CodeGroup>
+  </Step>
 
-2. Add a Component in the template where you want to show the inbox on UI.
+  <Step title="Add SuprSend inbox styles in the global styles file." stepNumber="3">
+    <CodeGroup>
+      ```css styles.css
+      @import url("@suprsend/ngx-inbox/assets/styles.css");
+      ```
+    </CodeGroup>
+  </Step>
 
-<CodeGroup>
-  ```html your-component.component.ts
-  <suprsend-inbox></suprsend-inbox>
-  ```
-</CodeGroup>
+  <Step title="Identify the user" stepNumber="4">
+    1. Identify the user by passing
 
-3. Add SuprSend inbox styles in the global styles file.
+       `distinct_id`
 
-<CodeGroup>
-  ```css styles.css
-  @import url("@suprsend/ngx-inbox/assets/styles.css");
-  ```
-</CodeGroup>
+       and
 
-4. Identify the user by passing `distinct_id` and `subscriber_id`. Refer [HMAC authentication](/v1.3/docs/inbox-hmac-authentication) section to understand how to generate subscriber\_id
+       `subscriber_id`
 
-<CodeGroup>
-  ```typescript your-component.component.ts
-  import { SuprSendInboxService } from '@suprsend/ngx-inbox';
+       . Refer
 
-  export class MyComponent implements OnInit {
+       [HMAC authentication](/docs/hmac-authentication)
 
-   constructor(private ssinbox: SuprSendInboxService) {}
+       section to understand how to generate
 
-   async ngOnInit() {
-     this.ssinbox.identifyUser('distinct_id', 'subscriber_id');
-    }
-  }
-  ```
-</CodeGroup>
+       `subscriber_id`
+
+    <CodeGroup>
+      ```typescript your-component.component.ts
+      import { SuprSendInboxService } from '@suprsend/ngx-inbox';
+
+      export class MyComponent implements OnInit {
+
+       constructor(private ssinbox: SuprSendInboxService) {}
+
+       async ngOnInit() {
+         this.ssinbox.identifyUser('distinct_id', 'subscriber_id');
+        }
+      }
+      ```
+    </CodeGroup>
+  </Step>
+</Steps>
+
+Here's a description on what each of these form fields describe:
 
 | Field             | Description                                                                                                                                                                                                            | Format                    |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
@@ -102,8 +121,6 @@ Also, add toastr styles in your global styles file like given in ngx-toastr docu
   @import url("@suprsend/ngx-inbox/assets/styles.css");
   ```
 </CodeGroup>
-
-###
 
 The inbox component is highly customizable. For most parts in Inbox, we also support custom components using render props. This is how the default inbox looks like with its components marked in order.
 
@@ -261,7 +278,7 @@ Here's an example code for customizing the notification container
 
 ### Header text
 
-Here's an example code for customizing the heading
+Here's an example code for customising the heading
 
 <CodeGroup>
   ```css style.css
@@ -339,7 +356,7 @@ There are two types of buttons on a notification card - Primary (solid backgroun
 
 ![](/images/docs/efc3b82-buttons.png)
 
-### Primary Button
+**Primary Button**
 
 Here's an example code for customizing the primary button
 
@@ -363,7 +380,7 @@ Here's an example code for customizing the primary button
   ```
 </CodeGroup>
 
-**Primary button background**
+**Primary Button Background**
 
 | Property name            | Customization method                              |
 | ------------------------ | ------------------------------------------------- |
@@ -372,7 +389,7 @@ Here's an example code for customizing the primary button
 | button width             | `.ss-action-primary { width: 150px; }`            |
 | button text decoration   | `.ss-action-primary { text-decoration: dashed; }` |
 
-**Primary button text**
+**Primary Button Text**
 
 | Property name                                       | Customization method                                 |
 | --------------------------------------------------- | ---------------------------------------------------- |
@@ -411,7 +428,7 @@ Here's an example code for customizing the secondary button
   ```
 </CodeGroup>
 
-**Secondary button background**
+**Secondary Button Background**
 
 | Property name            | Customization method                              |
 | ------------------------ | ------------------------------------------------- |
@@ -423,7 +440,7 @@ Here's an example code for customizing the secondary button
 | border style             | `.ss-action-outline { border-style: dashed; }`    |
 | border width             | `.ss-action-outline { border-width: 2px; }`       |
 
-**Secondary button text**
+**Secondary Button Text**
 
 | Property name                                       | Customization method                                 |
 | --------------------------------------------------- | ---------------------------------------------------- |
@@ -467,7 +484,7 @@ On click of the notification card, SDK will internally mark it as seen and redir
 </CodeGroup>
 
 <CodeGroup>
-  ```typescript your-component.component.ts
+  ```markup your-component.component.ts
   import { SuprSendInboxService, IRemoteNotification } from '@suprsend/ngx-inbox';
 
   // ...
@@ -588,8 +605,6 @@ Here's an example code for customizing the toast header text
   ```
 </CodeGroup>
 
-t
-
 | Property name  | Customization method                                                                          |
 | -------------- | --------------------------------------------------------------------------------------------- |
 | text color     | `.toast-message { color: #c9c7c7; }`                                                          |
@@ -655,39 +670,3 @@ Below is list of classnames of html elements. you can also refer sdks internal [
 | ss-notification-created-text | Notification created on text class name                                                 |
 
 ***
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-
-  * [Integrating Inbox](#integrating-inbox)
-
-  * [Integrating Toast](#integrating-toast)
-
-  * [Customizing Bell icon](#customizing-bell-icon)
-
-  * [Customizing Badge (counter)](#customizing-badge-counter)
-
-  * [Customizing Header](#customizing-header)
-
-  * [Customizing Notification Card](#customizing-notification-card)
-
-    * [Background (container)](#background-container)
-    * [Header text](#header-text)
-    * [Body text](#body-text)
-    * [Unread dot](#unread-dot)
-    * [Buttons](#buttons)
-    * [Primary Button](#primary-button)
-    * [Secondary Button](#secondary-button)
-
-  * [Design custom notification card component](#design-custom-notification-card-component)
-
-  * [Set a custom click handler](#set-a-custom-click-handler)
-
-  * [Customizing Toast](#customizing-toast)
-    * [Styling toast theme](#styling-toast-theme)
-
-  * [Customizing Empty Inbox screen](#customizing-empty-inbox-screen)
-    * [Changing Empty screen content](#changing-empty-screen-content)
-
-  * [Customizing styles using HTML template file](#customizing-styles-using-html-template-file)

@@ -3,59 +3,68 @@ title: "Mixpanel"
 description: "Guide to integrate Mixpanel with SuprSend"
 ---
 
-[Suggest Edits](/edit/mixpanel)
-
 SuprSend mixpanel integration enables you to export user cohorts from mixpanel and create [subscriber lists](/docs/lists) on SuprSend. You can then trigger notification to this list using our [broadcast](/docs/broadcast) API.
 
-## Getting Started
+## Integration
 
 To start syncing mixpanel data, you need to first setup custom webhook integration in your mixpanel dashboard.
 
-1. Go to [SuprSend dashboard -> Settings -> Connectors](https://app.suprsend.com/en/staging/connectors) page
-2. Click on Mixpanel. It will open integrations page. Just add mapping key and click on enable. Mapping key is the unique identifier of user on SuprSend.
+<Steps>
+  <Step title="Enable Mixpanel connector on SuprSend console">
+    Go to [SuprSend dashboard -> Settings -> Connectors](https://app.suprsend.com/en/staging/connectors) page.
+  </Step>
 
-![](/images/docs/bb7e7af-mixpanel_1.png)
+  <Step title="Click on Mixpanel and set-up integrations steps. ">
+    Just add mapping key and click on enable. Mapping key is the unique identifier of user on SuprSend.
+  </Step>
 
-3. Once enabled, you'll see webhook configuration details. Go to **Mixpanel dashboard -> Integrations -> Custom Webhook** section and click on **Add connection**.
-4. Copy paste the webhook details from SuprSend integrations page to Mixpanel custom webhook settings and click on "Continue"
+  <Step title="Add connections to the webhook details">
+    Once enabled, you'll see webhook configuration details. Go to **`Mixpanel dashboard -> Integrations -> Custom Webhook`** section and click on **`Add connection`**
+  </Step>
 
-![](/images/docs/f7ec809-copy_mixpanel.png)
+  <Step title="Setup Mixpanel custom webhook">
+    Copy paste the webhook details from SuprSend integrations page to Mixpanel custom webhook settings and click on "Continue"
 
-SuprSend webhook is now setup in your mixpanel account. You can now start exporting user cohorts.
+    ![](/images/docs/f7ec809-copy_mixpanel.png)
 
-## Export Cohorts
+    SuprSend webhook is now setup in your mixpanel account. You can now start exporting user cohorts.
+  </Step>
+</Steps>
+
+## Setup List (User Cohorts) sync
 
 Cohort is a filtered list of users in mixpanel. You can export cohort to create subscriber list in SuprSend. Follow below steps to export cohort:
 
-1. Go to Cohorts page and click on "Create Cohort"
+<Steps>
+  <Step title="Go to Cohorts page and click on &#x22;Create Cohort&#x22;">
+    ![](/images/docs/ab6003c-cohort_1.png)
+  </Step>
 
-![](/images/docs/ab6003c-cohort_1.png)
+  <Step title="Add filter and give a name to the cohort. ">
+    After Creating a cohort, add filter and give a suitable name to the cohort. This name will also be the name of the subscriber list on SuprSend.
 
-2. It will open cohort settings. Add filter and give a name to the cohort. This name will also be the name of the subscriber list on SuprSend.
+    ![](/images/docs/d56aaba-image.png)
+  </Step>
 
-![](/images/docs/d56aaba-image.png)
+  <Step title="Export the Cohort">
+    Once cohort is created, export the cohort to the SuprSend webhook that we just configured.
 
-3. Once cohort is created, export the cohort to the SuprSend webhook that we just configured.
+    ![](/images/docs/e9000c2-image.png)
 
-![](/images/docs/e9000c2-image.png)
+    You can setup 2 types of cohort exports - One time and Recurring. We recommend using recurring sync to keep Mixpanel and SuprSend data in sync. Click on Begin Sync to start cohort sync. Data is updated every 30 mins from sync start time.
 
-4. You can do 2 types of cohort exports - One time and Recurring. We recommend using recurring sync to keep Mixpanel and SuprSend data in sync. Click on Begin Sync to start cohort sync. Data is updated every 30 mins from sync start time.
+    ![](/images/docs/a8f0e90-image.png)
 
-![](/images/docs/a8f0e90-image.png)
+    Congratulations! Mixpanel integration is now complete.&#x20;
 
-Congratulations! Mixpanel integration is now complete. You can now track the status of cohort sync on mixpanel logs page. Logs can be accessed from the connector page itself.
 
-![](/images/docs/af79354-logs.png)
+  </Step>
+</Steps>
 
 ***
 
-What’s Next
+## Check Synced Logs&#x20;
 
-After setting up mixpanel cohort sync, you can pass the List ID in broadcast call to start sending notification
+You can now track the status of cohort sync on mixpanel [logs page](https://app.suprsend.com/en/demo/connectors/mixpanel/3/logs). Logs can be accessed from the connector page itself.
 
-* [Broadcast](/docs/broadcast)
-
-* [Table of Contents](#)
-
-* * [Getting Started](#getting-started)
-  * [Export Cohorts](#export-cohorts)
+![](/images/Screenshot2025-03-08at6.44.56PM.png)

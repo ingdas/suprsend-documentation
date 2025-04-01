@@ -3,149 +3,139 @@ title: "Firebase Push (FCM)"
 description: "This will guide you to integrate FCM push notifications in android flutter applications using SuprSend"
 ---
 
-[Suggest Edits](/edit/flutter-firebase-fcm-push-integration)
+<Tip>
+  Example integration project can be found [here](<https://github.com/suprsend/suprsend-flutter-sdk/tree/main/example&#xA;>).
+</Tip>
 
-This section is a step-by-step guide to integrating FCM as your service provider in your flutter application for sending Android Push notifications.
+## Integration Steps
+<Steps>
+  <Step title="Create a Firebase project in the firebase console" stepNumber="1">
+    To start sending notifications from FCM, you'll have to first create a firebase project. Create a firebase project and application in [firebase console](https://firebase.google.com/) with your applications package name which you can find in *`AndroidManifest.xml`*
+  </Step>
 
-Example integration project can be found here: [https://github.com/suprsend/suprsend-flutter-sdk/tree/main/example](https://github.com/suprsend/suprsend-flutter-sdk/tree/main/example)
+  <Step title="Adding google-services.json to your project" stepNumber="2">
+    You can get your Service Account JSON from Firebase Console Project Settings. Download *google-services.json* and add the file inside your *android > app* folder.
 
-## Step-1: Create a Firebase project in the firebase console
+    ![](/images/docs/e2d76a2-Group_6.png)
+  </Step>
 
-To start sending notifications from FCM, you'll have to first create a firebase project. Create a firebase project and application in [firebase console](https://firebase.google.com/) with your applications package name which you can find in *AndroidManifest.xml*.
+  <Step title="Adding Firebase dependencies and plugins" stepNumber="3">
+    3.1. Add the below dependency inside projects *`build.gradle`* inside dependencies
 
-## Step-2: Adding google-services.json to your project
+    <CodeGroup>
+      ```groovy build.gradle
+      dependencies {
+              ...
+              classpath 'com.google.gms:google-services:4.3.10' // or latest version
+      }
+      ```
+    </CodeGroup>
 
-You can get your Service Account JSON from Firebase Console Project Settings. Download *google-services.json* and add the file inside your *android > app* folder.
+    3.2. Add the below plugin inside the app *`build.gradle`*
 
-![](/images/docs/e2d76a2-Group_6.png)
+    <CodeGroup>
+      ```groovy build.gradle
+      apply plugin: 'com.google.gms.google-services'
+      ```
+    </CodeGroup>
 
-## Step-3: Adding Firebase dependencies and plugins
+    3.3 Add the below dependency inside apps *`build.gradle`* inside dependencies
 
-3.1. Add the below dependency inside projects *build.gradle* inside dependencies
+    <CodeGroup>
+      ```groovy build.gradle
+      implementation("com.google.firebase:firebase-messaging:22.0.0") // or latest version
+      ```
+    </CodeGroup>
+  </Step>
 
-<CodeGroup>
-  ```groovy build.gradle
-  dependencies {
-          ...
-          classpath 'com.google.gms:google-services:4.3.10' // or latest version
-  }
-  ```
-</CodeGroup>
+  <Step title="Implementing push" stepNumber="4">
+    Push feature can be implemented in two ways:
 
-3.2. Add the below plugin inside the app *build.gradle*
+    <AccordionGroup>
+      <Accordion title="Token Generation and Notification handled By SDK [Recommended]" defaultOpen={true}>
+        You may use this option if all of your android push notifications are to be handled via SuprSend SDK. We recommend you use this method as it is just a single-step process to just register the service in your application manifest and everything else will be ready.
 
-<CodeGroup>
-  ```groovy build.gradle
-  apply plugin: 'com.google.gms.google-services'
-  ```
-</CodeGroup>
+        <CodeGroup>
+          ```xml AndroidManifest.xml
+          <!--If you are targeting to API 33 (Android 13) you will additional need to add POST_NOTIFICATIONS -->
+          <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-3.3. Add the below dependency inside apps *build.gradle* inside dependencies
+          <service
+              android:name="app.suprsend.fcm.SSFirebaseMessagingService"
+              android:enabled="true"
+              android:exported="false">
+              <intent-filter>
+                  <action android:name="com.google.firebase.MESSAGING_EVENT" />
+              </intent-filter>
+          </service>
+          ```
+        </CodeGroup>
+      </Accordion>
 
-<CodeGroup>
-  ```groovy build.gradle
-  implementation("com.google.firebase:firebase-messaging:22.0.0") // or latest version
-  ```
-</CodeGroup>
+      <Accordion title="Token Generation and Notification handled By Your Application" defaultOpen={false}>
+        Once you get a token from Firebase you can pass the token by using the below code
 
-## Step-4: Implementing push
+        <CodeGroup>
+          ```javascript main.dart
+          suprsend.setAndroidFcmPush(fcm_token);
+          ```
+        </CodeGroup>
 
-Push feature can be implemented in two ways:
+        When you get a push notification you will get a payload and it can be passed to the method provided by Suprsend Flutter SDK and the notification displaying part will be handled by SDK.
 
-### Option-1: Token Generation and Notification handled By SDK
+        <CodeGroup>
+          ```javascript main.dart
+          suprsend.showNotification(notification_payload);
+          ```
+        </CodeGroup>
 
-You may use this option if all of your android push notifications are to be handled via SuprSend SDK. We recommend you use this method as it is just a single-step process to just register the service in your application manifest and everything else will be ready.
+        <Info>
+          ## How to identify if notification is sent by SuprSend?
 
-<CodeGroup>
-  ```xml AndroidManifest.xml
-  <!--If you are targeting to API 33 (Android 13) you will additional need to add POST_NOTIFICATIONS -->
-  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+          If notification payload contains key **supr\_send\_n\_pl** then simply consider this as payload sent from suprsend and pass the payload to suprsend sdk.
+        </Info>
+      </Accordion>
+    </AccordionGroup>
+  </Step>
+</Steps>
 
-  <service
-      android:name="app.suprsend.fcm.SSFirebaseMessagingService"
-      android:enabled="true"
-      android:exported="false">
-      <intent-filter>
-          <action android:name="com.google.firebase.MESSAGING_EVENT" />
-      </intent-filter>
-  </service>
-  ```
-</CodeGroup>
+### Targeting Android 13 (API-33)
 
-### Option-2: Token Generation and Notification handled By Your Application:
+In Android13 (API 33) or higher [notification permission](https://developer.android.com/develop/ui/views/notifications/notification-permission) will be disabled by default so permission needs to be asked to enable notifications if you are targeting android 13 users. You can follow [this doc](https://developer.android.com/about/versions/13/setup-sdk) to update to support Andriod 13(API 33), if not already supported. Please test the application as well as upgrading to API 33 may causes breaking changes.
 
-2.1. Once you get a token from Firebase you can pass the token by using the below code
+<Steps>
+  <Step title="Add POST_NOTIFICATIONS permission in AndroidManifest.xml if not present already.">
+    <CodeGroup>
+      ```xml AndroidManifest.xml
+      <manifest ...>
+          <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/> 
+          <application ...>
+              ...
+          </application>
+      </manifest>
+      ```
+    </CodeGroup>
+  </Step>
 
-<CodeGroup>
-  ```javascript main.dart
-  suprsend.setAndroidFcmPush(fcm_token);
-  ```
-</CodeGroup>
+  <Step title="From your code call the SDK method to show a notification permission popup">
+    This method is asynchronous and returns permission values. To show permission popup we use flutter package ***permission\_handler***
 
-2.2 When you get a push notification you will get a payload and it can be passed to the method provided by Suprsend Flutter SDK and the notification displaying part will be handled by SDK.
+    <Info>
+      This method is available from suprsend-flutter-sdk v2.0.0. Please update it if using lower versions
+    </Info>
 
-<CodeGroup>
-  ```javascript main.dart
-  suprsend.showNotification(notification_payload);
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```javascript main.dart
+      import 'package:permission_handler/permission_handler.dart';
 
-<Info>
-  If notification payload contains key **supr\_send\_n\_pl** then simply consider this as payload sent from suprsend and pass the payload to suprsend sdk.
-</Info>
+      final permission = await suprsend.askNotificationPermission(); // ask permission as well as return permission enum
 
-## Targeting Android 13 (API-33):
+      print("permission data is ${data == PermissionStatus.granted}");
+      ```
+    </CodeGroup>
 
-In Android13 (API 33) or higher [notification permission](https://developer.android.com/develop/ui/views/notifications/notification-permission) will be disabled by default so permission needs to be asked to enable notifications if you are targeting android 13 users. You can follow this doc to update to support Andriod 13(API 33), if not already supported: [https://developer.android.com/about/versions/13/setup-sdk](https://developer.android.com/about/versions/13/setup-sdk). Please test the application as well as upgrading to API 33 may causes breaking changes.
-
-1. Add POST\_NOTIFICATIONS permission in AndroidManifest.xml if not present already.
-
-<CodeGroup>
-  ```xml AndroidManifest.xml
-  <manifest ...>
-      <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/> 
-      <application ...>
-          ...
-      </application>
-  </manifest>
-  ```
-</CodeGroup>
-
-2. From your code call the SDK method to show a notification permission popup. This method is asynchronous and returns permission values. To show permission popup we use flutter package ***permission\_handler***
-
-**NOTE**: This method is available from suprsend-flutter-sdk v2.0.0. Please update it if using lower versions
-
-<CodeGroup>
-  ```javascript main.dart
-  import 'package:permission_handler/permission_handler.dart';
-
-  final permission = await suprsend.askNotificationPermission(); // ask permission as well as return permission enum
-
-  print("permission data is ${data == PermissionStatus.granted}");
-  ```
-</CodeGroup>
-
-Once permission is granted users can be able to get push notifications.
+    Once permission is granted users can be able to get push notifications.
+  </Step>
+</Steps>
 
 ***
-
-What’s Next
-
-Add FCM vendor configuration on SuprSend dashboard vendor page to start sending notification
-
-* [Firebase FCM](/docs/firebase-fcm-androidpush)
-
-* [Table of Contents](#)
-
-* * [Step-1: Create a Firebase project in the firebase console](#step-1-create-a-firebase-project-in-the-firebase-console)
-
-  * [Step-2: Adding google-services.json to your project](#step-2-adding-google-servicesjson-to-your-project)
-
-  * [Step-3: Adding Firebase dependencies and plugins](#step-3-adding-firebase-dependencies-and-plugins)
-
-  * [Step-4: Implementing push](#step-4-implementing-push)
-
-    * [Option-1: Token Generation and Notification handled By SDK](#option-1-token-generation-and-notification-handled-by-sdk)
-    * [Option-2: Token Generation and Notification handled By Your Application:](#option-2-token-generation-and-notification-handled-by-your-application)
-
-  * [Targeting Android 13 (API-33):](#targeting-android-13-api-33)

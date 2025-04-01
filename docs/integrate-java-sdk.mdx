@@ -3,25 +3,15 @@ title: "Integrate Java SDK"
 description: "This document will cover SDK installation and initialization steps"
 ---
 
-[Suggest Edits](/edit/integrate-java-sdk)
-
-You can follow the steps mentioned in the documentation below or refer to our quick code recipe
-
-🦉
-
-SuprSend Java SDK installation
-
-Open Recipe
-
 ## Installation
 
 For SDK installation, you'll have to add the SuprSend jar file. You can include the jar using following two ways:
 
-### Option 1. As a Maven dependency for maven projects from downloaded jar
+<Accordion title="Option 1. As a Maven dependency for maven projects from downloaded jar">
+  `suprsend-java-sdk` is present as a maven dependency on maven central. Add following code to your pom.xml to include the sdk
 
-`suprsend-java-sdk` is present as a maven dependency on maven central. Add following code to your pom.xml to include the sdk
+  <CodeGroup>
 
-<CodeGroup>
   ```xml xml
   <dependencies>
     <dependency>
@@ -31,51 +21,46 @@ For SDK installation, you'll have to add the SuprSend jar file. You can include 
     </dependency>
   </dependencies>
   ```
-</CodeGroup>
 
-### Option 2. As a jar file for non maven projects
+  </CodeGroup>
+</Accordion>
 
-Click [here](https://github.com/suprsend/suprsend-java-sdk/releases/download/v0.5.0/suprsend-java-sdk-0.5.0-jar-with-dependencies.jar) to download the latest version of java SDK from releases section and add it as an External Jar in your build path. suprsend-java-sdk is available as a JAR with name - `suprsend-java-sdk-0.5.0-jar-with-dependencies.jar`
+<Accordion title="Option 2. As a jar file for non maven projects">
+  Click [here](https://github.com/suprsend/suprsend-java-sdk/releases/download/v0.5.0/suprsend-java-sdk-0.5.0-jar-with-dependencies.jar) to download the latest version of java SDK from releases section and add it as an External Jar in your build path. suprsend-java-sdk is available as a JAR with name - `suprsend-java-sdk-0.5.0-jar-with-dependencies.jar`
 
-<Check>
-  Please check your Java development kit version. If it is lower than supported version, upgrade it to the latest version
-</Check>
+  <Check>
+    **JDK version 8 and above is supported**
+
+    Please check your Java development kit version. If it is lower than supported version, upgrade it to the latest version
+  </Check>
+</Accordion>
 
 ## Initialization
 
 For initializing SDK, you need **WORKSPACE KEY** and **WORKSPACE SECRET**.
 
 <CodeGroup>
-  ```java java
-  import suprsend.Suprsend;
-  Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE KEY");
-  ```
+
+```java Request
+import suprsend.Suprsend;
+Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE SECRET");
+```
+
 </CodeGroup>
 
-Replace **WORKSPACE KEY** and **WORKSPACE SECRET** with your workspace values. You will get both the tokens from [Suprsend dashboard](https://app.suprsend.com/) (***Settings page -> "API keys"*** section). For more details, check the [documentation on 'Workspaces'](/docs/workspace).
-
-![](/images/docs/d60fec2-Frame_58_1.png)
+Replace `WORKSPACE KEY` and `WORKSPACE SECRET` with your workspace values. You will get both the tokens from Developers -> API keys section.
 
 ## Constructor to test SDK in debug mode
 
-Constructor which allows you to view HTTP calls to Suprsend in your console. The final parameter is a boolean parameter which denotes whether value for "debug" is true or false. Default value for the same is false.
+Constructor allows you to view HTTP calls to Suprsend in your console. The final parameter is a boolean parameter which denotes whether value for "debug" is true or false. Default value for the same is false.
 
 <CodeGroup>
-  ```java java
-  import suprsend.Suprsend;
-  Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE KEY", true);
-  ```
+
+```java Request
+import suprsend.Suprsend;
+Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE SECRET", true);
+```
+
 </CodeGroup>
 
-***
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-
-    * [Option 1. As a Maven dependency for maven projects from downloaded jar](#option-1-as-a-maven-dependency-for-maven-projects-from-downloaded-jar)
-    * [Option 2. As a jar file for non maven projects](#option-2-as-a-jar-file-for-non-maven-projects)
-
-  * [Initialization](#initialization)
-
-  * [Constructor to test SDK in debug mode](#constructor-to-test-sdk-in-debug-mode)
+---

@@ -1,11 +1,16 @@
 ---
 title: "Headless Inbox"
-description: "Suggest Edits"
 ---
 
-This Headless Inbox can be used if you want more control on the UI of Inbox Notifications like showing notifications in Sidepanel or in Fullscreen etc.
+<Warning>
+  **End of Support for `@suprsend/react-inbox`: Migrate to `@suprsend/react`**
 
-# Installation
+  > Development of the [@suprsend/react-inbox](https://github.com/suprsend/suprsend-react-inbox) SDK has been discontinued in favour of the new [@suprsend/react](https://docs.suprsend.com/docs/headless-feed) SDK. Please refer the [migration guide](https://docs.suprsend.com/docs/migration-guide) for instructions on transitioning to the new SDK.
+</Warning>
+
+This Headless Inbox can be used if you want more control on the UI of Inbox Notifications like showing notifications in `Sidepanel` or in Fullscreen etc.
+
+## Installation
 
 <CodeGroup>
   ```shell npm
@@ -17,11 +22,11 @@ This Headless Inbox can be used if you want more control on the UI of Inbox Noti
   ```
 </CodeGroup>
 
-# Adding SuprSend Inbox component
+## Adding SuprSend Inbox component
 
-## SuprSendProvider Component
+### SuprSendProvider Component
 
-Enclose your notifications component in **SuprSendProvider**. SuprSend hooks can only be used in children of SuprSendProvider component.
+Enclose your notifications component in **`SuprSend Provider`**. SuprSend hooks can only be used in children of SuprSendProvider component.
 
 <CodeGroup>
   ```javascript Syntax
@@ -42,7 +47,7 @@ Enclose your notifications component in **SuprSendProvider**. SuprSend hooks can
 | workspaceKey | string (Mandatory)   | You can find it in SuprSend Dashboard inside *Settings -> API Keys*.                                                                         |
 | distinctId   | string (Mandatory)   | Unique identifier for the user.                                                                                                              |
 | subscriberId | string (Mandatory)   | This is unique string for every distinctId used for authentication to inbox service. You check [generation docs](/docs/hmac-authentication). |
-| tenantId     | string (Optional)    | If you use multi-tenant architecture you can get inbox notifications for that specific tenant/brand only.                                    |
+| tenantId     | string (Optional)    | If you use multi-tenant architecture you can get inbox notifications for that specific tenant only.                                    |
 | pageSize     | number (Optional)    | Notifications to get in one api call. Used for pagination to get older notifications. Maximum allowed is 50. Defaults to 20.                 |
 | stores       | IStore\[] (Optional) | Pass stores array if you want to use [multi-tab feature](/docs/multi-tabs).                                                                  |
 
@@ -50,7 +55,7 @@ Enclose your notifications component in **SuprSendProvider**. SuprSend hooks can
   Make sure that you have only one active SuprSend's socket connection at a time (inspect -> network -> ws tab) to avoid unexpected issues.
 </Warning>
 
-## useUnseenCount hook
+### useUnseenCount hook
 
 This hook provides unSeenCount, markAllSeen which you can show on Bell icon.
 
@@ -67,7 +72,7 @@ This hook provides unSeenCount, markAllSeen which you can show on Bell icon.
 | unSeenCount | number | Use this variable to show the unseen notification count anywhere in your application.                                           |
 | markAllSeen | method | Used to mark seen for all notifications. Call this method on clicking the bell icon so that it will reset the unSeenCount to 0. |
 
-## useNotifications hook
+### useNotifications hook
 
 This hook is used to get notifications related data and methods
 
@@ -182,13 +187,3 @@ This hook is an event emitter, takes arguments event type and callback function(
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-
-  * [Adding SuprSend Inbox component](#adding-suprsend-inbox-component)
-
-    * [SuprSendProvider Component](#suprsendprovider-component)
-    * [useUnseenCount hook](#useunseencount-hook)
-    * [useNotifications hook](#usenotifications-hook)

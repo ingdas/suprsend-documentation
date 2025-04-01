@@ -3,12 +3,12 @@ title: "Notification Category"
 description: "Learn what notification categories mean and how you can use it for user preferences"
 ---
 
-[Suggest Edits](/edit/notification-category)
-
 Notification Categories are the category your workflow belongs to. It is used for following purposes:
 
 * **Defining notification latency**: We maintain separate notification queues for different notification category to ensure that marketing and promotional notifications doesn't delay system or time-sensitive notifications.
-* **[Setting category-level preferences](/docs/preferences) per-user and tenant**: You can create sub-categories for different type of notifications and give your users option to set their notification preferences at category level.
+
+* [Setting category-level preferences](/docs/preferences) **per-user and tenant**: You can create sub-categories for different type of notifications and give your users option to set their notification preferences at category level.
+
 * **Setting category-level rules or limits**: For example, you can set a rule that all notifications in promotional category should only be sent between 10 am - 5 pm or the max notifications in the category should not exceed 100k per day.
 
 ## Top-level Categories
@@ -29,9 +29,9 @@ Some examples are - Delivery updates, Payment Confirmation, booking confirmation
 
 As a company, you should make sure that you use strategies like [batching](/docs/batching-digest) & [channel routing](/docs/smart-delivery), so that users do not feel bombarded with transactional notifications. Also, you can cleverly use transactional communications to up-sell, cross-sell, collect feedback, or bring your user back to your platform. Channel providers do not block transactional communications generally, and consider your users to be implicitly agreeing to these notifications, hence transactional communications should be used judiciously.
 
-<Info>
-  Sending notifications that are not related to user transaction but are very personal to user's profile and interests, like recommended products, cart abandoned, etc could be inferred as transactional, depending on indicators like whether user is subscribed to receive them, or the way content is designed.
-</Info>
+<Note>
+  📘 Sending notifications that are not related to user transaction but are very personal to user's profile and interests, like recommended products, cart abandoned, etc could be inferred as transactional, depending on indicators like whether user is subscribed to receive them, or the way content is designed.
+</Note>
 
 ### Promotional
 
@@ -43,14 +43,15 @@ Some channel providers often require explicit users permission to send these com
 
 ## Creating sub-categories for preference management
 
-You can create notification categories from **[Developers -> Notification categories](https://app.suprsend.com/en/staging/developers/preference-categories)** page. All sub-categories are created in the 3 [top level categories](/docs/notification-categories#top-level-categories) mentioned above. Notification rules and latency priority are inherited from the top level category. [Preference](/docs/preferences) settings are defined at each sub-category level. Top level categories are not shown on the preference page.
+You can create notification categories from [Developers -> Notification categories](https://app.suprsend.com/en/staging/developers/preference-categories) page. All sub-categories are created in the 3 [top level categories](/docs/notification-categories#top-level-categories) mentioned above. Notification rules and latency priority are inherited from the top level category. [Preference](/docs/preferences) settings are defined at each sub-category level. Top level categories are not shown on the preference page.
 
 Every category can have sections and sub-categories. User preferences are controlled at the sub-category level.
 
 * **Sub-category** is what end users will see on their preference page.
+
 * **Sections** are used to group related sub-categories on the preference page, facilitating easier navigation and organization on the preference page.
 
-For instance, in the below example, **Quote Approval** and **Forecast** are sub-categories and **Quotes** is the section in which these sub-categories are grouped.
+For instance, in the below example, `Quote Approval` and `Forecast` are sub-categories and `Quotes` is the section in which these sub-categories are grouped.
 
 ![](/images/docs/80cbf50-image.png)
 
@@ -58,21 +59,23 @@ For instance, in the below example, **Quote Approval** and **Forecast** are sub-
 
 ### Updating Section
 
-You can update section in any category by clicking on the **"+Section"** button in each category
+You can update section in any category by clicking on the `+Section` button in each category
 
 ![](/images/docs/7c1bb84-small-edit_section.png)
 
-Add name and description for the category and **"Save Changes"**. You'll see the updated section inside the category and edit it later by clicking on the **"Edit"** button against that section.
+Add name and description for the category and `Save Changes`. You'll see the updated section inside the category and edit it later by clicking on the `Edit` button against that section.
 
 ### Updating Sub-Category
 
 Sub-Category default preferences vary based on the category that you are adding in.
 
-* System category default preference is set to **"Can't Unsubscribe"** with **"All"** user channels set as mandatory. Users will not be allowed to update preferences in this category as system notifications are critical notifications and should always be sent to the user.
-* Transactional category default preference is set to **"Can't Unsubscribe"**. We recommend selecting at least one mandatory channel for the transactional category since users should receive notifications on at least one channel corresponding to a transaction. However, you are free to set any default preference in this category.
-* Promotional category default preference is set to **ON**. This means that the user will receive notification in this category by default. You can't set this category to **Can't Unsubscribe** as users should always be able to opt-out of marketing-related notifications.
+* System category default preference is set to `Can't Unsubscribe` with `All` user channels set as mandatory. Users will not be allowed to update preferences in this category as system notifications are critical notifications and should always be sent to the user.
 
-You can update sub-category in any category by clicking on the **"+Sub-Category"** button in that category.
+* Transactional category default preference is set to `Can't Unsubscribe`. We recommend selecting at least one mandatory channel for the transactional category since users should receive notifications on at least one channel corresponding to a transaction. However, you are free to set any default preference in this category.
+
+* Promotional category default preference is set to `ON`. This means that the user will receive notification in this category by default. You can't set this category to `Can't Unsubscribe` as users should always be able to opt-out of marketing-related notifications.
+
+You can update sub-category in any category by clicking on the `+Sub-Category` button in that category.
 
 ![](/images/docs/3ce5883-image.png)
 
@@ -81,12 +84,16 @@ You can update sub-category in any category by clicking on the **"+Sub-Category"
 | Name               | *Mandatory* | Name of the sub-category to be shown on the user preference page                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | Section            | *Optional*  | Section in which this sub-category will be grouped into                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | Description        | *Optional*  | Description of the sub-category to be shown on the user preference page                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| Default Preference | *Mandatory* | Default preference settings for the sub-category. Notifications will be sent to the user based on this preference until the user overrides it - **On** means the user will get notifications on all channels in this sub-category until user opts out from this category or any channel in this category - **Off** means the user will not get notification on all channels in this sub-category until user opts into this category or any channel in this category - **Can't Unsubscribe** means the user can't completely opt-out from this category. Notifications will always be sent on mandatory channels in this category. |
-| Mandatory Channels | *Optional*  | Mandatory channels from which user **Can't Unsubscribe**. The default selection is `All` but you can change it to `Selected Channels only` to make specific channels mandatory.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Default Preference | *Mandatory* | Default preference settings for the sub-category. Notifications will be sent to the user based on this preference until the user overrides it - `On` means the user will get notifications on all channels in this sub-category until user opts out from this category or any channel in this category - `Off` means the user will not get notification on all channels in this sub-category until user opts into this category or any channel in this category - `Can't Unsubscribe` means the user can't completely opt-out from this category. Notifications will always be sent on mandatory channels in this category. |
+| Mandatory Channels | *Optional*  | Mandatory channels from which user `Can't Unsubscribe`. The default selection is `All` but you can change it to `Selected Channels only` to make specific channels mandatory.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
 Click on "Save Changes" to save the sub-category. You'll see the updated sub-category inside the section and edit it later by clicking on the pencil icon against that category.
 
 <Warning>
+  **Avoid Changing sub-category name:**
+
+
+
   Changing category name updates the category slug. So, make sure to not change sub-category name once you have configured it in your workflows or if it is absolutely necessary to change the name, change it in all backend and front workflows otherwise the workflows will start failing.
 </Warning>
 
@@ -98,11 +105,11 @@ Click on **Preview** to see a reference view of ready-made preference center for
 
 All the changes done are saved in draft version. You can publish the changes to make it live for your end users. You'll be able to add the updated categories in workflow call only after publishing the changes.
 
-Click on **Publish Changes** button to publish the changes.
+Click on `Publish Changes` button to publish the changes.
 
 ### Clone Categories to production workspace
 
-You can test preferences in your staging application and use "Clone" button to clone the changes to production workspace.
+You can test preferences in your staging application and use `Clone` button to clone the changes to production workspace.
 
 ## Triggering notification for a sub-category
 
@@ -113,21 +120,3 @@ You can copy sub-category slug by clicking on sub-category name on the category 
 ![](/images/docs/5d5cebe-image.png)
 
 ***
-
-* [Table of Contents](#)
-
-* * [Top-level Categories](#top-level-categories)
-
-    * [System](#system)
-    * [Transactional](#transactional)
-    * [Promotional](#promotional)
-
-  * [Creating sub-categories for preference management](#creating-sub-categories-for-preference-management)
-
-    * [Updating Section](#updating-section)
-    * [Updating Sub-Category](#updating-sub-category)
-    * [Preview Changes](#preview-changes)
-    * [Publish Changes](#publish-changes)
-    * [Clone Categories to production workspace](#clone-categories-to-production-workspace)
-
-  * [Triggering notification for a sub-category](#triggering-notification-for-a-sub-category)

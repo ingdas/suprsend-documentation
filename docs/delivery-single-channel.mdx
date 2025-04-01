@@ -3,9 +3,7 @@ title: "Delivery - Single Channel"
 description: "Learn how to use delivery nodes like email, sms, whatsapp, mobile push, web push, slack, ms teams, inbox in workflows"
 ---
 
-[Suggest Edits](/edit/delivery-single-channel)
-
-Delivery nodes are the final send nodes, delivering final notification to the end user. You can use single-channel delivery nodes - Email, SMS, Whatsapp, Inbox, Slack, MS Teams, MobilePush and Webpush to send notification on a particular user channel. The content of the notification is designed with [templates](/docs/templates).
+You can use single-channel delivery nodes - Email, SMS, Whatsapp, Inbox, Slack, MS Teams, MobilePush and Webpush to send notification on a particular user channel. The content of the notification is designed with [templates](/docs/templates).
 
 ![](/images/docs/fa676e8-image.png)
 
@@ -15,32 +13,27 @@ Delivery node is successfully executed if all of the below checks hold true:
 
 1. The channel must be published and live within the template. For WhatsApp and SMS (Indian vendors), templates become live upon approval by the respective provider.
 2. Vendor Configuration is available for the channel. For all out-of-app channels, you need to create an account with the respective [channel provider](/docs/vendors) and add the configuration in the vendor form on SuprSend dashboard. Inbox is an internal offering by SuprSend and doesn't need any third party integration. [Refer Integration guide](/docs/inbox-overview) to setup Inbox Channel.
-3. Channel information should be available in user profile and channel status should be active. A set channel becomes inactive in case the channel is `removed` or `unset` using [SDK or API](/docs/users#via-sdk) or it is marked inactive by SuprSend.
-4. User preference is `opt-in` for the given channel and notification category (defined in workflow settings). You can check user preference status using [get user preference API](/reference/get-user-preferences-single-category).
+3. Channel information should be available in user profile and channel status should be active. A set channel becomes inactive in case the channel is `removed`or `unset`using [SDK or API](/docs/users#via-sdk) or it is marked inactive by SuprSend.
+4. User preference is`opt-in `for the given channel and notification category (defined in workflow settings). You can check user preference status using [get user preference API](/reference/get-user-preferences-single-category).
 
-<Info>
-  SuprSend marks the user channel identity inactive for email and whatsapp in case of hard errors from vendor end, such as bounced email addresses, unregistered whatsapp numbers. This is done to safeguard your email domain authority or whatsapp rating if you continue to send notifications to users who have reported or marked your email or messages as spam. Additionally, this helps in whatsapp cost saving, as vendor charges for every processed request. Inactive marking period by SuprSend is 15 days for whatsapp and 90 days for email.
-</Info>
+<Check>
+  ### Inactive Channel Marking by SuprSend
+
+  SuprSend marks the user channel identity inactive for email and whatsapp in case of hard errors from vendor end, such as bounced email addresses, unregistered whatsapp numbers. 
+
+  This is done to safeguard your email domain authority or whatsapp rating if you continue to send notifications to users who have reported or marked your email or messages as spam. 
+
+  Additionally, this helps in whatsapp cost saving, as vendor charges for every processed request. Inactive marking period by SuprSend is 15 days for whatsapp and 90 days for email.
+</Check>
 
 ## Success Metric
 
 Success metric can be any event which defines the target user activity you aim to drive with your sent notification. For example, if the objective of your notification is to prompt users to open it, such as in the case of newsletters, you can set your success metric as `Notification Status - Seen`. If your goal is for users to perform any custom event, like complete payment in case of payment reminder notification, then you can set that event as your success metric.
 
 <Frame caption="Success metric for payment reminder">
-  <img src="/images/docs/5bb733a-image.png" />
+  ![](/images/docs/5bb733a-image.png)
 </Frame>
 
 In the context of single-channel delivery, the success metric is utilized solely to track conversion numbers for display in workflow analytics. However, in the case of [smart channel routing](/docs/smart-delivery), the same success metric serves to halt delivery on further channels once the success metric is achieved.
 
-***
-
-What’s Next
-
-Once configured, go ahead and trigger your workflow
-
-* [Trigger Workflow](/reference/trigger-workflow-api)
-
-* [Table of Contents](#)
-
-* * [How the delivery node is executed?](#how-the-delivery-node-is-executed)
-  * [Success Metric](#success-metric)
+---

@@ -3,97 +3,151 @@ title: "Broadcast"
 description: "Trigger broadcast notifications to list of subscribers in single call"
 ---
 
-[Suggest Edits](/edit/broadcast-go)
+## Pre-requisites
+
+[Create a list of users](/docs/lists-go)
 
 ## Payload Schema
 
 <CodeGroup>
-  ```go go
-  package main
 
-  import (
-  	"context"
-  	"log"
+```go Request [Method]
+package main
 
-  	suprsend "github.com/suprsend/suprsend-go"
-  )
+import (
+	"context"
+	"log"
 
-  func main() {
-  	// Initialize SDK
-  	opts := []suprsend.ClientOption{
-  		// suprsend.WithDebug(true),
-  	}
-  	suprClient, err := suprsend.NewClient("__api_key__", "__api_secret__", opts...)
-  	if err != nil {
-  		log.Println(err)
-  	}
-  	ctx := context.Background()
-  	// ================= broadcast to a list
-  	broadcastIns := &suprsend.SubscriberListBroadcast{
-  		Body: map[string]interface{}{
-  			"list_id":               "users-with-prepaid-vouchers-1",
-  			"template":              "template slug",
-  			"notification_category": "category",
-  			// broadcast channels.
-  			// if empty: broadcast will be tried on all available channels
-  			// if present: broadcast will be tried on passed channels only
-  			"channels": []string{"email"},
-  			"delay":    "1m", // check docs for delay format
-  			// "trigger_at":            "", // check below for trigger_at format
-  			"data": map[string]interface{}{
-  				"first_name":   "User",
-  				"spend_amount": "$10",
-  				"nested_key_example": map[string]interface{}{
-  					"nested_key1": "some_value_1",
-  					"nested_key2": map[string]interface{}{
-  						"nested_key3": "some_value_3",
-  					},
-  				},
-  			},
-  		},
-  		IdempotencyKey: "",
-  		TenantId:       "",
-  	}
-  	res, err := suprClient.SubscriberLists.Broadcast(ctx, broadcastIns)
-  	if err != nil {
-  		log.Fatalln(err)
-  	}
-  	log.Println(res)
-  }
-  ```
+	suprsend "github.com/suprsend/suprsend-go"
+)
+
+func main() {
+	// Initialize SDK
+	opts := []suprsend.ClientOption{
+		// suprsend.WithDebug(true),
+	}
+	suprClient, err := suprsend.NewClient("_workspace_key_", "_workspace_secret_", opts...)
+	if err != nil {
+		log.Println(err)
+	}
+	ctx := context.Background()
+	// ================= broadcast to a list
+	broadcastIns := &suprsend.SubscriberListBroadcast{
+		Body: map[string]interface{}{
+			"list_id":               "users-with-prepaid-vouchers-1",
+			"template":              "template slug",
+			"notification_category": "category",
+			// broadcast channels.
+			// if empty: broadcast will be tried on all available channels
+			// if present: broadcast will be tried on passed channels only
+			"channels": []string{"email"},
+			"delay":    "1m", // check docs for delay format
+			// "trigger_at":            "", // check below for trigger_at format
+			"data": map[string]interface{}{
+				"first_name":   "User",
+				"spend_amount": "$10",
+				"nested_key_example": map[string]interface{}{
+					"nested_key1": "some_value_1",
+					"nested_key2": map[string]interface{}{
+						"nested_key3": "some_value_3",
+					},
+				},
+			},
+		},
+		IdempotencyKey: "",
+		TenantId:       "",
+	}
+	res, err := suprClient.SubscriberLists.Broadcast(ctx, broadcastIns)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	log.Println(res)
+}
+```
+
+
+```go Sample
+package main
+
+import (
+	"fmt"
+	"log"
+
+	suprsend "github.com/suprsend/suprsend-go"
+)
+
+func main() {
+	// Initialize Suprsend client
+	suprClient, err := suprsend.NewClient("_workspace_key_", "_workspace_secret_")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// Create broadcast body
+	broadcastBody := map[string]interface{}{
+		"list_id":               "application_abandoned",
+		"template":              "complete_application",
+		"notification_category": "promotional",
+		"data": map[string]interface{}{
+			"page_no": "2",
+		},
+	}
+
+	// Create SubscriberListBroadcast instance
+	inst := suprsend.NewSubscriberListBroadcast(broadcastBody)
+
+	// Call broadcast API
+	resp, err := suprClient.SubscriberLists.Broadcast(inst)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println(resp)
+}
+```
+
+
+```go Response
+{
+  'success': True, 
+  'status': 'success', 
+  'status_code': 202, 
+  'message': 'OK'
+}
+```
+
 </CodeGroup>
 
-| Parameter              | Format                                              | Description                                                                                                                                                                                                                                              |
-| ---------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| list\_id               | string                                              | list of users that you want to send broadcast messages.                                                                                                                                                                                                  |
-| template               | string                                              | It is the template slug which can be found in Templates tab in SuprSend dashboard.                                                                                                                                                                       |
-| notification\_category | system / transactional / promotional                | You can understand more about them in the [Notification Category](/docs/notification-category).                                                                                                                                                          |
-| channels (Optional)    | string\[]                                           | User channels on which the broadcast messages to be sent. If not provided, it will trigger notifications on all available channels in user profile. Available channels: androidpush / iospush / inbox / email / whatsapp / sms Example:\["sms", "inbox"] |
-| delay (Optional)       | **XX**d**XX**h**XX**m**XX**s or Number (in seconds) | Broadcast will be halted for the time mentioned in delay, and become active once the delay period is over. Example: 1d2h3m4s / 60                                                                                                                        |
-| trigger\_at (Optional) | date string in ISO 8601                             | Trigger broadcast on a specific date-time. Example: "2021-08-27T20:14:51.643Z"                                                                                                                                                                           |
-| data (Optional)        | object                                              | variable data defined in templates                                                                                                                                                                                                                       |
+Broadcast body field description:
+
+| Parameter             | Format                                              | Description                                                                                                                                                                                                                                             |
+| --------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| list_id               | string                                              | list of users that you want to send broadcast messages.                                                                                                                                                                                                 |
+| template              | string                                              | It is the template slug which can be found in Templates tab in SuprSend dashboard.                                                                                                                                                                      |
+| notification_category | system / transactional / promotional                | You can understand more about them in the [Notification Category](/docs/notification-category).                                                                                                                                                         |
+| channels (Optional)   | string[]                                            | User channels on which the broadcast messages to be sent. If not provided, it will trigger notifications on all available channels in user profile. Available channels: androidpush / iospush / inbox / email / whatsapp / sms Example:["sms", "inbox"] |
+| delay (Optional)      | **XX**d**XX**h**XX**m**XX**s or Number (in seconds) | Broadcast will be halted for the time mentioned in delay, and become active once the delay period is over. Example: 1d2h3m4s / 60                                                                                                                       |
+| trigger_at (Optional) | date string in ISO 8601                             | Trigger broadcast on a specific date-time. Example: "2021-08-27T20:14:51.643Z"                                                                                                                                                                          |
+| data (Optional)       | object                                              | variable data defined in templates                                                                                                                                                                                                                      |
 
 ## Add file attachment (for email)
 
 To add one or more attachments to a notification (viz. Email), call `add_attachment()` on broadcast instance for each attachment file. Ensure that attachment url is valid and public, otherwise error will be raised. Since broadcast instance size can't be > 100 KB, local file paths can't be passed in event attachment.
 
 <CodeGroup>
-  ```go go
-  // If need to add attachment
-  err = broadcastIns.AddAttachment("https://attachment-url", &suprsend.AttachmentOption{IgnoreIfError: true})
-  if err != nil {
-    log.Fatalln(err)
-  }
-  ```
+
+```go Request
+// If need to add attachment
+err = broadcastIns.AddAttachment("https://attachment-url", &suprsend.AttachmentOption{IgnoreIfError: true})
+if err != nil {
+  log.Fatalln(err)
+}
+```
+
 </CodeGroup>
 
 <Warning>
   A single broadcast instance size (including attachment) must not exceed 100KB (100 x 1024 bytes).
 </Warning>
 
-***
-
-* [Table of Contents](#)
-
-* * [Payload Schema](#payload-schema)
-  * [Add file attachment (for email)](#add-file-attachment-for-email)
+---

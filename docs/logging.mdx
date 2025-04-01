@@ -1,9 +1,7 @@
 ---
-title: "Overview"
+title: "Logs"
 description: "A guide to SuprSend notification logs and how to navigate and troubleshoot log errors"
 ---
-
-[Suggest Edits](/edit/logging)
 
 SuprSend provides real-time notification logs of sent notifications for quick debugging and auditing. Navigate to the [Logs tab](https://app.suprsend.com/en/production/logs/) on the SuprSend dashboard to access notification logs.
 
@@ -13,11 +11,21 @@ SuprSend provides real-time notification logs of sent notifications for quick de
 
 Every workflow request generates a common entry in the log, allowing developers to gain a holistic view of notifications sent across all channels. You can expand the log to track the entire notification flow of each channel, from request to user delivery and engagement (open, seen, and click).
 
-<Info>
-  To track notification failure, delivery, seen and click response in your logs, configure SuprSend tracking URL `https://hub.suprsend.com/webhook/*` in your vendor dashboard. This enables SuprSend to get delivery and failure response from your vendor and show the same in dashboard logs. You'll find details of the callback URL in individual [vendor integration](/docs/vendors) documentation.
+<Note>
+  **📘 Set Callback URL in vendor account:**
+
+
+
+  To track notification failure, delivery, seen and click response in your logs, configure SuprSend tracking URL `https://hub.suprsend.com/webhook/*` in your vendor dashboard.&#x20;
+
+
+
+  This enables SuprSend to get delivery and failure response from your vendor and show the same in dashboard logs. You'll find details of the callback URL in individual [vendor integration](/docs/vendors) documentation.
+
+
 
   You can also configure your [outbound webhook](/docs/webhook) to get the normalized vendor response back to your application.
-</Info>
+</Note>
 
 Notification log conveys all necessary information in a summarized view for easy debugging:
 
@@ -29,7 +37,7 @@ Notification log conveys all necessary information in a summarized view for easy
 | User channel  | Trigger summary of all channels. 1. `Sent` count - notifications successfully sent by SuprSend to end vendor. This would also mean successful notification delivery to end user if callback URL tracking is set in vendor account. 2. `failed` count - SuprSend failed to send the notifications or if we got delivery failure error from vendor. 3. `in progress` count - Notifications in progress during [Smart Delivery](/docs/smart-delivery) |
 | Status        | `Success` if at least one of the notifications is sent in workflow.`Failed` if all notifications fail in the workflow.                                                                                                                                                                                                                                                                                                                             |
 
-### Notification Status
+## Notification Status
 
 You can see notification status in real-time as they are being sent by expanding the log. These are all the stages we track:
 
@@ -62,16 +70,18 @@ You can see notification status in real-time as they are being sent by expanding
 | MS Teams    | yes                                | yes       | -    | -         | -                    |
 
 <Check>
+  **👍 Set Callback URL in vendor account:**
+
   To track notification status post-trigger, like trigger failure, delivery, seen and click response in your logs, configure SuprSend tracking URL `https://hub.suprsend.com/webhook/*` in your vendor portal. You'll find details of the callback URL in respective [vendor integration documentation](/docs/vendors).
 </Check>
 
-### Getting Logs and Notification status back to your database
+## Getting Logs and Notification status back to your database
 
 You can either configure [outbound webhook](/docs/outbound-webhook) to get instant alert of all notification statuses in a URL endpoint. You can use it for logging on a third party platform and internal alerting of failure cases.
 
 Setup [S3 sync](/docs/amazon_s3) for internal analytics or showing notification status to your customers within your product. With this, you can get a consolidated entry of each notification sent and their statues in your database. You can directly query on this data using Athena or import it to data warehouses like Redshift, Snowflake, Clickhouse etc. for analysis.
 
-## Trouble debugging? Reach out to Support
+** Trouble debugging? Reach out to Support **
 
 You can click on `**i**` icon at the end of logs to see more details related to workflow execution like `brand_id`, `idempotency_key`, `execution ID`. If you have trouble debugging the error, just copy the **execution ID** and share with us either through in-product chat or slack community. We'll be happy to help you debug the issue.
 
@@ -102,24 +112,3 @@ Date-time filter allows you to filter logs for a given time period. By default, 
 You can also get easy reference of workflow logs on subscriber details page. This can be used for user level auditing and compliance checks, allowing you to reference all notifications sent to a user within a specified time period. You can also access subscriber specific logs directly on logs page by filtering on `distinct_id`.
 
 ***
-
-What’s Next
-
-Check error guides for debugging workflow and broadcast failures.
-
-* [Error Guides](/docs/error-guides)
-
-* [Table of Contents](#)
-
-* * [Data structure of logs](#data-structure-of-logs)
-
-    * [Notification Status](#notification-status)
-    * [Notification Statuses tracked per channel](#notification-statuses-tracked-per-channel)
-    * [Getting Logs and Notification status back to your database](#getting-logs-and-notification-status-back-to-your-database)
-
-  * [Trouble debugging? Reach out to Support](#trouble-debugging-reach-out-to-support)
-
-  * [Filtering Logs](#filtering-logs)
-    * [Date-time filter](#date-time-filter)
-
-  * [Subscriber logs](#subscriber-logs)

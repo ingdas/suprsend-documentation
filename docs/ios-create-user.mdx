@@ -1,63 +1,52 @@
 ---
-title: "Create User Profile"
+title: "Manage Users"
 description: "This document will cover the methods to create a user and set communication channel preferences along with push notification token"
 ---
 
-[Suggest Edits](/edit/ios-create-user)
-
-## Pre-requisites
-
-[Integrate iOS SDK](/docs/integrate-ios-sdk)
-
 ## How Suprsend identifies a user
 
-Suprsend identifies Users by unique identifier `distinct_id`. The identifier for a user is important as we use this key to create a user profile and all the information related to a user, like channel preferences, is attached to that profile. It's best to send the users`distinct_id` from your database to map it across different devices and platforms. You can view the user profile by searching `distinct_id` on the Subscribers page in SuprSend Dashboard.
+SuprSend identifies users with immutable `distinct_id`. It's best to map the same identifier in your DB with `distinct_id` in SuprSend. Do not use identifiers that can be changed like email or phone number. You can view synced users by searching `distinct_id` on [Users page](https://app.suprsend.com/en/production/users).
 
-**Please note:** You cannot change a user's ID once it has been set, so we recommend you use a non-transient ID like a primary key rather than a phone number or email address.
+## Identify user and Set Push token
 
-## Step 1: Create/Identify a new user
+<Steps>
+  <Step title="Create/Identify a new user">
+  You can identify a user using the`SuprSend.shared.identify()` method. iospsuh token is automatically set in user's profile when this method is called. 
+    Call this method as soon as you know the identity of user, that is after login authentication. If you don't call this method, user will be identified using distinct\_id (uuid) that sdk generates internally.
 
-You can identify a user using the`SuprSend.shared.identify()` method.
+    We internally create an event called **`$user_login`**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
 
-Call this method as soon as you know the identity of a user, that is after login authentication. If you don't call this method, the user will be identified using distinct\_id (UUID) that SDK generates internally.
 
-When you call this method, we internally create an event called **$user\_login**. You can see this event on the SuprSend workflows event list and you can configure a workflow on it.
+    <CodeGroup>
+      ```kotlin Swift
+      SuprSend.shared.identify(identity: distinct_id)
+       
+      //Example
+      SuprSend.shared.identify(identity: "291XXXXX-62XX-4dXX-b2XX");
+      SuprSend.shared.identify(identity: "johndoe@suprsend.com");
+      ```
+    </CodeGroup>
 
-<CodeGroup>
-  ```kotlin Swift
-  SuprSend.shared.identify(identity: distinct_id)
-   
-  //Example
-  SuprSend.shared.identify(identity: "291XXXXX-62XX-4dXX-b2XX");
-  SuprSend.shared.identify(identity: "[email protected]");
-  ```
-</CodeGroup>
+    | Parameters       | Type                      | Description                                                                         |
+    | ---------------- | ------------------------- | ----------------------------------------------------------------------------------- |
+    | **distinct\_id** | int, bigint, string, UUID | *mandatory* Unique identifier for a user across devices or between multiple logins. |
+  </Step>
 
-| Parameters       | Type                      | Description                                                                         |
-| ---------------- | ------------------------- | ----------------------------------------------------------------------------------- |
-| **distinct\_id** | int, bigint, string, UUID | *mandatory* Unique identifier for a user across devices or between multiple logins. |
+  <Step title="Call reset to clear user data on log-out">
+    As soon as the user logs out, call `SuprSend.shared.reset()` method to clear data attributed to a user. This will generate a new random `distinct_id` and clear all super properties. This allows you to handle multiple users on a single device.
 
-## Step 2: Call reset to clear user data on log-out
+    When you call this method, we internally create an event called **$user\_logout**. You can see this event on the SuprSend workflows event list and you can configure a workflow on it.
 
-As soon as the user logs out, call `SuprSend.shared.reset()` method to clear data attributed to a user. This will generate a new random `distinct_id` and clear all super properties. This allows you to handle multiple users on a single device.
+    <CodeGroup>
+      ```swift Swift
+      SuprSend.shared.reset(unsubscribeNotification: true) // unsubscribeNotification flag is needed to be set true so that push token will be detatched from user after logout
+      ```
+    </CodeGroup>
 
-When you call this method, we internally create an event called **$user\_logout**. You can see this event on the SuprSend workflows event list and you can configure a workflow on it.
-
-<CodeGroup>
-  ```swift Swift
-  SuprSend.shared.reset(unsubscribeNotification: true) // unsubscribeNotification flag is needed to be set true so that push token will be detatched from user after logout
-  ```
-</CodeGroup>
-
-<Warning>
-  Don't forget to call reset on user logout. If not called, user id will not reset and multiple tokens and channels will get added to the user\_id who logged in first on the device.
-</Warning>
+    <Warning>
+      Don't forget to call reset on user logout. If not called, user id will not reset and multiple tokens and channels will get added to the user\_id who logged in first on the device.
+    </Warning>
+  </Step>
+</Steps>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-  * [How Suprsend identifies a user](#how-suprsend-identifies-a-user)
-  * [Step 1: Create/Identify a new user](#step-1-createidentify-a-new-user)
-  * [Step 2: Call reset to clear user data on log-out](#step-2-call-reset-to-clear-user-data-on-log-out)

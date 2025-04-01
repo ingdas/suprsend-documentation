@@ -3,244 +3,333 @@ title: "Lists"
 description: "Methods to create and manage lists using python SDK"
 ---
 
-[Suggest Edits](/edit/python-lists)
+The Lists SDK methods lets you create / manage list of subscribers. You can then send [broadcast](/docs/broadcast) to all the users in the list or create a workflow that triggers when a new user enters / exits list.
 
-The Lists SDK methods lets you create / manage list of subscribers. You can then send bulk messages to all the subscribers in the list with a single API call.
+## Create / Update List
 
-## Data structure of List:
-
-These are all the possible configurations of a list
+You can use `supr_client.subscribers_list.create` method to create a new list
 
 <CodeGroup>
-  ```json json
-  {
-  	"list_id": "_list_id_",
-  	"list_name": "_list_name",
-  	"list_description: "_some sample description_"
-  }
-  ```
+
+```python Request
+from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
+from suprsend import Suprsend
+# Initialize SDK
+supr_client = Suprsend("workspace_key", "workspace_secret")
+
+try:
+    data = supr_client.subscriber_lists.create({
+    "list_id": "_list_id_",   #Unique identifier for the list
+    "list_name": "_list_name_", #readable name of the list (optional)
+    "list_description": "_some sample description for the list_"
+    })
+    print(data)
+except (SuprsendAPIException,SuprsendValidationError) as ex:
+    print(ex) 
+```
+
+
+```python Response
+{
+   "list_id":"_list_id_",
+   "list_name":"_list_name_",
+   "list_description":"_some sample description for the list_",
+   "list_type":"static_list",
+   "subscribers_count":0,
+   "source":"None",
+   "is_readonly":false,
+   "status":"active",
+   "track_user_entry":false,
+   "track_user_exit":false,
+   "requested_for_delete":false,
+   "created_at":"2025-03-14T13:42:45.641000Z",
+   "updated_at":"2025-03-14T13:42:45.641000Z",
+   "drafts":"None"
+}
+```
+
 </CodeGroup>
 
-Field Description:
+<Note>
+  Guidelines on defining the list_id
 
-| Field           | Descriptiom                                                                                                                                                                                                                                                                                                                                                      | Obligation  |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| **list\_id**    | Unique identifier for the list. Follow these guidelines for naming the list: - list\_id can be of max 64 characters. - It can contain characters \[a-z0-9\_-] i.e. alphanumeric characters, \_(underscore) and -(hyphen). - list\_id is case-insensitive. Suprsend first converts list\_id to lowercase before storing it or doing any sort of comparison on it. | *mandatory* |
-| **list\_name**  | Name of the list. This is for your reference and can be referred to understand what this list is for.                                                                                                                                                                                                                                                            | *optional*  |
-| **description** | Description of the list to identify what type of users belong to this list.                                                                                                                                                                                                                                                                                      | *optional*  |
+  - `list_id` is case-insensitive. Suprsend first converts list_id to lowercase before storing it or doing any sort of comparison on it.
+  - `list_id `can be of max 64 characters.
+  - It can contain characters [a-z0-9\_-] i.e. alphanumeric characters, \_(underscore) and -(hyphen).
+</Note>
 
-### Sample list body
+## Get list data
+
+You can get the latest information of a list using `supr_client.subscribers_list.get` method.
 
 <CodeGroup>
-  ```json json
-  {
-  	"list_id": "list_1",
-  	"list_name": "city_san_francisco",
-  	"list_description: "All Users whose last updated city is San Francisco"
-  }
-  ```
+
+```python Request
+from suprsend import SubscriberListBroadcast, SuprsendAPIException, SuprsendValidationError
+from suprsend import Suprsend
+
+supr_client = Suprsend("workspace_key", "workspace_secret")
+
+try:
+    data = supr_client.subscriber_lists.get("_list_id_")  
+    print(data)
+    
+except (SuprsendAPIException, SuprsendValidationError) as ex:
+    print(ex)
+```
+
+
+```python Response
+{
+   "list_id":"_list_id_",
+   "list_name":"_list_name_",
+   "list_description":"_some sample description for the list_",
+   "list_type":"static_list",
+   "subscribers_count":0,
+   "source":"None",
+   "is_readonly":false,
+   "status":"active",
+   "track_user_entry":false,
+   "track_user_exit":false,
+   "requested_for_delete":false,
+   "created_at":"2025-03-14T13:42:45.641000Z",
+   "updated_at":"2025-03-14T13:42:45.641000Z",
+   "drafts":"None"
+}
+```
+
 </CodeGroup>
 
-## List Methods
+## Get all lists
 
-Below are some methods that you can use to create and update list
-
-### 1. Create a List
-
-You can use `supr_client.subscribers_list.create` method to create a new list
+To get the data of all the lists created in your workspace, use `supr_client.subscribers_list.get_all()`  method
 
 <CodeGroup>
-  ```python python
-  from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
-  from suprsend import Suprsend
-  # Initialize SDK
-  supr_client = Suprsend("_api_key_", "_api_secret_")
 
-  try:
-      data = supr_client.subscriber_lists.create({
-      "list_id": "_list_id",
-      "list_name": "_list_name",
-      "list_description": "_some sample description for the list_",
-      })
-      print(data)
-  except (SuprsendAPIException,SuprsendValidationError) as ex:
-      print(ex)
-  ```
-</CodeGroup>
+```python Request
+from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
+from suprsend import Suprsend
+# Initialize SDK
+supr_client = Suprsend("workspace_key", "workspace_secret")
 
-#### Response
+try:
+	const data = supr_client.subscribers_list.get_all();
+    print(data)
+    
+except (SuprsendAPIException,SuprsendValidationError) as ex:
+    print(ex)
+```
 
-<CodeGroup>
-  ```json json
-  {
-  	"list_id": "list-id",
-  	"list_name": "List Name",
-    "updated_at": "2022-12-18T10:40:27.268417+00:00",
-  	"list_description": "List description"
-  }
-  ```
-</CodeGroup>
 
-### 2. Get list data
-
-You can get the latest information of a list using `supr_client.subscribers_list.get` method
-
-<CodeGroup>
-  ```python Python
-  from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
-  from suprsend import Suprsend
-  # Initialize SDK
-  supr_client = Suprsend("_api_key_", "_api_secret_")
-
-  try:
-      data = supr_client.subscribers_list.get("_list_id_");
-      print(data)
-      
-  except (SuprsendAPIException,SuprsendValidationError) as ex:
-      print(ex)
-  ```
-</CodeGroup>
-
-#### Response
-
-<CodeGroup>
-  ```json json
-  {
-  	"list_id": "list-id",
-  	"list_name": "List Name",
-    "updated_at": "2022-12-18T10:40:27.268417+00:00",
-  	"list_description": "List description"
-  }
-  ```
-</CodeGroup>
-
-### 3. Get all lists
-
-To get the data of all the lists created in your workspace, use `supr_client.subscribers_list.get_all()` method
-
-<CodeGroup>
-  ```python Python
-  from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
-  from suprsend import Suprsend
-  # Initialize SDK
-  supr_client = Suprsend("_api_key_", "_api_secret_")
-
-  try:
-  	const data = supr_client.subscribers_list.get_all();
-      print(data)
-      
-  except (SuprsendAPIException,SuprsendValidationError) as ex:
-      print(ex)
-  ```
-</CodeGroup>
-
-#### Response
-
-<CodeGroup>
-  ```json json
-  {
-    "meta": {
-      "limit": 20,
-      "offset": 0,
-      "count": 1
+```python Response
+{
+  "meta": {
+    "count": 14,
+    "limit": 20,
+    "offset": 0
+  },
+  "results": [
+    {
+      "list_id": "newsletter_subscribers",
+      "list_name": "Newsletter Subscribers",
+      "list_description": "all users who opted in to receive product updates",
+      "list_type": "static_list",
+      "subscribers_count": 0,
+      "source": "None",
+      "is_readonly": false,
+      "status": "active",
+      "track_user_entry": false,
+      "track_user_exit": false,
+      "requested_for_delete": false,
+      "created_at": "2025-01-14T13:42:45.641000Z",
+      "updated_at": "2025-01-14T13:42:45.641000Z",
+      "drafts": "None"
     },
-    "results": [
-      {
-        "list_id": "list-id1",
-        "list_name": "List Name1",
-        "updated_at": "2022-12-18T10:40:27.268417+00:00",
-        "list_description": "List description1"
-      },
-      {
-        "list_id": "list-id2",
-        "list_name": "List Name2",
-        "updated_at": "2022-12-19T10:40:27.268417+00:00",
-        "list_description": "List description2"
-      }
-    ]
-  }
-  ```
+    {
+      "list_id": "abandoned_application",
+      "list_name": "Signups abandoned application",
+      "list_description": "Users who didn’t finish application",
+      "list_type": "static_list",
+      "subscribers_count": 0,
+      "source": "None",
+      "is_readonly": false,
+      "status": "active",
+      "track_user_entry": true,
+      "track_user_exit": true,
+      "requested_for_delete": false,
+      "created_at": "2025-02-14T13:42:45.641000Z",
+      "updated_at": "2025-02-14T13:42:45.641000Z",
+      "drafts": "None"
+    }
+	...
+  ]
+}
+```
+
 </CodeGroup>
 
-### 4. Add Subscribers to the list
+## Add Subscribers to the list
 
-You can add subscribers to the list using `supr_client.subscribers_list.add()`. There is no limit to the number of subscribers that you can add to a list.
+Use `supr_client.subscribers_list.add()` to add list subscribers. There is no limit to the number of subscribers that you can add to a list.
 
 <CodeGroup>
-  ```python Python
-  from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
-  from suprsend import Suprsend
-  # Initialize SDK
-  supr_client = Suprsend("_api_key_", "_api_secret_")
 
-  try:
-  	data = supr_client.subscribers_list.add("_list_id_", [
-  		"_distinct_id1_",
-  		"_distinct_id2_"
-  	]);
-  	print(data)
+```python Request
+from suprsend import SubscriberListBroadcast, SuprsendAPIException, SuprsendValidationError
+from suprsend import Suprsend
 
-  except (SuprsendAPIException,SuprsendValidationError) as ex:
-  	print(ex)
-  ```
+# Initialize SDK
+supr_client = Suprsend("workspace_key", "workspace_secret")
+
+try:
+    data = supr_client.subscriber_lists.add("_list_id_", [
+        "_distinct_id1_",
+        "_distinct_id2_"
+    ])
+    print(data)
+
+except (SuprsendAPIException, SuprsendValidationError) as ex:
+    print(ex)
+```
+
+
+```python Response
+{
+   "success":true
+}
+```
+
 </CodeGroup>
 
-#### Response
+## Remove Subscribers from the list
+
+You can remove subscribers from the list using `supr_client.subscribers_list.remove()`
 
 <CodeGroup>
-  ```json json
-  { success: true }
-  ```
+
+```python Request
+from suprsend import SubscriberListBroadcast, SuprsendAPIException, SuprsendValidationError
+from suprsend import Suprsend
+
+# Initialize SDK
+supr_client = Suprsend("workspace_key", "workspace_secret")
+
+try:
+    data = supr_client.subscriber_lists.remove("_list_id_", [
+        "_distinct_id1_",
+        "_distinct_id2_"
+    ])
+    print(data)
+
+except (SuprsendAPIException, SuprsendValidationError) as ex:
+    print(ex)
+```
+
+
+```python Sample Response
+{
+   "success":true
+}
+```
+
 </CodeGroup>
 
-### 5. Remove Subscribers from the list
+## Delete List
 
-You can remove subscribers from the list using `supr_client.subscribers_list.remove()`.
+You can delete a list using the `supr_client.subscribers_list.delete()` method.
 
 <CodeGroup>
-  ```python Python
-  from suprsend import SubscriberListBroadcast,SuprsendAPIException,SuprsendValidationError
-  from suprsend import Suprsend
-  # Initialize SDK
-  supr_client = Suprsend("_api_key_", "_api_secret_")
 
-  try:
-  	data = supr_client.subscribers_list.remove("_list_id_", [
-  		"_distinct_id1_",
-  		"_distinct_id2_"
-  	]);
-  	print(data)
+```python Request
+from suprsend import SubscriberListBroadcast, SuprsendAPIException, SuprsendValidationError
+from suprsend import Suprsend
 
-  except (SuprsendAPIException,SuprsendValidationError) as ex:
-  	print(ex)
-  ```
+# Initialize SDK
+supr_client = Suprsend("workspace_key", "workspace_secret")
+
+try:
+    data = supr_client.subscriber_lists.delete("_list_id_")
+    print(data)
+
+except (SuprsendAPIException, SuprsendValidationError) as ex:
+    print(ex)
+```
+
+
+```python Response
+{
+   "success": true,
+   "message": "List deleted successfully"
+}
+```
+
 </CodeGroup>
 
-#### Response
+Deleting a list is a permanent action and cannot be undone or restored.
+
+## Replace Users in List
+
+If you want to refresh a list completely with a new set of users, you can replace users by creating a draft version of the list and updating users in it.
+
+<Warning>
+  Use this method only if you want to completely overwrite the list members.
+</Warning>
+
+<Steps>
+  <Step title="Start Sync to create a draft version of the list">
+    This method will create a draft version of the list where you can add the new set of users to replace existing users.
+
+    <CodeGroup>
+
+    ```python Request
+    data = supr_client.subscriber_lists.start_sync("_list_id_") 
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Add Subscribers to the draft list">
+    You can use this method to add subscribers to the list's draft version created in Step-1. You'll get `version_id` in the start sync response.
+
+    <CodeGroup>
+
+    ```python Request
+    data = supr_client.subscriber_lists.add_to_version("_list_id_", "01HHCTXXXXXXXXXXX", ["_distinct_id1_", "_distinct_id2_"])
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Remove Subscribers from the draft list">
+    You can use this method to remove subscribers from the list's draft version created in Step-1. You'll get `version_id` in the start sync response.
+
+    <CodeGroup>
+
+    ```python Request
+    data = supr_client.subscriber_lists.remove_from_version("_list_id_", "01HHCTXXXXXXXXXXX", ["_distinct_id1_", "_distinct_id2_"])
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Finish Sync to make the draft version live">
+    Once your subscribers are updated in the list, use this method to finish sync and make the draft version updated in the above steps live.
+
+    <CodeGroup>
+
+    ```python Request
+    data = supr_client.subscriber_lists.finish_sync("_list_id_", "01HHCTXXXXXXXXXXX")
+    ```
+
+    </CodeGroup>
+  </Step>
+</Steps>
+
+### Delete Draft List
+
+You can also delete the draft list if it was created by mistake.
 
 <CodeGroup>
-  ```json json
-  { success: true }
-  ```
+
+```python Request
+data = supr_client.subscriber_lists.delete_version("_list_id_", "01HHCTXXXXXXXXXXX")
+```
+
 </CodeGroup>
-
-***
-
-What’s Next
-
-Once you have created a user list, you can trigger bulk messages on that list using broadcast method
-
-* [Broadcast](/docs/python-broadcast)
-
-* [Table of Contents](#)
-
-* * [Data structure of List:](#data-structure-of-list)
-    * [Sample list body](#sample-list-body)
-
-  * [List Methods](#list-methods)
-
-    * [1. Create a List](#1-create-a-list)
-    * [2. Get list data](#2-get-list-data)
-    * [3. Get all lists](#3-get-all-lists)
-    * [4. Add Subscribers to the list](#4-add-subscribers-to-the-list)
-    * [5. Remove Subscribers from the list](#5-remove-subscribers-from-the-list)

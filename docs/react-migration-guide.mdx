@@ -1,0 +1,79 @@
+---
+title: "Migration Guide"
+description: "Steps to migrate from @suprsend/react-inbox to @suprsend/react"
+---
+
+<Warning>Development of the [@suprsend/react-inbox](https://github.com/suprsend/suprsend-react-inbox) SDK has been discontinued in favour of the new [@suprsend/react ](https://docs.suprsend.com/docs/inapp-feed-1)SDK. Reason for this change is to bring all drop-in components for inbox and preferences, under one SDK. Currently `@suprsend/react-inbox` only contains inbox related code.</Warning>
+
+## Migrating from @suprsend/react-inbox to @suprsend/react changes
+
+Most of features that inbox component supports remain unchanged. Following are changes that happened in new SDK.
+
+### Authentication changes
+
+Authentication mechanism has been changed from [HMAC authentication](https://docs.suprsend.com/docs/hmac-authentication) to [JWT authentication](https://docs.suprsend.com/docs/client-authentication) because  HMAC authentication (subscriberId) is not as secure as that of JWT authentication. Earlier `SuprSendInbox`component and `SuprSendProvider` component(headless) used to take care of authentication if you pass `distinctId`, `workspaceKey` and `subscriberId`. But in new SDK you can use [SuprSendProvider](https://docs.suprsend.com/docs/react-1#suprsendprovider) to authenticate user and all other features like inbox, preferences, webpush etc can be accessed inside that context provide.
+
+### Toast functionality has been removed
+
+`SuprSendInbox`used to have inbuilt toast notification feature using [react-toastify](https://fkhadra.github.io/react-toastify/introduction/) library. But the latest versions of this library created few peerDependencies which created issues for us. So we have exposed event listener to listen to new notification arrival and in that callback you will get new notification payload which you can use to show toast notification using any of your toast library. Refer [implementation](https://docs.suprsend.com/docs/toast-notifications) guide here.
+
+## Steps to migrate `SuprSendInbox` component (Drop-in)
+<Steps>
+<Step title="Remove existing `@suprsend/react-inbox` and install `@suprsend/react`">
+
+```shell npm
+npm uninstall @suprsend/react-inbox
+
+npm install @suprsend/react
+```
+```shell yarn
+yarn remove @suprsend/react-inbox
+
+yarn add @suprsend/react
+```
+</Step>
+<Step title="Change User Authentication">
+
+For authenticating user, follow integration steps of [SuprSendProvider](https://docs.suprsend.com/docs/react-1#integration).
+</Step>
+
+<Step title="Import New `Inbox` component">
+Import `Inbox` component and use it instead of `SuprSendInbox`. Remove `distinctId`, `workspaceKey` and `subscriberId` props since authentication is handled by SuprSendProvider in above step. Please remove any invalid prop present in existing component. Check all [available props](https://github.com/suprsend/suprsend-react-sdk?tab=readme-ov-file#inbox-popover) in new component.
+
+```javascript Example.jsx
+import SuprSendInbox from '@suprsend/react-inbox'; // remove it
+import { Inbox } from '@suprsend/react';
+
+// old code
+function Example() {
+  return (
+    <div>
+      <SuprSendInbox />
+    </div>
+  );
+}
+
+// new code
+function Example() {
+  return (
+    <div>
+      <SuprSendProvider publicApiKey="" distinctId="">
+        <Inbox />
+      </SuprSendProvider>
+    </div>
+  );
+}
+```
+</Step>
+
+<Step title="Change Toast Implementation">
+
+Since default toast notification feature has been removed, you can refer this section to [integrate](https://docs.suprsend.com/docs/toast-notifications) toast notification functionality.
+
+</Step>
+</Steps>
+## Steps to migrate headless implementation
+
+If you are migrating headless version of inbox then its better to re-implement the headless inbox, as architecture of methods have been changed. Please refer this [guide](https://docs.suprsend.com/docs/headless-feed).
+
+Please reach out to use if you face any issues in migration.

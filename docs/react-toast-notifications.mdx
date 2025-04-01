@@ -1,0 +1,84 @@
+---
+title: "Toast Notifications"
+description: "This will guide you through integration steps to show toast notifications when new notification arrives, in react application."
+---
+
+<Note>
+  **Toast Notifications in @suprsend/react**
+
+  In the `@suprsend/react` SDK, toast notification functionality is no longer included in Inbox by default. Developers who wish to use toast notifications will need to implement them separately to achieve similar functionality. This change allows for more flexibility and modularity in customizing the user experience.
+</Note>
+
+SDK exposes event listener `feed.new_notification` which is available on feedClient. You can use this listener to show toast notification by using your own toast library. We also export `ToastNotification` component, which is a light version of `NotificationCard` that can be used by your toast library. The following example snippet uses [react-hot-toast](https://react-hot-toast.com/).
+
+<CodeGroup>
+  ```javascript Example.jsx
+  import toast, { Toaster } from 'react-hot-toast';
+  import { SuprSendFeedProvider, Inbox, useFeedClient } from '@suprsend/react';
+
+  // drop-in Inbox component example
+  function Example() {
+    return (
+      <SuprSendProvider>
+        <Inbox>
+          <ToastNotification />
+        </Inbox>
+      </SuprSendProvider>
+    );
+  }
+
+  // example when using SuprSendFeedProvider provider in headless or fullscreen feed
+  function HeadlessExample() {
+    return (
+      <SuprSendProvider>
+        <SuprSendFeedProvider>
+          <ToastNotification />
+        </SuprSendFeedProvider>
+      </SuprSendProvider>
+    );
+  }
+
+  function ToastNotification() {
+    const feedClient = useFeedClient();
+
+    useEffect(() => {
+      if (!feedClient) return;
+
+      // event listener which return new notification data
+      feedClient.emitter.on('feed.new_notification', (data) => {
+        toast.custom(<ToastNotificationCard notificationData={data} />); // show toast with new notification data
+        feedClient.markAsSeen(data.n_id); // marking seen
+      });
+
+      return () => {
+        feedClient.emitter.off('feed.new_notification');
+      };
+    }, [feedClient]);
+
+    return <Toaster />;
+  }
+  ```
+
+  ```javascript TypeDef
+  interface ToastNotificationProps {
+    notificationData: IRemoteNotification;
+    hideAvatar?: boolean;
+    themeType?: ThemeType;
+    theme?: ToastNotificationCardTheme;
+  }
+    
+  interface ToastNotificationCardTheme {
+    avatar?: React.CSSProperties;
+    headerText?: React.CSSProperties;
+    bodyText?: NotificationCardBodyTextThemeProps;
+    container?: React.CSSProperties;
+  }
+    
+  interface NotificationCardBodyTextThemeProps extends React.CSSProperties {
+    color?: string;
+    blockquoteColor?: string;
+    tableBorderColor?: string;
+    linkColor?: string;
+  }
+  ```
+</CodeGroup>

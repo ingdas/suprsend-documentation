@@ -1,19 +1,24 @@
 ---
 title: "Users"
-description: "Suggest Edits"
 ---
 
-Users represent a person who will receive the communication. SuprSend identifies a user by a unique identifier distinct\_id and creates a profile for each user identified by this id.
+Users represent a person who will receive the communication. SuprSend identifies a user by a unique identifier distinct_id and creates a profile for each user identified by this id.
 
 All the channel information like email id, phone number, and push tokens are attached to the user profile which in turn is used to trigger communication on the given channels
 
-### Benefits of Users with SuprSend:
+### Benefits of Mansging Users in SuprSend
 
 If you're used to sending notifications via single-channel APIs, the idea of storing user data in a messaging platform such as SuprSend may sound odd to you. Here are a few reasons why we store user data in SuprSend:
 
-1. **Multi-channel notifications:** When you're triggering notifications on a single channel, you can pass the recipient's email address or phone number when you trigger the message. In a multi-channel platform like SuprSend, that would mean passing all the channel information every time you trigger a notification. By storing the channel data with SuprSend, you can update a user's channel information once, then reference them via their `distinct_id` from that point on. We take care of the rest.
-2. **Use User properties in notification templates:** With SuprSend, you can also add custom properties to the user profile using one of our client-side SDKs. These properties can be used as a variable in templates and used to send dynamic content to the users based on their properties
-3. **Notify the User sequentially with [Smart Delivery](/docs/smart-delivery)** Rather than sending your notifications to a user on all channels, you can notify the user sequentially on the best channel (which could be different for each user), till the time user interacts with a notification, and do not send subsequent notification.
+1. **Multi-channel notifications:**
+
+   When you're triggering notifications on a single channel, you can pass the recipient's email address or phone number when you trigger the message. In a multi-channel platform like SuprSend, that would mean passing all the channel information every time you trigger a notification. By storing the channel data with SuprSend, you can update a user's channel information once, then reference them via their `distinct_id` from that point on. We take care of the rest.
+2. **Use User properties in notification templates:**
+
+   With SuprSend, you can also add custom properties to the user profile using one of our client-side SDKs. These properties can be used as a variable in templates and used to send dynamic content to the users based on their properties
+3. **Notify the User sequentially with** [Smart Delivery](/docs/smart-delivery)
+
+   Rather than sending your notifications to a user on all channels, you can notify the user sequentially on the best channel (which could be different for each user), till the time user interacts with a notification, and do not send subsequent notification.
 
 ### Creating User Profile on SuprSend
 
@@ -25,31 +30,44 @@ You can either use [HTTP API](/reference/update-user-profile) or our backend SDK
 
 **Available Backend SDK:**
 
-1. [Create User profile using Python SDK](/docs/python-create-user-profile)
-2. [Create User profile using Node SDK](/docs/node-create-user-profile)
-3. [Create User profile using Java SDK](/docs/java-create-user-profile)
-4. [Create User profile using Go SDK](/docs/go-create-user-profile)
+<CardGroup cols="4">
+  <Card title="Python SDK" icon="python" iconType="solid" href="/docs/python-create-user-profile">
+    
+  </Card>
+  <Card title="Node SDK" icon="JS" iconType="solid" href="/docs/node-create-user-profile">
+    
+  </Card>
+  <Card title="Java SDK" icon="Java" iconType="solid" href="/docs/java-create-user-profile">
+    
+  </Card>
+  <Card title="Go SDK" icon="golang" iconType="solid" href="/docs/go-create-user-profile">
+    
+  </Card>
+</CardGroup>
 
 **Available Client side SDK:**
 
-1. [Create User profile using Javascript SDK](/docs/javascript-create-user) (for web applications)
-2. [Create User profile using Android SDK](/docs/android-create-user) (for mobile applications)
-3. [Create User profile using React Native SDK](/docs/react-native-create-user) (for mobile applications)
-4. [Create User profile using Flutter SDK](/docs/flutter-create-user) (for mobile applications)
+<CardGroup cols="4">
+  <Card title="Javascript SDK" icon="JS" iconType="solid" href="/docs/java-create-user">
+    1. (for web applications)
+  </Card>
+  <Card title="Android SDK" icon="Android" iconType="solid" href="/docs/android-create-user">
+    1. (for mobile applications)
+  </Card>
+  <Card title="React Native SDK" icon="mobile-button" iconType="solid" href="/docs/react-native-create-user">
+    1. (for mobile )
+  </Card>
+  <Card title="Flutter SDK" icon="Flutter" iconType="solid" href="/docs/flutter-create-user">
+    1. (for mobile applications)
+  </Card>
+</CardGroup>
 
 #### Via 3rd party connectors
 
 You can use connectors to directly sync users from your 3rd party data tracking platforms.
 
-1. [Create User profile using Segment](/docs/segment)
+<Card title="Segment" icon="User" iconType="solid" href="/docs/segment">
+  
+</Card>
 
-***
-
-* [Table of Contents](#)
-
-* * [Benefits of Users with SuprSend:](#benefits-of-users-with-suprsend)
-
-  * [Creating User Profile on SuprSend](#creating-user-profile-on-suprsend)
-
-    * [Via SDK](#via-sdk)
-    * [Via 3rd party connectors](#via-3rd-party-connectors)
+---

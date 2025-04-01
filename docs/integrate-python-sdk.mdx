@@ -3,69 +3,57 @@ title: "Integrate Python SDK"
 description: "This document will cover SDK installation and initialization steps"
 ---
 
-[Suggest Edits](/edit/integrate-python-sdk)
-
-You can follow the steps mentioned in the documentation below or refer to our quick code recipe
-
-🦉
-
-SuprSend Python SDK installation
-
-Open Recipe
-
 ## Installation
 
-**Step 1:** Install `libmagic` system package. You can skip this step if you already have this package installed in your system. You can install it as follows:
+<Steps>
+  <Step title="Install 'libmagic' system package. ">
+    You can skip this step if you already have this package installed in your system.
 
-<CodeGroup>
-  ```shell bash
-  # if you are using linux / debian based systems
-  sudo apt install libmagic
+    <CodeGroup>
 
-  # If you are using macOS
-  brew install libmagic
-  ```
-</CodeGroup>
+    ```shell bash
+    # if you are using linux / debian based systems
+    sudo apt install libmagic
+    
+    # If you are using macOS
+    brew install libmagic
+    ```
 
-**Step 2:** Install `suprsend-py-sdk` using pip
+    </CodeGroup>
+  </Step>
+  <Step title="Install 'suprsend-py-sdk' using pip">
+    <CodeGroup>
 
-<CodeGroup>
-  ```shell bash
-  $ pip install suprsend-py-sdk
+    ```shell bash
+    $ pip install suprsend-py-sdk
+    
+    # to upgrade to latest SDK version
+    
+    $ pip install suprsend-py-sdk --upgrade
+    ```
 
-  # to upgrade to latest SDK version
+    </CodeGroup>
 
-  $ pip install suprsend-py-sdk --upgrade
-  ```
-</CodeGroup>
+    <Check>
+      **Python version 3.7 or later is required**
 
-<Check>
-  If your python3 version is lower than 3.7, upgrade it to >=3.7
-</Check>
+      If your python3 version is lower than 3.7, upgrade it.
+    </Check>
+  </Step>
+</Steps>
 
 ## Initialization
 
-For initializing SDK, you need **WORKSPACE KEY** and **WORKSPACE SECRET**.
+For initializing SDK, you need workspace_key and workspace_secret. You will get both the tokens from your [Suprsend dashboard](https://app.suprsend.com/en/production/developers/api-keys) (Developers -> API Keys).
 
 <CodeGroup>
-  ```python python
-  from suprsend import Suprsend
-  # Initialize SDK
-  supr_client = Suprsend("WORKSPACE KEY", "WORKSPACE SECRET")
-  ```
+
+```python python
+from suprsend import Suprsend
+# Initialize SDK
+supr_client = Suprsend("WORKSPACE KEY", "WORKSPACE SECRET")
+```
+
 </CodeGroup>
 
-Replace **WORKSPACE KEY** and **WORKSPACE SECRET** with your workspace values. You will get both the tokens from [Suprsend dashboard](https://app.suprsend.com/) (***Settings page -> "API keys"*** section). For more details, check the [documentation on 'Workspaces'](/docs/workspace).
-
-![](/images/docs/d60fec2-Frame_58_1.png)
-
-***
-
-What’s Next
-
-* [Create User Profile](/docs/python-create-user-profile)
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-  * [Initialization](#initialization)
+---

@@ -1,186 +1,208 @@
 ---
-title: "Create User Profile"
-description: "This document will cover the methods to create a user and set communication channel preferences along with push notification token"
+title: "Manage Users"
+description: "This document will cover all methods to create users and set communication channel along with push notification token"
 ---
 
-[Suggest Edits](/edit/flutter-create-user)
+## How SuprSend Identifies a User
 
-## Pre-requisites
+SuprSend identifies users with immutable `distinct_id`. It's best to map the same identifier in your DB with `distinct_id` in SuprSend. Do not use identifiers that can be changed like email or phone number. You can view synced users by searching `distinct_id` on [Users page](https://app.suprsend.com/en/production/users).
 
-[Integrate Flutter SDK in android application](/docs/integrate-flutter-sdk-android)
+## Identify user and Set Push token
+<Steps>
+  <Step title="Create / Identify a new user">
+    You can identify a user via `suprsend.identify()` method. Call this method as soon as you know the identity of user, that is after login authentication. If you don't call this method, user will be identified using distinct\_id (uuid) that sdk generates internally.
 
-[Integrate Flutter SDK in iOS application](/docs/integrate-flutter-sdk-ios)
+    When you call this method, we internally create an event called **`$user_login`**. You can use this event to trigger workflow on user login.
 
-## How Suprsend identifies a user
+    <CodeGroup>
+      ```dart Dart
+      suprsend.identify(__distinct_id__);
 
-Suprsend identifies Users by unique identifier `distinct_id`. The identifier for a user is important as we use this key to create user profile and all the information related to a user, like channel preferences, is attached to that profile. It's best to send the user's `distinct_id` from your DB to map it across different devices and platforms. You can view user profile by searching `distinct_id` on [Subscribers page](https://app.suprsend.com/en/staging/subscribers/subscribers/)
+      //Sample
+      suprsend.identify("291eaa13-62f5-4d52-b2dd");
+      suprsend.identify(10005);
+      ```
+    </CodeGroup>
 
-**Please note:** you cannot change a user's id once it has been set, so we recommend you use a non-transient id like a primary key rather than a phone number or email address.
+    | Parameter        | Type                      | Description                                                                         |
+    | ---------------- | ------------------------- | ----------------------------------------------------------------------------------- |
+    | **distinct\_id** | int, bigint, string, UUID | *mandatory* Unique identifier for a user across devices or between multiple logins. |
+  </Step>
 
-## Step 1 : Create/Identify a new user
+  <Step title="Call reset to clear user data on log out">
+    As soon as the user logs out, call `suprsend.reset()` method to clear data attributed to a user. This allows you to handle multiple user logins on a single device and keep their data isolated from each other.
 
-You can identify a user using `suprsend.identify()` method.
+    When you call this method, we internally create an event called **$user\_logout**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
 
-Call this method as soon as you know the identity of user, that is after login authentication. If you don't call this method, user will be identified using distinct\_id (uuid) that sdk generates internally.
+    <CodeGroup>
+      ```javascript Dart
+      suprsend.reset();
+      ```
+    </CodeGroup>
 
-When you call this method, we internally create an event called **$user\_login**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
+    <Warning>
+      **Mandatory to call reset on logout:**
 
-<CodeGroup>
-  ```javascript Dart
-  suprsend.identify(unique_id);
+      Don't forget to call reset on user logout. If not called, users' distinct\_id will not reset and multiple tokens and channels will get added to the distinct\_id who logged in first on the device.
+    </Warning>
+  </Step>
+</Steps>
 
-  //Sample
-  suprsend.identify("291eaa13-62f5-4d52-b2dd");
-  suprsend.identify(10005);
-  suprsend.identify("[email protected]");
-  ```
-</CodeGroup>
+ ## Set Communication Channels
+    Mobile push tokens automatically gets updated in user profile on `suprsend.identify()` call. All you have to do is to integrate [push notification ](/docs/flutter-firebase-fcm-push-integration)service in your application to start sending mobile push notification. To set other communication channels, use below methods.
 
-| Parameters       | Type                      | Description                                                                         |
-| ---------------- | ------------------------- | ----------------------------------------------------------------------------------- |
-| **distinct\_id** | int, bigint, string, UUID | *mandatory* Unique identifier for a user across devices or between multiple logins. |
+    <AccordionGroup>
+      <Accordion title="Add User Channels">
+        Add user channels on signup, or whenever a user updates their communication channels in the application flow.
 
-## Step 2: Call reset to clear user data on log out
+        <CodeGroup>
+          ```dart Dart
+          suprsend.user.setEmail("abc@example.com");  // To add Email
 
-As soon as the user logs out, call `suprsend.reset()` method to clear data attributed to a user. This will generate a new random `distinct_id` and clear all super properties. This allows you to handle multiple users on a single device.
+          suprsend.user.setSms("+91XXXXXXXXXX");  // To add SMS, mandatory to pass country code
 
-When you call this method, we internally create an event called **$user\_logout**. You can see this event on SuprSend workflows event list and you can configure a workflow on it.
+          suprsend.user.setWhatsApp("+91XXXXXXXXXX"); // To add Whatsapp, mandatory to pass country code
+          ```
+        </CodeGroup>
 
-<CodeGroup>
-  ```javascript Dart
-  suprsend.reset();
-  ```
-</CodeGroup>
+        Android Push token will automatically be set at the time of user login. All you have to do is to integrate the push notification service in your application. Here's the [Android Push Integration guide](https://docs.suprsend.com/docs/flutter-firebase-fcm-push-integration).
 
-<Warning>
-  Don't forget to call reset on user logout. If not called, user id will not reset and multiple tokens and channels will get added to the user\_id who logged in first on the device.
-</Warning>
+        <Warning>
+          **Country Code Mandatory:**
 
-## Step 3: Set Communication Channel preferences
+          > Make sure you are sending the country code when you are calling communication methods for SMS and Whatsapp.
+        </Warning>
+      </Accordion>
 
-You can send communication channel details of a user to the SuprSend SDK. We will store the channel details in the user profile. This will allow us to send communications to a user on the channels available for that user whenever there is any communication trigger.
+      <Accordion title="Remove User Channels">
+        <CodeGroup>
+          ```javascript javascript
+          suprsend.user.unSetEmail("abc@example.com");  // To remove Email
 
-### 1. Add User Channels
+          suprsend.user.unSetSms("+91XXXXXXXXXX");  // To remove SMS, mandatory to pass country code
 
-You can add SMS, Email and Whatsapp channel information by using below methods. You can call this on signup, or whenever a user provides the above channel information.
+          suprsend.user.unSetWhatsApp("+91XXXXXXXXXX"); // To remove Whatsapp, mandatory to pass country code
+          ```
+        </CodeGroup>
+      </Accordion>
+    </AccordionGroup>
 
-<CodeGroup>
-  ```javascript Dart
-  suprsend.user.setEmail("[email protected]");  // To add Email
+## Set User Properties
 
-  suprsend.user.setSms("+91XXXXXXXXXX");  // To add SMS
+You can sync other user properties in SuprSend and use it to pass dynamic content in template or add in workflow conditions.
 
-  suprsend.user.setWhatsApp("+91XXXXXXXXXX"); // To add Whatsapp
-  ```
-</CodeGroup>
+<AccordionGroup>
+  <Accordion title="Set">
+    Set is used to add property. Set is upsert function and will override existing values corresponding to a key.
 
-Android Push token will automatically be set at the time of user login. All you have to do is to integrate the push notification service in your application
+    <CodeGroup>
+      ```javascript Dart
+      suprsend.user.set(property_obj);
+        
+      //Example for setting single property
+      suprsend.user.set({"prime_member_group" : "super"});
+        
+      //Example for setting multiple properties
+      suprsend.user.set({"prime_member_group" : "super"},{"name" : "john doe"});
+      ```
+    </CodeGroup>
 
-[Android Push Integration guide](/docs/flutter-firebase-fcm-push-integration)
+    <Warning>
+      Property key can't start with **`$`** or **`ss_`**, as this is reserved for our internal events and property names.
+    </Warning>
 
-<Warning>
-  Make sure you are sending the country code when you are calling communication methods for SMS and Whatsapp.
-</Warning>
+    | Parameters     | Type   | Description                                                                                                     |
+    | -------------- | ------ | --------------------------------------------------------------------------------------------------------------- |
+    | key            | string | *Mandatory*&#xA;This is property key that will be attached to user.&#xA;&#xA;Should not start with `$` or `ss_` |
+    | value          | any    | *Optional*&#xA;This will be value that will be attached to key property.                                        |
+    | **JSONObject** | object | *Optional*&#xA;This is used in case of setting multiple user properties.                                        |
+  </Accordion>
 
-### 2. Remove User Channels
+  <Accordion title="Unset" defaultOpen={false}>
+    This will delete property key
 
-You can remove SMS, Email and Whatsapp channel information by using below methods. You can call this when a user updates his channel information. You need not call this when a user unsubscribes from a particular channel notification, as that will be handled in user preferences.
+    <CodeGroup>
+      ```javascript Dart
+      suprsend.user.unSet(property_list);
 
-<CodeGroup>
-  ```javascript javascript
-  suprsend.user.unSetEmail("[email protected]");  // To remove Email
+      suprsend.user.unSet(["wishlist"]);
+      suprsend.user.unSet(["wishlist", "cart"]);
+      ```
+    </CodeGroup>
+  </Accordion>
 
-  suprsend.user.unSetSms("+91XXXXXXXXXX");  // To remove SMS
+  <Accordion title="Append" defaultOpen={false}>
+    This method will append a value to an array
 
-  suprsend.user.unSetWhatsApp("+91XXXXXXXXXX"); // To remove Whatsapp
-  ```
-</CodeGroup>
+    ```dart
+    Suprsend.user.append(key, value);  
+    Suprsend.user.append(propertyObj);  // for multiple properties
 
-## Advanced Configuration - Set User Properties
+    // Sample values for appending a single property:
+    Suprsend.user.append("wishlist", "iphone12");
 
-You can use SuprSend SDK to set advanced user properties, which will help in creating a user profile. You can use these properties to create user cohorts on SuprSend's platform with future releases.
+    // Sample values for appending multiple properties:
+    Suprsend.user.append({
+      "wishlist": ["iphone12", "Apple airpods"]
+    });
+    ```
+  </Accordion>
 
-### 1. Set
+  <Accordion title="Remove">
+    Removes property value but doesn't unset property key. If you want to remove property key use unset method.
 
-Set is used to set the custom user property or properties. The given name and value will be assigned to the user, overwriting an existing property with the same name if present. It can take key as first param, value as second param for setting single user property or object for setting multiple user properties.
+    <CodeGroup>
+      ```javascript javascript
+      // remove single property
+      suprsend.user.remove(key, value);  
+      suprsend.user.remove("wishlist", "iphone12");
 
-<CodeGroup>
-  ```javascript Dart
-  suprsend.user.set(property_obj);  // for both single and multiple property
-    
-  //Example for setting single property
-  suprsend.user.set({"prime_member_group" : "super"});
-    
-  //Example for setting multiple properties
-  suprsend.user.set({"prime_member_group" : "super"},{"name" : "john doe"});
-  ```
-</CodeGroup>
+      // remove multiple properties
+      suprsend.user.remove(property_obj);
+      suprsend.user.remove({"wishlist" : "iphone12", "wishlist": "Apple airpods"});
 
-| Parameters     | Type   | Description                                                                                        |
-| -------------- | ------ | -------------------------------------------------------------------------------------------------- |
-| **key**        | string | *Mandatory* This is property key that will be attached to user. Should not start with `$` or `ss_` |
-| **value**      | any    | *Optional* This will be value that will be attached to key property.                               |
-| **JSONObject** | object | *Optional* This is used in case of setting multiple user properties.                               |
+      ```
+    </CodeGroup>
+  </Accordion>
 
-<Warning>
-  When you create a key, please ensure that the Key Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
-</Warning>
+  <Accordion title="Set Once" defaultOpen={false}>
+    Works just like `user.set`, except it will not overwrite existing property values. This is useful for properties like *First login date*
 
-### 5. Remove
+    ```dart
+    import 'package:suprsend_flutter/suprsend_flutter.dart';
 
-This method will remove a value from the list for a given property.
+    void main() {
+      // Initialize SuprSend instance
+      final Suprsend suprsend = Suprsend();
 
-<CodeGroup>
-  ```javascript javascript
-  suprsend.user.remove(key, value);  // for single property
-  suprsend.user.remove(property_obj);  // for multiple properties
+      // Set a single property once
+      suprsend.user.setOnce("first_login", "2021-11-02");
 
-  // Sample values for removing a single property:
-  suprsend.user.remove("wishlist", "iphone12");
+      // Set multiple properties once
+      suprsend.user.setOnce({
+        "first_login": "2021-11-02",
+        "DOB": "1991-10-02",
+      });
+    }
+    ```
+  </Accordion>
 
-  // Sample values for removing multiple properties:
-  suprsend.user.remove({"wishlist" : "iphone12", "wishlist": "Apple airpods"});
-  ```
-</CodeGroup>
+  <Accordion title="Increment" defaultOpen={false}>
+    Increase or decrease integer values on consecutive action, like login count. To reduce a property, provide a negative number for the value.
 
-### 2. Unset
+    ```dart
+    // For single property
+    Suprsend.user.increment(key, value);
+    Suprsend.user.increment("login_count", 1);
 
-This will remove a property permanently from user properties.
-
-<CodeGroup>
-  ```javascript Dart
-  suprsend.user.unSet(property_list);  // for both single and multiple properties
-
-  suprsend.user.unSet(["wishlist"]); // for unsetting a single property
-
-  // For unsetting multiple properties
-  suprsend.user.unSet(["wishlist", "cart"]);
-  ```
-</CodeGroup>
-
-| Parameters         | Type           | Description                                                           |
-| ------------------ | -------------- | --------------------------------------------------------------------- |
-| **property\_list** | array\[string] | All properties included in list will be removed from user properties. |
+    // For multiple properties
+    Suprsend.user.increment(propertyObj);
+    Suprsend.user.increment({
+      "login_count": 1,
+      "order_count": 1
+    });
+    ```
+  </Accordion>
+</AccordionGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-
-  * [How Suprsend identifies a user](#how-suprsend-identifies-a-user)
-
-  * [Step 1 : Create/Identify a new user](#step-1--createidentify-a-new-user)
-
-  * [Step 2: Call reset to clear user data on log out](#step-2-call-reset-to-clear-user-data-on-log-out)
-
-  * [Step 3: Set Communication Channel preferences](#step-3-set-communication-channel-preferences)
-
-    * [1. Add User Channels](#1-add-user-channels)
-    * [2. Remove User Channels](#2-remove-user-channels)
-
-  * [Advanced Configuration - Set User Properties](#advanced-configuration---set-user-properties)
-
-    * [1. Set](#1-set)
-    * [5. Remove](#5-remove)
-    * [2. Unset](#2-unset)

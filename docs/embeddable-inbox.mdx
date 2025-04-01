@@ -1,6 +1,5 @@
 ---
 title: "Embeddable Inbox"
-description: "Suggest Edits"
 ---
 
 **@suprsend/web-inbox** is used to integrate inbox channel in non react applications. For react application use [@suprsend/react-inbox](/docs/inbox-react).
@@ -34,9 +33,9 @@ This solution works if you are using applications like Django, Laravel, ruby.
   ```
 </CodeGroup>
 
-In above code replace **your\_distinct\_id**, **your\_subscriber\_id** and **your\_workspace\_key** variables with valid values.
+In above code replace **`your_distinct_id`**, **`your_subscriber_id`** and **`your_workspace_key`** variables with valid values.
 
-Example code: [https://github.com/suprsend/suprsend-web-inbox/blob/main/index.html](https://github.com/suprsend/suprsend-web-inbox/blob/main/index.html)
+Find the [Example Code](https://github.com/suprsend/suprsend-web-inbox/blob/main/index.html).
 
 ### Integrate using NPM module
 
@@ -69,9 +68,9 @@ This solution work if you are using applications like angular, vue etc. If you a
   ```
 </CodeGroup>
 
-Calling **initSuprSendInbox** function will initialize inbox inside div tag.
+Calling **`initSuprSendInbox`** function will initialize inbox inside div tag.
 
-To unmount inbox component manually you can use **cleanSuprSend** function provided in SDK.
+To unmount inbox component manually you can use **`cleanSuprSend`** function provided in SDK.
 
 <CodeGroup>
   ```javascript javascript
@@ -247,9 +246,3 @@ Other UI based options are:
 **Customization Details**: More details about these UI customization props can be found [here](/docs/react-customize-inbox).
 
 ***
-
-* [Table of Contents](#)
-
-* * [Integrate using script tag](#integrate-using-script-tag)
-  * [Integrate using NPM module](#integrate-using-npm-module)
-  * [Customising Inbox](#customising-inbox)

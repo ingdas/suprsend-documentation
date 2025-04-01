@@ -3,38 +3,22 @@ title: "Resend"
 description: "https://resend.com/"
 ---
 
-[Suggest Edits](/edit/resend)
-
 This section is a step by step guide to add Resend as your email service provider. You can use use your existing Resend account to integrate, or create a new account from [here](https://resend.com/signup)
 
 ## Resend integration on SuprSend account
 
-**Step 1:** On the SuprSend dashboard, follow the steps as below:
+On the SuprSend dashboard, go to vendor page from side panel and click Email -> Resend from the list of Vendors. This will open vendor details page as shown below:
 
-1. Go to vendors tab from the side navigation panel. Select 'Email' channel
+![](https://files.readme.io/00da130-image.png)
 
-2. Select the relevant [notification category](/docs/notification-category) from the list
-
-   1. **System** for time-sensitive notifications like OTP, Forgot Password and Verification emails. These notifications can't be unsubscribed by the users and are given the highest priority in notification send queues.
-   2. **Transactional** notifications are sent in response to some user transaction or action on your platform like Payment Confirmation, booking confirmation, Post shared / liked, and reminders. They are second in priority in notification queues after system notifications. [Know more about transactional category here](/docs/notification-category#transactional)
-   3. **Promotional** notifications are sent out to users to increase sales, promote products, or bring users back to your platform like newsletters, announcements, upcoming sale or event, deals and discounts etc. These communications are generally sent in bulk, consuming a significant portion of the communication pipeline. That's why they are given the least priority in notification queue.
-
-3. Select 'Resend' from the list of Vendors
-
-![](/images/docs/f949509-image.png)
-
-**Step 2:** On the Settings, enter the details:
-
-![](/images/docs/00da130-image.png)
-
-| Form Field             | Description                                                                                                                                                                                                     |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Nickname               | You can give any name which may help you to identify this account easily                                                                                                                                        |
-| API Key                | You will get the [API key from your Resend account](https://resend.com/api-keys).SuprSend uses this API key to send email on your behalf via your registered Resend account.                                    |
-| From Name              | Default 'From Name' that email will go from. You can override this in the individual template.*eg. SuprSend*                                                                                                    |
-| From Email             | Default 'From Email ID' that email will go from. You can override this in the individual template.*eg. [\[email protected\]](/cdn-cgi/l/email-protection#cdbeb8bdbda2bfb98dbeb8bdbfbea8a3a9e3aea2a0)*           |
-| Reply Email            | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. [\[email protected\]](/cdn-cgi/l/email-protection#ef9c9a9f9f809d9baf9c9a9f9d9c8a818bc18c8082)* |
-| Price per notification | This is the amount you pay per email notification to Resend. It helps us to calculate, estimate and optimise your cost spent on notifications.                                                                  |
+| Form Field             | Description                                                                                                                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nickname               | You can give any name which may help you to identify this account easily                                                                                                     |
+| API Key                | You will get the [API key from your Resend account](https://resend.com/api-keys).SuprSend uses this API key to send email on your behalf via your registered Resend account. |
+| Form Name              | Default 'From Name' that email will go from. You can override this in the individual template.&#xA;*eg. SuprSend*                                                            |
+| Form Email             | Default 'From Email ID' that email will go from. You can override this in the individual template.&#xA;*eg.* [*support@suprsend.com*](mailto:support@suprsend.com)           |
+| Reply Email            | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.&#xA;*eg.* [*support@suprsend.com*](mailto:support@suprsend.com) |
+| Price per notification | This is the amount you pay per email notification to Resend. It helps us to calculate, estimate and optimise your cost spent on notifications.                               |
 
 ## Get API Key from Resend account
 
@@ -54,29 +38,16 @@ One of the platform advantage of using SuprSend as a central communication syste
 
 Go to the webhook tab from side navigation on your resend account and add SuprSend webhook endpoint and select all events to listen.
 
-URL: **`https://hub.suprsend.com/webhook/resend/`**
+`URL: `[**`https://hub.suprsend.com/webhook/resend/`**](https://hub.suprsend.com/webhook/resend/)
 
 ![](/images/docs/f302109-image.png)
 
 ## How to add Unsubscription link in email
 
-It is advisable to give your recipients the ability to unsubscribe from emails. First, it is required by the [CAN-Spam Act](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business). Second, if you don’t give them this option, they are more likely to click on the spam complaint button, which will cause more harm than allowing them to unsubscribe. Finally, many ESPs look for unsubscribe links and are more likely to filter your email if they don’t have them.
+You can directly add unsubscription link in your email using [`$hosted_preference_url`](/docs/preferences#hosted-preference-page) variable in your template. This link directs users to the [SuprSend preference page](/docs/preferences). With SuprSend preference setting, you have the flexibility to create multiple notification categories based on the type of notifications. This allows users to opt-out of specific notification categories, providing them with granular control over their preferences compared to other email services where they can only opt-out from all marketing communications at once.
 
-You can directly add unsubscription link in your email using `$hosted_preference_url` variable in your template. This link directs users to the [SuprSend preference page](/docs/preferences). With SuprSend preference setting, you have the flexibility to create multiple notification categories based on the type of notifications. This allows users to opt-out of specific notification categories, providing them with granular control over their preferences compared to other email services where they can only opt-out from all marketing communications at once.
+**Why it's important to give unsubscribe option in email?**
+
+First, it is required by the [CAN-Spam Act](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business). Second, if you don’t give them this option, they are more likely to click on the spam complaint button, which will cause more harm than allowing them to unsubscribe. Finally, many ESPs look for unsubscribe links and are more likely to filter your email if they don’t have them.
 
 ***
-
-What’s Next
-
-Create an email template and create workflow to start sending email notifications with your Resend account
-
-* [Email Template](/docs/email)
-* [Create Workflow](https://docs.suprsend.com/docs/design-workflow)
-
-* [Table of Contents](#)
-
-* * [Resend integration on SuprSend account](#resend-integration-on-suprsend-account)
-  * [Get API Key from Resend account](#get-api-key-from-resend-account)
-  * [Whitelist email domain on Resend](#whitelist-email-domain-on-resend)
-  * [Configuring Open/Click tracking for emails on Resend](#configuring-openclick-tracking-for-emails-on-resend)
-  * [How to add Unsubscription link in email](#how-to-add-unsubscription-link-in-email)

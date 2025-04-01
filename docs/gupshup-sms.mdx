@@ -3,27 +3,17 @@ title: "Gupshup"
 description: "https://www.gupshup.io/"
 ---
 
-[Suggest Edits](/edit/gupshup-sms)
-
 This section is a step-by-step guide to select Gupshup as your SMS service provider.
 
 ## Pre-Requisites
 
 1. You'll need a Gupshup account to complete this tutorial. You can use your existing Gupshup account to integrate, or [Create a Gupshup account](https://www.gupshup.io/auth/signup)
+
 2. [Create an Enterprise DLT account](https://dltconnect.airtel.in/signup/) (The link added here is for Airtel DLT portal. Though you can choose any vendor that best suits you)
 
 ## Gupshup integration on SuprSend account
 
-On the SuprSend dashboard, follow the steps as below:
-
-1. Select Vendors from the left panel
-2. Select 'SMS' as the channel from the list
-3. Select the communication type from the list - OTP, Transactional, Promotional
-4. Select 'Gupshup' from the list of Vendors
-
-![](/images/docs/1714a09-gupshup_vendor_page.png)
-
-Clicking on the vendor name will open settings page. In the **Settings** page, enter the details corresponding to each type of notification:
+On the SuprSend dashboard, go to vendor page from side panel and click SMS -> Gusphup from the list of Vendors. This will open vendor details page as shown below:
 
 ![](/images/docs/d9bbd0d-Screenshot_2022-08-22_at_4.23.59_PM.png)
 
@@ -45,7 +35,7 @@ One of the platform advantage of using SuprSend as a central communication syste
 
 Send a mail to Gupshup team to enable below webhook URL to your account:
 
-URL : `https://hub.suprsend.com/webhook/gupshup/sms/` Request method - POST
+URL : [`https://hub.suprsend.com/webhook/gupshup/sms/`](https://hub.suprsend.com/webhook/gupshup/sms/) Request method - POST
 
 ## Enabling URL shortener service in Gupshup account
 
@@ -58,18 +48,3 @@ To activate URL shortening, write a mail to gupshup enterprise support
 To register header on Airtel DLT platform, you can refer the section: [Sender ID/Mask/Header Registration - DLT Platform](https://enterprise.smsgupshup.com/DLT/senderidRegistration)
 
 ***
-
-What’s Next
-
-Create SMS template and add a workflow to start sending your SMS notifications
-
-* [SMS Template](/docs/sms-template)
-* [Create Workflow](https://docs.suprsend.com/docs/design-workflow)
-
-* [Table of Contents](#)
-
-* * [Pre-Requisites](#pre-requisites)
-  * [Gupshup integration on SuprSend account](#gupshup-integration-on-suprsend-account)
-  * [Setting Callback URL in Gupshup Account](#setting-callback-url-in-gupshup-account)
-  * [Enabling URL shortener service in Gupshup account](#enabling-url-shortener-service-in-gupshup-account)
-  * [How to register headers through Airtel DLT platform](#how-to-register-headers-through-airtel-dlt-platform)

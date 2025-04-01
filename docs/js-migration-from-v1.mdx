@@ -1,111 +1,107 @@
----
-title: "Migrating from v1"
-description: "Suggest Edits"
----
+# Migrating to v3 from v2
 
-Migrating from v1 to v2 has breaking changes, as we have made some architectural level changes. Following are changes in detail:
+This migration is pretty simple. This version also supports InApp Feed support.
+
+- SuprSend class export has been changed from default export to named export.
+
+```javascript v3
+import {SuprSend} from "@suprsend/web-sdk"
+```
+```javascript v2
+import SuprSend from "@suprsend/web-sdk"
+```
+
+# Migrating to v2 from v1
+
+Migrating from v1 to v2 has breaking changes, as we have made some architectural level changes. Refer the v1 SDK [documentation](https://docs.suprsend.com/v1.2.1/docs/javascript-sdk) . Following are changes in detail:
 
 ### Authentication Changes
 
-In v1, workspace key and workspace secret are used to authenticate requests made to SuprSend which is not so secure.
+In v1, workspace key and workspace secret are used to authenticate requests made to SuprSend which is not so secure. 
 
 In v2 we have changed authentication to use public API Key and Signed User Token.
 
-<CodeGroup>
-  ```javascript v2
-  const suprSendClient = new SuprSend(publicApiKey);
+```javascript v2
+const suprSendClient = new SuprSend(publicApiKey);
 
-  suprSendClient.idenitfy(distinctId, userToken);
-  ```
+suprSendClient.idenitfy(distinctId, userToken);
+```
+```javascript v1
+suprsend.init(workspace_key, workspace_secret);
+```
 
-  ```javascript v1
-  suprsend.init(workspace_key, workspace_secret);
-  ```
-</CodeGroup>
+<br />
 
 ### Initializing SDK
 
-v1 used `init` method to initialize SDK and suprsend instance was provided by SDK itself.
+v1 used `init` method to initialize SDK and suprsend instance was provided by SDK itself. 
 
 In v2 we have provided `SuprSend` class and its clients responsibility to export the class instance and use it in other places to call library methods.
 
-<CodeGroup>
-  ```javascript v2
-  export const suprSendClient = new SuprSend(publicApiKey);
+```javascript v2
+export const suprSendClient = new SuprSend(publicApiKey);
 
-  suprSendClient.track("test")
-  ```
+suprSendClient.track("test")
+```
+```Text v1
+suprsend.init(workspace_key, workspace_secret);
 
-  ```Text v1
-  suprsend.init(workspace_key, workspace_secret);
+suprsend.track("test")
+```
 
-  suprsend.track("test")
-  ```
-</CodeGroup>
+<br />
 
 ### Synchronous methods
 
-In v1 all methods used to be asynchronous and have returned void. In background SDK used to batch requests and make api calls.
+In v1 all methods used to be asynchronous and have returned void. In background SDK used to batch requests and make api calls. 
 
-In v2 we have made all requests synchronous so you could access response of api immediately depending of status of api call. Almost all methods including preference methods return response type of [APIResponse](/docs/javascript-sdk#response-structure).
+In v2 we have made all requests synchronous so you could access response of api immediately depending of status of api call. Almost all methods including preference methods return response type of [APIResponse](https://docs.suprsend.com/docs/javascript-sdk#response-structure).
 
-<CodeGroup>
-  ```javascript v2
-  const trackResponse = await suprSendClient.track("test")
+```javascript v2
+const trackResponse = await suprSendClient.track("test")
 
-  console.log(trackResponse.status) // success or error
-  ```
+console.log(trackResponse.status) // success or error
+```
+```javascript v1
+const resp = suprsend.track("test") // resp will be null
+```
 
-  ```javascript v1
-  const resp = suprsend.track("test") // resp will be null
-  ```
-</CodeGroup>
+<br />
 
 ### Renamed methods and arguments to camelCase
 
-In v1, all library methods and method parameters are in snake\_case which has been changed to camelCase in v2.
+In v1, all library methods and method parameters are in snake_case which has been changed to camelCase in v2.
 
-<CodeGroup>
-  ```javascript v2
-  // examples
-  suprSendClient.user.addEmail();
-  suprSendClient.user.preferences.getPreferences({tenantId: "test"});
-  ```
+```javascript v2
+// examples
+suprSendClient.user.addEmail();
+suprSendClient.user.preferences.getPreferences({tenantId: "test"});
+```
+```javascript v1
+// examples
+suprsend.user.add_email();
+suprsend.user.preferences.get_preferences({tenant_id: "test"});
+```
 
-  ```javascript v1
-  // examples
-  suprsend.user.add_email();
-  suprsend.user.preferences.get_preferences({tenant_id: "test"});
-  ```
-</CodeGroup>
+<br />
 
 ### Removed `purchase_made` method
 
 In v2 `purchase_made`method has been removed. If you are using this method in v1 you can directly call track method with event type: `$purchase_made`.
 
-<CodeGroup>
-  ```javascript v2
-  suprSendClient.track("$purchase_made", {item: "ps5"});
-  ```
+```javascript v2
+suprSendClient.track("$purchase_made", {item: "ps5"});
+```
+```javascript v1
+suprsend.purchase_made({item: "ps5"});
+```
 
-  ```javascript v1
-  suprsend.purchase_made({item: "ps5"});
-  ```
-</CodeGroup>
+<br />
 
 ### Removed `set_super_properties`
 
 In v2 `set_super_properties` method has been removed. If you are using this method in v1 you could directly pass all these super properties as individual event properties.
 
-After migrating please test all library methods to see if they everything is working properly. If you face any issue in migration process please reach out to us on our [slack community](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#/shared-invite/email) or drop an email to us on [\[email protected\]](/cdn-cgi/l/email-protection#45363035352a3731053630353736202b216b262a28)
+<br />
 
-***
-
-* [Table of Contents](#)
-
-* * [Authentication Changes](#authentication-changes)
-  * [Initializing SDK](#initializing-sdk)
-  * [Synchronous methods](#synchronous-methods)
-  * [Renamed methods and arguments to camelCase](#renamed-methods-and-arguments-to-camelcase)
-  * [Removed `purchase_made` method](#removed-purchase_made-method)
-  * [Removed `set_super_properties`](#removed-set_super_properties)
+After migrating please test all library methods to see if they everything is working properly. If you face any issue in migration process please reach out to us on our [slack community](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#/shared-invite/email) or drop an email to us on [support@suprsend.com](mailto:support@suprsend.com)

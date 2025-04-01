@@ -1,24 +1,14 @@
 ---
 title: "ACL Sinch"
 description: "https://www.aclmobile.com/sms-business-solutions"
+sidebarTitle: "ACL Sinch"
 ---
-
-[Suggest Edits](/edit/acl-sinch)
 
 This section is a step by step guide to select Sinch (ACL) as your SMS service provider. You can use use your existing ACL account to integrate, or connect with their sales team for account setup from [here](https://www.aclmobile.com/request-a-demo/)
 
 ## ACL(Sinch) integration on SuprSend account
 
-On the SuprSend dashboard, follow the steps as below:
-
-1. Select Vendors from the left panel
-2. Select 'SMS' as the channel from the list
-3. Select the communication type from the list - OTP, Transactional, Promotional
-4. Select 'Sinch (ACL)' from the list of Vendors
-
-![](/images/docs/16be150-Sinch_vendor_page.png)
-
-Clicking on the vendor name will open settings page. In the **Settings** page, enter the details corresponding to each type of notification:
+On the SuprSend dashboard, go to vendor page from side panel and click SMS -> Sinch (ACL) from the list of Vendors. This will open vendor details page as shown below:
 
 ![](/images/docs/4bd15ce-Screenshot_2022-08-21_at_10.44.33_PM.png)
 
@@ -46,32 +36,18 @@ As soon as your account is created, you'll receive a mail from sinch team sharin
 
 One of the platform advantage of using SuprSend as a central communication system is that it shows notification analytics for all channels in your SuprSend account together.
 
-Send a mail to acl sinch team to enable below webhook URL to your account, webhook for OTP and transactional account will be different
+Send a mail to ACL Sinch team to enable below webhook URL to your account, webhook for OTP and transactional account will be different
 
-1. For OTP account
+> **For OTP account**
+> URL : [`https://hub.suprsend.com/webhook/acl/sms/otp`](https://hub.suprsend.com/webhook/acl/sms/otp)
+> Request method - POST
 
-   1. URL : `https://hub.suprsend.com/webhook/acl/sms/otp` Request method - POST
-
-2. For Transactional account
-
-   1. URL : `https://hub.suprsend.com/webhook/acl/sms/` Request method - POST
+> **For Transactional account**
+> URL : [`https://hub.suprsend.com/webhook/acl/sms/`](https://hub.suprsend.com/webhook/acl/sms/)&#x20;
+> Request method - POST
 
 ## How to register headers through Airtel DLT platform
 
 To register header on Airtel DLT platform, you can refer the section: [Sender ID/Mask/Header Registration - DLT Platform](https://enterprise.smsgupshup.com/DLT/senderidRegistration)
 
 ***
-
-What’s Next
-
-Create SMS template and add a workflow to start sending your SMS notifications
-
-* [SMS Template](/docs/sms-template)
-* [Create Workflow](https://docs.suprsend.com/docs/design-workflow)
-
-* [Table of Contents](#)
-
-* * [ACL(Sinch) integration on SuprSend account](#aclsinch-integration-on-suprsend-account)
-    * [How to get App ID, Sub App ID for your ACL(Sinch) account](#how-to-get-app-id-sub-app-id-for-your-aclsinch-account)
-  * [Setting Callback URL in ACL(Sinch) Account](#setting-callback-url-in-aclsinch-account)
-  * [How to register headers through Airtel DLT platform](#how-to-register-headers-through-airtel-dlt-platform)

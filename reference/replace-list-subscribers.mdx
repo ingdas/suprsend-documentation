@@ -1,0 +1,11 @@
+---
+title: "Replace List Subscribers"
+---
+
+For scenarios where you need to replace the entire user list rather than just updating a subset, follow these steps using the provided APIs:
+
+- [Start Sync](/reference/start-sync): This API creates a draft version of the list where you can add or remove users.
+- Update Users: [Add](/reference/add-subscribers-to-draft-list) or [remove](/reference/remove-subscribers-from-draft-list) subscribers to/from this draft version as needed.
+- [Finish Sync](/reference/finish-sync): Call this API when you are done updating users in the draft version. The draft list will replace the current active list after calling this API.
+
+If you create a draft version by mistake and decide not to keep it, you can [delete the draft list](/reference/delete-draft-list).

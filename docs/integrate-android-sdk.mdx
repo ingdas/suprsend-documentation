@@ -3,60 +3,66 @@ title: "Integrate Android SDK"
 description: "This document will cover SDK installation and initialization steps for your Android application"
 ---
 
-[Suggest Edits](/edit/integrate-android-sdk)
-
 ## Installation
 
-**Step 1: Add the mavenCentral() repository to your build file.**
+<Steps>
+  <Step title="Add the mavenCentral() repository to your build file.">
+    <CodeGroup>
+      ```groovy Add it in your root build.gradle at the end of repositories
+      allprojects {
+      		repositories {
+      			...
+      			mavenCentral()
+      		}
+      	}
+      ```
+    </CodeGroup>
+  </Step>
 
-<CodeGroup>
-  ```groovy Add it in your root build.gradle at the end of repositories
-  allprojects {
-  		repositories {
-  			...
-  			mavenCentral()
-  		}
-  	}
-  ```
-</CodeGroup>
+  <Step title="Add Android SDK dependency inside app level build.gradle">
+    Add following line of code inside dependencies in app build.gradle
 
-**Step 2. Add Android SDK dependency inside app level build.gradle** Add following line of code inside dependencies in app build.gradle
+    <CodeGroup>
+      ```java build.gradle
+      dependencies {
+      	        implementation("com.suprsend:native:1.0.1")
+      	}
+      ```
+    </CodeGroup>
+  </Step>
+</Steps>
 
-<CodeGroup>
-  ```java build.gradle
-  dependencies {
-  	        implementation("com.suprsend:native:1.0.1")
-  	}
-  ```
-</CodeGroup>
+## &#x20;Initialization
 
-## Initialization
+<Steps>
+  <Step title="Initialising Suprsend Android SDK">
+    To integrate SuprSend in your Android app, initialise the Suprsend android sdk in MainApplicaNtion inside `onCreate` method and just above `super.onCreate()` line.
 
-**Step 1.** To integrate SuprSend in your Android app, initialise the Suprsend android sdk in MainApplication inside `onCreate` method and just above `super.onCreate()` line.
+    <CodeGroup>
+      ```kotlin kotlin
+      class MyApplication : Application() {
 
-<CodeGroup>
-  ```kotlin kotlin
-  class MyApplication : Application() {
-
-      override fun onCreate() {
-          SSApi.init(this,"WORKSPACE KEY", "WORKSPACE SECRET")
-          super.onCreate()
+          override fun onCreate() {
+              SSApi.init(this,"WORKSPACE KEY", "WORKSPACE SECRET")
+              super.onCreate()
+          }
       }
-  }
-  ```
-</CodeGroup>
+      ```
+    </CodeGroup>
 
-Replace **WORKSPACE KEY** and **WORKSPACE SECRET** with your workspace values. You will get both the tokens from [Suprsend dashboard](https://app.suprsend.com/) (***Settings page -> "API keys"*** section). For more details, check the [documentation on 'Workspaces'](/docs/workspace).
+    Replace **`WORKSPACE KEY`** and **`WORKSPACE SECRET`** with your workspace values. You will get both the tokens from [Suprsend API Keys ](https://app.suprsend.com/en/demo/developers/api-keys)[page ](https://app.suprsend.com/en/demo/developers/api-keys)***` (Settings page -> "API keys"`***` section)`
 
-![](/images/docs/d60fec2-Frame_58_1.png)
+    ![](/images/WorkspaceKeyandsecret.png)
+  </Step>
 
-**Step 2.** Import SuprSend SDK in your client side code
-
-<CodeGroup>
-  ```kotlin kotlin
-  val ssApi = SSApi.getInstance()
-  ```
-</CodeGroup>
+  <Step title="Import SuprSend SDK in your client side code">
+    <CodeGroup>
+      ```kotlin kotlin
+      val ssApi = SSApi.getInstance()
+      ```
+    </CodeGroup>
+  </Step>
+</Steps>
 
 ## Logging
 
@@ -116,10 +122,3 @@ For creating a release build you will need to add these below pro-guard rules:
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-  * [Initialization](#initialization)
-  * [Logging](#logging)
-  * [Proguard Rules (For release build)](#proguard-rules-for-release-build)

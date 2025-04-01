@@ -3,172 +3,256 @@ title: "Lists"
 description: "Methods to create and manage lists using Node SDK"
 ---
 
-[Suggest Edits](/edit/node-lists)
+The Lists SDK methods lets you create / manage list of subscribers. You can then send [broadcast](/docs/broadcast) to all the users in the list or create a workflow that triggers when a new user enters / exits list.
 
-List methods lets you manage a list and subscribers in that list. You can then send bulk messages to all the subscribers in the list with a single API call.
+## Create / Update List
 
-## Create list
+You can use `supr_client.subscribers_list.create` method to create a new list
 
 <CodeGroup>
-  ```javascript javascript
-  const { Suprsend } = require("@suprsend/node-sdk");
 
-  const supr_client = new Suprsend("workspace_key", "workspace_secret");
+```javascript Request
+const { Suprsend } = require("@suprsend/node-sdk");
 
-  // create list api call
-  const response = supr_client.subscriber_lists.create({
-    list_id: "_list_id_",
-    list_name: "_list_name_",
-    list_description: "_some sample descritpion for list_",
-  });
+const supr_client = new Suprsend("workspace_key", "workspace_secret");
 
-  data.then((res) => console.log(res)).catch((err) => console.log(err));
-  ```
+// create list api call
+const response = supr_client.subscriber_lists.create({
+  list_id: "_list_id_",
+  list_name: "_list_name_",
+  list_description: "_some sample descritpion for list_",
+});
+
+data.then((res) => console.log(res)).catch((err) => console.log(err));
+```
+
+
+```javascript Response
+{
+   "list_id":"_list_id_",
+   "list_name":"_list_name_",
+   "list_description":"_some sample description for the list_",
+   "list_type":"static_list",
+   "subscribers_count":0,
+   "source":"None",
+   "is_readonly":false,
+   "status":"active",
+   "track_user_entry":false,
+   "track_user_exit":false,
+   "requested_for_delete":false,
+   "created_at":"2025-03-14T13:42:45.641000Z",
+   "updated_at":"2025-03-14T13:42:45.641000Z",
+   "drafts":"None"
+}
+```
+
 </CodeGroup>
 
-| Property                     | Description                                                                                             |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------- |
-| list\_id                     | max 64 characters and should contains alphanumeric characters(a-z, 0-9), hyphen (-) and underscode(\_). |
-| list\_name (Optional)        | Name of the list. This is for your reference and can be referred to understand what this list is for.   |
-| list\_description (Optional) | Description of the list to identify what type of users belong to this list.                             |
+<Note>
+  Guidelines on defining the list_id
 
-## Get list details
+  - `list_id` is case-insensitive. Suprsend first converts list_id to lowercase before storing it or doing any sort of comparison on it.
+  - `list_id `can be of max 64 characters.
+  - It can contain characters [a-z0-9\_-] i.e. alphanumeric characters, \_(underscore) and -(hyphen).
+</Note>
+
+## Get list data
+
+You can get the latest information of a list using `supr_client.subscribers_list.get` method.
 
 <CodeGroup>
-  ```javascript Javascript
-  const data = supr_client.subscriber_lists.get("_list_id_");
-  ```
 
-  ```json Response
-  {
-  	"list_id": "list-id",
-  	"list_name": "List Name",
-    "updated_at": "2022-12-18T10:40:27.268417+00:00",
-  	"list_description": "List description"
-  }
-  ```
+```javascript Request
+const data = supr_client.subscriber_lists.get("_list_id_");
+```
+
+
+```javascript Response
+{
+	"list_id": "list-id",
+	"list_name": "List Name",
+  "updated_at": "2022-12-18T10:40:27.268417+00:00",
+	"list_description": "List description"
+}
+```
+
 </CodeGroup>
 
 ## Get list of lists
 
-<CodeGroup>
-  ```javascript Javascript
-  const data = supr_client.subscriber_lists.get_all(); // default limit 20
+To get the data of all the lists created in your workspace, use `supr_client.subscribers_list.get_all()`  method
 
-  const data = supr_client.subscriber_lists.get_all({limit:20, offset:0}); //  max limit 1000
-  ```
+<CodeGroup>
+
+```javascript Request
+const data = supr_client.subscriber_lists.get_all(); // default limit 20
+
+const data = supr_client.subscriber_lists.get_all({limit:20, offset:0}); //  max limit 1000
+```
+
+
+```javascript Response
+{
+  "meta": {
+    "count": 14,
+    "limit": 20,
+    "offset": 0
+  },
+  "results": [
+    {
+      "list_id": "newsletter_subscribers",
+      "list_name": "Newsletter Subscribers",
+      "list_description": "all users who opted in to receive product updates",
+      "list_type": "static_list",
+      "subscribers_count": 0,
+      "source": "None",
+      "is_readonly": false,
+      "status": "active",
+      "track_user_entry": false,
+      "track_user_exit": false,
+      "requested_for_delete": false,
+      "created_at": "2025-01-14T13:42:45.641000Z",
+      "updated_at": "2025-01-14T13:42:45.641000Z",
+      "drafts": "None"
+    },
+    {
+      "list_id": "abandoned_application",
+      "list_name": "Signups abandoned application",
+      "list_description": "Users who didn’t finish application",
+      "list_type": "static_list",
+      "subscribers_count": 0,
+      "source": "None",
+      "is_readonly": false,
+      "status": "active",
+      "track_user_entry": true,
+      "track_user_exit": true,
+      "requested_for_delete": false,
+      "created_at": "2025-02-14T13:42:45.641000Z",
+      "updated_at": "2025-02-14T13:42:45.641000Z",
+      "drafts": "None"
+    }
+	...
+  ]
+}
+```
+
 </CodeGroup>
 
-## Add subscribers to list
+## Add Subscribers to list
+
+Use `supr_client.subscribers_list.add()` to add list subscribers. There is no limit to the number of subscribers that you can add to a list.
 
 <CodeGroup>
-  ```javascript Javascript
-  const list_id = "_list_id_";
-  const subscribers = ["_distinct_id1_","_distinct_id2_", ..... ];
 
-  const data = supr_client.subscriber_lists.add(list_id, subscribers);
-  ```
+```javascript Request
+const list_id = "_list_id_";
+const subscribers = ["_distinct_id1_","_distinct_id2_", ..... ];
+
+const data = supr_client.subscriber_lists.add(list_id, subscribers);
+```
+
+
+```javascript Response
+{
+   "success":true
+}
+```
+
 </CodeGroup>
 
-## Remove subscribers from list
+## Remove Subscribers from list
+
+You can remove subscribers from the list using `supr_client.subscribers_list.remove()`
 
 <CodeGroup>
-  ```javascript Javascript
-  const list_id = "_list_id_";
-  const subscribers = ["_distinct_id1_","_distinct_id2_", ..... ];
 
-  const data = supr_client.subscriber_lists.remove(list_id, subscribers);
-  ```
+```javascript Request
+const list_id = "_list_id_";
+const subscribers = ["_distinct_id1_","_distinct_id2_", ..... ];
+
+const data = supr_client.subscriber_lists.remove(list_id, subscribers);
+```
+
+
+```javascript Response
+{
+   "success":true
+}
+```
+
 </CodeGroup>
 
 ## Delete list
 
 <CodeGroup>
-  ```javascript javascript
-  const data = supr_client.subscriber_lists.delete("_list_id_");
-  ```
+
+```javascript Request
+const data = supr_client.subscriber_lists.delete("_list_id_");
+```
+
 </CodeGroup>
 
-## Replace users from the list
+## Replace users in the list
 
 In case you want to refresh list with a new set of users completely, you can replace users by creating a draft version of the list and updating users in it.
 
-### 1. Start Sync to create draft version of the list
+<Steps>
+  <Step title="Start Sync to create draft version of the list">
+    This method will create a draft version of the list where you can add the new set of users to replace users.
 
-This method will create a draft version of the list where you can add the new set of users to replace users.
+    <CodeGroup>
 
-<CodeGroup>
-  ```javascript javascript
-  const data = supr_client.subscriber_lists.start_sync("_list_id_");
-  ```
-</CodeGroup>
+    ```javascript Request
+    const data = supr_client.subscriber_lists.start_sync("_list_id_");
+    ```
 
-### 2. Add Subscribers to draft list
+    </CodeGroup>
+  </Step>
+  <Step title="Add Subscribers to draft list">
+    You can use this method to add subscribers to List draft version created in Step 1. You'll get `version_id` in start sync response.
 
-You can use this method to add subscribers to List draft version created in Step 1. You'll get `version_id` in start sync response.
+    <CodeGroup>
 
-<CodeGroup>
-  ```javascript javascript
-  const data = supr_client.subscriber_lists.add_to_version("_list_id_", "01HHCTXXXXXXXXXXX", ["_user_id_1","user_id_2"])
-  ```
-</CodeGroup>
+    ```javascript Request
+    const data = supr_client.subscriber_lists.add_to_version("_list_id_", "01HHCTXXXXXXXXXXX", ["_user_id_1","user_id_2"])
+    ```
 
-### 3. Remove Subscribers from draft list
+    </CodeGroup>
+  </Step>
+  <Step title="Remove Subscribers from draft list">
+    You can use this method to remove subscribers from List draft version created in Step 1. You'll get `version_id` in start sync response.
 
-You can use this method to remove subscribers from List draft version created in Step 1. You'll get `version_id` in start sync response.
+    <CodeGroup>
 
-<CodeGroup>
-  ```javascript javascript
-  const data = supr_client.subscriber_lists.remove_from_version("_list_id_", "01HHCTXXXXXXXXXXX", ["_user_id_1","_user_id_2"])
-  ```
-</CodeGroup>
+    ```javascript Request
+    const data = supr_client.subscriber_lists.remove_from_version("_list_id_", "01HHCTXXXXXXXXXXX", ["_user_id_1","_user_id_2"])
+    ```
 
-### 4. Finish Sync to make the draft version live
+    </CodeGroup>
+  </Step>
+  <Step title="Finish Sync to make the draft version live">
+    Once your subscribers are updated in the list, use this method to finish sync and make the draft version updated in above steps live.
 
-Once your subscribers are updated in the list, use this method to finish sync and make the draft version updated in above steps live.
+    <CodeGroup>
 
-<CodeGroup>
-  ```javascript javascript
-  const data = supr_client.subscriber_lists.finish_sync("_list_id_", "01HHCTXXXXXXXXXXX")
-  ```
-</CodeGroup>
+    ```javascript Request
+    const data = supr_client.subscriber_lists.finish_sync("_list_id_", "01HHCTXXXXXXXXXXX")
+    ```
 
-### Delete Draft list
+    </CodeGroup>
+  </Step>
+</Steps>
+
+---
+
+### Delete Draft List
 
 You can also delete draft list if it's created by mistake.
 
 <CodeGroup>
-  ```javascript javascript
-  const data = supr_client.subscriber_lists.delete_version("_list_id_", "01HHCTXXXXXXXXXXX");
-  ```
+
+```python Request
+const data = supr_client.subscriber_lists.delete_version("_list_id_", "01HHCTXXXXXXXXXXX");
+```
+
 </CodeGroup>
-
-***
-
-What’s Next
-
-Send broadcast notification to users in list
-
-* [Broadcast](/docs/node-broadcast)
-
-* [Table of Contents](#)
-
-* * [Create list](#create-list)
-
-  * [Get list details](#get-list-details)
-
-  * [Get list of lists](#get-list-of-lists)
-
-  * [Add subscribers to list](#add-subscribers-to-list)
-
-  * [Remove subscribers from list](#remove-subscribers-from-list)
-
-  * [Delete list](#delete-list)
-
-  * [Replace users from the list](#replace-users-from-the-list)
-
-    * [1. Start Sync to create draft version of the list](#1-start-sync-to-create-draft-version-of-the-list)
-    * [2. Add Subscribers to draft list](#2-add-subscribers-to-draft-list)
-    * [3. Remove Subscribers from draft list](#3-remove-subscribers-from-draft-list)
-    * [4. Finish Sync to make the draft version live](#4-finish-sync-to-make-the-draft-version-live)
-    * [Delete Draft list](#delete-draft-list)

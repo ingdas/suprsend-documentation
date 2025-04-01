@@ -1,46 +1,29 @@
 ---
-title: "Send and Track Events"
+title: "Sync Events"
 description: "This document will cover the method to send event to Suprsend platform"
 ---
-
-[Suggest Edits](/edit/react-native-send-event-data)
 
 In this section, we'll cover how to send events to the Suprsend platform for both iOS and Android application
 
 ## Pre-requisites
 
-1. [Integrate react native SDK in android application](/docs/integrate-react-native-sdk-android)
-2. [Integrate react native SDK in iOS application](/docs/integrate-react-native-sdk-ios)
-3. [Create User Profile](/docs/react-native-create-user)
-4. [Create Template on SuprSend platform](/docs/templates) - if you want to trigger workflow by passing the event
-5. [Create Workflow on SuprSend Platform](/docs/workflows) - if you want to trigger workflow by passing the event
-
-## Create Workflow on SuprSend Platform
-
-For Event based workflow trigger, you'll have to [create the workflow on SuprSend Platform](/docs/design-workflow).
-
-![577](/images/docs/d95d579-Frame_2.png "Frame 2.png")
+1. [Create User](/docs/react-native-create-user) - Mandatory to pass in event trigger
 
 ## Sending Events to SuprSend
 
-Once the workflow is configured, you can pass the `Event Name` ( `GROCERY_PURCHASED` in above example) defined in workflow configuration from your SDK and the related workflow will be triggered. Variables added in the template should be passed as event `properties`
+You can setup events on user actions in your app and configure workflows on top of it that triggers when the corresponding event is passed through App. Variables added in the template or workflow should be passed as event `properties`
 
-You can send Events from your app to SuprSend platform by using `suprsend.track()` method
+You can send Events from your app to SuprSend platform by using `suprsend.track()` method.
 
 <CodeGroup>
   ```javascript javascript
-  //method
-  suprsend.track(event_name);
   suprsend.track(event_name, properties);
-
-  //Sample values 
-  suprsend.track("grocery_purchased");
   suprsend.track("grocery_purchased", {"item":"olive oil","amount":"$12"});
   ```
 </CodeGroup>
 
 <Warning>
-  When you create an Event or a property, please ensure that the Event Name or Property Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
+  Event Name or Property Name should not start with **`$`** or **`ss_`**. These keywords are reserved for internal events and property names.
 </Warning>
 
 ### System Events tracked by SuprSend
@@ -59,70 +42,56 @@ There are some system events tracked by SuprSend SDK by default. These are some 
 
 ## Advanced Concepts
 
-### 1. Super Properties
+### **1. Super Properties**
 
 Super properties are data that are always sent with events data. These super properties will be sent in each event after calling this method. Super properties will be stored in local storage, and will persist across invocations of app.
 
-#### Set Super Property
+<AccordionGroup>
+  <Accordion title="Set Super Property" defaultOpen={false}>
+    There are some super properties that SuprSend SDK will send by default. Developer can set custom super properties as well with `suprsend.setSuperProperties()` method
 
-There are some super properties that SuprSend SDK will send by default. Developer can set custom super properties as well with `suprsend.setSuperProperties()` method
+    <CodeGroup>
+      ```javascript javascript
+      //method
+      suprsend.setSuperProperties(key, value);
+      suprsend.setSuperProperties(property_obj);
 
-<CodeGroup>
-  ```javascript javascript
-  //method
-  suprsend.setSuperProperties(key, value);
-  suprsend.setSuperProperties(property_obj);
+      //Example
+      suprsend.setSuperProperties("Location", "Banglore");
+      suprsend.setSuperProperties({"Location": "Banglore","Pincode": 1234567});
+      ```
+    </CodeGroup>
 
-  //Example
-  suprsend.setSuperProperties("Location", "Banglore");
-  suprsend.setSuperProperties({"Location": "Banglore","Pincode": 1234567});
-  ```
-</CodeGroup>
+    Default Super properties tracked by SuprSend SDK:
 
-Default Super properties tracked by SuprSend SDK:
+    | Super Property        | Description                                  | Sample Value     |
+    | --------------------- | -------------------------------------------- | ---------------- |
+    | $app\_version\_string | Version of your app                          | 0.0.1            |
+    | $app\_build\_number   | Build number of your app                     | 2                |
+    | $os                   | Operating system of the user                 | android          |
+    | $manufacturer         | Manufacturer of the user's device            | OnePlus          |
+    | $brand                | Brand of the user's device                   | OnePlus          |
+    | $model                | Model of the user's device                   | GM1901           |
+    | $deviceId             | Device id                                    | 89eead05a0150146 |
+    | $ss\_sdk\_version     | SuprSend SDK version                         | 0.1.31           |
+    | $network              | Network on which the user is                 | wifi             |
+    | $connected            | Whether the user is connected to the network | true             |
+  </Accordion>
 
-| Super Property        | Description                                  | Sample Value     |
-| --------------------- | -------------------------------------------- | ---------------- |
-| $app\_version\_string | Version of your app                          | 0.0.1            |
-| $app\_build\_number   | Build number of your app                     | 2                |
-| $os                   | Operating system of the user                 | android          |
-| $manufacturer         | Manufacturer of the user's device            | OnePlus          |
-| $brand                | Brand of the user's device                   | OnePlus          |
-| $model                | Model of the user's device                   | GM1901           |
-| $deviceId             | Device id                                    | 89eead05a0150146 |
-| $ss\_sdk\_version     | SuprSend SDK version                         | 0.1.31           |
-| $network              | Network on which the user is                 | wifi             |
-| $connected            | Whether the user is connected to the network | true             |
+  <Accordion title="Unset Super Property" defaultOpen={false}>
+    There are unset custom super properties with `suprsend.unSetSuperProperty()` method. This method will stop calling that property with every event trigger.
 
-#### Unset Super Property
+    <CodeGroup>
+      ```javascript javascript
+      suprsend.unSetSuperProperty(key);
 
-There are unset custom super properties with `suprsend.unSetSuperProperty()` method. This method will stop calling that property with every event trigger.
+      suprsend.unSetSuperProperty("Location");
+      ```
+    </CodeGroup>
+  </Accordion>
+</AccordionGroup>
 
-<CodeGroup>
-  ```javascript javascript
-  suprsend.unSetSuperProperty(key);
-
-  suprsend.unSetSuperProperty("Location");
-  ```
-</CodeGroup>
-
-### 2. Special Events
-
-Special events are some best use case events defined by SuprSend. You could call these events with some of their pre-defined properties.
-
-#### 1. Purchase Made
-
-You can call purchase made event if user is doing a transaction on your platform. You can pass property values like product id, product name, and amount in the event.
-
-<CodeGroup>
-  ```javascript javascript
-  suprsend.purchaseMade(property_obj);
-
-  suprsend.purchaseMade({product_id:12,product_name:"Car", amount:12000})
-  ```
-</CodeGroup>
-
-### 3. Flush Events
+### 2. Flush Events
 
 SuprSend SDK automatically flushes events at an interval of 5 seconds, and on certain activities like app relaunch, etc. If you wish to flush a time sensitive event to SuprSend immediately, you can use the `suprSendApi.flush()` method.
 
@@ -135,18 +104,3 @@ All the system tracked events are flushed immediately
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-
-  * [Create Workflow on SuprSend Platform](#create-workflow-on-suprsend-platform)
-
-  * [Sending Events to SuprSend](#sending-events-to-suprsend)
-    * [System Events tracked by SuprSend](#system-events-tracked-by-suprsend)
-
-  * [Advanced Concepts](#advanced-concepts)
-
-    * [1. Super Properties](#1-super-properties)
-    * [2. Special Events](#2-special-events)
-    * [3. Flush Events](#3-flush-events)

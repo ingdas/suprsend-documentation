@@ -1,0 +1,54 @@
+---
+title: "Tenant Preference"
+description: "Learn how to manage preferences for your tenants and its users"
+---
+
+Tenants (previously named as brands) represents a segment that user belongs to. It can be organizations, teams within an organization, subsidiary companies or different product lines in the same business. If you're a B2B application or a multi-tenant SaaS product, you can use tenant preferences to allow company admins to set preference for their internal team or allow your customers to set default preferences for their users.
+
+## Company setting preference for tenants
+
+In a multi-tenant architecture, businesses can define which notification categories and channels are applicable to different tenants. For example - if you are a SAAS platform with some paid features and some of your clients have not subscribed to the paid features. You can hide notification categories related to the paid feature for those tenants.
+
+You can disable category overall preference or set channels as opt-out that are not valid for your tenants from [tenant details page on SuprSend dashboard](https://app.suprsend.com/en/staging/tenants/default/tenant_preference). Tenant will not be able to set preferences in the hidden categories and notification will not be sent to tenant's users in hidden categories.
+
+![](/images/docs/f5dbac0aa956ee3b5b8bc801421ec7b422163dba69a6f6a025bed75c41f48ddf-image.png)
+
+## Per-tenant default preference
+
+Tenants can set [default preferences](/reference/update-tenant-default-preference) for their end users and hide the categories which are not applicable to their end user. This gives tenants control to choose which notifications are sent to their users or shown to their users for setting preferences.
+
+## Controlling preference UI for users
+
+Turning off categories or channels on tenant from [tenant preference page](https://app.suprsend.com/en/demo/tenants/default/tenant_preference) automatically removes it from user's preference view. Additionally, if tenants wish to further limit the categories visible to their end users, they can do so by setting `visible_to_subscriber` to `false` in the [default tenant preferences](/reference/update-tenant-default-preference).
+
+## Collecting preference from tenant users
+
+You can load user preferences for a tenant by simply passing `tenant_id` in [Rest APIs](/reference/update-user-preference) and [preference centre SDK](/docs/overview-preference-page). Hosted preference page automatically loads preferences corresponding to the tenant passed in workflow trigger.
+
+## Triggering tenant workflows
+
+You can simply trigger tenant workflow by passing `tenant_id` in your workflow trigger. [Read more about tenant workflows here](/docs/tenant-workflows).
+
+## Tenant level preference evaluation
+
+When a workflow is triggered, preference is evaluated for recipient and tenant before send node. Notification is sent in categories and channels where both tenant and user preferences are `opt_in`.
+
+<Steps>
+    <Step title="Evaluating Recipient preferences">
+    If recipient preferences are not set in a category, default tenant preference is picked. Once user preference is set in a category, any changes in the default preference of existing categories will not effect recipient preferences.
+  </Step>
+
+  <Step title="Resolving preference conflicts">
+    The order of precedence is always user > tenant > org (set in notification category settings). However, if company turns off notifications in a category or channel for a tenant, user will not get notification in that category even if they have kept their preference `ON` in that category in the past.
+  </Step>
+  <Step title="Debugging preference evaluation in workflow runs">
+    User preferences can change over time and when checking a workflow run, you need to know what was user's preferences at that time. You can view this using the step-by-step debugger in [workflow executions](https://app.suprsend.com/en/demo/logs/executions/?last_n_minutes=1440).
+
+![](/images/docs/e0555b827b95d61b16ba0f58fa1faa05b5109709828157df9d774fb123954516-image.png)
+
+You can also track when user updated their preference by filtering on `Subscriber preference update` in [request logs](https://app.suprsend.com/en/demo/logs/api/?last_n_minutes=1440).
+
+  </Step>
+</Steps>
+ 
+***

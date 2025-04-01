@@ -3,22 +3,13 @@ title: "Mailjet"
 description: "https://www.mailjet.com/"
 ---
 
-[Suggest Edits](/edit/mailjet)
-
 This section is a step by step guide to setup Mailjet as your email service provider You can use use your existing Mailjet account to integrate, or create a new account from [here](https://app.mailjet.com/signup?lang=en_US)
 
 ## Mailjet integration on SuprSend account
 
-**Step 1**: On the SuprSend dashboard, follow the steps as below:
-
-1. Select **Vendors** from the left panel
-2. Select **Email** as the channel from the list
-3. Choose a notification category from the list: **System**, **Transactional**, or **Promotional**. You have the option to add different vendors in each notification category. This helps you to manage different messaging queues at vendor end based on the criticality of notification and doesn't let your marketing or promotional notifications to impact the deliverability of critical system notifications, such as OTPs or verification messages.
-4. Select **Mailjet** from the list of Vendors
+On the SuprSend dashboard, go to vendor page from side panel and click Email -> Mailjet from the list of Vendors. This will open vendor details page as shown below:
 
 ![](/images/docs/8863183-image.png)
-
-**Step 2**: On the **Mailjet Integration settings** page, enter following details.
 
 | Form Field             | Description                                                                                                                                                                                                                                                                                                                                             |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -26,51 +17,57 @@ This section is a step by step guide to setup Mailjet as your email service prov
 | API Key                | You will get from the API key management section in your Mailjet account settings. This is a mandatory field. SuprSend will use this key to route emails through your Mailjet account. Check [below section](/docs/postmark#how-to-get-a-server-token-from-postmark) on how to get your API and Secret Key.                                             |
 | Secret Key             | Secret generate along with your API key. You will get this from API key management section in your Mailjet account settings. This is a mandatory field. SuprSend will use this token to route emails through your Mailjet account. Check [below section](/docs/postmark#how-to-get-a-server-token-from-postmark) on how to get your API and Secret Key. |
 | From Name              | Default 'From Name' that email will go from. You can override this in the individual template.*eg. SuprSend*                                                                                                                                                                                                                                            |
-| From Email             | Default 'From Name' that email will go from. You can override this in the individual template. *eg. [\[email protected\]](/cdn-cgi/l/email-protection#5a292f2a2a35282e1a292f2a28293f343e74393537)* From email domain should be verified by Mailjet.                                                                                                     |
-| Reply Email            | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. [\[email protected\]](/cdn-cgi/l/email-protection#f2818782829d8086b28187828081979c96dc919d9f)*                                                                                                                                         |
+| From Email             | Default 'From Name' that email will go from. You can override this in the individual template. *eg. \[support@suprsend.com]]\(mailto:support@suprsend.com)* From email domain should be verified by Mailjet.                                                                                                                                            |
+| Reply Email            | Default 'Reply To Email id' on which replies are received. You can override this in the individual template.*eg. \[support@suprsend.com]]\(mailto:support@suprsend.com)*                                                                                                                                                                                |
 | Price per notification | This is the amount you pay per email notification to Mailjet. It helps us to calculate, estimate and optimise your cost spent on notifications. We use this cost to set the order of channels in smart routing where routing rule is `optimize on cost`.                                                                                                |
+
 
 ## How to get API and Secret key from Mailjet
 
-1. Login to your Mailjet account
-2. Click on your profile from the top bar and select account settings.
+<Steps>
+  <Step title="Login to your Mailjet account" />
 
-![](/images/docs/ecb4fd8-image.png)
+  <Step title="Click on your profile from the top bar and select account settings">
+    ![](/images/docs/ecb4fd8-image.png)
+  </Step>
 
-3. On account Information Page, click on **Rest API -> API Key Management**
+  <Step title="On account Information Page, click on Rest API -> API Key Management">
+    ![](/images/docs/4c4dd8e-image.png)
+  </Step>
 
-![](/images/docs/4c4dd8e-image.png)
+  <Step title="Create an API Key">
+    On the API Key Management page, you'll get the option to create API key. Create one if you haven't already or else you can add the existing API Key and Secret in SuprSend vendor form.
 
-4. On the API Key Management page, you'll get the option to create API key. Create one if you haven't already or else you can add the existing API Key and Secret in SuprSend vendor form.
+    ![](/images/docs/8f2e98f-image.png)
 
-![](/images/docs/8f2e98f-image.png)
-
-![](/images/docs/92ef18f-image.png)
+    ![](/images/docs/92ef18f-image.png)
+  </Step>
+</Steps>
 
 ## Configuring Open/Click tracking for emails on Mailjet
 
 SuprSend uses webhooks to update notification statuses on delivery, user actions like open/click or the failure scenarios. This allows SuprSend to track notification status in logs and to power analytics. To allow SuprSend to receive these events via webhook, add SuprSend's webhook URL in your Mailjet account.
 
-SuprSend's webhook URL: `https://hub.suprsend.com/webhook/mailjet/`
+SuprSend's webhook URL: [`https://hub.suprsend.com/webhook/mailjet/`](https://hub.suprsend.com/webhook/mailjet/)
 
-1. Go to Mailjet Account Settings Page from the top profile and select **Rest API -> Event Notifications (Webhooks)**
+<Steps>
+  <Step title="Go to Mailjet Account Settings Page from the top profile and select Rest API -> Event Notifications (Webhooks)">
+    ![](/images/docs/955e7d8-image.png)
+  </Step>
 
-![](/images/docs/955e7d8-image.png)
+  <Step title="On the webhook page, add SuprSend's tracking URL">
+    On webhook page, add SuprSend's tracking URL `<https://hub.suprsend.com/webhook/mailjet/>` and apply this URL to all events.
 
-2. On the webhook page, add SuprSend's tracking URL `<https://hub.suprsend.com/webhook/mailjet/>` and apply this URL to all events.
+    ![](https://mintlify.s3-us-west-1.amazonaws.com/suprsend/images/docs/604d0d5-image.png)
+  </Step>
+</Steps>
 
-![](/images/docs/604d0d5-image.png)
+## How to add Unsubscription link in email
+
+You can directly add unsubscription link in your email using [`$hosted_preference_url`](/docs/preferences#hosted-preference-page) variable in your template. This link directs users to the [SuprSend preference page](/docs/preferences). With SuprSend preference setting, you have the flexibility to create multiple notification categories based on the type of notifications. This allows users to opt-out of specific notification categories, providing them with granular control over their preferences compared to other email services where they can only opt-out from all marketing communications at once.
+
+**Why it's important to give unsubscribe option in email?**
+
+First, it is required by the [CAN-Spam Act](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business). Second, if you don’t give them this option, they are more likely to click on the spam complaint button, which will cause more harm than allowing them to unsubscribe. Finally, many ESPs look for unsubscribe links and are more likely to filter your email if they don’t have them.
 
 ***
-
-What’s Next
-
-Design your Email template if you haven't already.
-
-* [Email Template](/docs/email)
-
-* [Table of Contents](#)
-
-* * [Mailjet integration on SuprSend account](#mailjet-integration-on-suprsend-account)
-  * [How to get API and Secret key from Mailjet](#how-to-get-api-and-secret-key-from-mailjet)
-  * [Configuring Open/Click tracking for emails on Mailjet](#configuring-openclick-tracking-for-emails-on-mailjet)

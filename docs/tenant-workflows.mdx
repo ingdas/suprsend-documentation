@@ -3,21 +3,25 @@ title: "Tenant Workflows"
 description: "Learn how to handle multi-tenant notifications"
 ---
 
-[Suggest Edits](/edit/tenant-workflows)
+Tenants represents a segment that user belongs to. It can be organizations, teams within an organization, subsidiary companies or different product lines in the same business. In SuprSend, you can dynamically manage tenant level notification customizations. This includes the ability to [customize template design or content](/docs/tenants#using-tenant-components-in-templates), set different [notification preferences at the tenant level](/docs/tenant-preference), route notifications via [tenant vendors](/docs/tenant-vendor) or even have a distinct set of notifications for each tenant. All of this can be managed dynamically within SuprSend by defining tenant settings once and passing `tenant_id` in your event or workflow call. [Know more about how to manage tenants within SuprSend here](/docs/tenants).
 
-Tenants represents a segment that user belongs to. It can be organizations, teams within an organization, subsidiary companies or different product lines in the same business. In SuprSend, you can dynamically manage tenant level notification customizations. This includes the ability to [customize template design or content](/docs/brands#using-brand-components-in-templates), set different [notification preferences at the tenant level](/docs/brand-preference), route notifications via [tenant vendors](/docs/tenant-vendor) or even have a distinct set of notifications for each tenant. All of this can be managed dynamically within SuprSend by defining tenant settings once and passing `**tenant_id**` in your event or workflow call. [Know more about how to manage tenants within SuprSend here](/docs/brands).
+<Note>
+  📘 If you have a usecase where the entire user base and notifications differ between two distinct business lines within your company, we recommend using different workspaces to manage these notifications effectively.&#x20;
 
-<Info>
-  If you have a usecase where the entire user base and notifications differ between two distinct business lines within your company, we recommend using different workspaces to manage these notifications effectively. This approach ensures clear separation and management of workflows, templates, and user data, tailored specifically to the unique requirements of each business line.
-</Info>
+
+
+  This approach ensures clear separation and management of workflows, templates, and user data, tailored specifically to the unique requirements of each business line.
+</Note>
 
 ## Sending notifications for a tenant
 
 By default, all notifications (aka workflow) are triggered for default tenant (your organization). You can override tenant by passing `tenant_id` in your workflow or event instance. Passing `tenant_id` in your workflow will:
 
 * Pick tenant properties for sending custom notification content or design for the tenant (by replacing tenant variables in the template).
+
 * Pick per-tenant preferences while executing the workflow.
-* Override vendor details for the tenant if set. This is especially useful for cases where you are sending notifications on behalf of your customers and they want the notifications to be sent with their email domain and brand handles or you have different customer applications for sending messages on chat applications (Slack and MS Teams).
+
+* Override vendor details for the tenant if set. This is especially useful for cases where you are sending notifications on behalf of your customers and they want the notifications to be sent with their email domain and tenant/brand handles or you have different customer applications for sending messages on chat applications (Slack and MS Teams).
 
 Below is a sample of how you can override tenant\_id in your workflow or event call
 
@@ -58,6 +62,3 @@ Below is a sample of how you can override tenant\_id in your workflow or event c
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-* * [Sending notifications for a tenant](#sending-notifications-for-a-tenant)

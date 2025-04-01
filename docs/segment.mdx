@@ -3,11 +3,9 @@ title: "Segment"
 description: "Guide to integrate Segment with SuprSend"
 ---
 
-[Suggest Edits](/edit/segment)
-
 The SuprSend segment integration enables you to sync users and events from Segment to SuprSend. This allows for seamless migration of users from Segment to SuprSend and the ability to use events from Segment to power automated workflows within SuprSend.
 
-## Getting Started
+## Connector Setup on SuprSend
 
 Login to SuprSend dashboard. Go to **Settings** -> **Connectors**. Select **"Segment"** from the connectors list. This is how segment integration page looks like.
 
@@ -61,7 +59,7 @@ Example of Segment `identify` API call
     "type": "identify",
     "traits": {
       "name": "Peter Gibbons",
-      "email": "[email protected]",
+      "email": "peter@example.com",
       "language": "hi",
       "plan": "premium",
       "logins": 5
@@ -73,8 +71,9 @@ Example of Segment `identify` API call
 
 associated user JSON at SuprSend will be.
 
-* Segment `userID` is used to map the `distinct_id` of user on SuprSend.
-* All properties inside `traits` are considered as user properties which can be further used to map user channels and preferences in SuprSend.
+* Segment`userID`is used to map the`distinct_id`of user on SuprSend.
+
+* All properties inside`traits`are considered as user properties which can be further used to map user channels and preferences in SuprSend.
 
 <CodeGroup>
   ```javascript javascript
@@ -82,7 +81,7 @@ associated user JSON at SuprSend will be.
 
   properties = {
     "name": "Peter Gibbons",
-    "email": "[email protected]",
+    "email": "peter@example.com",
     "language": "hi",
     "plan": "premium",
     "logins": 5
@@ -131,9 +130,9 @@ Example of Segment `identify` API call
     "type": "identify",
     "traits": {
       "name": "Peter Gibbons",
-      "email": "[email protected]",
+      "email": "peter@example.com",
       "phone":"+15555555555",
-      "slack_email":"[email protected]",
+      "slack_email":"peter@abccompany.com",
       "language": "hi",
       "plan": "premium",
       "logins": 5
@@ -151,9 +150,11 @@ Communication channels in user profile will look like this
 
 ![](/images/docs/3bd2518-image.png)
 
-Click on "**Save Mapping**" to save the changes
+Click on **`Save Mapping`** to save the changes
 
 <Warning>
+  **Changes in mapping keys will be applied to future syncs**
+
   It's important to note that any changes made to channel or preference mapping will only be applied to future user syncs. If the mapping is changed, you'll have to replay all past user syncs in order to update the data in the user profile for existing users.
 
   Also, we don't override channel information. So, if a user's email or any other channel value is changed in user profile, it will be appended to the user channel list and notification will be sent on both old and new email. This is to ensure that no communication is lost during the change and users can continue to receive notifications on their preferred channels.
@@ -161,93 +162,102 @@ Click on "**Save Mapping**" to save the changes
 
 Now that the desired mapping of Segment events and users in SuprSend has been established, the next step is to start Segment integration.
 
-## Segment Integration
+## Setting up data sync from Segment to SuprSend
 
 You'll have to configure SuprSend as a destination in Segment.
 
 <Info>
+  **Use webhooks destination to connect with SuprSend**
+
   Since, we are in beta and we don't have a first-party integration with Segment yet, you can use webhooks in Segment destination list to connect with SuprSend.
 </Info>
 
 Follow below steps to configure SuprSend Destination in Segment:
 
-1. Login to your Segment account. Select **Connections** -> **Destinations** from the side navigation menu and click on **"Add Destination"**
+<Steps>
+  <Step title="Add SuprSend as destination in your segment account">
+    1. Login to your Segment account. Select **Connections** -> **Destinations** from the side navigation menu and click on **"Add Destination"**
 
-![](/images/docs/97a2e63-segment_1.png)
+    ![](/images/docs/97a2e63-segment_1.png)
+  </Step>
 
-2. This will open destinations catalog. Search for webhook and select **"Webhooks (Actions)"**
+  <Step title="Search for webhook">
+    This will open destinations catalog. Search for webhook and select **"Webhooks (Actions)"**
 
-![](/images/docs/914e86b-image.png)
+    ![](/images/docs/914e86b-image.png)
+  </Step>
 
-3. On the Webhooks page, click on **"Add destination"**
+  <Step title="Add Destination">
+    On the Webhooks page, click on **"Add destination"**
 
-![](/images/docs/c2d4b57-image.png)
+    ![](/images/docs/c2d4b57-image.png)
+  </Step>
 
-4. Select the data source from which you are syncing your user and event data and click on "Next"
-5. On the setup screen, add Destination name. Destination name can be **"SuprSend \{workspace}"**. For example - For staging workspace, the destination name can be "SuprSend Staging". Choose **"Fill in settings manually"** and click on **"Create destination"**.
+  <Step title="Pick Data Source">
+    Select the data source from which you are syncing your user and event data and click on "Next"
+  </Step>
 
-![](/images/docs/e27856c-image.png)
+  <Step title="Add Destination Name">
+    On the setup screen, add Destination name. Destination name can be **"SuprSend \{workspace}"**. For example - For staging workspace, the destination name can be "SuprSend Staging". Choose **"Fill in settings manually"** and click on **"Create destination"**.
 
-6. Now, on your webhook destination page, go to **Mappings** tab and create a **+New Mapping**.
+    ![](/images/docs/e27856c-image.png)
+  </Step>
 
-![](/images/docs/ebd8075-image.png)
+  <Step title="Create a New Mapping">
+    Now, on your webhook destination page, go to **Mappings** tab and create a **+New Mapping**.
 
-7. Select **Send an HTTP request** in Add Mapping modal and add below details
+    ![](/images/docs/ebd8075-image.png)
+  </Step>
 
-![](/images/docs/be129b0-image.png)
+  <Step title="Send an HTTP Request">
+    Select **Send an HTTP request** in Add Mapping modal and add below details
 
-7. Add below mapping in the send request:
+    ![](/images/docs/be129b0-image.png)
+  </Step>
 
-1. Select **any of event type - track and identify**
+  <Step title="Add below mapping in the send request:">
+    * Select any of event type - track and identify
 
-![](/images/docs/71ff24e-image.png)
+      ![](https://files.readme.io/71ff24e-image.png)
 
-2. In Add test event, select **Load Test Event from Source**
+    * In Add test event, select **Load Test Event from Source**
 
-![](/images/docs/141834f-image.png)
+      ![](https://files.readme.io/141834f-image.png)
 
-3. In Select Mappings, add below details:
+    * In Select Mappings, add below details:
 
-   1. `https://hub.suprsend.com/connector/segment/` -> URL
-   2. `POST` -> Method
-   3. `Bearer _api_key_` -> `Authorization` in headers. Please make sure to replace "*api\_key*" with actual api key from segment connector settings page.
+    > URL: [https://hub.suprsend.com/connector/segment/](https://hub.suprsend.com/connector/segment/)
+      <br/> Method: `POST`
+      <br/>`Authorization` in headers: `Bearer _api_key_`(Please make sure to replace "*`api_key`*" with actual api key from segment connector settings page.)
+     
+    ![](https://files.readme.io/8d6594d-image.png)
+  </Step>
 
-![](/images/docs/8d6594d-image.png)
+  <Step title="Sending Test Event">
+    Now, send a test event of type `track` or `identify`. You'll see status `200 OK` response and the corresponding event on [SuprSend dashboard -> API logs](https://app.suprsend.com/en/staging/logs/api/?last_n_minutes=1440) page.
 
-8. Now, send a test event of type `track` or `identify`. You'll see status `200 OK` response and the corresponding event on [SuprSend dashboard -> API logs](https://app.suprsend.com/en/staging/logs/api/?last_n_minutes=1440) page.
+    ![](/images/docs/f0fc0a8-image.png)
 
-![](/images/docs/f0fc0a8-image.png)
+    <Warning>
+      Callout ContentIf you don't get `200 OK` response in event tester, this means that Segment was unable to successfully setup your SuprSend connection. Double check Webhook URL and header in step-7 and see if its configured correctly in the Destination settings.
+    </Warning>
 
-<Warning>
-  If you don't get `200 OK` response in event tester, this means that Segment was unable to successfully setup your SuprSend connection. Double check Webhook URL and header in step-7 and see if its configured correctly in the Destination settings.
-</Warning>
+    Once your SuprSend connection is successful, try sending a test `identify call` and see if the user channels are mapped correctly in SuprSend. You can see the synced user on [*SuprSend dashboard -> Subscribers*](https://app.suprsend.com/en/staging/subscribers/subscribers/) page. Also, send a test `track event` call and check if the workflows are getting triggered.
+  </Step>
 
-Once your SuprSend connection is successful, try sending a test `identify call` and see if the user channels are mapped correctly in SuprSend. You can see the synced user on [*SuprSend dashboard -> Subscribers*](https://app.suprsend.com/en/staging/subscribers/subscribers/) page. Also, send a test `track event` call and check if the workflows are getting triggered.
+  <Step title="Enable Mapping">
+    1. After successful testing, **Save and Enable** the mapping.
 
-9. After successful testing, **Save and Enable** the mapping.
+    ![](/images/docs/d92dc6b-image.png)
+  </Step>
 
-![](/images/docs/d92dc6b-image.png)
+  <Step title="Enable Destination in Settings ">
+    Also enable destination in Settings tab to start sending webhook data to SuprSend.
 
-10. Also enable destination in Settings tab to start sending webhook data to SuprSend.
-
-![](/images/docs/1afc9f3-image.png)
+    ![](/images/docs/1afc9f3-image.png)
+  </Step>
+</Steps>
 
 Your setup is now complete, enabling events and users data to flow from Segment to SuprSend. You can use this info to automatically power SuprSend workflows without making any changes in your codebase.
 
 ***
-
-What’s Next
-
-After receiving the event, SuprSend will look out for all the workflows linked to that event on Suprsend dashboard and trigger those workflows. If not created, you can create a new workflow from here.
-
-* [Create Workflow](https://docs.suprsend.com/docs/design-workflow)
-
-* [Table of Contents](#)
-
-* * [Getting Started](#getting-started)
-
-    * [1. Add Prefix to track events](#1-add-prefix-to-track-events)
-    * [2. User preference mapping](#2-user-preference-mapping)
-    * [3. User channel mapping](#3-user-channel-mapping)
-
-  * [Segment Integration](#segment-integration)

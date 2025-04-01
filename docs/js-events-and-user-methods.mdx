@@ -1,6 +1,5 @@
 ---
 title: "Events and User methods"
-description: "Suggest Edits"
 ---
 
 ## Trigger Events
@@ -43,10 +42,9 @@ Set user channel related information using following methods. Its recommended to
 </CodeGroup>
 
 ### Update User properties
+This is the list of available user update methods:
 
-**Note:** Keys starting with `ss_` or `$` will be ignored.
-
-#### Set Timezone
+<Accordion title='Set Timezone'>
 
 This method will set users timezone. Timezone value should be in [IANA timezone format](https://timeapi.io/documentation/iana-timezones).
 
@@ -59,8 +57,9 @@ This method will set users timezone. Timezone value should be in [IANA timezone 
   await suprSendClient.user.setTimezone("America/Bogota")
   ```
 </CodeGroup>
+</Accordion>
 
-#### Set Language
+<Accordion title='Set Language'>
 
 This method will set users preferred language. Language value should be in [ISO 639-1 Alpha-2 format](https://gist.github.com/jrnk/8eb57b065ea0b098d571).
 
@@ -73,8 +72,9 @@ This method will set users preferred language. Language value should be in [ISO 
   await suprSendClient.user.setPreferredLanguage("en")
   ```
 </CodeGroup>
+</Accordion>
 
-#### Set
+<Accordion title='Set'>
 
 Set is used to set the custom user property or properties. If already property is already present value will be replaced.
 
@@ -88,68 +88,9 @@ Set is used to set the custom user property or properties. If already property i
   await suprSendClient.user.set({"name": "John Doe", "designation": "manager"})
   ```
 </CodeGroup>
+</Accordion>
 
-#### SetOnce
-
-This method is similar to set method but values once set cannot be updated.
-
-<CodeGroup>
-  ```typescript syntax
-  await suprSendClient.user.setOnce(arg1: string | Dictionary, arg2?: unknown)
-  ```
-
-  ```typescript example
-  await suprSendClient.user.setOnce("DOB", "1991-10-02")
-  await suprSendClient.user.setOnce({"first_login" : "2021-11-02", "DOB" : "1991-10-02"});
-  ```
-</CodeGroup>
-
-#### Increment
-
-Add the given amount to an existing user property. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number as the value.
-
-<CodeGroup>
-  ```typescript syntax
-  await suprSendClient.user.increment(arg1: string | Dictionary, arg2?: number)
-  ```
-
-  ```typescript example
-  await suprSendClient.user.increment("login_count", 1);
-  await suprSendClient.user.increment({"login_count" : 1, "order_count" : 1});
-  ```
-</CodeGroup>
-
-#### Append
-
-This method will add a value to the list for a given property.
-
-<CodeGroup>
-  ```typescript syntax
-  await suprSendClient.user.append(arg1: string | Dictionary, arg2?: unknown)
-  ```
-
-  ```typescript example
-  await suprSendClient.user.append("wishlist", "iphone12")
-  await suprSendClient.user.append({"wishlist" : "iphone12", "cart" : "Apple airpods"});
-  ```
-</CodeGroup>
-
-#### Remove
-
-This method will remove a value from the list for a given property.
-
-<CodeGroup>
-  ```typescript syntax
-  await suprSendClient.user.remove(arg1: string | Dictionary, arg2?: unknown)
-  ```
-
-  ```typescript example
-  await suprSendClient.user.remove("wishlist", "iphone12")
-  await suprSendClient.user.remove({"wishlist" : "iphone12", "cart" : "Apple airpods"});
-  ```
-</CodeGroup>
-
-#### Unset
+<Accordion title='Unset'>
 
 This method will remove user property. To remove channel pass `$email`, `$sms`, `$whatsapp`.
 
@@ -163,14 +104,75 @@ This method will remove user property. To remove channel pass `$email`, `$sms`, 
   await suprSendClient.user.unset(["wishlist", "$email"]);
   ```
 </CodeGroup>
+</Accordion>
+
+<Accordion title='Append'> 
+
+This method will add a value to the list for a given property.
+
+<CodeGroup>
+  ```typescript syntax
+  await suprSendClient.user.append(arg1: string | Dictionary, arg2?: unknown)
+  ```
+
+  ```typescript example
+  await suprSendClient.user.append("wishlist", "iphone12")
+  await suprSendClient.user.append({"wishlist" : "iphone12", "cart" : "Apple airpods"});
+  ```
+</CodeGroup>
+</Accordion>
+
+<Accordion title='Remove'>
+
+This method will remove a value from the list for a given property.
+
+<CodeGroup>
+  ```typescript syntax
+  await suprSendClient.user.remove(arg1: string | Dictionary, arg2?: unknown)
+  ```
+
+  ```typescript example
+  await suprSendClient.user.remove("wishlist", "iphone12")
+  await suprSendClient.user.remove({"wishlist" : "iphone12", "cart" : "Apple airpods"});
+  ```
+</CodeGroup>
+</Accordion>
+
+<Accordion title='SetOnce'>
+
+This method is similar to set method but values once set cannot be updated.
+
+<CodeGroup>
+  ```typescript syntax
+  await suprSendClient.user.setOnce(arg1: string | Dictionary, arg2?: unknown)
+  ```
+
+  ```typescript example
+  await suprSendClient.user.setOnce("DOB", "1991-10-02")
+  await suprSendClient.user.setOnce({"first_login" : "2021-11-02", "DOB" : "1991-10-02"});
+  ```
+</CodeGroup>
+</Accordion>
+
+<Accordion title='Increment'>
+
+Add the given amount to an existing user property. If the user does not already have the associated property, the amount will be added to zero. To reduce a property, provide a negative number as the value.
+
+<CodeGroup>
+  ```typescript syntax
+  await suprSendClient.user.increment(arg1: string | Dictionary, arg2?: number)
+  ```
+
+  ```typescript example
+  await suprSendClient.user.increment("login_count", 1);
+  await suprSendClient.user.increment({"login_count" : 1, "order_count" : 1});
+  ```
+</CodeGroup>
+</Accordion>
+
+
+<Note>
+  Keys starting with `ss_` or `$` will be ignored.
+</Note>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Trigger Events](#trigger-events)
-
-  * [Update User Profile](#update-user-profile)
-
-    * [Update User channels](#update-user-channels)
-    * [Update User properties](#update-user-properties)

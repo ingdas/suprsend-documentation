@@ -3,302 +3,227 @@ title: "Send and Track Events"
 description: "This document will cover the method to send event to Suprsend platform"
 ---
 
-[Suggest Edits](/edit/python-send-event-data)
-
-You can follow the steps mentioned in the documentation below or refer to our quick code recipe
-
-🦉
-
-Send and Track events using python SDK
-
-Open Recipe
-
 ## Pre-requisites
 
-1. [Integrate Python SDK](/docs/python-sdk)
-2. [Create User Profile](/docs/python-create-user-profile)
-3. [Create Template on SuprSend platform](/docs/templates) - if you want to trigger workflow by passing the event
-4. [Create Workflow on SuprSend Platform](/docs/design-workflow) - if you want to trigger workflow by passing the event
-
-## Create Workflow on SuprSend Platform
-
-For Event based workflow trigger, you'll have to [create the workflow on SuprSend Platform](/docs/design-workflow). Once the workflow is created, you can pass the `EventName` ( `GROCERY_PURCHASED` in below example) defined in workflow configuration with the help of `suprClient.TrackEvent` method. Variables added in the template should be passed as event `Properties`
-
-![577](/images/docs/d95d579-Frame_2.png "Frame 2.png")
+[Create User Profile](/docs/python-create-user-profile)
 
 ## Send Event
 
-You can send event to Suprsend platform by using the `supr_client.track_event` method.
+You can send event to Suprsend platform by using the `supr_client.track_event` method. When you call `supr_client.track_event`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance status. The actual processing/execution of event happens asynchronously.
 
 <CodeGroup>
-  ```python python
-  from suprsend import Event
 
-  distinct_id = "distinct_id" # Mandatory, Unique id of user in your application
-  event_name = "event_name"   # Mandatory, name of the event you're tracking
-  brand_id = "brand_id"   # Mandatory, name of the event you're tracking
+```python Request [Method]
+from suprsend import Suprsend
+from suprsend import Event
 
-  # Properties:  Optional, default=None, a dict representing event-attributes
-  properties = {													
-    "key1":"value1",
-    "key2":"value2"
-  } 
+supr_client = suprsend.Suprsend("workspace_key", "workspace_secret")
+ 
+distinct_id = "distinct_id" # Mandatory, Unique id of user in your application
+event_name = "event_name"   # Mandatory, name of the event you're tracking
+brand_id = "brand_id"   # Mandatory, name of the event you're tracking
 
-  event = Event(distinct_id=distinct_id, event_name=event_name, properties=properties
-               idempotency_key="__uniq_request_id__", brand_id="default")
+# Properties:  Optional, default=None, a dict representing event-attributes
+properties = {                                       
+"key1":"value1",
+"key2":"value2"
+} 
 
-  # Track event
-  response = supr_client.track_event(event)
-  print(response)
-  ```
+event = Event(distinct_id=distinct_id, event_name=event_name, properties=properties, idempotency_key="__uniq_request_id__", brand_id="default")
+
+# Track event
+response = supr_client.track_event(event)
+print(response)
+```
+
+
+```python Sample
+from suprsend import Event
+
+# Track Event Example
+distinct_id = "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08"
+event_name = "product_purchased"   
+
+# Properties:  Optional, default=None, a dict representing event-attributes
+properties = {													
+  "first_name": "User",
+  "spend_amount": "$10",
+  "nested_key_example": {
+    "nested_key1": "some_value_1",
+    "nested_key2": {
+      "nested_key3": "some_value_3",
+    },
+  }
+} 
+event = Event(distinct_id=distinct_id, event_name=event_name, properties=properties)
+
+# Track event
+response = supr_client.track_event(event)
+print(response)
+```
+
+
+```python Response
+# Response structure
+{
+    "success": True, # if true, request was accepted.
+    "status": "success",
+    "status_code": 202, # http status code
+    "message": "OK",
+}
+
+{
+    "success": False, # error will be present in message
+    "status": "fail",
+    "status_code": 500, # http status code
+    "message": "error message",
+}
+```
+
 </CodeGroup>
 
-| Parameter         | Description                                                                                                                                         | Type       | Obligation  |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----------- |
-| `distinct_id`     | `distinct_id` of user performing the event                                                                                                          | string     | *mandatory* |
-| `event_name`      | string identifier for the event like `product_purchased`                                                                                            | string     | *mandatory* |
-| `properties`      | a dictionary representing event attributes like `first_name` Event properties can be used to pass template variables in case of event based trigger | Dictionary | *optional*  |
-| `brand_id`        | Brand\_id of the tenant                                                                                                                             | string     | *optional*  |
-| `idempotency_key` | unique key in the request call for [idempotent requests](/docs/python-send-event-data#idempotent-requests)                                          | string     | *optional*  |
+| Parameter     | Description                                                                                                                                         | Format                    | Obligation  |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- | ----------- |
+| `distinct_id` | `distinct_id` of user performing the event                                                                                                    | int, bigint, string, UUID | _mandatory_ |
+| `event_name`  | string identifier for the event like `product_purchased`                                                                                            | string                    | _mandatory_ |
+| `properties`  | a dictionary representing event attributes like `first_name` Event properties can be used to pass template variables in case of event based trigger | Dictionary                | _optional_  |
 
 <Warning>
-  When you create an Event or a property, please ensure that the Event Name or Property Name does not start with **`$`** or **`ss_`**, as we have reserved these symbols for our internal events and property names.
+  **Event naming guidelines:**
+
+  Event Name or Property Name should not start with  or , as we have reserved these symbols for our internal events and property names.
 </Warning>
 
 ### Idempotent requests
 
-SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives and processes a request with an idempotency\_key, it will skip processing requests with same `idempotency_key` for next 24 hours. You can use this key to track webhooks related to workflow notifications.
+SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives and processes a request with an idempotency_key, it will skip processing requests with same `idempotency_key` for next 24 hours. You can use this key to track webhooks related to workflow notifications.
 
-To make an idempotent request, pass `idempotency_key` in the event instance. Idempotency key should be unique that you generate for each request. You may use any string up to 255 characters in length as an idempotency key. Ensure that you don’t add any space in start and end of the key as it will be trimmed.
+Idempotency key should be unique that you generate for each request. You may use any string up to 255 characters in length. Any space at start and end of the key will be trimmed.
 
 Here are some common approaches for assigning idempotency keys:
 
-* **Generate a random UUID** for each request.
-* **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like `user147-new-comment-1687437670`
-* **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
-
-### Sample Code
-
-<CodeGroup>
-  ```python python
-  from suprsend import Event
-
-  # Track Event Example
-  distinct_id = "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08" # Mandatory, Unique id of user in your application
-  event_name = "product_purchased"   # Mandatory, name of the event you're tracking
-  # Properties:  Optional, default=None, a dict representing event-attributes
-  properties = {													
-    "first_name": "User",
-    "spend_amount": "$10",
-    "nested_key_example": {
-      "nested_key1": "some_value_1",
-      "nested_key2": {
-        "nested_key3": "some_value_3",
-      },
-    }
-  } 
-  event = Event(distinct_id=distinct_id, event_name=event_name, properties=properties)
-
-  # Track event
-  response = supr_client.track_event(event)
-  print(response)
-  ```
-</CodeGroup>
-
-<Warning>
-  Event\_name in Track event method should exactly match the Event name added in Workflow configurations
-</Warning>
+- **Generate a random UUID** for each request.
+- **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like `user147-new-comment-1687437670`
+- **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
 
 ## Add file attachment in event (for email)
 
 To add one or more Attachments to a Notification (viz. Email), you can just append the filepath of attachment to the event instance.
 
-* Call `event.add_attachment()` for each file with an accessible URL.
-* Ensure that file\_path is a publicly accessible URL. Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
-
-Refer below example for adding attachment in event call
+- Call `event.add_attachment()` for each file with an accessible URL.
+- Ensure that file_path is a publicly accessible URL. Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
 
 <CodeGroup>
-  ```python python
-  from suprsend import Event
 
-  distinct_id = "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08" # Mandatory, Unique id of user in your application
-  event_name = "product_purchased" 
-  properties = {...}
+```python Request
+from suprsend import Event
 
-  event = Event(distinct_id=distinct_id, event_name=event_name, properties=properties)
+distinct_id = "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08"
+event_name = "invoice_generated" 
+properties = {...}
 
-  # this snippet can be used to add attachment to event
-  file_path = "https://www.adobe.com/sample_file.pdf"
-  event.add_attachment(file_path)
+event = Event(distinct_id=distinct_id, event_name=event_name, properties=properties)
 
-  response = supr_client.track_event(event)
-  print(response)
-  ```
+# this snippet can be used to add attachment to event
+file_path = "https://www.adobe.com/sample_file.pdf"
+event.add_attachment(file_path)
+
+response = supr_client.track_event(event)
+print(response)
+```
+
+
+```python Response
+# Response structure
+{
+    "success": true, // if true, request was accepted.
+    "status": "success",
+    "status_code": 202, // http status code
+    "message": "OK",
+}
+
+{
+    "success": false, // error will be present in message
+    "status": "fail",
+    "status_code": 500, // http status code
+    "message": "error message",
+}
+```
+
 </CodeGroup>
 
 <Warning>
   Please add public accessible URL only as attachment file otherwise it will throw an error `404 not found` and workflow will not be triggered
 </Warning>
 
-### Response
+## Bulk Event trigger
 
-When you call `supr_client.track_event`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance status.
-
-Note: The actual processing/execution of event happens asynchronously.
+You can use Bulk API to send multiple events. Use `.append()` on bulk_events instance to add however-many-records to call in bulk.
 
 <CodeGroup>
-  ```python python
-  # Response structure
-  {
-      "success": True, # if true, request was accepted.
-      "status": "success",
-      "status_code": 202, # http status code
-      "message": "OK",
-  }
 
-  {
-      "success": False, # error will be present in message
-      "status": "fail",
-      "status_code": 500, # http status code
-      "message": "error message",
-  }
-  ```
-</CodeGroup>
+```python Request
+from suprsend import Event
 
-## Bulk API for multiple event requests
+bulk_ins = supr_client.bulk_events.new_instance()
+# Example
+e1 = Event("distinct_id1", "event_name1", {"k1": "v1"}) # Event 1
+e2 = Event("distinct_id2", "event_name2", {"k2": "v2"}) # Event 2
 
-You can use Bulk API to send multiple events.
+# --- use .append on bulk instance to add one or more records
+bulk_ins.append(e1)
+bulk_ins.append(e2)
+# OR
+bulk_ins.append(e1, e2)
 
-Use `.append()` on bulk\_events instance to add however-many-records to call in bulk.
+# -------
+response = bulk_ins.trigger()
+print(response)
+```
 
-<CodeGroup>
-  ```python python
-  from suprsend import Event
 
-  bulk_ins = supr_client.bulk_events.new_instance()
-  # Example
-  e1 = Event("distinct_id1", "event_name1", {"k1": "v1"}) # Event 1
-  e2 = Event("distinct_id2", "event_name2", {"k2": "v2"}) # Event 2
+```python With Email attachment
+from suprsend import Event
 
-  # --- use .append on bulk instance to add one or more records
-  bulk_ins.append(e1)
-  bulk_ins.append(e2)
-  # OR
-  bulk_ins.append(e1, e2)
+bulk_ins = supr_client.bulk_events.new_instance()
+# Example
+e1 = Event("distinct_id1", "event_name1", {"k1": "v1"}) # Event 1
 
-  # -------
-  response = bulk_ins.trigger()
-  print(response)
-  ```
+# this snippet can be used to add attachment to event
+file_path1 = "https://www.adobe.com/sample_file.pdf"
+e1.add_attachment(file_path1)
+
+e2 = Event("distinct_id2", "event_name2", {"k2": "v2"}) # Event 2
+# this snippet can be used to add attachment to event
+file_path2 = "https://www.africau.edu/images/default/sample.pdf"
+e2.add_attachment(file_path2)
+
+# --- use .append on bulk instance to add one or more records
+bulk_ins.append(e1)
+bulk_ins.append(e2)
+# OR
+bulk_ins.append(e1, e2)
+
+# -------
+response = bulk_ins.trigger()
+print(response)
+```
+
+
+```python Response
+{
+  status = "fail",
+  total = 10, # number of records sent in bulk
+  success = 0, # number of records succeeded
+  failure = 10, # number of records failed
+  failed_records = [{"record": {...}, "error": "error_str", "code": 500}]
+}
+```
+
 </CodeGroup>
 
 <Warning>
   Bulk API is supported in SuprSend python-sdk version 0.2.0 and above. If you are using an older version, please upgrade to the latest SDK version.
 </Warning>
 
-### How SuprSend Processes the bulk API request
-
-* On calling `bulk_ins.trigger()`, the SDK internally makes one-or-more Callable-chunks.
-* Each callable-chunk contains a subset of records, the subset calculation is based on each record's bytes-size and max allowed chunk-size, chunk-length etc.
-* For each callable-chunk SDK makes an HTTP call to SuprSend to register the request.
-
-## Add file attachment in bulk API (for email)
-
-Similar to single API call, you can add file attachment to bulk API by appending the attachment filepath to each event instance in bulk API call.
-
-* Call `event.add_attachment()` for each file with an accessible URL. Ensure that file\_path is a publicly accessible URL.
-* Since event API size can't be > 100 KB, local file paths can't be passed in event attachment.
-
-Refer below example for adding attachment in bulk API call
-
-<CodeGroup>
-  ```python python
-  from suprsend import Event
-
-  bulk_ins = supr_client.bulk_events.new_instance()
-  # Example
-  e1 = Event("distinct_id1", "event_name1", {"k1": "v1"}) # Event 1
-
-  # this snippet can be used to add attachment to event
-  file_path1 = "https://www.adobe.com/sample_file.pdf"
-  e1.add_attachment(file_path1)
-
-  e2 = Event("distinct_id2", "event_name2", {"k2": "v2"}) # Event 2
-  # this snippet can be used to add attachment to event
-  file_path2 = "https://www.africau.edu/images/default/sample.pdf"
-  e2.add_attachment(file_path2)
-
-  # --- use .append on bulk instance to add one or more records
-  bulk_ins.append(e1)
-  bulk_ins.append(e2)
-  # OR
-  bulk_ins.append(e1, e2)
-
-  # -------
-  response = bulk_ins.trigger()
-  print(response)
-  ```
-</CodeGroup>
-
-<Warning>
-  Please add public accessible URL only as attachment file otherwise it will throw an error `404 not found` and workflow will not be triggered
-</Warning>
-
-## Response
-
-Response is an instance of `suprsend.BulkResponse` class
-
-<CodeGroup>
-  ```python python
-  # Response structure
-  from suprsend import BulkResponse
-
-  BulkResponse(
-    status = "success",
-    total = 10, # number of records sent in bulk
-    success = 10, # number of records succeeded
-    failure = 0, # number of records failed
-    failed_records = []
-  )
-
-  BulkResponse(
-    status = "fail",
-    total = 10, # number of records sent in bulk
-    success = 0, # number of records succeeded
-    failure = 10, # number of records failed
-    failed_records = [{"record": {...}, "error": "error_str", "code": 500}]
-  )
-
-  BulkResponse(
-    status = "partial",
-    total = 10, # number of records sent in bulk
-    success = 6, # number of records succeeded
-    failure = 4, # number of records failed
-    failed_records = [{"record": {...}, "error": "error_str", "code": 500}]
-  )
-  ```
-</CodeGroup>
-
-***
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-
-  * [Create Workflow on SuprSend Platform](#create-workflow-on-suprsend-platform)
-
-  * [Send Event](#send-event)
-
-    * [Idempotent requests](#idempotent-requests)
-    * [Sample Code](#sample-code)
-
-  * [Add file attachment in event (for email)](#add-file-attachment-in-event-for-email)
-    * [Response](#response)
-
-  * [Bulk API for multiple event requests](#bulk-api-for-multiple-event-requests)
-    * [How SuprSend Processes the bulk API request](#how-suprsend-processes-the-bulk-api-request)
-
-  * [Add file attachment in bulk API (for email)](#add-file-attachment-in-bulk-api-for-email)
-
-  * [Response](#response-1)
+---

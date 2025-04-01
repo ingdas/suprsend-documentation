@@ -3,35 +3,38 @@ title: "Workflow"
 description: "Understand what is workflow and how to design a workflow to send multi-channel notification."
 ---
 
-[Suggest Edits](/edit/workflows)
-
 Workflow is the notification powerhouse where you define the logic and stitch individual pieces together, like [user](/docs/users), [template](/docs/templates), [vendor](/docs/vendors), and [preferences](/docs/preferences), to deliver notifications to the end user.
 
 A workflow comprises a series of steps that, when executed in sequence, form the notification journey. There are primarily four types of workflow steps, referred to as workflow nodes in SuprSend:
 
-1. **[Trigger](/docs/trigger-workflow):&#x20;**&#x54;his is the first node in your workflow that initiates the notification. You can trigger workflow using an event call or a direct API call to SuprSend. Events can be
+<AccordionGroup>
+  <Accordion title="Trigger: Initiates the workflow">
+    [Trigger](/docs/trigger-workflow) is the first node in your workflow that initiates the notification. You can trigger workflow using an event call or a direct API call to SuprSend. Events can be **1.1. External actions performed by a user on your platform**, such as`post like`or`a new comment`. You can track these actions by integrating one of our [frontend SDKs](/docs/javascript-sdk) directly into your product or pass them via [backend SDKs](/docs/python-sdk) or [HTTP API](/reference/event-api).**1.2. User entering or leaving a list**: these events are generated when you maintain a user list and you want to notify users who leave or enter the list, for instance, when`users unsubscribe from a topic`. These events are [auto tracked](/docs/lists#configure-list-events) if you maintain lists within SuprSend.**1.3. Internal trigger from your backend code** based on some data or state change like`shipment out for delivery`or`job closed`.
 
-   1. **External actions performed by a user on your platform**, such as `post like` or `a new comment`. You can track these actions by integrating one of our [frontend SDKs](/docs/javascript-sdk) directly into your product or pass them via [backend SDKs](/docs/python-sdk) or [HTTP API](/reference/event-api).
-   2. **User entering or leaving a list**: these events are generated when you maintain a user list and you want to notify users who leave or enter the list, for instance, when `users unsubscribe from a topic`. These events are [auto tracked](/docs/lists#configure-list-events) if you maintain lists within SuprSend.
-   3. **Internal trigger from your backend code** based on some data or state change like `shipment out for delivery` or `job closed`.
+  </Accordion>
 
-2. **Functions:** Functions are logical steps in your workflow such as [delay](/docs/delay), [batch](/docs/batch) multiple notifications into a single summarized notification, or implementing conditional waits.
+  <Accordion title="Functions: Logical steps in the workflow">
+    Functions are logical steps in your workflow such as [delay](/docs/delay), [batch](/docs/batch) multiple notifications into a single summarized notification, or implementing conditional waits.
+  </Accordion>
 
-3. **Branches** split the workflow execution into parallel flows where user passes through one of the branch based on a condition. An example of branch is [wait until](/docs/wait-until) where user waits on this branch until a condition is met.
+  <Accordion title="Branches: Splits execution in conditional branches">
+    split the workflow execution into parallel flows where user passes through one of the branch based on a condition. An example of branch is [wait until](/docs/wait-until) where user waits on this branch until a condition is met.
+  </Accordion>
 
-4. **Delivery:** Delivery nodes are the final send nodes that deliver the final notification to the users. The content of the notification is designed with templates. You can send notification on a [single channel](/docs/delivery-single-channel), [multi-channel](/docs/delivery-multi-channel), or use [channel routing](/docs/smart-delivery) for sequential delivery across multiple channels.
+  <Accordion title="Delivery: sends notification">
+    Delivery nodes are the final send nodes that deliver the final notification to the users. The content of the notification is designed with templates. You can send notification on a [single channel](/docs/delivery-single-channel), [multi-channel](/docs/delivery-multi-channel), or use [channel routing](/docs/smart-delivery) for sequential delivery across multiple channels.
+  </Accordion>
 
-## Notification Categories
+</AccordionGroup>
 
-Each workflow is associated with a notification category. Notification category is used to group related workflows together and are also used for users to set their preferences across a group of workflows. For example, all shipment related notifications can be grouped under a category `Delivery updates` and user can then chose to turn off these notifications on email and just receive these updates on push channel. This preference setting will automatically apply to all workflows with category `Delivery updates`. You can know more about [notification categories here](/docs/notification-categories).
-
-## Designing a workflow
+## Create workflow
 
 In SuprSend, you can group multi-channel and multi-stakeholder notifications in a single workflow. We consider workflow as a sequence of notifications.
 
 One example of a multi-channel and multi-stakeholder workflow can be a payment reminder, where you have to send a series of reminders to the company's users.
 
 * The first reminder is sent to the admins of the accounts via email.
+
 * 2nd reminder is sent to the admins as well as the finance team of the company on Inbox first, and then via email if the notification is not seen on Inbox.
 
 <Frame caption="Payment Reminder workflow">
@@ -40,26 +43,37 @@ One example of a multi-channel and multi-stakeholder workflow can be a payment r
 
 We recommend creating a single workflow for tracking the journey corresponding to a trigger so that it's easier for you to track the entire flow, like how many users saw the first notification, how many dropped off after the second notification, which is the best performing channel, and more. It is also easier to maintain and iterate over if you have fewer workflows corresponding to an event.
 
-<Info>
-  It is best to first design your workflows in staging workspace and trigger a test workflow before making it live for your production users. Once, your workflow is well tested and working, [clone](/docs/design-workflow#cloning-a-workflow) it to the production workspace.
-</Info>
+<Tip>
+  **Test your workflows in staging workspace before deploying to production:**
 
-## Version control for workflows
+
+
+  It is best to first design your workflows in staging workspace and trigger a test workflow before making it live for your production users. Once, your workflow is well tested and working, [clone](/docs/design-workflow#cloning-a-workflow) it to the production workspace.
+</Tip>
+
+### Notification Categories
+
+Each workflow is associated with a notification category. Notification category is used to group related workflows together and are also used for users to set their preferences across a group of workflows. For example, all shipment related notifications can be grouped under a category `Delivery updates` and user can then chose to turn off these notifications on email and just receive these updates on push channel. 
+
+This preference setting will automatically apply to all workflows with category `Delivery updates`. You can know more about [notification categories here](/docs/notification-category).
+
+
+### Version control for workflows
 
 All the workflow changes are first saved in the draft version and are only made live once you commit the changes. This allows you to confidently make changes to workflows, without affecting any running workflow in production.
 
 ![](/images/docs/c0aeee1-image.png)
 
-## Triggering a workflow
+## Trigger Workflow
 
 Workflows created on SuprSend dashboard can be [triggered via event call](/docs/trigger-workflow#event-based-trigger) or via a [direct API call](/docs/trigger-workflow#triggering-workflow-via-api).
 
-## Triggering workflow via API
-
-For transactional usecases such as OTP, authentication, and verification notifications, where dynamic user channel information or sensitive data needs to be passed at the time of sending, you can pass all data and recipient information directly in a single API. This method doesn't require user creation beforehand to trigger notification and can be used if you are migrating your existing notifications to SuprSend. Below is an example payload illustrating a dynamic workflow setup for an OTP notification.
+<AccordionGroup>
+  <Accordion title="via workflow API">
+    For transactional usecases such as OTP, authentication, and verification notifications, where dynamic user channel information or sensitive data needs to be passed at the time of sending, you can pass all data and recipient information directly in a single API. This method doesn't require user creation beforehand to trigger notification and can be used if you are migrating your existing notifications to SuprSend. Below is an example payload illustrating a dynamic workflow setup for an OTP notification.
 
 <CodeGroup>
-  ```python python
+  ```python Python
   from suprsend import Event
   from suprsend import WorkflowTriggerRequest
 
@@ -87,7 +101,7 @@ For transactional usecases such as OTP, authentication, and verification notific
   print(response)
   ```
 
-  ```node node
+  ```node Node
   const {Suprsend, WorkflowTriggerRequest} = require("@suprsend/node-sdk");
   const supr_client = new Suprsend("_workspace_key_", "_workspace_secret_");
 
@@ -111,7 +125,7 @@ For transactional usecases such as OTP, authentication, and verification notific
   response.then(res => console.log("response", res));
   ```
 
-  ```go go
+  ```go Go
   package main
 
   import (
@@ -163,12 +177,14 @@ For transactional usecases such as OTP, authentication, and verification notific
   It is a new workflow method and is available in below SDK versions (Python >= v0.11.0, Go >= v0.5.1 and Node >= 1.10.0). Upgrade to the latest version if you are on older SDK versions.
 </Warning>
 
-### Event based Trigger
 
-Below is a sample event call to trigger payment reminder workflow. These events can either be triggered by integrating one of our frontend or backend SDKs or you can also integrate with your CDP platforms like [Segment](/docs/segment) and map the events passed through these platforms as your workflow trigger.
+  </Accordion>
+
+  <Accordion title='Event based Trigger'>
+    Below is a sample event call to trigger payment reminder workflow. These events can either be triggered by integrating one of our frontend or backend SDKs or you can also integrate with your CDP platforms like [Segment](/docs/segment) and map the events passed through these platforms as your workflow trigger.
 
 <CodeGroup>
-  ```python python
+  ```python Python
   from suprsend import Event
 
   # Track Event Example
@@ -206,7 +222,7 @@ Below is a sample event call to trigger payment reminder workflow. These events 
   response.then((res) => console.log("response", res));
   ```
 
-  ```java java
+  ```java Java
   import org.json.JSONObject;
 
   import suprsend.Suprsend;
@@ -236,7 +252,7 @@ Below is a sample event call to trigger payment reminder workflow. These events 
     }
   ```
 
-  ```go go
+  ```go Go
   ev := &suprsend.Event{
     EventName:  "Payment Pending", 
     DistinctId: "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08", 
@@ -255,49 +271,48 @@ Below is a sample event call to trigger payment reminder workflow. These events 
   ```
 </CodeGroup>
 
-<Info>
+<Note>
+  **User profile should be created in SuprSend for passing in event call:**
+
   Please Note that the user profile should be created beforehand for `distinct_id` passed in your event call. If user is not present, it will discard the event call.
-</Info>
+</Note>
 
-## Send notification using Google Sheets
+</Accordion>
 
-You can also configure your one-time notifications using google sheets. Refer step-by-step guide to [configure workflows using google sheets here](/docs/trigger-workflow#triggering-workflow-using-google-sheets).
+<Accordion title='Send notification using Google Sheets'>
+  You can also configure your one-time notifications using google sheets. Refer step-by-step guide to [configure workflows using google sheets here](/docs/trigger-workflow#triggering-workflow-using-google-sheets).
 
-## Per-Tenant workflow
+</Accordion>
+</AccordionGroup>
 
-Tenants represents a segment that user belongs to. It can be organizations, teams within an organization, subsidiary companies or different product lines in the same business. While there is no association of workflows and tenants directly within SuprSend, you can dynamically pass tenant\_id in your trigger to send notification for a tenant. This will pick the properties corresponding to that tenant for sending custom notification content for the tenant and also pick per-tenant preferences while executing the workflow. [Read more about tenant workflows here](/docs/tenant-workflows).
 
-## Tracking / Debugging Workflow run
+## Track / Debug Workflow run
 
 For each workflow run, you'll see a detailed log capturing the state and response of each workflow step as they are being sent. You can refer to [error guides](/docs/error-guides) to comprehend the errors and see how to solve them.
 
 ![](/images/docs/c43f4ce-image.png)
 
-## Analyzing notification performance
+## Analyze notification performance
 
 SuprSend provides comprehensive analytics for you to track the performance of your notifications. You can track delivery, seen, click across all channels in a single graph, track which channel is performing best, and how users are interacting with the notification. You can also get the notification data back in your data warehouse for internal analysis and reporting using [S3 connector](/docs/amazon_s3).
 
 ![](/images/docs/5049d5a-image.png)
 
 <Check>
-  Ensure to include the SuprSend webhook callback URL in your vendor dashboards for WhatsApp, SMS, and email. This enables us to track delivery, seen, and click statuses to show in logs and analytics. For real-time updates to your system, you can also add your webhook endpoint as an [outbound webhook](/docs/webhook) in SuprSend. SuprSend processes data received from your end-vendors in a standard format, eliminating the need to adapt your system for different vendor data structures.
+  **Configure SuprSend webhook in vendor dashboard to track delivery data** 👍
+
+
+
+  Ensure to include the SuprSend webhook callback URL in your vendor dashboards for WhatsApp, SMS, and email. This enables us to track delivery, seen, and click statuses to show in logs and analytics.&#x20;
+
+
+
+  For real-time updates to your system, you can also add your webhook endpoint as an [outbound webhook](/docs/webhook) in SuprSend. SuprSend processes data received from your end-vendors in a standard format, eliminating the need to adapt your system for different vendor data structures.
 </Check>
 
+## Per-Tenant workflow
+
+Tenants represents a segment that user belongs to. It can be organizations, teams within an organization, subsidiary companies or different product lines in the same business. While there is no association of workflows and tenants directly within SuprSend, you can dynamically pass tenant\_id in your trigger to send notification for a tenant. This will pick the properties corresponding to that tenant for sending custom notification content for the tenant and also pick per-tenant preferences while executing the workflow. [Read more about tenant workflows here](/docs/tenant-workflows).
+
+
 ***
-
-What’s Next
-
-* [Design your first workflow](https://docs.suprsend.com/docs/design-workflow)
-
-* [Table of Contents](#)
-
-* * [Notification Categories](#notification-categories)
-  * [Designing a workflow](#designing-a-workflow)
-  * [Version control for workflows](#version-control-for-workflows)
-  * [Triggering a workflow](#triggering-a-workflow)
-  * [Triggering workflow via API](#triggering-workflow-via-api)
-    * [Event based Trigger](#event-based-trigger)
-  * [Send notification using Google Sheets](#send-notification-using-google-sheets)
-  * [Per-Tenant workflow](#per-tenant-workflow)
-  * [Tracking / Debugging Workflow run](#tracking--debugging-workflow-run)
-  * [Analyzing notification performance](#analyzing-notification-performance)

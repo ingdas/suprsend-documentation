@@ -1,50 +1,52 @@
 ---
 title: "Integrate Flutter SDK - iOS"
-description: "This document will cover SDK installation and initialization steps for your iOS application"
+description: "This document will cover SDK installation and initialization steps for your Flutter iOS application"
 ---
-
-[Suggest Edits](/edit/integrate-flutter-sdk-ios)
-
-Please follow the below steps for Suprsend SDK set up in your Flutter iOS project
 
 ## Installation
 
-**Step 1: Open your Flutter project’s pubspec.yaml file**
+<Steps>
+  <Step title="Open your Flutter project’s pubspec.yaml file">
+    Add following line of code inside dependencies in pubspec.yaml file
 
-Add following line of code inside dependencies in pubspec.yaml file
+    <CodeGroup>
+      ```yaml pubspec.yaml
+      dependencies:
+        flutter:
+        	sdk: flutter
+        suprsend_flutter_sdk: "^2.2.0"
+      ```
+    </CodeGroup>
+  </Step>
 
-<CodeGroup>
-  ```yaml pubspec.yaml
-  dependencies:
-    flutter:
-    	sdk: flutter
-    suprsend_flutter_sdk: "^2.2.0"
-  ```
-</CodeGroup>
+  <Step title="Run flutter pub get in the terminal">
+    <CodeGroup>
+      ```shell shell
+      flutter pub get
+      ```
+    </CodeGroup>
+  </Step>
 
-**Step 2: Run `flutter pub get` in the terminal**
+  <Step title="Changes in PodFile and Run pod">
+    SuprSend SDK can be installed in iOS platform version >= 13.  Check version in PodFile and upgrade it by running **pod install** inside iOS folder.
 
-<CodeGroup>
-  ```shell shell
-  flutter pub get
-  ```
-</CodeGroup>
+    <CodeGroup>
+      ```ruby PodFile
+      platform :ios, '13.0' // this version has to be >=13
+      ```
+    </CodeGroup>
+  </Step>
 
-**Step 3: Changes in PodFile and Run pod Install** SuprSend sdk needs iOS platform version of 13 or above, so check it inside PodFile and change if its less than 13.0 and then run **pod install** from inside iOS folder.
+  <Step title="Change iOS Deployment Target">
+    &#x20;SuprSend sdk needs an iOS deployment target >= 11. Open your project in Xcode(*project > ios > project.xcworkspace*) and update the target.
 
-<CodeGroup>
-  ```ruby PodFile
-  platform :ios, '13.0' // this version has to be 13 or greater
-  ```
-</CodeGroup>
+    ![](/images/docs/18650ad-Screenshot_2022-07-27_at_12.36.03_PM.png "Screenshot 2022-07-27 at 12.36.03 PM.png")
+  </Step>
+</Steps>
 
-**Step 4: Change iOS Deployment Target** SuprSend sdk needs an iOS deployment target of 11 or above, open your project in Xcode(*project > ios > project.xcworkspace*) and update the target as given in below image.
+## Initialization
 
-![](/images/docs/18650ad-Screenshot_2022-07-27_at_12.36.03_PM.png "Screenshot 2022-07-27 at 12.36.03 PM.png")
-
-## 2. Initialization
-
-**Step 1:** To integrate SuprSend in your iOS app, you'll need to import Suprsend iOS sdk into your application. In `AppDelegate` add the below mentioned code inside `didFinishLaunchingWithOptions` method, just before returning.
+Import Suprsend iOS SDK into your application. In `AppDelegate`, add the below code inside `didFinishLaunchingWithOptions` method, just before returning.
 
 <CodeGroup>
   ```objectivec AppDelegate.swift
@@ -66,9 +68,7 @@ Add following line of code inside dependencies in pubspec.yaml file
   ```
 </CodeGroup>
 
-Replace **WORKSPACE KEY** and **WORKSPACE SECRET** with your workspace values. You will get both the tokens from [Suprsend dashboard](https://app.suprsend.com/) (***Settings page -> "API keys"*** section). For more details, check the [documentation on 'Workspaces'](/docs/workspace).
-
-![](/images/docs/d60fec2-Frame_58_1.png)
+Replace **`WORKSPACE KEY`** and **`WORKSPACE SECRET`** with values linked to your account. You'll find this in SuprSend dashboard (Developers -> API keys) page.
 
 ## Logging
 
@@ -87,9 +87,3 @@ By default the logs of SuprSend SDK are disabled. We recommend you to enable the
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-  * [2. Initialization](#2-initialization)
-  * [Logging](#logging)

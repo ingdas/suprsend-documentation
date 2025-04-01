@@ -3,8 +3,6 @@ title: "Fetch"
 description: "Learn about Fetch node functionality within SuprSend workflows"
 ---
 
-[Suggest Edits](/edit/fetch)
-
 Fetch is an http api request call to an endpoint which you can use to fetch data from an endpoint and use it as template or workflow variables. One of the use case of using fetch node could be to send digest notifications where you can add fetch node before a batch or delay function to fetch digest data and then use it inside template to trigger the notification.
 
 Any data returned in the api request response is appended to the response\_key in your fetch function and then merged with the input payload.
@@ -32,14 +30,16 @@ Fetch node supports JSONNET rendering language. You can add workflow trigger pay
 | Input Payload  | data passed in your event or workflow trigger.                                                                                                                                                                                                                 | `data.key`               |
 | Actor          | properties of actor in your workflow trigger. In case of event, distinct\_id works both as actor and recipient.                                                                                                                                                | `data["$actor"].key`     |
 | Recipient      | properties of recipient in your workflow trigger. In case of event, distinct\_id works both as actor and recipient, unless override recipient is set in workflow trigger settings. In case of override recipient, properties of overriden recipient is picked. | `data["$recipient"].key` |
-| Brand / Tenant | properties of the tenant passed in workflow trigger.                                                                                                                                                                                                           | `data["$brand"].key`     |
+| Tenant | properties of the tenant passed in workflow trigger.                                                                                                                                                                                                           | `data["$brand"].key`     |
 
 ### Request execution
 
 When executing the request for a fetch function, SuprSend expects the following from your service:
 
 * The response to the request is one of: 200 OK, 201 Created, or 204 No Content.
+
 * If the request response contains data, it's encoded as JSON and can be decoded into a map/dictionary/hash.
+
 * The response to the request takes no longer than 5 seconds for SuprSend to receive.
 
 ### Merging Response to workflow input
@@ -95,11 +95,3 @@ Here's how Fetch function data output would look like with response key and with
 </CodeGroup>
 
 ***
-
-* [Table of Contents](#)
-
-* * [Configuring fetch node](#configuring-fetch-node)
-
-    * [Adding variables in Fetch node](#adding-variables-in-fetch-node)
-    * [Request execution](#request-execution)
-    * [Merging Response to workflow input](#merging-response-to-workflow-input)

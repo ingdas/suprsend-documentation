@@ -3,145 +3,147 @@ title: "Trigger Workflow from API"
 description: "Guide to configure and trigger workflow from API"
 ---
 
-[Suggest Edits](/edit/java-trigger-workflow-from-api)
-
 It is a unified API to trigger workflow and doesn't require user creation before hand to trigger notification. Recommended for platforms transitioning their existing notifications to SuprSend. If you are using our frontend SDKs to configure notifications and passing events and user properties from third-party data platforms like Segment, then [event-based trigger](/docs/java-send-event-data) would be a better choice.
 
-<Info>
-  Available in SDK version >= v0.7.0
-</Info>
+<Note>
+  📘 Available in SDK version >= v0.7.0
+</Note>
 
 ## Sample Payload
-
-<CodeGroup>
-  ```java Workflow.java
-  package test;
-
-  import java.io.IOException;
-  import java.io.UnsupportedEncodingException;
-  import java.util.Arrays;
-
-  import org.json.JSONArray;
-  import org.json.JSONObject;
-
-  import suprsend.Suprsend;
-  import suprsend.SuprsendException;
-  import suprsend.WorkflowTriggerRequest;
-
-  public class Workflow {
-
-    public static void main(String[] args) throws Exception {
-      WorkflowTrigger();
-    }
-
-    private static void WorkflowTrigger() throws SuprsendException, UnsupportedEncodingException {
-      Suprsend suprClient = Helper.getClientInstance();
-      // payload
-      JSONObject body = getWorkflowBody();
-      String idempotencyKey = "_unique_request_identifier";
-      String tenantId = "tenant_id1";
-      WorkflowTriggerRequest wf = new WorkflowTriggerRequest(body, idempotencyKey, tenantId);
-      //
-      JSONObject resp = suprClient.workflows.trigger(wf);
-      System.out.println(resp);
-    }
-
-    private static JSONObject getWorkflowBody() {
-      JSONObject body = new JSONObject()
-        .put("workflow", "__workflow_slug__")
-        .put("actor", new JSONObject()
-             .put("distinct_id", "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08")
-             .put("name", "actor_1")
-            )
-        .put("recipients", new JSONArray()
-             .put(new JSONObject()
-                  .put("distinct_id", "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09")
-                  .put("$email", Arrays.asList("[email protected]"))
-                  .put("name", "recipient_1")
-                  .put("$preferred_language", "en")
-  				        .put("$timezone", "America/New_York")
-                 ))
-        .put("data", new JSONObject()
-             .put("first_name", "User")
-             .put("invoice_amount", "$5000")
-             .put("invoice_id", "Invoice-1234")
-            );
-
-      return body;
-    }
-  }
-  ```
-
-  ```java Helper.java
-  package test;
-
-  import suprsend.Suprsend;
-  import suprsend.SuprsendException;
-
-  public class TestHelper {
-      public static Suprsend getClientInstance() throws SuprsendException {
-          String apiKey = "_workspace_key_";
-          String apiSecret = "_workspace_secret_";
-          return new Suprsend(apiKey, apiSecret);
-      }
-  }
-  ```
-</CodeGroup>
-
-| Property                                                                                 | Type                               | Description                                                                                                                                                                                                                                                                                                            |
-| ---------------------------------------------------------------------------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| workflow                                                                                 | string                             | Slug of designed workflow on SuprSend dashboard. You'll get the slug from workflow settings.                                                                                                                                                                                                                           |
-| recipients                                                                               | array of string / array of objects | List of users who need to be notified. You can add upto 100 recipients in a workflow trigger. You can either pass recipients as an array of `distinct_ID` (if user is pre-synced in SuprSend database) or [define recipient information inline](/docs/java-trigger-workflow-from-api#identifying-recipients-inline).   |
-| actor (Optional)                                                                         | string / object                    | Includes distinct\_id and properties of the user who performed the action. You can use it for [cross-user notifications](/docs/java-trigger-workflow-from-api#sending-cross-user-notifications) where you need to include actor properties in notification template. Actor properties can be added as `$actor.<prop>`. |
-| data                                                                                     | object                             | variable data required to render dynamic template content or workflow properties such as dynamic delay or channel override in send node.                                                                                                                                                                               |
-| [tenant\_id](/docs/java-trigger-workflow-from-api#multi-tenant-notifications) (Optional) | string                             | trigger workflow for specific tenant/brand.                                                                                                                                                                                                                                                                            |
-| [idempotency\_key](/docs/java-trigger-workflow-from-api#idempotent-requests) (Optional)  | string                             | unique identifier of the request. We'll be returning idempotency\_key in our [outbound webhook response](/docs/outbound-webhook). You can use it to map notification statuses and replies in your system.                                                                                                              |
-| recipients\[].$timezone                                                                  | string                             | to set recipient's timezone. Used to send notification in user's local timezone. You can pass timezone in [IANA (TZ identifier)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) format.                                                                                                            |
-| recipients\[].$preferred\_language                                                       | string                             | to set recipient's preferred language. This is to support localization in notification content. You can pass the language in `ISO 639-1 2-letter` format. [Refer all language codes here](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) .                                      |
-
-### Response
 
 Once your request is accepted, you can check the status of your request in the [SuprSend Logs](https://app.suprsend.com/en/staging/log).
 
 <CodeGroup>
-  ```json json
-  {
-    "success": true,
-    "status": "success",
-    "status_code": 202,
-    "message": "{\"status\":\"success\"}"
+
+```java Workflow.java
+package test;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import suprsend.Suprsend;
+import suprsend.SuprsendException;
+import suprsend.WorkflowTriggerRequest;
+
+public class Workflow {
+
+  public static void main(String[] args) throws Exception {
+    WorkflowTrigger();
   }
-  ```
+
+  private static void WorkflowTrigger() throws SuprsendException, UnsupportedEncodingException {
+    Suprsend suprClient = Helper.getClientInstance();
+    // payload
+    JSONObject body = getWorkflowBody();
+    String idempotencyKey = "_unique_request_identifier";
+    String tenantId = "tenant_id1";
+    WorkflowTriggerRequest wf = new WorkflowTriggerRequest(body, idempotencyKey, tenantId);
+    //
+    JSONObject resp = suprClient.workflows.trigger(wf);
+    System.out.println(resp);
+  }
+
+  private static JSONObject getWorkflowBody() {
+    JSONObject body = new JSONObject()
+      .put("workflow", "__workflow_slug__")
+      .put("actor", new JSONObject()
+           .put("distinct_id", "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08")
+           .put("name", "actor_1")
+          )
+      .put("recipients", new JSONArray()
+           .put(new JSONObject()
+                .put("distinct_id", "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09")
+                .put("$email", Arrays.asList("abc@example.com"))
+                .put("name", "recipient_1")
+                .put("$preferred_language", "en")
+				        .put("$timezone", "America/New_York")
+               ))
+      .put("data", new JSONObject()
+           .put("first_name", "User")
+           .put("invoice_amount", "$5000")
+           .put("invoice_id", "Invoice-1234")
+          );
+
+    return body;
+  }
+}
+```
+
+
+```java Helper.java
+package test;
+
+import suprsend.Suprsend;
+import suprsend.SuprsendException;
+
+public class TestHelper {
+    public static Suprsend getClientInstance() throws SuprsendException {
+        String apiKey = "_workspace_key_";
+        String apiSecret = "_workspace_secret_";
+        return new Suprsend(apiKey, apiSecret);
+    }
+}
+```
+
+
+```java Response
+{
+  "success": true,
+  "status": "success",
+  "status_code": 202,
+  "message": "{\"status\":\"success\"}"
+}
+```
+
 </CodeGroup>
+
+| Property                                                                                                         | Type                               | Description                                                                                                                                                                                                                                                                                                                    |
+|------------------------------------------------------------------------------------------------------------------|------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `workflow`                                                                                                     | `string`                           | Slug of designed workflow on SuprSend dashboard. You'll get the slug from workflow settings.                                                                                                                                                                                                                                   |
+| `recipients`                                                                                                  | `array of string / array of objects` | List of users who need to be notified. You can add up to 100 recipients in a workflow trigger. You can either pass recipients as an array of `distinct_id` (if the user is pre-synced in SuprSend database) or [define recipient information inline](https://docs.suprsend.com/docs/java-trigger-workflow-from-api#identifying-recipients-inline).  |
+| `actor` _(Optional)_                                                                                           | `string / object`                  | Includes `distinct_id` and properties of the user who performed the action. You can use it for [cross-user notifications](https://docs.suprsend.com/docs/java-trigger-workflow-from-api#sending-cross-user-notifications), where you need to include actor properties in the notification template. Actor properties can be added as `$actor.<prop>`. |
+| `data`                                                                                                         | `object`                           | Variable data required to render dynamic template content or workflow properties such as dynamic delay or channel override in send node.                                                                                                                                                                                       |
+| **[tenant_id](https://docs.suprsend.com/docs/java-trigger-workflow-from-api#multi-tenant-notifications)** _(Optional)_ | `string`                           | Trigger workflow for a specific tenant/brand.                                                                                                                                                                                                                                                                                  |
+| **[idempotency_key](https://docs.suprsend.com/docs/java-trigger-workflow-from-api#idempotent-requests)** _(Optional)_ | `string`                           | Unique identifier of the request. We'll be returning `idempotency_key` in our [outbound webhook response](https://docs.suprsend.com/docs/outbound-webhook). You can use it to map notification statuses and replies in your system.                                                                                            |
+| `recipients\[].$timezone`                                                                                      | `string`                           | Sets the recipient's timezone. Used to send notifications in the user's local timezone. You can pass the timezone in [IANA (TZ identifier)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) format.                                                                                                         |
+| `recipients\[].$preferred_language`                                                                            | `string`                           | Sets the recipient's preferred language. This supports localization in notification content. You can pass the language in `ISO 639-1` 2-letter format. [Refer to all language codes here](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py).                                                  |
 
 ## Sending notification to multiple users
 
 Recipients in workflow call is an array of `distinct_ids` or recipient objects. You can pass upto 100 recipients in a single workflow trigger. SuprSend will internally convert it into multiple workflow triggers, one for each recipient in the array.
 
 <CodeGroup>
-  ```java java
-  JSONObject body = new JSONObject()
-    .put("recipients", Arrays.asList("id1","id2"))
 
-  // ---- OR ------
+```java Request
+JSONObject body = new JSONObject()
+  .put("recipients", Arrays.asList("id1","id2"))
 
-  JSONObject body = new JSONObject()
-    .put("recipients", new JSONArray()
-         .put(new JSONObject()
-              .put("distinct_id", "id1")
-              .put("$email", Arrays.asList("[email protected]"))
-              .put("name", "recipient_1"))
-         .put(new JSONObject()
-              .put("distinct_id", "id2")
-              .put("$email", Arrays.asList("[email protected]"))
-              .put("name", "recipient_2"))
-        )
-  ```
+// ---- OR ------
+
+JSONObject body = new JSONObject()
+  .put("recipients", new JSONArray()
+       .put(new JSONObject()
+            .put("distinct_id", "id1")
+            .put("$email", Arrays.asList("recipient1@example.com"))
+            .put("name", "recipient_1"))
+       .put(new JSONObject()
+            .put("distinct_id", "id2")
+            .put("$email", Arrays.asList("recipient2@example.com"))
+            .put("name", "recipient_2"))
+      )
+```
+
 </CodeGroup>
 
-<Info>
+<Note>
+  **Use lists to broadcast to a large list of users:**
+
   We recommend you to use [lists](/docs/lists-java) and [broadcast](/docs/broadcast-java) to send notifications to a user list larger than 1000 users. This approach allows bulk processing, resulting in significantly faster delivery compared to individual workflow calls. Sending individual workflows to a large set of users may introduce delays in your notification queue.
-</Info>
+</Note>
 
 ## Identifying recipients inline
 
@@ -150,74 +152,78 @@ One of the benefits of using direct workflow trigger is that you can identify re
 This is how the complete recipient object with look like
 
 <CodeGroup>
-  ```java java
-  JSONObject body = new JSONObject()
-    .put("recipients", new JSONArray()
-         .put(new JSONObject()
-              .put("distinct_id", "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09")
-              .put("$email", Arrays.asList("[email protected]")) // email communication channel
-              .put("$sms", Arrays.asList("+15555555555")) // sms communication channel
-              .put("$channels", Arrays.asList("email","inbox"))
-              .put("$preferred_language", "en")
-              .put("$timezone", "America/New_York")
-              .put("custom_prop1", "value_1")  // custom property  
-              .put("custom_prop2", "value_2")  // custom property
-             ))
-  ```
+
+```java Request
+JSONObject body = new JSONObject()
+  .put("recipients", new JSONArray()
+       .put(new JSONObject()
+            .put("distinct_id", "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09")
+            .put("$email", Arrays.asList("abc@example.com")) // email communication channel
+            .put("$sms", Arrays.asList("+15555555555")) // sms communication channel
+            .put("$channels", Arrays.asList("email","inbox"))
+            .put("$preferred_language", "en")
+            .put("$timezone", "America/New_York")
+            .put("custom_prop1", "value_1")  // custom property  
+            .put("custom_prop2", "value_2")  // custom property
+           ))
+```
+
 </CodeGroup>
 
-| Property                                                                                                                   | Type                      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| -------------------------------------------------------------------------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| distinct\_id                                                                                                               | string                    | Unique identifier of the user to be notified.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| [communication channels](/docs/java-trigger-workflow-from-api#communication-channels-of-recipient) (`$email`, `$sms` etc). | array of string / objects | The communication channels info provided will be updated to user profile in the background. For this workflow, only channel values specified for this recipient will be used for sending notification instead of all channel values present in User profile.                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| $channels                                                                                                                  | array of string           | By default, notifications will be sent to all channels defined in the workflow delivery nodes. However, if you have a scenario where user has specific channel preference for a notification (e.g., they only want to receive payment reminders via email), you can include that preference in the workflow payload. This will ensure that notifications are sent only to the channels specified in the this. Supported channel: `email, sms, whatsapp, androidpush, iospush, slack, webpush, ms_teams`. You can always use our [in-build preference APIs](/docs/preferences) to maintain user notification preferences. Preferences defined within SuprSend will automatically apply with workflow trigger. |
-| $preferred\_language                                                                                                       | string                    | to set recipient's preferred language. This is to support localization in notification content. You can pass the language in `ISO 639-1 2-letter` format. [Refer all language codes here](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py) .                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| $timezone                                                                                                                  | string                    | to set recipient's timezone. Used to send notification in user's local timezone. You can pass timezone in [IANA (TZ identifier)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) format.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| \*                                                                                                                         | object                    | You can pass other user properties to render dynamic template content. These properties will also be set in user profile and can be used in the template as `$recipient.<property>`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Property                                                                                                         | Type                               | Description                                                                                                                                                                                                                                                                                          |
+|------------------------------------------------------------------------------------------------------------------|------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `distinct_id`                                                                                                  | `string`                           | Unique identifier of the user to be notified.                                                                                                                                                                                                                                                         |
+| **[communication channels](https://docs.suprsend.com/docs/java-trigger-workflow-from-api#communication-channels-of-recipient)** (`$email`, `$sms`, etc.) | `array of string / objects`        | The communication channels info provided will be updated to the user profile in the background. For this workflow, only channel values specified for this recipient will be used for sending notifications instead of all channel values present in the user profile.                                 |
+| `channels`                                                                                                    | `array of string`                  | By default, notifications will be sent to all channels defined in the workflow delivery nodes. However, if a user has a specific channel preference for a notification (e.g., they only want to receive payment reminders via email), you can include that preference in the workflow payload. This will ensure that notifications are sent only to the specified channels.Supported channels: `email, sms, whatsapp, androidpush, iospush, slack, webpush, ms_teams`.You can always use our [in-built preference APIs](https://docs.suprsend.com/docs/preferences) to maintain user notification preferences. Preferences defined within SuprSend will automatically apply with workflow triggers. |
+| `$preferred_language`                                                                                          | `string`                           | Sets the recipient's preferred language to support localization in notification content. You can pass the language in `ISO 639-1` 2-letter format. [Refer to all language codes here](https://github.com/suprsend/suprsend-py-sdk/blob/main/src/suprsend/language_codes.py).                         |
+| `$timezone`                                                                                                    | `string`                           | Sets the recipient's timezone. Used to send notifications in the user's local timezone. You can pass the timezone in [IANA (TZ identifier)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) format.                                                                              |
+| `\*`                                                                                                          | `object`                           | You can pass other user properties to render dynamic template content. These properties will also be set in the user profile and can be used in the template as `$recipient.<property>`.                                                                                                           |
 
 ### Communication Channels of recipient
 
 <CodeGroup>
-  ```java java
-  JSONObject body = new JSONObject()
-    .put("recipients", new JSONArray()
-         .put(new JSONObject()
-              .put("$email", Arrays.asList("[email protected]")) // email communication channel
-              .put("$sms", Arrays.asList("+15555555555"))      // sms communication channel
-              .put("$whatsapp", Arrays.asList("+15555555555")) // whatsapp communication channel
-              .put("$androidpush", new JSONObject()						 // androidpush communication channel
-                   .put("token", "__android_push_token__")
-                   .put("provider", "fcm")
-                   .put("device_id", ""))
-              .put("$iospush", new JSONObject()							 // iospush communication channel
-                   .put("token", "__ios_push_token__")
-                   .put("provider", "apns")
-                   .put("device_id", ""))
-              .put("$slack", new JSONObject()								 // slack using user email id
-                   .put("email", "[email protected]")
-                   .put("access_token", "xoxb-XXXXXXXX"))
-              .put("$slack", new JSONObject()								 // slack using member_id
-                   .put("user_id", "U/WXXXXXXXX")
-                   .put("access_token", "xoxb-XXXXXXXX"))
-              .put("$slack", new JSONObject()								 // slack channel
-                   .put("channel", "CXXXXXXXX")
-                   .put("access_token", "xoxb-XXXXXXXX"))
-              .put("$slack", new JSONObject()							 	 // slack using incoming webhook
-                   .put("incoming_webhook", new JSONObject()
-                        .put("url", "https://hooks.slack.com/services/T0XXXXX/B0XXXXXX/XXXXXXX")))
-              .put("$ms_teams", new JSONObject()					 	 // MS teams user or channel using conversation_id
-                   .put("tenant_id", "c1981ab2-9aaf-xxxx-xxxx")
-                   .put("service_url", "https://smba.trafficmanager.net/amer")
-                   .put("conversation_id", "19:c1524d7c-a06f-456f-8abe-xxxx"))
-              .put("$ms_teams", new JSONObject()					 	 // MS teams using user id
-                   .put("tenant_id", "c1981ab2-9aaf-xxxx-xxxx")
-                   .put("service_url", "https://smba.trafficmanager.net/amer")
-                   .put("user_id", "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"))
-              .put("$ms_teams", new JSONObject()						 // MS teams using incoming webhook
-                   .put("incoming_webhook", new JSONObject()
-                        .put("url", "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX")))
-             ))
-  ```
+
+```java Request
+JSONObject body = new JSONObject()
+  .put("recipients", new JSONArray()
+       .put(new JSONObject()
+            .put("$email", Arrays.asList("abc@example.com")) // email communication channel
+            .put("$sms", Arrays.asList("+15555555555"))      // sms communication channel
+            .put("$whatsapp", Arrays.asList("+15555555555")) // whatsapp communication channel
+            .put("$androidpush", new JSONObject()						 // androidpush communication channel
+                 .put("token", "__android_push_token__")
+                 .put("provider", "fcm")
+                 .put("device_id", ""))
+            .put("$iospush", new JSONObject()							 // iospush communication channel
+                 .put("token", "__ios_push_token__")
+                 .put("provider", "apns")
+                 .put("device_id", ""))
+            .put("$slack", new JSONObject()								 // slack using user email id
+                 .put("email", "abc@example.com")
+                 .put("access_token", "xoxb-XXXXXXXX"))
+            .put("$slack", new JSONObject()								 // slack using member_id
+                 .put("user_id", "U/WXXXXXXXX")
+                 .put("access_token", "xoxb-XXXXXXXX"))
+            .put("$slack", new JSONObject()								 // slack channel
+                 .put("channel", "CXXXXXXXX")
+                 .put("access_token", "xoxb-XXXXXXXX"))
+            .put("$slack", new JSONObject()							 	 // slack using incoming webhook
+                 .put("incoming_webhook", new JSONObject()
+                      .put("url", "https://hooks.slack.com/services/T0XXXXX/B0XXXXXX/XXXXXXX")))
+            .put("$ms_teams", new JSONObject()					 	 // MS teams user or channel using conversation_id
+                 .put("tenant_id", "c1981ab2-9aaf-xxxx-xxxx")
+                 .put("service_url", "https://smba.trafficmanager.net/amer")
+                 .put("conversation_id", "19:c1524d7c-a06f-456f-8abe-xxxx"))
+            .put("$ms_teams", new JSONObject()					 	 // MS teams using user id
+                 .put("tenant_id", "c1981ab2-9aaf-xxxx-xxxx")
+                 .put("service_url", "https://smba.trafficmanager.net/amer")
+                 .put("user_id", "29:1nsLcmJ2RKtYH6Cxxxx-xxxx"))
+            .put("$ms_teams", new JSONObject()						 // MS teams using incoming webhook
+                 .put("incoming_webhook", new JSONObject()
+                      .put("url", "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX")))
+           ))
+```
+
 </CodeGroup>
 
 ## Sending cross-user notifications
@@ -225,37 +231,40 @@ This is how the complete recipient object with look like
 In scenarios where you need to notify a group of users based on another user's action, such as sending a notification to the document owner when someone comments on it, you can specify the actor in your workflow call. This allows you to use actor's name or other properties in your notification template. Actor properties can be included in the template as `$actor.<property>`.
 
 <CodeGroup>
-  ```javascript Sample Template
-  //handlebar template
-  Hi {{$recipient.name}}, {{$actor.name}} added {{length comments}} new comments on the {{doc_name}}.
 
-  // rendered content with Sample Data
-  Hi recipient_1, actor_1 added 2 new comments on the annual IT report.
-  ```
+```javascript Sample Template
+//handlebar template
+Hi {{$recipient.name}}, {{$actor.name}} added {{length comments}} new comments on the {{doc_name}}.
 
-  ```java API request payload
-  private static JSONObject getWorkflowBody() {
-    JSONObject body = new JSONObject()
-      .put("workflow", "new_comment")
-      .put("actor", new JSONObject()
-           .put("distinct_id", "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08")
-           .put("name", "actor_1")
-          )
-      .put("recipients", new JSONArray()
-           .put(new JSONObject()
-                .put("distinct_id", "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09")
-                .put("$email", Arrays.asList("[email protected]"))
-                .put("name", "recipient_1")
-               ))
-      .put("data", new JSONObject()
-           .put("doc_name", "annual IT report")
-           .put("date", "2024-01-01")
-           .put("comments", Arrays.asList("change the date","rest looks good"))
-               );
+// rendered content with Sample Data
+Hi recipient_1, actor_1 added 2 new comments on the annual IT report.
+```
 
-           return body;
-           }
-  ```
+
+```java API request payload
+private static JSONObject getWorkflowBody() {
+  JSONObject body = new JSONObject()
+    .put("workflow", "new_comment")
+    .put("actor", new JSONObject()
+         .put("distinct_id", "0fxxx8f74-xxxx-41c5-8752-xxxcb6911fb08")
+         .put("name", "actor_1")
+        )
+    .put("recipients", new JSONArray()
+         .put(new JSONObject()
+              .put("distinct_id", "0gxxx9f14-xxxx-23c5-1902-xxxcb6912ab09")
+              .put("$email", Arrays.asList("abc@example.com"))
+              .put("name", "recipient_1")
+             ))
+    .put("data", new JSONObject()
+         .put("doc_name", "annual IT report")
+         .put("date", "2024-01-01")
+         .put("comments", Arrays.asList("change the date","rest looks good"))
+             );
+
+         return body;
+         }
+```
+
 </CodeGroup>
 
 ## Sending notification to anonymous user
@@ -263,75 +272,81 @@ In scenarios where you need to notify a group of users based on another user's a
 You can send notifications to anonymous users by passing ` "is_transient": true` in your recipient object. This approach is recommended for scenarios where you need to send notifications to unregistered users without creating them in the SuprSend platform. The same way, you can pass ` "is_transient": true` in your actor object to use actor properties in template without creating user profile.
 
 <CodeGroup>
-  ```java java
-  private static JSONObject getWorkflowBody() {
-    JSONObject body = new JSONObject()
-      .put("workflow", "_workflow_slug_")
-      .put("actor", new JSONObject()
-           .put("is_transient", true)		// for anonymous actor
-           .put("name", "actor_1")
-          )
-      .put("recipients", new JSONArray()
-           .put(new JSONObject()
-                .put("is_transient", true)	// for anonymous recipient
-                .put("$email", Arrays.asList("[email protected]"))
-                .put("name", "recipient_1")
-               ))
-      .put("data", new JSONObject()
-           .put("doc_name", "annual IT report")
-           .put("date", "2024-01-01")
-           .put("comments", Arrays.asList("change the date","rest looks good"))
-               );
 
-           return body;
-           }
-  ```
+```java Request
+private static JSONObject getWorkflowBody() {
+  JSONObject body = new JSONObject()
+    .put("workflow", "_workflow_slug_")
+    .put("actor", new JSONObject()
+         .put("is_transient", true)		// for anonymous actor
+         .put("name", "actor_1")
+        )
+    .put("recipients", new JSONArray()
+         .put(new JSONObject()
+              .put("is_transient", true)	// for anonymous recipient
+              .put("$email", Arrays.asList("abc@example.com"))
+              .put("name", "recipient_1")
+             ))
+    .put("data", new JSONObject()
+         .put("doc_name", "annual IT report")
+         .put("date", "2024-01-01")
+         .put("comments", Arrays.asList("change the date","rest looks good"))
+             );
+
+         return body;
+         }
+```
+
 </CodeGroup>
 
 ## Multi-tenant notifications
 
-For cases where you want to send notifications to your enterprise customers end users, pass the `tenant_id` in your workflow instance. You can use this to dynamically manage [tenant level notification customizations](/docs/brands). This includes the ability to customize template design or content and route notifications via tenant vendors.
+For cases where you want to send notifications to your enterprise customers end users, pass the `tenant_id` in your workflow instance. You can use this to dynamically manage [tenant level notification customizations](/docs/tenants). This includes the ability to customize template design or content and route notifications via tenant vendors.
 
 <CodeGroup>
-  ```java java
-  private static void WorkflowTrigger() throws SuprsendException, UnsupportedEncodingException {
-    Suprsend suprClient = Helper.getClientInstance();
-    
-    // payload
-    JSONObject body = getWorkflowBody();
-    String tenantId = "tenant_id1";
-    WorkflowTriggerRequest wf = new WorkflowTriggerRequest(body, tenantId);
-    
-    //
-    JSONObject resp = suprClient.workflows.trigger(wf);
-    System.out.println(resp);
-  }
-  ```
+
+```java Request
+private static void WorkflowTrigger() throws SuprsendException, UnsupportedEncodingException {
+  Suprsend suprClient = Helper.getClientInstance();
+  
+  // payload
+  JSONObject body = getWorkflowBody();
+  String tenantId = "tenant_id1";
+  WorkflowTriggerRequest wf = new WorkflowTriggerRequest(body, tenantId);
+  
+  //
+  JSONObject resp = suprClient.workflows.trigger(wf);
+  System.out.println(resp);
+}
+```
+
 </CodeGroup>
 
 ## Idempotent requests
 
-SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives and processes a request with an idempotency\_key, it will skip processing requests with same `idempotency_key` for next 24 hours. Idempotency key should be uniquely generated for each request (max 255 characters allowed). Spaces in start and end of the key will be trimmed. Here are some common approaches for generating idempotency keys:
+SuprSend supports idempotency to ensure that requests can be retried safely without duplicate processing. If Suprsend receives and processes a request with an idempotency_key, it will skip processing requests with same `idempotency_key` for next 24 hours. Idempotency key should be uniquely generated for each request (max 255 characters allowed). Spaces in start and end of the key will be trimmed. Here are some common approaches for generating idempotency keys:
 
-* **Generate a random UUID** for each request.
-* **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like `user147-new-comment-1687437670`
-* **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
+- **Generate a random UUID** for each request.
+- **Construct the idempotency key by combining relevant information about the request**. This can include parameters, identifiers, or specific contextual details that are meaningful within your application. For example, you could concatenate the user ID, action, and timestamp to form an idempotency key like `user147-new-comment-1687437670`
+- **Request-specific Identifier**: If your request already contains a unique identifier, such as an order ID or a job ID, you can use that identifier directly as the idempotency key.
 
 <CodeGroup>
-  ```java java
-  private static void WorkflowTrigger() throws SuprsendException, UnsupportedEncodingException {
-    Suprsend suprClient = Helper.getClientInstance();
-    
-    // payload
-    JSONObject body = getWorkflowBody();
-    String idempotencyKey = "_unique_request_identifier";
-    WorkflowTriggerRequest wf = new WorkflowTriggerRequest(body, idempotencyKey);
-    
-    //
-    JSONObject resp = suprClient.workflows.trigger(wf);
-    System.out.println(resp);
-  }
-  ```
+
+```java Request
+private static void WorkflowTrigger() throws SuprsendException, UnsupportedEncodingException {
+  Suprsend suprClient = Helper.getClientInstance();
+  
+  // payload
+  JSONObject body = getWorkflowBody();
+  String idempotencyKey = "_unique_request_identifier";
+  WorkflowTriggerRequest wf = new WorkflowTriggerRequest(body, idempotencyKey);
+  
+  //
+  JSONObject resp = suprClient.workflows.trigger(wf);
+  System.out.println(resp);
+}
+```
+
 </CodeGroup>
 
 ## Bulk API for triggering multiple workflows
@@ -339,84 +354,84 @@ SuprSend supports idempotency to ensure that requests can be retried safely with
 Bulk API allows you to send multiple workflow requests in a single call. Use `.append()` and `workflows.bulkTriggerInstance()` to add however-many-records to call in bulk.
 
 <CodeGroup>
-  ```java Workflow.java
-  package test;
 
-  import java.io.IOException;
-  import java.io.UnsupportedEncodingException;
-  import java.util.Arrays;
+```java Workflow.java
+package test;
 
-  import org.json.JSONArray;
-  import org.json.JSONObject;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
-  import suprsend.BulkResponse;
-  import suprsend.BulkWorkflowTrigger;
-  import suprsend.Suprsend;
-  import suprsend.SuprsendException;
-  import suprsend.WorkflowTriggerRequest;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-  public class Workflow {
+import suprsend.BulkResponse;
+import suprsend.BulkWorkflowTrigger;
+import suprsend.Suprsend;
+import suprsend.SuprsendException;
+import suprsend.WorkflowTriggerRequest;
 
-    public static void main(String[] args) throws Exception {
-      WorkflowBulkTrigger();
+public class Workflow {
+
+  public static void main(String[] args) throws Exception {
+    WorkflowBulkTrigger();
+  }
+
+  private static void WorkflowBulkTrigger() throws SuprsendException, UnsupportedEncodingException {
+    Suprsend suprClient = Helper.getClientInstance();
+    
+    // payload of first workflow
+    JSONObject body1 = getWorkflowBody1();
+    String idempotencyKey1 = "_unique_request_identifier";
+    String tenantId1 = "tenant_id1";
+    WorkflowTriggerRequest wf1 = new WorkflowTriggerRequest(body1, idempotencyKey1, tenantId1);
+
+    // payload for second workflow
+    JSONObject body2 = getWorkflowBody2();
+    String idempotencyKey2 = "_unique_request_identifier";
+    String tenantId2 = "tenant_id1";
+    WorkflowTriggerRequest wf2 = new WorkflowTriggerRequest(body2, idempotencyKey2, tenantId2);
+    
+    //
+    BulkWorkflowTrigger bulkIns = suprClient.workflows.bulkTriggerInstance();
+    bulkIns.append(wf1,wf2);
+    //
+    BulkResponse resp = bulkIns.trigger();
+    System.out.println(resp);
+}
+
+private static JSONObject getWorkflowBody1() {...}
+private static JSONObject getWorkflowBody2() {...}
+```
+
+
+```java Helper.java
+package test;
+
+import suprsend.Suprsend;
+import suprsend.SuprsendException;
+
+public class TestHelper {
+    public static Suprsend getClientInstance() throws SuprsendException {
+        String apiKey = "_workspace_key_";
+        String apiSecret = "_workspace_secret_";
+        return new Suprsend(apiKey, apiSecret);
     }
+}
+```
 
-    private static void WorkflowBulkTrigger() throws SuprsendException, UnsupportedEncodingException {
-      Suprsend suprClient = Helper.getClientInstance();
-      
-      // payload of first workflow
-      JSONObject body1 = getWorkflowBody1();
-      String idempotencyKey1 = "_unique_request_identifier";
-      String tenantId1 = "tenant_id1";
-      WorkflowTriggerRequest wf1 = new WorkflowTriggerRequest(body1, idempotencyKey1, tenantId1);
 
-      // payload for second workflow
-      JSONObject body2 = getWorkflowBody2();
-      String idempotencyKey2 = "_unique_request_identifier";
-      String tenantId2 = "tenant_id1";
-      WorkflowTriggerRequest wf2 = new WorkflowTriggerRequest(body2, idempotencyKey2, tenantId2);
-      
-      //
-      BulkWorkflowTrigger bulkIns = suprClient.workflows.bulkTriggerInstance();
-      bulkIns.append(wf1,wf2);
-      //
-      BulkResponse resp = bulkIns.trigger();
-      System.out.println(resp);
-  }
+```java Response
+{
+  status: "success/fail/partial",
+  total: 10,
+  success: 10,
+  failure: 0,
+  failed_records: [{"record": {...}, "error": "error_str", "code": "<status_code>"}],
+  warnings: []
+}
+```
 
-  private static JSONObject getWorkflowBody1() {...}
-  private static JSONObject getWorkflowBody2() {...}
-  ```
-
-  ```java Helper.java
-  package test;
-
-  import suprsend.Suprsend;
-  import suprsend.SuprsendException;
-
-  public class TestHelper {
-      public static Suprsend getClientInstance() throws SuprsendException {
-          String apiKey = "_workspace_key_";
-          String apiSecret = "_workspace_secret_";
-          return new Suprsend(apiKey, apiSecret);
-      }
-  }
-  ```
-</CodeGroup>
-
-### Response
-
-<CodeGroup>
-  ```json json
-  {
-    status: "success/fail/partial",
-    total: 10,
-    success: 10,
-    failure: 0,
-    failed_records: [{"record": {...}, "error": "error_str", "code": "<status_code>"}],
-    warnings: []
-  }
-  ```
 </CodeGroup>
 
 ## Add attachment (in email)
@@ -424,298 +439,285 @@ Bulk API allows you to send multiple workflow requests in a single call. Use `.a
 To add one or more attachments to a notification (viz. Email), call `wf.addAttachment()` for each file with local path or remote attachment url. Ensure that file path is valid, and public(for remote url) otherwise it will raise error.
 
 <CodeGroup>
-  ```javascript javascript
-  private static void WorkflowTrigger() throws SuprsendException, UnsupportedEncodingException {
-    Suprsend suprClient = Helper.getClientInstance();
-    
-    // payload
-    JSONObject body = getWorkflowBody();
-    WorkflowTriggerRequest wf = new WorkflowTriggerRequest(body);
-    String filePath = "https://lightning.network/lightning-network-paper.pdf";
-    wf.addAttachment(filePath, "MyFile.pdf", true);
-    
-    //
-    JSONObject resp = suprClient.workflows.trigger(wf);
-    System.out.println(resp);
-  }
-  ```
+
+```javascript Request
+private static void WorkflowTrigger() throws SuprsendException, UnsupportedEncodingException {
+  Suprsend suprClient = Helper.getClientInstance();
+  
+  // payload
+  JSONObject body = getWorkflowBody();
+  WorkflowTriggerRequest wf = new WorkflowTriggerRequest(body);
+  String filePath = "https://lightning.network/lightning-network-paper.pdf";
+  wf.addAttachment(filePath, "MyFile.pdf", true);
+  
+  //
+  JSONObject resp = suprClient.workflows.trigger(wf);
+  System.out.println(resp);
+}
+```
+
 </CodeGroup>
 
 <Warning>
-  A single workflow instance size (including attachment) must not exceed 100KB (100 x 1024 bytes).
+  🚧 A single workflow instance size (including attachment) must not exceed 100KB (100 x 1024 bytes). 
 </Warning>
 
-***
+---
 
 ## Dynamic workflow trigger
 
 You can configure workflow from backend API by following below steps:
 
-#### Step 1. Create a json file with workflow configurations in a file named input.json
+<Steps>
+  <Step title="Create a json file with workflow configurations in a file named input.json">
+    <CodeGroup>
 
-<CodeGroup>
-  ```json Input.json
-  // Prepare Workflow body
-  workflow_body = {
-    "name": "workflow_name",
-    "template": "template_slug",
-    "notification_category": "notification_category", // notification category transactional/promotional/system
-    "delay": "time_delay",  // time delay after which the first notification will be sent
-    "trigger_at": "date string in ISO 8601", //to trigger scheduled notifications
-
-    "users": [
-      {
-        "distinct_id": "distinct_id", // unique identifier of the user
-        // if $channels is present, communication will be triggered on mentioned channels only.
-        // "$channels": ["email"],
-
-        // User communication channel can be added as [optional]:
-        // "$email":["[email protected]"],
-        // "$whatsapp":["+15555555555"],
-        // "$sms":["+15555555555"],
-        // "$androidpush": [{"token": "__android_push_token__", "provider": "fcm", "device_id": ""}],  
-        // "$iospush":[{"token": "__ios_push_token__", "provider": "apns", "device_id": ""}],
-        // "$slack": {
-        //  "email": "[email protected]",
-        //  "access_token": "xoxb-XXXXXXXX"
-        //}   --- slack using email
-
-        // "$slack": {
-        //  "user_id": "U/WXXXXXXXX",
-        //  "access_token": "xoxb-XXXXXX"
-        //} --- slack using member_id
-
-        // "$slack": {
-        //  "channel": "CXXXXXXXX",
-        //  "access_token": "xoxb-XXXXXX"
-        //} --- slack channel
-
-        // "$slack": {
-        //  "incoming_webhook": {
-        //  "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
-        // }
-        //} --- slack incoming webhook
+    ```json Input.json
+    // Prepare Workflow body
+    workflow_body = {
+      "name": "workflow_name",
+      "template": "template_slug",
+      "notification_category": "notification_category", // notification category transactional/promotional/system
+      "delay": "time_delay",  // time delay after which the first notification will be sent
+      "trigger_at": "date string in ISO 8601", //to trigger scheduled notifications
+    
+      "users": [
+        {
+          "distinct_id": "distinct_id", // unique identifier of the user
+          // if $channels is present, communication will be triggered on mentioned channels only.
+          // "$channels": ["email"],
+    
+          // User communication channel can be added as [optional]:
+          // "$email":["user@example.com"],
+          // "$whatsapp":["+15555555555"],
+          // "$sms":["+15555555555"],
+          // "$androidpush": [{"token": "__android_push_token__", "provider": "fcm", "device_id": ""}],  
+          // "$iospush":[{"token": "__ios_push_token__", "provider": "apns", "device_id": ""}],
+          // "$slack": {
+          //  "email": "e@example.com",
+          //  "access_token": "xoxb-XXXXXXXX"
+          //}   --- slack using email
+    
+          // "$slack": {
+          //  "user_id": "U/WXXXXXXXX",
+          //  "access_token": "xoxb-XXXXXX"
+          //} --- slack using member_id
+    
+          // "$slack": {
+          //  "channel": "CXXXXXXXX",
+          //  "access_token": "xoxb-XXXXXX"
+          //} --- slack channel
+    
+          // "$slack": {
+          //  "incoming_webhook": {
+          //  "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"
+          // }
+          //} --- slack incoming webhook
+        }
+      ],
+    
+      // delivery instruction [optional]. how should notifications be sent, and whats the success metric
+      "delivery": {
+        "smart": <boolean_value>,
+        "success": "success_metric",
+        "time_to_live": "TTL duration", // will be applicable for smart = TRUE
+        "mandatory_channels": [] // list of mandatory channels e.g ["email"], will be applicable for smart = TRUE
+      },
+      // data can be any json / serializable python-dictionary
+      "data": {
+        "key":"value",
+        "nested_key": {
+          "nested_key1": "some_value_1",
+          "nested_key2": {
+            "nested_key3": "some_value_3",
+          },
+        }
       }
-    ],
+    }   
+    ```
 
-    // delivery instruction [optional]. how should notifications be sent, and whats the success metric
-    "delivery": {
-      "smart": <boolean_value>,
-      "success": "success_metric",
-      "time_to_live": "TTL duration", // will be applicable for smart = TRUE
-      "mandatory_channels": [] // list of mandatory channels e.g ["email"], will be applicable for smart = TRUE
-    },
-    // data can be any json / serializable python-dictionary
-    "data": {
-      "key":"value",
-      "nested_key": {
-        "nested_key1": "some_value_1",
-        "nested_key2": {
-          "nested_key3": "some_value_3",
-        },
-      }
+    </CodeGroup>
+
+    For configuring a workflow from backend, you can pass following properties in your method
+
+    | Parameter               | Description                                                                                                                                                                                                                                                                                      | Format                                                                                                                                                               | Obligation  |
+    | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+    | `name`                  | It is the unique name of the workflow. You can see workflow-related analytics on the workflow page (how many notifications were sent, delivered, clicked or interacted). The workflow name should be easily identifiable for your reference at a later stage                                     | _text_                                                                                                                                                               | _Mandatory_ |
+    | `template`              | It is the unique slug of the template created on SuprSend platform. You can get this slug by clicking on the clipboard icon next to the Template name on SuprSend templates page. It is the same for all channels                                                                                | slug name                                                                                                                                                            | _Mandatory_ |
+    | `notification_category` | You can understand more about them in the [Notification Category](/docs/notification-category) documentation                                                                                                                                                                                     | system / transactional / promotional                                                                                                                                 | _Mandatory_ |
+    | `delay`                 | Workflow will be halted for the time mentioned in delay, and become active once the delay period is over.                                                                                                                                                                                        | **XX**d**XX**h**XX**m**XX**s or if its number (n) then delay is in seconds (n)                                                                                       | _Optional_  |
+    | `trigger_at`            | Trigger workflow on a specific date-time                                                                                                                                                                                                                                                         | date string in ISO 8601 eg. "2021-08-27T20:14:51.643Z"                                                                                                               | _Optional_  |
+    | `users`                 | Array object of target users. Atleast 1 user mandatory. `distinct_id` for each user mandatory Channel information is non-mandatory. If you pass channel information here, then these channels will be used for sending notification otherwise channels will be picked from user profile.         | `"users": [ { "distinct_id": "value", "$channels":[], channel_information_dict #(optional) }], `                                                                        | _Mandatory_ |
+    | `delivery`              | Delivery instructions for the workflow. You can enable smart delivery by setting `"smart":True` By default, delivery instruction will be `"delivery": { "smart": False, "success": "seen" }` Further details are given in the [below section](/docs/java-trigger-workflow-from-api#smart-delivery) | `delivery = { "smart": True/False, "success": "delivered/seen/interaction/", "time_to_live": "", "mandatory_channels": []}`, # list of mandatory channels e.g gation" | _Optional_  |
+    | `data`                  | JSON. To replace the variables in the template, templates use [handlebars](https://handlebarsjs.com/guide/) language                                                                                                                                                                             | `"data": { "key": { "key": "value", "key": "value" } },`                                                                                                               | _Optional_  |
+
+    <Frame caption="To find the template slug name on SuprSend platform, click on the clipboard icon on Templates page. Templates > Template Details Page">
+      ![](/images/docs/5610927-Screenshot_2021-10-21_at_6.31.48_PM.png)
+    </Frame>
+    <Check>
+      👍 **+CountryCode Required for SMS and Whatsapp:** 
+
+      For setting `$sms` and `$whatsapp`, `+<countrycode>` is mandatory to send along with phone number. Eg. +91 for India
+    </Check>
+  </Step>
+  <Step title="Call suprsend.triggerWorkflow() method to trigger workflow">
+    Once you have the object initialized you can make a call to suprsend backend using following line:
+
+    <CodeGroup>
+
+    ```java Request
+    JSONObject response = suprsend.triggerWorkflow(body);
+    ```
+
+    
+    ```java Sample Code
+    package tests;
+    
+    import java.io.File;
+    import java.io.FileInputStream;
+    import java.io.FileNotFoundException;
+    import java.io.InputStream;
+    
+    import org.json.JSONObject;
+    import org.json.JSONTokener;
+    
+    import suprsend.Suprsend;
+    
+    public class TestSuprsendSDK {
+    
+        private JSONObject loadBody(String fileName) throws FileNotFoundException {
+            JSONObject jsonObject;
+            String relativePath = String.format("%s/src/%s/resources/%s.json", System.getProperty("user.dir"),
+                    this.getClass().getPackage().getName(), fileName);
+            InputStream schemaStream = new FileInputStream(new File(relativePath));
+            jsonObject = new JSONObject(new JSONTokener(schemaStream));
+            return jsonObject;
+        }
+    
+        public static void main(String[] args) throws Exception {
+            TestSuprsendSDK sdk = new TestSuprsendSDK();
+            // Load workflow body json
+            JSONObject body = sdk.loadBody("input");
+            // SDK instance
+            Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE KEY");
+            Workflow wf = new Workflow(body, idempotencyKey, tenantId)
+              
+            // Trigger workflow
+            JSONObject resp = suprClient.triggerWorkflow(wf);
+            System.out.println(resp);
+        }
+    
+    }}
+    ```
+
+    
+    ```java Response
+    // Response structure
+    {
+        "success": true, // if true, request was accepted.
+        "status": "success",
+        "status_code": 202, // http status code
+        "message": "OK",
     }
-  }   
-  ```
-</CodeGroup>
+    
+    {
+        "success": false, // error will be present in message
+        "status": "fail",
+        "status_code": 500, // http status code
+        "message": "error message",
+    }
+    ```
 
-For configuring a workflow from backend, you can pass following properties in your method
+    </CodeGroup>
 
-| Parameter                   | Description                                                                                                                                                                                                                                                                                       | Format                                                                                                                                                                    | Obligation  |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| **`name`**                  | It is the unique name of the workflow. You can see workflow-related analytics on the workflow page (how many notifications were sent, delivered, clicked or interacted). The workflow name should be easily identifiable for your reference at a later stage                                      | *text*                                                                                                                                                                    | *Mandatory* |
-| **`template`**              | It is the unique slug of the template created on SuprSend platform. You can get this slug by clicking on the clipboard icon next to the Template name on SuprSend templates page. It is the same for all channels                                                                                 | **`slug name`**                                                                                                                                                           | *Mandatory* |
-| **`notification_category`** | You can understand more about them in the [Notification Category](/docs/notification-category) documentation                                                                                                                                                                                      | system / transactional / promotional                                                                                                                                      | *Mandatory* |
-| **`delay`**                 | Workflow will be halted for the time mentioned in delay, and become active once the delay period is over.                                                                                                                                                                                         | **XX**d**XX**h**XX**m**XX**s or if its number (n) then delay is in seconds (n)                                                                                            | *Optional*  |
-| **`trigger_at`**            | Trigger workflow on a specific date-time                                                                                                                                                                                                                                                          | date string in ISO 8601 eg. "2021-08-27T20:14:51.643Z"                                                                                                                    | *Optional*  |
-| **`users`**                 | Array object of target users. Atleast 1 user mandatory. `distinct_id` for each user mandatory Channel information is non-mandatory. If you pass channel information here, then these channels will be used for sending notification otherwise channels will be picked from user profile.          | "users": \[ \{ "distinct\_id": "value", "$channels":\[], channel\_information\_dict #(optional) ],                                                                        | *Mandatory* |
-| **`delivery`**              | Delivery instructions for the workflow. You can enable smart delivery by setting `"smart":True` By default, delivery instruction will be "delivery": \{ "smart": False, "success": "seen" } Further details are given in the [below section](/docs/java-trigger-workflow-from-api#smart-delivery) | delivery = \{ "smart": True/False, "success": "delivered/seen/interaction/", "time\_to\_live": "", "mandatory\_channels": \[] # list of mandatory channels e.g gation", } | *Optional*  |
-| **`data`**                  | JSON. To replace the variables in the template, templates use [handlebars](https://handlebarsjs.com/guide/) language                                                                                                                                                                              | "data": \{ "key": \{ "key": "value", "key": "value" } },                                                                                                                  | *Optional*  |
+    Alternatively you can find sample java client code snippet, which demonstrates how to make a call to Suprsend backend using Java SDK below:
 
-<Frame caption="To find the template slug name on SuprSend platform, click on the clipboard icon on Templates page. Templates > Template Details Page">
-  <img src="/images/docs/5610927-Screenshot_2021-10-21_at_6.31.48_PM.png" />
-</Frame>
+    - [Maven Client](https://suprsend-java-sdk.s3.ap-south-1.amazonaws.com/example-client/suprsend-java-sdk-client.zip) 
+    - [Non Maven Client](https://suprsend-java-sdk.s3.ap-south-1.amazonaws.com/example-client/suprsend-java-sdk-non-maven-client.zip)
 
-<Check>
-  For setting `$sms` and `$whatsapp`, `+<countrycode>` is mandatory to send along with phone number. Eg. +91 for India
-</Check>
+    **Response Structure: **When you call `suprClient.triggerWorkflow`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance status.
 
-#### Step 2. Call `suprsend.triggerWorkflow()` method to trigger workflow
+    Possible values for status key in the response:
 
-Once you have the object initialized you can make a call to suprsend backend using following line:
+    | status | Description                                                                                                                              |
+    | ------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+    | `202`  | Request was successfully accepted                                                                                                        |
+    | `400`  | Some of the backend validations failed due to which request could not be accepted. More details will be present against the message key. |
+    | `401`  | Unauthorised access made to Suprsend backend. Please check the credentials that are being passed.                                        |
+    | `500`  | Any other error which was not handled by the Suprsend system. You will find more details against the message key in response.            |
 
-<CodeGroup>
-  ```java java
-  JSONObject response = suprsend.triggerWorkflow(body);
-  ```
-</CodeGroup>
+    <Note>
+      **Note: **The actual processing/execution of workflow happens asynchronously.
+    </Note>
+    Once your request is accepted, you can check what is the status of your request in the '[ SuprSend Logs](https://app.suprsend.com/en/staging/logs)' section.
 
-#### Sample Code to call Suprsend backend using SDK
+    #### Bulk API for triggering multiple workflows.
 
-<CodeGroup>
-  ```java java
-  package tests;
+    Bulk API allows you to send multiple workflow requests in a single call. There isn't any limit on number-of-records that can be added to bulk_workflows instance. Use `.append()` on `bulk_workflows` instance to add however-many-records to call in bulk.
 
-  import java.io.File;
-  import java.io.FileInputStream;
-  import java.io.FileNotFoundException;
-  import java.io.InputStream;
+    Response is an instance of `suprsend.BulkResponse` class.
 
-  import org.json.JSONObject;
-  import org.json.JSONTokener;
+    <CodeGroup>
 
-  import suprsend.Suprsend;
+    ```javascript Request
+    package tests;
+    
+    import java.io.File;
+    import java.io.FileInputStream;
+    import java.io.FileNotFoundException;
+    import java.io.InputStream;
+    
+    import org.json.JSONObject;
+    import org.json.JSONTokener;
+    
+    import suprsend.Suprsend;
+    
+    public class TestSuprsendSDK {
+    
+        private JSONObject loadBody(String fileName) throws FileNotFoundException {
+            JSONObject jsonObject;
+            String relativePath = String.format("%s/src/%s/resources/%s.json", System.getProperty("user.dir"),
+                    this.getClass().getPackage().getName(), fileName);
+            InputStream schemaStream = new FileInputStream(new File(relativePath));
+            jsonObject = new JSONObject(new JSONTokener(schemaStream));
+            return jsonObject;
+        }
+    
+        public static void main(String[] args) throws Exception {
+            TestSuprsendSDK sdk = new TestSuprsendSDK();
+            // Load workflow body json
+            JSONObject body = sdk.loadBody("input");
+            // SDK instance
+            Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE KEY");
+            // Create one or more workflow instances
+            Workflow wf1 = new Workflow(body1)
+          	Workflow wf2 = new Workflow(body2)
+          
+          	// --- use .append on bulk instance to add one or more records
+          	BulkWorkflows bulkIns = suprClient.bulkWorkflows.newInstance();
+          	bulkIns.append(wf1,wf2);
+          
+            // trigger workflow
+            BulkResponse resp = bulkIns.trigger();
+            System.out.println(resp);
+        }
+    }}
+    ```
 
-  public class TestSuprsendSDK {
+    
+    ```java Response
+    // Response structure
+    import suprsend.BulkResponse;
+    
+    BulkResponse{status: 'success' | total: 2 | success: 2 | failure: 0 | warnings: 0}
+    
+    BulkResponse{status: 'fail' | total: 2 | success: 0 | failure: 2 | warnings: 0}
+    
+    BulkResponse{status: 'partial' | total: 2 | success: 1 | failure: 1 | warnings: 0}
+    ```
 
-      private JSONObject loadBody(String fileName) throws FileNotFoundException {
-          JSONObject jsonObject;
-          String relativePath = String.format("%s/src/%s/resources/%s.json", System.getProperty("user.dir"),
-                  this.getClass().getPackage().getName(), fileName);
-          InputStream schemaStream = new FileInputStream(new File(relativePath));
-          jsonObject = new JSONObject(new JSONTokener(schemaStream));
-          return jsonObject;
-      }
+    </CodeGroup>
+  </Step>
+</Steps>
 
-      public static void main(String[] args) throws Exception {
-          TestSuprsendSDK sdk = new TestSuprsendSDK();
-          // Load workflow body json
-          JSONObject body = sdk.loadBody("input");
-          // SDK instance
-          Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE KEY");
-          Workflow wf = new Workflow(body, idempotencyKey, brandId)
-            
-          // Trigger workflow
-          JSONObject resp = suprClient.triggerWorkflow(wf);
-          System.out.println(resp);
-      }
-
-  }}
-  ```
-</CodeGroup>
-
-Alternatively you can find sample java client code snippet, which demonstrates how to make a call to Suprsend backend using Java SDK below:
-
-a. [Maven Client](https://suprsend-java-sdk.s3.ap-south-1.amazonaws.com/example-client/suprsend-java-sdk-client.zip) b. [Non Maven Client](https://suprsend-java-sdk.s3.ap-south-1.amazonaws.com/example-client/suprsend-java-sdk-non-maven-client.zip)
-
-#### Response structure
-
-When you call `suprClient.triggerWorkflow`, the SDK internally makes an `HTTP` call to SuprSend Platform to register this request, and you'll immediately receive a response indicating the acceptance status.
-
-<CodeGroup>
-  ```javascript javascript
-  // Response structure
-  {
-      "success": true, // if true, request was accepted.
-      "status": "success",
-      "status_code": 202, // http status code
-      "message": "OK",
-  }
-
-  {
-      "success": false, // error will be present in message
-      "status": "fail",
-      "status_code": 500, // http status code
-      "message": "error message",
-  }
-  ```
-</CodeGroup>
-
-Possible values for status key in the response:
-
-| status    | Description                                                                                                                              |
-| --------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| **`202`** | Request was successfully accepted                                                                                                        |
-| **`400`** | Some of the backend validations failed due to which request could not be accepted. More details will be present against the message key. |
-| **`401`** | Unauthorised access made to Suprsend backend. Please check the credentials that are being passed.                                        |
-| **`500`** | Any other error which was not handled by the Suprsend system. You will find more details against the message key in response.            |
-
-###### Note: The actual processing/execution of workflow happens asynchronously.
-
-Once your request is accepted, you can check what is the status of your request in the '[ SuprSend Logs](https://app.suprsend.com/en/staging/logs)' section.
-
-#### Bulk API for triggering multiple workflows.
-
-Bulk API allows you to send multiple workflow requests in a single call. There isn't any limit on number-of-records that can be added to bulk\_workflows instance. Use `.append()` on `bulk_workflows` instance to add however-many-records to call in bulk.
-
-<CodeGroup>
-  ```javascript javascript
-  package tests;
-
-  import java.io.File;
-  import java.io.FileInputStream;
-  import java.io.FileNotFoundException;
-  import java.io.InputStream;
-
-  import org.json.JSONObject;
-  import org.json.JSONTokener;
-
-  import suprsend.Suprsend;
-
-  public class TestSuprsendSDK {
-
-      private JSONObject loadBody(String fileName) throws FileNotFoundException {
-          JSONObject jsonObject;
-          String relativePath = String.format("%s/src/%s/resources/%s.json", System.getProperty("user.dir"),
-                  this.getClass().getPackage().getName(), fileName);
-          InputStream schemaStream = new FileInputStream(new File(relativePath));
-          jsonObject = new JSONObject(new JSONTokener(schemaStream));
-          return jsonObject;
-      }
-
-      public static void main(String[] args) throws Exception {
-          TestSuprsendSDK sdk = new TestSuprsendSDK();
-          // Load workflow body json
-          JSONObject body = sdk.loadBody("input");
-          // SDK instance
-          Suprsend suprsend = new Suprsend("WORKSPACE KEY", "WORKSPACE KEY");
-          // Create one or more workflow instances
-          Workflow wf1 = new Workflow(body1)
-        	Workflow wf2 = new Workflow(body2)
-        
-        	// --- use .append on bulk instance to add one or more records
-        	BulkWorkflows bulkIns = suprClient.bulkWorkflows.newInstance();
-        	bulkIns.append(wf1,wf2);
-        
-          // trigger workflow
-          BulkResponse resp = bulkIns.trigger();
-          System.out.println(resp);
-      }
-  }}
-  ```
-</CodeGroup>
-
-#### Response
-
-Response is an instance of `suprsend.BulkResponse` class
-
-<CodeGroup>
-  ```java java
-  // Response structure
-  import suprsend.BulkResponse;
-
-  BulkResponse{status: 'success' | total: 2 | success: 2 | failure: 0 | warnings: 0}
-
-  BulkResponse{status: 'fail' | total: 2 | success: 0 | failure: 2 | warnings: 0}
-
-  BulkResponse{status: 'partial' | total: 2 | success: 1 | failure: 1 | warnings: 0}
-  ```
-</CodeGroup>
-
-***
-
-* [Table of Contents](#)
-
-* * [Sample Payload](#sample-payload)
-    * [Response](#response)
-  * [Sending notification to multiple users](#sending-notification-to-multiple-users)
-  * [Identifying recipients inline](#identifying-recipients-inline)
-    * [Communication Channels of recipient](#communication-channels-of-recipient)
-  * [Sending cross-user notifications](#sending-cross-user-notifications)
-  * [Sending notification to anonymous user](#sending-notification-to-anonymous-user)
-  * [Multi-tenant notifications](#multi-tenant-notifications)
-  * [Idempotent requests](#idempotent-requests)
-  * [Bulk API for triggering multiple workflows](#bulk-api-for-triggering-multiple-workflows)
-    * [Response](#response-1)
-  * [Add attachment (in email)](#add-attachment-in-email)
-  * [Dynamic workflow trigger](#dynamic-workflow-trigger)
+---

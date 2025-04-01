@@ -3,52 +3,45 @@ title: "Integrate Go SDK"
 description: "This document will cover SDK installation and initialization steps"
 ---
 
-[Suggest Edits](/edit/integrate-go-sdk)
-
 ## Installation
 
 Install `suprsend-go` sdk
 
 <CodeGroup>
-  ```shell bash
-  go get github.com/suprsend/suprsend-go
-  ```
+
+```shell bash
+go get github.com/suprsend/suprsend-go
+```
+
 </CodeGroup>
 
 ## Initialization
 
-For initializing SDK, you need **API KEY** and **API SECRET**.
+For initializing SDK, you need workspace_key and workspace_secret. You will get both the tokens from your [Suprsend dashboard](https://app.suprsend.com/en/production/developers/api-keys) (Developers -> API Keys).
 
 <CodeGroup>
-  ```go go
-  package main
 
-  import (
-    "log"
+```go Request
+package main
 
-    suprsend "github.com/suprsend/suprsend-go"
-  )
+import (
+  "log"
 
-  // Initialize SDK
-  func main() {
-    opts := []suprsend.ClientOption{
-      // suprsend.WithDebug(true),
-    }
-    suprClient, err := suprsend.NewClient("__api_key__", "__api_secret__", opts...)
-    if err != nil {
-      log.Println(err)
-    }
+  suprsend "github.com/suprsend/suprsend-go"
+)
+
+// Initialize SDK
+func main() {
+  opts := []suprsend.ClientOption{
+    // suprsend.WithDebug(true),
   }
-  ```
+  suprClient, err := suprsend.NewClient("__workspace_key__", "__workspace_secret__", opts...)
+  if err != nil {
+    log.Println(err)
+  }
+}
+```
+
 </CodeGroup>
 
-Replace **API KEY** and **API SECRET** with your workspace values. You will get both the tokens from [Suprsend dashboard](https://app.suprsend.com/) (***Settings page -> "API keys"*** section). For more details, check the [documentation on 'Workspaces'](/docs/workspace).
-
-![](/images/docs/d60fec2-Frame_58_1.png)
-
-***
-
-* [Table of Contents](#)
-
-* * [Installation](#installation)
-  * [Initialization](#initialization)
+---

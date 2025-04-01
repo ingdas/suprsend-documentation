@@ -1,27 +1,15 @@
 ---
 title: "Gupshup"
-description: "https://www.gupshup.io/"
+description: "This section is a step-by-step guide to set Gupshup as your Whatsapp service provider."
 ---
-
-[Suggest Edits](/edit/gupshup-whatsapp)
-
-This section is a step-by-step guide to set Gupshup as your Whatsapp service provider.
 
 ## Pre-Requisites
 
-1. You'll need a Gupshup account to complete this tutorial. You can use your existing Gupshup account to integrate, or [Create a Gupshup account](https://www.gupshup.io/auth/signup)
+You'll need a Gupshup account to complete this tutorial. You can use your existing Gupshup account to integrate, or [Create a Gupshup account](https://www.gupshup.io/auth/signup)
 
 ## Gupshup integration on SuprSend account
 
-On the SuprSend dashboard, follow the steps as below:
-
-1. Select Vendors from the left panel
-2. Select 'Whatsapp' as the channel from the list
-3. Select 'Gupshup' from the list of Vendors
-
-![](/images/docs/b8baba4-gupshup_WA.png)
-
-Clicking on the vendor name will open settings page. In the **Settings** page, enter the details:
+On the SuprSend dashboard, go to vendor page from side panel and click Whatsapp -> Gupshup from the list of Vendors. This will open vendor details page as shown below:
 
 ![](/images/docs/427003a-image.png)
 
@@ -47,19 +35,8 @@ One of the platform advantage of using SuprSend as a central communication syste
 
 Send a mail to Gupshup team to enable below webhook URL to your account:
 
-Http Method: POST URL: `https://hub.suprsend.com/webhook/gupshup/whatsapp/` Headers: Content-Type: application/json
+> Http Method: POST 
+    <br /> URL: [`https://hub.suprsend.com/webhook/gupshup/whatsapp/`](https://hub.suprsend.com/webhook/gupshup/whatsapp/)
+    <br />Headers: Content-Type: application/json
 
 ***
-
-What’s Next
-
-Create Whatsapp template and add a workflow to start sending your Whatsapp notifications
-
-* [Whatsapp Template](/docs/whatsapp)
-* [Create Workflow](https://docs.suprsend.com/docs/design-workflow)
-
-* [Table of Contents](#)
-
-* * [Pre-Requisites](#pre-requisites)
-  * [Gupshup integration on SuprSend account](#gupshup-integration-on-suprsend-account)
-  * [Setting Callback URL in Gupshup Account](#setting-callback-url-in-gupshup-account)

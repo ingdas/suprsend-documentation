@@ -1,0 +1,202 @@
+---
+title: "Tenants"
+description: "This document covers methods to manage tenants using python SDK"
+---
+
+Tenants (previously named as brands) are used for whitelabelling notifications, personliazing template content or capturing admin preferences for another entity/organization. Tenants are workspace-level entities and by default, a tenant with `tenant_id="default"` (representing your organization) is created your workspace. Read more about tenants [here](/docs/tenants).
+
+### Create / Update Tenant
+
+<CodeGroup>
+
+```python Request
+from suprsend import Suprsend, SuprsendAPIException
+
+supr_client = Suprsend("workspace_key", "workspace_secret")
+
+# Define tenant ID and prepare tenant payload
+tenant_id = "tenant_01"
+tenant_payload = {
+    "tenant_name": "ABC Company",
+    "logo": "https://company_logo_image.png",
+    "primary_color": "#ff0000",
+
+# ---- Optional Parameters -------
+    "secondary_color": "#00ff00",
+    "tertiary_color": "#0000ff",
+    "timezone": "America/New_York",
+    "blocked_channels": ["email"], # These channels will be skipped for sending notification to recipients when triggering for this tenant. 
+    "social_links": {
+        "website": "https://suprsend.com",
+        "facebook": "",
+        "linkedin": "",
+        "twitter": "",
+        "instagram": "",
+        "medium": "",
+        "discord": "",
+        "telegram": "",
+        "youtube": ""
+    },
+    "embedded_preference_url": "", # In-product Notification centre link for capturing user preferences. 
+    "properties": {
+        "prop1": "value1",
+        "prop2": { "prop3": ["value2"] }
+    }
+}
+
+try:
+    response = supr_client.tenants.upsert(tenant_id, tenant_payload)
+    print(response)
+except SuprsendAPIException as ex:
+    print(ex)
+```
+
+
+```python Response
+{
+   "tenant_id":"tenant_01",
+   "tenant_name":"ABC Company",
+   "logo":"https://company_logo_image.png",
+   "timezone":"America/New_York",
+   "blocked_channels":["email"],
+   "embedded_preference_url":"",
+   "hosted_preference_domain":"https://preferences.suprsend.com",
+   "primary_color":"#ff0000",
+   "secondary_color":"#00ff00",
+   "tertiary_color":"#0000ff",
+   "social_links":{
+      "website":"https://suprsend.com",
+      "facebook":"",
+      "linkedin":"",
+      "twitter":"",
+      "instagram":"",
+      "medium":"",
+      "discord":"",
+      "telegram":"",
+      "youtube":""
+   },
+   "properties":{
+        "prop1": "value1",
+        "prop2": { "prop3": ["value2"] }
+    },
+   "updated_at":"2025-03-13T18:16:35.744843Z"
+}
+```
+
+</CodeGroup>
+
+
+| Field                                          | Description                                                                                                                                                                |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| tenant_id (mandatory)                          | Unique identifier for the tenant (max 64 characters, case insenstive). It can contain characters \[a-z0-9\_\\-\] i.e. alphanumeric characters, \\\_(underscore) and -(hyphen). |
+| tenant_name (\*mandatory)                      | Tenant's display name in a human-readable format                                                                                                                           |
+| logo                                           | Logo URL, used in email headers or on hosted preference page for per-tenant branding.                                                                                      |
+| primary_color, secondary_color, tertiary_color | Tenant branding colors - used in template design or hosted preference page for per-tenant branding.                                                                        |
+| timezone                                       | The primary timezone for most tenants' recipients. Used as a fallback when sending notifications in the recipient's timezone and timezone is not set in recipient profile. |
+| blocked_channels                               | These channels will be skipped for sending notification to recipients when triggering for this tenant. Used to apply channel level opt-outs at admin level.                |
+| social_links                                   | URLs of the tenant's social media accounts.                                                                                                                                |
+| embedded_preference_url                        |                                                                                                                                                                            |
+| properties                                     | Custom properties of the tenant like address, to be used in template or workflow.                                                                                          |
+
+All properties of the tenant can be referred as `{{$brand.prop}}` (handlebars) or `data\["tenant"\].prop` in JSONNET format.
+
+### Get Tenant
+
+<CodeGroup>
+
+```python Request
+from suprsend import Suprsend, SuprsendAPIException
+
+supr_client = Suprsend("workspace_key", "workspace_secret")
+
+try:
+    response = supr_client.tenants.get("tenant_id")
+    print(response)
+except SuprsendAPIException as ex:
+    print(ex)
+```
+
+
+```python Response
+{
+   "tenant_id":"tenant_id",
+   "tenant_name":"ABC Company",
+   "logo":"https://logo_url.png",
+   "timezone":"America/New_York",
+   "blocked_channels":[
+      "whatsapp",
+      "email"
+   ],
+   "embedded_preference_url":"https://app.suprsend.com/preferences",
+   "hosted_preference_domain":"preferences.suprsend.com",
+   "primary_color":"#0751E8",
+   "secondary_color":"#e308e3",
+   "tertiary_color":"#1EE9F1",
+   "social_links":{
+      "website":"https://www.suprsend.com/",
+      "facebook":"",
+      "linkedin":"",
+      "twitter":"",
+      "instagram":"",
+      "medium":"",
+      "discord":"",
+      "telegram":"",
+      "youtube":""
+   },
+   "properties":{
+      "address":"5678 Market Street Suite 300 San Francisco, CA 94103 USA"
+   },
+   "updated_at":"2025-02-27T10:21:15.235666Z"
+}
+```
+
+</CodeGroup>
+
+### List Tenants
+
+By default, `limit=20`. The maximum value for `limit` is `1000`.
+
+<CodeGroup>
+
+```python Request
+from suprsend import Suprsend, SuprsendAPIException
+
+supr_client = Suprsend("workspace_key", "workspace_secret")
+
+try:
+    params = {"limit": 20, "offset": 0}
+    response = supr_client.tenants.list(**params)
+    print(response)
+except SuprsendAPIException as ex:
+    print(ex)
+```
+
+
+```python Response
+{
+   "meta":{
+      "count":28,
+      "limit":20,
+      "offset":0
+   },
+   "results":[
+      {
+         "tenant_id":"tenant_01",
+         "tenant_name":"ABC Company",
+         "logo":"https://logo.url",
+         ...
+         "updated_at":"2025-03-13T18:16:35.744843Z"
+      },
+	  {
+         "tenant_id":"tenant_02",
+         "tenant_name":"CDE Company",
+         "logo":"https://logo.url",
+         ...
+         "updated_at":"2025-03-13T18:16:35.744843Z"
+      }
+	...
+   ]
+}
+```
+
+</CodeGroup>

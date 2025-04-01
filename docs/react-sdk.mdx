@@ -1,0 +1,125 @@
+---
+title: "React"
+description: "SuprSend's React SDK is a library designed to help developers integrate SuprSend’s features like Inbox, Preferences, Webpush etc into React-based web applications."
+---
+
+## Installation
+
+We support 2 SDK's for react based applications.
+
+* [@suprsend/react-core](https://www.npmjs.com/package/@suprsend/react-core): This provides context providers and hooks to integrate SuprSend in to your application. If you want to use web-push, user methods, track events or implement your own UI for preferences and inbox by using provided methods, this library is better option. If you want to use any of inbuilt components for inbox or preferences then use `@suprsend/react`.
+
+* [@suprsend/react](https://www.npmjs.com/package/@suprsend/react): This library is built on top of `@suprsend/react-core`, so all hooks, context providers and methods that are present in `@suprsend/react-core` library are also present in this, with addition to that drop-in components like Inbox, NotificationsFeed, Preferences etc are available which comes with UI to ease integration.
+
+<CodeGroup>
+  ```javascript npm
+  npm install @suprsend/react
+  ```
+
+  ```javascript yarn
+  yarn add @suprsend/react
+  ```
+</CodeGroup>
+
+## Integration
+
+### SuprSendProvider
+
+This context provider need to be wrapper around your component in which you want to use SuprSend methods. This is responsible for creating client instance(`new SuprSend()`), identify and reset user. You can access the SuprSend client instance using `useSuprSendClient` hook. This instance contains all methods needed to integrate preferences, webpush, track events and user methods.
+
+<CodeGroup>
+  ```javascript Example.js
+  import { SuprSendProvider } from '@suprsend/react';
+
+  function Example() {
+    return (
+      <SuprSendProvider publicApiKey={YOUR_KEY} distinctId={YOUR_DISTINCT_ID}>
+        <MyComponent/>
+      </SuprSendProvider>
+    );
+  }
+  ```
+
+  ```javascript TypeDef
+  interface SuprSendProviderProps {
+    publicApiKey: string;
+    distinctId?: unknown;
+    userToken?: string;
+    host?: string;
+    vapidKey?: string;
+    swFileName?: string;
+    refreshUserToken?: (oldUserToken: string, tokenPayload: Dictionary) => Promise<string>;
+    userAuthenticationHandler?: ({ response: ApiResponse }) => void;
+  }
+  ```
+</CodeGroup>
+
+| Parameter                                                         | Description                                                                                                                                                                                                                            |
+| ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| publicApiKey                                                      | public api key is mandatory field without which error will be thrown by SuprSendProvider. You can get this from [SuprSend Dashboard](https://app.suprsend.com/en/staging/developers/api-keys).                                         |
+| distinctId                                                        | Unique identifier to identify a user across platform. If a value is passed SDK will create user and authenticate user. If null value is passed authenticated user's instance data will be cleared in your application, kind of logout. |
+| [userToken](https://docs.suprsend.com/docs/client-authentication) | Mandatory when enhanced security mode is on. This is ES256 JWT token generated in your server-side. Refer [docs](https://docs.suprsend.com/docs/client-authentication) to create userToken.                                            |
+| refreshUserToken                                                  | This function is called by SDK internally to get new userToken before existing token is expired. The returned JWT token string is used as the new userToken.                                                                           |
+| userAuthenticationHandler                                         | This callback will be called after authenticating user internally when you pass distinctId field to give you back the response of user creation api call.                                                                              |
+| host                                                              | Customise the host url.                                                                                                                                                                                                                |
+| vapidKey                                                          | This key is needed only if you are implementing WebPush notifications. You can get it in SuprSend Dashboard --> Vendors --> WebPush                                                                                                    |
+| swFileName                                                        | This key is needed only if you are implementing WebPush notifications and want to customise default `serviceworker.js` file name with your own service worker file name.                                                               |
+
+After implementing the above SuprSendProvider you can be able to use all SuprSend features.
+
+### useSuprSendClient
+
+This hook is used to access internal SuprSend client instance which has all methods related to webpush, preferences, user methods and track event. Use this hook inside child of SuprSendProvider.
+
+<CodeGroup>
+  ```javascript Example.js
+  import {SuprSendProvider, useSuprSendClient} from "@suprsend/react"
+
+  function Example() {
+    return (
+      <SuprSendProvider publicApiKey={YOUR_KEY} distinctId={YOUR_DISTINCT_ID}>
+        <MyComponent/>
+      </SuprSendProvider>
+    );
+  }
+
+  function MyComponent() {
+    const suprSendClient = useSuprSendClient();
+
+    return (
+      <p
+        onClick={() => {
+          // suprSendClient.track('testing');
+          // suprSendClient.user.setEmail('johndoe@gmail.com')
+          // suprSendClient.webpush.registerPush()
+          // suprSendClient.user.preferences.getPreferences()
+        }}
+      >
+        Click Me
+      </p>
+    );
+  }
+  ```
+</CodeGroup>
+
+### useAuthenticateUser
+
+This hook is used to get authenticated user anywhere in your application inside SuprSendProvider. This can also be used to check if user is authenticated before calling any method of SuprSend.
+
+<CodeGroup>
+  ```javascript Example.js
+  import { useAuthenticateUser } from '@suprsend/react';
+
+  function MyComponent() {
+    const { authenticatedUser } = useAuthenticateUser();
+
+    useEffect(() => {
+      if (authenticatedUser) {
+        console.log('User is authenticated', authenticatedUser);
+      }
+    }, [authenticatedUser]);
+
+    return <p>Hello world</p>;
+  }
+  ```
+</CodeGroup>

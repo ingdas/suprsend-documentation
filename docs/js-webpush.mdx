@@ -1,58 +1,63 @@
 ---
 title: "WebPush"
-description: "Suggest Edits"
 ---
+
+<Tip>
+  WebPush notifications only work over https. Most browsers allow push to work in localhost also for development purposes.
+</Tip>
 
 ### Prerequisites
 
 * Integration of [Javascript SDK](/docs/javascript-sdk)
 
-**NOTE:** WebPush notifications only work over https. Most browsers allow push to work in localhost also for development purposes.
-
 ## Integration Steps
 
-### 1. Configuration
+<Steps>
+  <Step title="Configuration">
+    While creating SuprSend instance you have to pass vapidKey (get it in SuprSend Dashboard --> Vendors --> WebPush).
 
-While creating SuprSend instance you have to pass vapidKey (get it in SuprSend Dashboard --> Vendors --> WebPush).
+    If you want to have custom serviceworker file name instead of `serviceworker.js`(mentioned in step2), you can pass name of it in `swFileName`.
 
-If you want to have custom serviceworker file name instead of `serviceworker.js`(mentioned in step2), you can pass name of it in `swFileName`.
+    <CodeGroup>
+      ```typescript typescript
+      new SuprSend(publicApiKey: string, {vapidKey?: string, swFileName?: string})
+      ```
+    </CodeGroup>
+  </Step>
 
-<CodeGroup>
-  ```typescript typescript
-  new SuprSend(publicApiKey: string, {vapidKey?: string, swFileName?: string})
-  ```
-</CodeGroup>
+  <Step title="Add ServiceWorker file">
+    Service worker file is the background worker script which handles push notifications.
 
-### 2. Add ServiceWorker file
+    Create `serviceworker.js` file such that it should be publicly accessible from `https://<your_domain>/serviceworker.js`. Add below lines of code in that file and replace publicApiKey with key you find in API Keys page in SuprSend Dashboard.
 
-Service worker file is the background worker script which handles push notifications.
+    <CodeGroup>
+      ```javascript javascript
+      importScripts('https://cdn.jsdelivr.net/npm/@suprsend/web-sdk@2.0.0/public/serviceworker.min.js');
+      initSuprSend(publicApiKey);
+      ```
+    </CodeGroup>
+  </Step>
 
-Create `serviceworker.js` file such that it should be publicly accessible from `https://<your_domain>/serviceworker.js`. Add below lines of code in that file and replace publicApiKey with key you find in API Keys page in SuprSend Dashboard.
+  <Step title="Register Push">
+    Call `registerPush` in your code, which will perform following tasks:
 
-<CodeGroup>
-  ```javascript javascript
-  importScripts('https://cdn.jsdelivr.net/npm/@suprsend/[email protected]/public/serviceworker.min.js');
-  initSuprSend(publicApiKey);
-  ```
-</CodeGroup>
+    * Ask for notification permission.
 
-### 3. Register Push
+    * Register push service and generate webpush token.
 
-Call `registerPush` in your code, which will perform following tasks:
+    * Send webpush token to SuprSend.
 
-* Ask for notification permission.
-* Register push service and generate webpush token.
-* Send webpush token to SuprSend.
+    <CodeGroup>
+      ```typescript typescript
+      const response = await suprSendClient.webpush.registerPush();
+      ```
+    </CodeGroup>
 
-<CodeGroup>
-  ```typescript typescript
-  const response = await suprSendClient.webpush.registerPush();
-  ```
-</CodeGroup>
+    **Returns:** `Promise<ApiResponse>`
 
-**Returns:** `Promise<ApiResponse>`
-
-**NOTE:** This method should be called on user action like button click for better UX, don't call this on page load.
+    **NOTE:** This method should be called on user action like button click for better UX, don't call this on page load.
+  </Step>
+</Steps>
 
 ## Other available methods
 
@@ -75,16 +80,3 @@ This will return a string representing the current permission. The value can be:
 **default:** The user's decision is unknown. This will be permission when user first lands on website.
 
 ***
-
-* [Table of Contents](#)
-
-* * * [Prerequisites](#prerequisites)
-
-  * [Integration Steps](#integration-steps)
-
-    * [1. Configuration](#1-configuration)
-    * [2. Add ServiceWorker file](#2-add-serviceworker-file)
-    * [3. Register Push](#3-register-push)
-
-  * [Other available methods](#other-available-methods)
-    * [Check for permission](#check-for-permission)

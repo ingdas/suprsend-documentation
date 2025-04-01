@@ -3,8 +3,6 @@ title: "List sync via database"
 description: "Learn how you can automate users and list sync using your database"
 ---
 
-[Suggest Edits](/edit/list-sync-via-database)
-
 Database connector allows you to sync list users using your true source of data from your data warehouse. This way data, product and growth teams can directly setup production notifications and automated marketing campaigns on the 360 degree data without doing any trade-offs on the amount of data available in click stream platforms.
 
 This is also one of the best ways of automating your list updates. You can set it up once and set the recurring list sync based on your notifications requirement.
@@ -17,71 +15,68 @@ This is also one of the best ways of automating your list updates. You can set i
 
 To update users in the list via database, you need to first create a task with SQL query to extract and transform data and then set an update schedule to define how each sync will be timed and what data will be updated in each sync.
 
-### Step 1: Create a sync task
+<Steps>
+  <Step title="Create a sync task">
+    You can create a new task by clicking on update users on the list page or by clicking on `New task` button on Sync tasks tab. Please note that lists having database connector as source will only open the database task window on `Update users` click. If you want to update users in a list with different datasource, update it directly from sync tasks tab.
 
-You can create a new task by clicking on update users on the list page or by clicking on "New task" button on Sync tasks tab. Please note that lists having database connector as source will only open the database task window on "Update users" click. If you want to update users in a list with different datasource, update it directly from sync tasks tab.
+    <Frame caption="Creating a new task from  tab">
+      ![](/images/docs/4b3ca82-Screenshot_2024-03-21_at_4.27.08_PM.png)
 
-<Frame caption="Creating a new task from  tab">
-  <img src="/images/docs/4b3ca82-Screenshot_2024-03-21_at_4.27.08_PM.png" />
+      **"Sync tasks"**
+    </Frame>
+    <Frame caption="Updating users directly from the list page. List source should be  here">
+      ![](/images/docs/c0bcc0b-image.png)
 
-  **"Sync tasks"**
-</Frame>
+      **"database_sync"**
+    </Frame>
+    Next, add the task name and list ID and click on `Add SQL query`. You can only add the list ID of existing lists. If you don't have the list pre-created, [create one](/docs/lists#creating-lists) before setting up the sync.
+  </Step>
+  <Step title="Write SQL query to extract and load data">
+    When on your task edit screen, select your database connection and start writing the SQL query to fetch users for list sync. If you haven't added your database connection, you can add it directly from your task screen. Read more about [database connection](/docs/database) and how to set it up.
 
-<Frame caption="Updating users directly from the list page. List source should be  here">
-  <img src="/images/docs/c0bcc0b-image.png" />
+    ![](https://files.readme.io/0bc69e9-query_editor.gif)
 
-  **"database\_sync"**
-</Frame>
+    Please make sure that you add `distinct_id` column in your query output. This is a reserved column used to identify `distinct_id` of user to be synced in the list.
 
-Next, add the task name and list ID and click on **"Add SQL query"**. You can only add the list ID of existing lists. If you don't have the list pre-created, [create one](/docs/lists#creating-lists) before setting up the sync.
+    Click `Run` to preview results and make sure that your query selects the right information. The preview will always show the first 10 results.
 
-### Step 2: Write SQL query to extract and load data
+    <Frame caption="always add a distinct_id column and use {{last_sync_time}} variable in your query">
+      ![](/images/docs/53b6274-image.png)
+    </Frame>
+    Make sure that your query returns only the rows and columns that you need to update the list or user profile. Each row in your extracted data represents a user that needs to be synced in the list. `distinct_id` is a mandatory column to identify the users to be synced in the list. If you want to update properties in user profile, add one column each for the property that needs to be synced. Avoid using `select *` in your final query since it may overload your database. Though, you can use `select *` while running your query for preview since it puts limit 10 in your query.
 
-When on your task edit screen, select your database connection and start writing the SQL query to fetch users for list sync. If you haven't added your database connection, you can add it directly from your task screen. Read more about [database connection](/docs/database) and how to set it up.
+    Also, use  variable to only sync source data that changed since the last successful sync interval.
 
-![](https://files.readme.io/0bc69e9-query_editor.gif)
+    **Optimizing your query with Last sync time:**
 
-Please make sure that you add `distinct_id` column in your query output. This is a reserved column used to identify `distinct_id` of user to be synced in the list.
+    You can use `{{last_sync_time}}` variable in your query to sync only the records that have changed since the last successful sync. This helps you avoid syncing the same records over and over again.
 
-Click **Run** to preview results and make sure that your query selects the right information. The preview will always show the first 10 results.
+    We strongly recommend that you index a column in your database representing the date-time each row was last-updated. When you write your query, you should add a WHERE clause comparing your “last updated” column to the `{{last_sync_time}}`.
 
-<Frame caption="always add a distinct_id column and use {{last_sync_time}} variable in your query">
-  <img src="/images/docs/53b6274-image.png" />
-</Frame>
+    The last sync time is a ISO date-time representing the timestamp of your previous successful sync. Add relevant data type conversion if you use any other date-time format.
+  </Step>
+  <Step title="Save query and commit to setup sync frequency">
+    Once you are satisfied with your query results, `Save query` and `Commmit changes` it. You'll see sync settings on commit.
 
-Make sure that your query returns only the rows and columns that you need to update the list or user profile. Each row in your extracted data represents a user that needs to be synced in the list. `distinct_id` is a mandatory column to identify the users to be synced in the list. If you want to update properties in user profile, add one column each for the property that needs to be synced. Avoid using `select *` in your final query since it may overload your database. Though, you can use `select *` while running your query for preview since it puts limit 10 in your query.
+    ![](/images/docs/4173882-image.png)
 
-Also, use **`{{last_sync_time}}`** variable to only sync source data that changed since the last successful sync interval.
+    | Field                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+    | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+    | Update type                  | - Select `Add` if you want to add users on every sync. For example, you are maintaining a list of new registrations and your query returns all users registered today. - Select `Replace` if you want to replace the list with a fresh set of users on every sync. For example, you have a list of all users who made a purchase in the last 30 days.                                                                                                                                                        |
+    | Schedule                     | - Set `One-time` sync if the list is created for one-time campaigns and will never be used again. - Set `Recurring` sync if your list is used in a cron or you are syncing user profile. You can setup recurring sync as **every** `**day **hour **minute` or add a **cron expression** for a more granular sync frequency like `every monday at 9:00 am`.                                                                                                                                                   |
+    | Create / Update user profile | Enable it if you also want to sync users on every sync. You can also update user properties by mapping columns to the relevant user properties and use it in your template as `{{$user.<property_key>}}` to send personalized broadcasts.                                                                                                                                                                                                                                                                    |
+    | Column header                | This is the column name from your query output used to map user property.                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+    | is channel?                  | enable it if the column value is used to update communication channel such as `email`, `sms` or `whatsapp` in user profile.                                                                                                                                                                                                                                                                                                                                                                                  |
+    | User property                | add the key in which your user property should be stored. It can be different from the column name. In case of channel, it will be a dropdown with the list of available channels that you can update.                                                                                                                                                                                                                                                                                                       |
+    | Manage Existing property     | - **Override** will override the value corresponding to the property key on every sync - **Don't Override** will set the property value for missing property keys. Existing property value will not be overriden. This is especially useful for properties which are set one time. For example, `signup_date`, `first_item_purchased` - **Append** will create an array in the property key and will keep on appending the value to that array on every sync. **User channels are always append operation**. |
 
-### Optimizing your query with Last sync time
+    After defining your sync setting, click on `Next` and add a relevant commit description for later reference. You'll be able to see all your previous edits in the version history.
 
-You can use `{{last_sync_time}}` variable in your query to sync only the records that have changed since the last successful sync. This helps you avoid syncing the same records over and over again.
+    ![](/images/docs/4d52dc3-image.png)
 
-We strongly recommend that you index a column in your database representing the date-time each row was last-updated. When you write your query, you should add a WHERE clause comparing your “last updated” column to the \{\{last\_sync\_time}}.
-
-The last sync time is a ISO date-time representing the timestamp of your previous successful sync. Add relevant data type conversion if you use any other date-time format.
-
-### Step 3: Save query and commit to setup sync frequency
-
-Once you are satisfied with your query results, **"Save query"** and **"Commmit changes"** it. You'll see sync settings on commit.
-
-![](/images/docs/4173882-image.png)
-
-| Field                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Update type                  | - Select **"Add"** if you want to add users on every sync. For example, you are maintaining a list of new registrations and your query returns all users registered today. - Select **"Replace"** if you want to replace the list with a fresh set of users on every sync. For example, you have a list of all users who made a purchase in the last 30 days.                                                                                                                                                |
-| Schedule                     | - Set **"One-time"** sync if the list is created for one-time campaigns and will never be used again. - Set **"Recurring"** sync if your list is used in a cron or you are syncing user profile. You can setup recurring sync as **every** `**day **hour **minute` or add a **cron expression** for a more granular sync frequency like `every monday at 9:00 am`.                                                                                                                                           |
-| Create / Update user profile | Enable it if you also want to sync users on every sync. You can also update user properties by mapping columns to the relevant user properties and use it in your template as `{{$user.<property_key>}}` to send personalized broadcasts.                                                                                                                                                                                                                                                                    |
-| Column header                | This is the column name from your query output used to map user property.                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| is channel?                  | enable it if the column value is used to update communication channel such as `email`, `sms` or `whatsapp` in user profile.                                                                                                                                                                                                                                                                                                                                                                                  |
-| User property                | add the key in which your user property should be stored. It can be different from the column name. In case of channel, it will be a dropdown with the list of available channels that you can update.                                                                                                                                                                                                                                                                                                       |
-| Manage Existing property     | - **Override** will override the value corresponding to the property key on every sync - **Don't Override** will set the property value for missing property keys. Existing property value will not be overriden. This is especially useful for properties which are set one time. For example, `signup_date`, `first_item_purchased` - **Append** will create an array in the property key and will keep on appending the value to that array on every sync. **User channels are always append operation**. |
-
-After defining your sync setting, click on **"Next"** and add a relevant commit description for later reference. You'll be able to see all your previous edits in the version history.
-
-![](/images/docs/4d52dc3-image.png)
-
-Your sync is now setup and will execute at the interval defined in your sync frequency.
+    Your sync is now setup and will execute at the interval defined in your sync frequency.
+  </Step>
+</Steps>
 
 ## Enable / Disable sync
 
@@ -101,18 +96,13 @@ You can see sync logs on [lists -> logs ](https://app.suprsend.com/en/staging/su
 
 There are 5 types of sync status:
 
-* **`Created`** - Logs sync has just started.
-
-* **`In progress`** - Users have started syncing in the list. You'll also see the `%progress` in this case.
-
-* **`Success`** - Users are successfully synced in the list. You'll see `Total` users returned in the query, `Processed` users and `Added` users. In most cases, `added` user will be equivalent to `total` users but if it less than total users, it would mean one of 2 things:
-
-  * Some users were already present in the list and that's why skipped.
-  * Users were not present in SuprSend subscriber list. You can enable `Create / Update user profile` in your sync settings to avoid this scenario.
-
-* **`Ignored`** - These are the syncs which were skipped sync the previous sync was still in progress when the next sync interval occurs.
-
-* **`Failed`** - Sync couldn't be completed due to some errors while running the query, query output doesn't have `distinct_id` column or there was no data returned in your query output. If you see any error which could be internal to SuprSend system, please reach out to our [support](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#/shared-invite/email). For failed logs, You can hover on the status or click on the sync to see errors. You can also filter to **"Show only error logs"**.
+-  `Created` - Logs sync has just started.
+-  `In progress` - Users have started syncing in the list. You'll also see the `%progress` in this case.
+-  `Success` - Users are successfully synced in the list. You'll see `Total` users returned in the query, `Processed` users and `Added` users. In most cases, `added` user will be equivalent to `total` users but if it less than total users, it would mean one of 2 things:
+    - Some users were already present in the list and that's why skipped.
+    - Users were not present in SuprSend subscriber list. You can enable `Create / Update user profile` in your sync settings to avoid this scenario.
+-  `Ignored` - These are the syncs which were skipped sync the previous sync was still in progress when the next sync interval occurs.
+-  `Failed` - Sync couldn't be completed due to some errors while running the query, query output doesn't have `distinct_id` column or there was no data returned in your query output. If you see any error which could be internal to SuprSend system, please reach out to our [support](https://suprsendcommunity.slack.com/join/shared_invite/zt-1bs6rbxr8-zI6SyJQd2b~XMpM9uaT1Bw#/shared-invite/email). For failed logs, You can hover on the status or click on the sync to see errors. You can also filter to `Show only error logs`.
 
 ![](/images/docs/59235f7-image.png)
 
@@ -122,21 +112,4 @@ All the changes are first saved in the draft version and are only made live once
 
 ![](/images/docs/7c9845b-image.png)
 
-***
-
-* [Table of Contents](#)
-
-* * [Pre-requisites](#pre-requisites)
-
-  * [Setting up list update](#setting-up-list-update)
-
-    * [Step 1: Create a sync task](#step-1-create-a-sync-task)
-    * [Step 2: Write SQL query to extract and load data](#step-2-write-sql-query-to-extract-and-load-data)
-    * [Optimizing your query with Last sync time](#optimizing-your-query-with-last-sync-time)
-    * [Step 3: Save query and commit to setup sync frequency](#step-3-save-query-and-commit-to-setup-sync-frequency)
-
-  * [Enable / Disable sync](#enable--disable-sync)
-
-  * [Sync logs](#sync-logs)
-
-  * [Version control](#version-control)
+---
