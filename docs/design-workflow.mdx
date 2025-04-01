@@ -67,7 +67,7 @@ Between multi-channel and smart channel routing, we recommed using the later as 
 
 Notification content is picked from the template, and only published and live templates can be added to the delivery node. Therefore, it's essential to [design the template](/docs/templates) before configuring this node.
 
-When the workflow reaches this node, it looks for active channels in the template and user profile, and send the notification to active user channels whose template content is live. [User preferences](/docs/preferences) are also taken into account at this stage. If the user has opted out of the given notification category or channel, it will be skipped, and corresponding errors can be seen on the[ logs page](/docs/logging).
+When the workflow reaches this node, it looks for active channels in the template and user profile, and send the notification to active user channels whose template content is live. [User preferences](/docs/user-preferences) are also taken into account at this stage. If the user has opted out of the given notification category or channel, it will be skipped, and corresponding errors can be seen on the[ logs page](/docs/logging).
 
 ### 3. Function Nodes
 
@@ -123,7 +123,7 @@ These Nodes are used to bring in, modify or update data within workflow. Availab
   <Card title="Add / Remove user from list" href="/docs/add-remove-from-list">
     Dynamically add or remove recipient or actor in/from the list.
   </Card>
-  <Card title="Update Object Subscription" href="/docs/subcribe-unsubscribe-from-object">
+  <Card title="Update Object Subscription" href="/docs/subscribe-unsubscribe-from-object">
     Dynamically add or remove recipient or actor in/from the object subscripot.
   </Card>
 </CardGroup>

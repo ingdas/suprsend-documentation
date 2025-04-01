@@ -7,13 +7,13 @@ Notification Categories are the category your workflow belongs to. It is used fo
 
 * **Defining notification latency**: We maintain separate notification queues for different notification category to ensure that marketing and promotional notifications doesn't delay system or time-sensitive notifications.
 
-* [Setting category-level preferences](/docs/preferences) **per-user and tenant**: You can create sub-categories for different type of notifications and give your users option to set their notification preferences at category level.
+* [Setting category-level preferences](/docs/user-preferences) **per-user and tenant**: You can create sub-categories for different type of notifications and give your users option to set their notification preferences at category level.
 
 * **Setting category-level rules or limits**: For example, you can set a rule that all notifications in promotional category should only be sent between 10 am - 5 pm or the max notifications in the category should not exceed 100k per day.
 
 ## Top-level Categories
 
-SuprSend has 3 broad notification categories - [System](/docs/notification-categories#system), [Transactional](/docs/notification-categories#transactional) and [Promotional](/docs/notification-categories#promotional). Notifications rules and latency settings are defined at these top level categories. You can create further [sub-categories](/docs/notification-categories#creating-sub-categories-for-preference-management) in each of these categories to power [user preferences](/docs/preferences).
+SuprSend has 3 broad notification categories - **System** , **Transactional** and **Promotional**. Notifications rules and latency settings are defined at these top level categories. You can create further [sub-categories](docs/notification-category#creating-sub-categories-for-preference-management) in each of these categories to power [user preferences](/docs/user-preferences).
 
 ### System
 
@@ -27,7 +27,7 @@ These notifications are considered second in priority in notification queues aft
 
 Some examples are - Delivery updates, Payment Confirmation, booking confirmation, Post shared / liked, Balance alerts, account update alert, and reminders.
 
-As a company, you should make sure that you use strategies like [batching](/docs/batching-digest) & [channel routing](/docs/smart-delivery), so that users do not feel bombarded with transactional notifications. Also, you can cleverly use transactional communications to up-sell, cross-sell, collect feedback, or bring your user back to your platform. Channel providers do not block transactional communications generally, and consider your users to be implicitly agreeing to these notifications, hence transactional communications should be used judiciously.
+As a company, you should make sure that you use strategies like [batching](/docs/batch) & [channel routing](/docs/smart-delivery), so that users do not feel bombarded with transactional notifications. Also, you can cleverly use transactional communications to up-sell, cross-sell, collect feedback, or bring your user back to your platform. Channel providers do not block transactional communications generally, and consider your users to be implicitly agreeing to these notifications, hence transactional communications should be used judiciously.
 
 <Note>
   📘 Sending notifications that are not related to user transaction but are very personal to user's profile and interests, like recommended products, cart abandoned, etc could be inferred as transactional, depending on indicators like whether user is subscribed to receive them, or the way content is designed.
@@ -43,7 +43,7 @@ Some channel providers often require explicit users permission to send these com
 
 ## Creating sub-categories for preference management
 
-You can create notification categories from [Developers -> Notification categories](https://app.suprsend.com/en/staging/developers/preference-categories) page. All sub-categories are created in the 3 [top level categories](/docs/notification-categories#top-level-categories) mentioned above. Notification rules and latency priority are inherited from the top level category. [Preference](/docs/preferences) settings are defined at each sub-category level. Top level categories are not shown on the preference page.
+You can create notification categories from [Developers -> Notification categories](https://app.suprsend.com/en/staging/developers/preference-categories) page. All sub-categories are created in the 3 [top level categories](/docs/notification-category#top-level-categories) mentioned above. Notification rules and latency priority are inherited from the top level category. [Preference](/docs/user-preferences) settings are defined at each sub-category level. Top level categories are not shown on the preference page.
 
 Every category can have sections and sub-categories. User preferences are controlled at the sub-category level.
 

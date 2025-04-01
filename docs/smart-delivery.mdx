@@ -23,7 +23,7 @@ The content of the notification is designed with [templates](/docs/templates). I
       Available channels in user profile which are not marked inactive. A set channel becomes inactive in case the channel is`removed `or`unset`using [SDK or API](/docs/users#via-sdk) or it is marked inactive by SuprSend.
     - **Channels where user preference is set as opt-in**
 
-      If you are using SuprSend preference centre to take user preferences, check if the user preference is`opt-in`for the given channel and notification category (defined in workflow settings). You can check user preference using [get user preference API](/reference/get-user-preferences-single-category).
+      If you are using SuprSend preference centre to take user preferences, check if the user preference is`opt-in`for the given channel and notification category (defined in workflow settings). You can check user preference using [get user preference API](/reference/get-user-category-preferences).
   </Step>
   <Step title="Finalize channel order using routing rule">
     Currently, the order of channel is defined to [optimize on](/docs/smart-delivery#optimize-on) cost (channels are tried from low to high cost picked from their vendor form). We'll also be introducing options to optimize on engagement so that notifications is sent on the channel with higher chances of open and click first.
@@ -66,7 +66,7 @@ Success metric can be any event which defines the target user activity that you 
 
 You can use this field to pass channel list dynamically using data in your event property. This feature comes in handy when user channels are dynamically defined at the user level for each workflow. For instance, when booking an appointment, your users are dynamically defining their preferred channel to receive booking updates for each appointment.
 
-For more consistent channel preferences, like user wanting to receive all communication via email only, or defininf preferred communication channel for a notifications category (like booking updates), we recommend updating it using [user preferences](/docs/preferences).
+For more consistent channel preferences, like user wanting to receive all communication via email only, or defininf preferred communication channel for a notifications category (like booking updates), we recommend updating it using [user preferences](/docs/user-preferences).
 
 To override channels, include the channels array in event property and add the corresponding key in the override channels field on SuprSend workflow form.
 

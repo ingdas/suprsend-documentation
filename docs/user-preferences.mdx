@@ -5,11 +5,11 @@ description: "Learn how preferences work in SuprSend and how to setup it up for 
 
 Preferences allow users to opt out of notification categories, choose their preferred communication channels, and set the frequency of notifications. Providing granular preferences significantly reduces the likelihood of users disabling all notifications from your platform.
 
-In SuprSend, you have access to [ready-made UI](/docs/preferences#taking-preferences-from-your-users) and [APIs](/reference/preference-overview) that facilitate simple to complex multi-tenant preference use cases. This includes allowing admins to set preferences for internal teams and managing notifications for enterprise customers, where companies, customers, and end users, all have different preferences.
+In SuprSend, you have access to [ready-made UI](/docs/user-preferences#controlling-what-categories-to-show-on-ui) and [APIs](/reference/overview) that facilitate simple to complex multi-tenant preference use cases. This includes allowing admins to set preferences for internal teams and managing notifications for enterprise customers, where companies, customers, and end users, all have different preferences.
 
 ## How preferences work?
 
-Every user will have a preference set within SuprSend and users get notifications in the category and channel they haven't opted-out from. If user preferences are not set for a category, it falls back to [default preferences](/docs/preferences#set-default-preferences).
+Every user will have a preference set within SuprSend and users get notifications in the category and channel they haven't opted-out from. If user preferences are not set for a category, it falls back to [default preferences](/docs/user-preferences#set-default-preferences).
 
 Preference set contains three level of preferences: `channel_preferences` (for channel-level opt-outs), `categories`, and `opt_out_channels` within each category. In the below example, user has opted out of `email`, `invoice-ready` category and slack channel in `payment-reminder` category.
 

@@ -3,13 +3,13 @@ title: "Workflow"
 description: "Understand what is workflow and how to design a workflow to send multi-channel notification."
 ---
 
-Workflow is the notification powerhouse where you define the logic and stitch individual pieces together, like [user](/docs/users), [template](/docs/templates), [vendor](/docs/vendors), and [preferences](/docs/preferences), to deliver notifications to the end user.
+Workflow is the notification powerhouse where you define the logic and stitch individual pieces together, like [user](/docs/users), [template](/docs/templates), [vendor](/docs/vendors), and [preferences](/docs/user-preferences), to deliver notifications to the end user.
 
 A workflow comprises a series of steps that, when executed in sequence, form the notification journey. There are primarily four types of workflow steps, referred to as workflow nodes in SuprSend:
 
 <AccordionGroup>
   <Accordion title="Trigger: Initiates the workflow">
-    [Trigger](/docs/trigger-workflow) is the first node in your workflow that initiates the notification. You can trigger workflow using an event call or a direct API call to SuprSend. Events can be **1.1. External actions performed by a user on your platform**, such as`post like`or`a new comment`. You can track these actions by integrating one of our [frontend SDKs](/docs/javascript-sdk) directly into your product or pass them via [backend SDKs](/docs/python-sdk) or [HTTP API](/reference/event-api).**1.2. User entering or leaving a list**: these events are generated when you maintain a user list and you want to notify users who leave or enter the list, for instance, when`users unsubscribe from a topic`. These events are [auto tracked](/docs/lists#configure-list-events) if you maintain lists within SuprSend.**1.3. Internal trigger from your backend code** based on some data or state change like`shipment out for delivery`or`job closed`.
+    [Trigger](/docs/trigger-workflow) is the first node in your workflow that initiates the notification. You can trigger workflow using an event call or a direct API call to SuprSend. Events can be **1.1. External actions performed by a user on your platform**, such as`post like`or`a new comment`. You can track these actions by integrating one of our [frontend SDKs](/docs/javascript-sdk) directly into your product or pass them via [backend SDKs](/docs/integrate-python-sdk) or [HTTP API](/reference/overview).**1.2. User entering or leaving a list**: these events are generated when you maintain a user list and you want to notify users who leave or enter the list, for instance, when`users unsubscribe from a topic`. These events are [auto tracked](/docs/lists#configure-list-events) if you maintain lists within SuprSend.**1.3. Internal trigger from your backend code** based on some data or state change like`shipment out for delivery`or`job closed`.
 
   </Accordion>
 

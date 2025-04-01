@@ -418,9 +418,9 @@ print(res)
 
 ## Update Object Profile and Preferences
 
-You can update channels, properties, and preferences for an object in the same way as for a user. These updates apply when sending notifications to the object itself as the recipient. Object profiles can be modified in the SuprSend UI for testing purposes, or programmatically through the object [upsert API](/reference/create-update-objects) or [edit operations API](/reference/edit-object-profile). Updating [object preferences](/reference/update-object-preference) follows the same approach as updating user preferences: in the API call, you pass the identifier as `:object_type/:id` instead of `:distinct_id`.
+You can update channels, properties, and preferences for an object in the same way as for a user. These updates apply when sending notifications to the object itself as the recipient. Object profiles can be modified in the SuprSend UI for testing purposes, or programmatically through the object [upsert API](/reference/create-update-objects) or [edit operations API](/reference/edit-object-profile). Updating object preferences follows the same approach as updating user preferences: in the API call, you pass the identifier as `:object_type/:id` instead of `:distinct_id`.
 
-[Refer all object APIs]("/reference/create-update-objects")
+[Refer all object APIs](/reference/create-update-objects)
 
 
 ---
