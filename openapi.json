@@ -6,6 +6,11 @@ servers:
   - url: https://hub.suprsend.com
 components:
   securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: API_Key  # Just for documentation, doesn't enforce behavior
+      description: "Pass as `Bearer <API_KEY>`. Get API Key from SuprSend dashboard Developers -> API Keys section."
     sec0:
       type: apiKey
       in: header
@@ -14,10 +19,13 @@ components:
       description: Bearer authentication header of the form `Bearer <token>`, where <token> is your auth token.
 security:
   - sec0: []
+  - BearerAuth: []
 paths:
   /event/:
     post:
       summary: Trigger an Event
+      security:
+        - BearerAuth: []
       description: API used to pass event which can then be used to trigger workflows created on SuprSend dashboard
       operationId: event-api
       requestBody:
@@ -80,6 +88,8 @@ paths:
   /v1/tenant/{tenant_id}:
     post:
       summary: Create / Update Tenants
+      security:
+        - BearerAuth: []
       description: API to create a new Tenant OR update an existing Tenant
       operationId: create-tenants
       parameters:
@@ -184,6 +194,8 @@ paths:
       deprecated: false
     get:
       summary: Get Tenant data
+      security:
+        - BearerAuth: []
       description: API to get tenant settings corresponding to a tenant id
       operationId: get-tenant
       parameters:
@@ -217,6 +229,8 @@ paths:
       deprecated: false
     delete:
       summary: Delete Tenant
+      security:
+        - BearerAuth: []
       description: API to delete tenant by passing tenant_id. Delete action is irreversible. All API calls and existing workflow runs on deleted tenant will start failing.
       operationId: delete-tenant
       parameters:
@@ -251,6 +265,8 @@ paths:
   /v1/tenant/:
     get:
       summary: Get Tenant List
+      security:
+        - BearerAuth: []
       description: API to get the list of tenants available in your workspace
       operationId: get-tenant-list
       parameters:
@@ -296,6 +312,8 @@ paths:
   /v1/subscriber_list/{list_id}/subscriber/remove:
     post:
       summary: Remove Subscribers from List
+      security:
+        - BearerAuth: []
       description: API to remove users / subscribers from the list
       operationId: remove-users-from-list
       parameters:
@@ -344,6 +362,8 @@ paths:
   /v1/subscriber_list/:
     get:
       summary: Get all Lists
+      security:
+        - BearerAuth: []
       description: API to get the data of all the lists created in your workspace
       operationId: get-all-lists
       parameters:
@@ -383,6 +403,8 @@ paths:
       deprecated: false
     post:
       summary: Create a List
+      security:
+        - BearerAuth: []
       description: API to create / manage lists to send notification to a bulk list of users
       operationId: create-list
       requestBody:
@@ -429,6 +451,8 @@ paths:
   /{workspace_key}/trigger/:
     post:
       summary: Dynamic Workflow Trigger
+      security:
+        - BearerAuth: []
       description: API to configure and trigger workflow dynamically
       operationId: dynamic-workflow-trigger
       parameters:
@@ -615,6 +639,8 @@ paths:
   /v1/user/{distinct_id}/preference/category/:
     get:
       summary: All Categories
+      security:
+        - BearerAuth: []
       description: API to get user category preferences
       operationId: get-user-preference-all-categories
       parameters:
@@ -660,6 +686,8 @@ paths:
   /v1/subscriber_list/{list_id}/subscriber/add:
     post:
       summary: Add Subscribers to List
+      security:
+        - BearerAuth: []
       description: API to add users / subscribers to the list
       operationId: add-subscribers-to-list
       parameters:
@@ -708,6 +736,8 @@ paths:
   /v1/subscriber_list/{list_id}/:
     get:
       summary: Get List configuration
+      security:
+        - BearerAuth: []
       description: API to get information corresponding to a list id
       operationId: get-list
       parameters:
@@ -743,6 +773,8 @@ paths:
   /{workspace_key}/broadcast:
     post:
       summary: Trigger Broadcast
+      security:
+        - BearerAuth: []
       description: API to trigger broadcast messages on a list of users
       operationId: trigger-broadcast
       parameters:
@@ -821,6 +853,8 @@ paths:
   /v1/user/{distinct_id}/preference/channel_preference/:
     get:
       summary: All Channels
+      security:
+        - BearerAuth: []
       description: API to get user channel preferences
       operationId: get-user-preference-channel
       parameters:
@@ -859,6 +893,8 @@ paths:
       deprecated: false
     patch:
       summary: Overall Channel level
+      security:
+        - BearerAuth: []
       description: API to update user channel preferences
       operationId: update-user-preference-channel
       parameters:
@@ -918,6 +954,8 @@ paths:
   /v1/user/{distinct_id}/preference/category/{category_slug}/:
     patch:
       summary: Category and Channel within Category
+      security:
+        - BearerAuth: []
       description: API to update user category preferences
       operationId: update-user-preference-category
       parameters:
@@ -978,6 +1016,8 @@ paths:
   /v1/tenant/{tenant_id}/category/{category_slug}/:
     post:
       summary: Update Tenant Default Preference
+      security:
+        - BearerAuth: []
       description: API to update user default preferences for a tenant
       operationId: update-tenant-default-preference
       parameters:
@@ -1036,6 +1076,8 @@ paths:
   /v1/subscriber_list/{list_id}/delete:
     patch:
       summary: Delete List
+      security:
+        - BearerAuth: []
       description: API to delete a list created in your workspace
       operationId: delete-list
       parameters:
@@ -1070,6 +1112,8 @@ paths:
   /v1/user/{distinct_id}/preference/category/{category_slug}:
     get:
       summary: Single Category
+      security:
+        - BearerAuth: []
       description: API to get user category preferences
       operationId: get-user-preferences-single-category
       parameters:
@@ -1121,6 +1165,8 @@ paths:
   /v1/tenant/{tenant_id}/category/:
     get:
       summary: Get Tenant Default Preference
+      security:
+        - BearerAuth: []
       description: API to get Tenant categories
       operationId: get-tenant-default-preference
       parameters:
@@ -1155,6 +1201,8 @@ paths:
   /v1/subscriber_list/{list_id}/version/{version_id}/subscriber/add:
     post:
       summary: Add Subscribers to Draft List
+      security:
+        - BearerAuth: []
       description: Add subscribers to a draft list with a version_id that uniquely identifies the draft list
       operationId: add-subscribers-to-draft-list
       parameters:
@@ -1210,6 +1258,8 @@ paths:
   /v1/subscriber_list/{list_id}/version/{version_id}/delete:
     patch:
       summary: Delete Draft List
+      security:
+        - BearerAuth: []
       description: API to delete a list created in your workspace
       operationId: delete-draft-list
       parameters:
@@ -1251,6 +1301,8 @@ paths:
   /v1/template/{template_slug}:
     get:
       summary: Fetch Template details
+      security:
+        - BearerAuth: []
       description: APIs to fetch the content of a template group. It will return data for live and draft version of a template.
       operationId: fetch-template-details
       parameters:
@@ -1690,6 +1742,8 @@ paths:
   /v1/subscriber_list/{list_id}/version/{version_id}/finish_sync:
     patch:
       summary: Finish Sync
+      security:
+        - BearerAuth: []
       description: Finishes the sync for a draft version and makes that particular version live for the given list_id
       operationId: finish-sync
       parameters:
@@ -1732,6 +1786,8 @@ paths:
   /v1/subscriber_list/{list_id}/version/{version_id}/subscriber/remove:
     post:
       summary: Remove Subscribers from Draft List
+      security:
+        - BearerAuth: []
       description: Remove subscribers from a draft list with a version_id that uniquely identifies the draft list
       operationId: remove-subscribers-from-draft-list
       parameters:
@@ -1787,6 +1843,8 @@ paths:
   /v1/subscriber_list/{list_id}/start_sync:
     post:
       summary: Start Sync
+      security:
+        - BearerAuth: []
       description: Starts sync on the active(live) version of the list, identified by list_id, and creates an empty draft version.
       operationId: start-sync
       parameters:
@@ -1822,6 +1880,8 @@ paths:
   /v1/template/{template_slug}/channel/{channel_slug}:
     get:
       summary: Fetch Template content for a channel
+      security:
+        - BearerAuth: []
       description: APIs to fetch the content of a particular channel in a template group. It will return data for live and draft version of a template.
       operationId: fetch-template-details-channel
       parameters:
@@ -2116,6 +2176,8 @@ paths:
   /v1/template:
     get:
       summary: Fetch Template List
+      security:
+        - BearerAuth: []
       description: APIs to fetch the list of all templates in a workspace
       operationId: fetch-template-list
       parameters:
@@ -2332,6 +2394,8 @@ paths:
   /trigger/:
     post:
       summary: Trigger Workflow
+      security:
+        - BearerAuth: []
       description: Unified API to trigger workflow
       operationId: trigger-workflow-api
       requestBody:
@@ -2442,6 +2506,8 @@ paths:
   /v1/bulk/subscriber/preference/:
     patch:
       summary: Bulk Update
+      security:
+        - BearerAuth: []
       description: Bulk API to update user full preference across categories and channels
       operationId: bulk-update-user-preference
       parameters:
@@ -2525,6 +2591,8 @@ paths:
   /v1/bulk/subscriber/preference/reset/:
     patch:
       summary: Reset
+      security:
+        - BearerAuth: []
       description: You can use these APIs to reset user preference settings to default tenant preference.
       operationId: reset-user-preferences
       parameters:
@@ -2582,6 +2650,8 @@ paths:
   /v1/user/{distinct_id}/preference/:
     get:
       summary: Full Preference
+      security:
+        - BearerAuth: []
       description: API to get user preference across all categories and channels
       operationId: get-user-full-preference
       parameters:
@@ -2627,6 +2697,8 @@ paths:
   /v1/subscriber_list/{list_id}/subscriber/:
     get:
       summary: Get list subscribers
+      security:
+        - BearerAuth: []
       description: API to fetch the list of subscribers added to the list
       operationId: get-subscriber-list-users
       parameters:
@@ -2753,6 +2825,8 @@ paths:
   /v1/object/{object_type}/{id}/:
     post:
       summary: Create / Update Objects
+      security:
+        - BearerAuth: []
       description: APIs to upsert object data
       operationId: create-update-objects
       parameters:
@@ -2803,6 +2877,8 @@ paths:
       deprecated: false
     get:
       summary: Fetch Object by id
+      security:
+        - BearerAuth: []
       description: Fetch Object properties and channels info
       operationId: get-object-by-id
       parameters:
@@ -2928,6 +3004,8 @@ paths:
       deprecated: false
     delete:
       summary: Delete an Object
+      security:
+        - BearerAuth: []
       description: API to delete single object
       operationId: delete-object
       parameters:
@@ -2967,6 +3045,8 @@ paths:
       deprecated: false
     patch:
       summary: Edit Object Profile
+      security:
+        - BearerAuth: []
       description: API to add / remove properties and communication channel from object profile
       operationId: edit-object-profile
       parameters:
@@ -3055,6 +3135,8 @@ paths:
   /v1/object/{object_type}/{id}/subscription/:
     post:
       summary: Add Subscription
+      security:
+        - BearerAuth: []
       description: Add one or more subscriptions to notify a list of recipients associated with an object
       operationId: add-object-subscription
       parameters:
@@ -3120,6 +3202,8 @@ paths:
       deprecated: false
     get:
       summary: List Object Subscriptions
+      security:
+        - BearerAuth: []
       description: Returns the list of subscribers in an object
       operationId: list-object-subscriptions
       parameters:
@@ -3245,6 +3329,8 @@ paths:
       deprecated: false
     delete:
       summary: Remove Object Subscription
+      security:
+        - BearerAuth: []
       description: API to remove object subscribers
       operationId: delete-object-subscriptions
       parameters:
@@ -3292,6 +3378,8 @@ paths:
   /v1/object/{object_type}/:
     get:
       summary: List Objects by type
+      security:
+        - BearerAuth: []
       description: Fetch all objects belonging to a type
       operationId: list-objects-by-type
       parameters:
@@ -3450,6 +3538,8 @@ paths:
   /v1/object/{object_type}/{id}/preference/category/{category_slug}/:
     patch:
       summary: Category and Channel within Category
+      security:
+        - BearerAuth: []
       description: API to update user category preferences
       operationId: object-preference-category
       parameters:
@@ -3516,6 +3606,8 @@ paths:
   /v1/object/{object_type}/{id}/preference/channel_preference/:
     patch:
       summary: Overall Channel level
+      security:
+        - BearerAuth: []
       description: API to update object channel preferences
       operationId: object-preference-channel
       parameters:
@@ -3580,6 +3672,8 @@ paths:
       deprecated: false
     get:
       summary: All Channels
+      security:
+        - BearerAuth: []
       description: API to get object channel preferences
       operationId: fetch-object-preference-all-channels
       parameters:
@@ -3625,6 +3719,8 @@ paths:
   /v1/object/{object_type}/{id}/preference/:
     get:
       summary: Full Preference
+      security:
+        - BearerAuth: []
       description: API to get object preference across all categories and channels
       operationId: fetch-object-full-preference
       parameters:
@@ -3676,6 +3772,8 @@ paths:
   /v1/object/{object_type}/{id}/preference/category/:
     get:
       summary: All Categories
+      security:
+        - BearerAuth: []
       description: API to get object category preferences
       operationId: fetch-object-preference-all-categories
       parameters:
@@ -3727,6 +3825,8 @@ paths:
   /v1/object/{object_type}/{id}/preference/category/{category_slug}:
     get:
       summary: Single Category
+      security:
+        - BearerAuth: []
       description: API to get object preference for a single category
       operationId: fetch-object-preference-single-category
       parameters:
@@ -3784,6 +3884,8 @@ paths:
   /v1/user/{distinct_id}/:
     post:
       summary: Create / Update Users
+      security:
+        - BearerAuth: []
       description: APIs to upsert user profile
       operationId: create-update-users
       parameters:
@@ -3828,6 +3930,8 @@ paths:
       deprecated: false
     get:
       summary: Fetch User by id
+      security:
+        - BearerAuth: []
       description: API to fetch user profile by passing distinct_id
       operationId: fetch-user-profile
       parameters:
@@ -3942,6 +4046,8 @@ paths:
       deprecated: false
     delete:
       summary: Delete user
+      security:
+        - BearerAuth: []
       description: API to delete user by passing distinct_id
       operationId: delete-user
       parameters:
@@ -4052,6 +4158,8 @@ paths:
       deprecated: false
     patch:
       summary: Edit User Profile
+      security:
+        - BearerAuth: []
       description: API to add / remove properties and communication channels from the user profile
       operationId: edit-user-profile
       parameters:
@@ -4134,6 +4242,8 @@ paths:
   /v1/user/:
     get:
       summary: List Users
+      security:
+        - BearerAuth: []
       description: API to list cursor based paginated list of users
       operationId: list-users
       responses:
@@ -4209,6 +4319,8 @@ paths:
   /v1/user/{distinct_id}/merge/:
     post:
       summary: Merge User Profiles
+      security:
+        - BearerAuth: []
       description: Merge 2 user profiles into a primary distinct ID. Used to resolve duplicates.
       operationId: merge-users
       parameters:
@@ -4252,6 +4364,8 @@ paths:
   /v1/user/{distinct_id}/subscribed_to/object/:
     get:
       summary: Fetch User object subscriptions
+      security:
+        - BearerAuth: []
       description: API to fetch all objects this user is subscribed to
       operationId: fetch-user-object-subscriptions
       parameters:
@@ -4372,6 +4486,8 @@ paths:
   /v1/user/{distinct_id}/subscribed_to/list/:
     get:
       summary: Fetch User list subscriptions
+      security:
+        - BearerAuth: []
       description: API to fetch all lists this user is part of
       operationId: fetch-user-list-subscriptions
       parameters:
@@ -4492,6 +4608,8 @@ paths:
   /{workspace_key}/trigger/adding-email-attachment/:
     post:
       summary: Adding Email Attachment
+      security:
+        - BearerAuth: []
       operationId: adding-email-attachment
       description: "You can add attachment as ```data->\"$attachments\"```. Attachments can be passed as             base-64 file (allowed size limit for base-64 file < 50KB) or directly as the media              URL.\n\n```json\n// adding base-64 file (supported limit < 50KB)\n\n{\n  \"data\": {\n    \"$attachments\":[\n      {\n        \"filename\": \"billing.pdf\",\n        \"contentType\": \"application/pdf\",\n        \"data\": \"Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh\" // this is base64 encoded content\n      }\n    ]\n  }\n} \n\n\n// adding URL directly (no limit on the file size)\n\n{\n  \"data\": {\n    \"$attachments\": [\n      { \n        \"filename\": \"Bitcoin-whitepaper.pdf\", // optional. if not present, filename will be picked from the url\n        \"url\": \"https://bitcoincore.org/bitcoin.pdf\", \n        \"ignore_if_error\": true/false\n      }\n    ]\n  }\n} \n\n```"
       parameters:
@@ -4663,6 +4781,8 @@ paths:
   /event/trigger/adding-email-attachment/:
     post:
       summary: Adding Email Attachment (event)
+      security:
+        - BearerAuth: []
       operationId: adding-email-attachment-event
       description: "You can add attachment as properties->\"$attachments\". Attachments can be passed as base-64 file (allowed size limit for base-64 file < 50KB) or directly as the media URL.\n\n```json\n// adding base-64 file (supported limit < 50KB)\n\n{\n  \"properties\": {\n    \"$attachments\":[\n      {\n        \"filename\": \"billing.pdf\",\n        \"contentType\": \"application/pdf\",\n        \"data\": \"Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh\" // this is base64 encoded content\n      }\n    ]\n  }\n} \n\n\n// adding URL directly (no limit on the file size)\n\n{\n  \"properties\": {\n    \"$attachments\": [\n      { \n        \"filename\": \"Bitcoin-whitepaper.pdf\", // optional. if not present, filename will be picked from the url\n        \"url\": \"https://bitcoincore.org/bitcoin.pdf\", \n        \"ignore_if_error\": true/false\n      }\n    ]\n  }\n} \n\n```"
       requestBody:
@@ -4718,6 +4838,8 @@ paths:
   /v1/object/{object_type}/{id}/subscribed_to/object/:
     get:
       summary: Fetch Object subscriptions
+      security:
+        - BearerAuth: []
       description: API to fetch all objects where this object is subscribed as child object
       operationId: fetch-object-subscriptions
       parameters:
