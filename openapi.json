@@ -448,194 +448,194 @@ paths:
                 type: object
                 properties: {}
       deprecated: false
-      /{workspace_key}/trigger/:
-      post:
-        summary: Dynamic Workflow Trigger
-        security:
+  /{workspace_key}/trigger/:
+    post:
+      summary: Dynamic Workflow Trigger
+      security:
         - BearerAuth: []
-        description: API to configure and trigger workflow dynamically
-        operationId: dynamic-workflow-trigger
-        parameters:
-          - name: workspace_key
-            in: path
+      description: API to configure and trigger workflow dynamically
+      operationId: dynamic-workflow-trigger
+      parameters:
+        - name: workspace_key
+          in: path
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
             schema:
-              type: string
-            required: true
-        requestBody:
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - name
-                  - template
-                  - notification_category
-                  - users
-                properties:
-                  name:
-                    type: string
-                    description: Unique name of the workflow. The workflow name should be easily identifiable for your reference at a later stage. You can see workflow-related analytics on the workflow page (how many notifications were sent, delivered, clicked or interacted).
-                    default: _workflow_name_
-                  template:
-                    type: string
-                    description: Unique slug name of the template created on SuprSend dashboard. You can get this by clicking on the clipboard icon next to the Template name on SuprSend templates page.
-                    default: _template_slug_
-                  notification_category:
-                    type: string
-                    description: Category in which your notification belongs. You can understand more about them in the 'Notification Category' documentation
-                    default: transactional
-                  users:
-                    type: array
-                    description: Array object of target users.
-                    items:
-                      properties:
-                        distinct_id:
-                          type: string
-                          description: unique identifier of the user
-                          default: _distinct_id_
-                        $channels:
-                          type: array
-                          description: 'send notification on selected channels in user profile. Following channel keys can be used: email, sms, whatsapp, androidpush, iospush, slack, webpush'
-                          default: []
-                          items:
-                            type: string
-                        $email:
-                          type: array
-                          description: To trigger notification on a particular email
-                          default: []
-                          items:
-                            type: string
-                        $sms:
-                          type: array
-                          description: Send SMS on a particular number.
-                          default: []
-                          items:
-                            type: string
-                        $whatsapp:
-                          type: array
-                          description: Send Whatsapp on a particular number.
-                          default: []
-                          items:
-                            type: string
-                        $androidpush:
-                          type: array
-                          description: Send androidpush on the given push token
-                          items:
-                            properties:
-                              token:
-                                type: string
-                                description: Androidpush token
-                                default: __android_push_token__
-                              provider:
-                                type: string
-                                description: vendor delivering the push notification
-                                default: fcm
-                              device_id:
-                                type: string
-                                description: unique identifier of user's device. This is used to avoid sending duplicate push notification on the user's device
-                            required:
-                              - token
-                              - provider
-                            type: object
-                        $iospush:
-                          type: array
-                          description: Send iOSpush on the given push token
-                          items:
-                            properties:
-                              token:
-                                type: string
-                                description: iOSpush token
-                                default: __ios_push_token__
-                              provider:
-                                type: string
-                                description: vendor delivering the push notification
-                                default: apns
-                              device_id:
-                                type: string
-                                description: unique identifier of user's device. This is used to avoid sending duplicate push notification on the same device
-                            required:
-                              - token
-                              - provider
-                            type: object
-                        $slack:
-                          type: string
-                          description: 'Send Slack on a particular channel in user''s profile. Use one of the methods to add slack token - 1. slack using email: {"email": "user@example.com", "access_token": "xoxb-XXXXXXXX"} ------ 2. slack using member_id: {"user_id": "U/WXXXXXXXX", "access_token": "xoxb-XXXXXXXX"} ------- 3. slack channel: {"channel": "CXXXXXXXX", "access_token": "xoxb-XXXXXXXX"} -------- 4. slack incoming webhook: {"incoming_webhook": { "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"}}'
-                          format: json
-                      required:
-                        - distinct_id
-                      type: object
-                  data:
-                    type: string
-                    description: Mock data to replace the template variables.
-                    default: {
-                                "data": {
-                                  "$attachments": [
-                                    {
-                                      "filename": "billing.pdf",
-                                      "contentType": "application/pdf",
-                                      "data": "Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh"
-                                    }
-                                  ]
-                                }
-                              }
-  
-                    format: json
-                  delivery:
-                    type: object
-                    description: delivery instructions for the workflow. You can set [Smart Delivery](https://docs.suprsend.com/docs/smart-delivery) preference by setting "smart":true
+              type: object
+              required:
+                - name
+                - template
+                - notification_category
+                - users
+              properties:
+                name:
+                  type: string
+                  description: Unique name of the workflow. The workflow name should be easily identifiable for your reference at a later stage. You can see workflow-related analytics on the workflow page (how many notifications were sent, delivered, clicked or interacted).
+                  default: _workflow_name_
+                template:
+                  type: string
+                  description: Unique slug name of the template created on SuprSend dashboard. You can get this by clicking on the clipboard icon next to the Template name on SuprSend templates page.
+                  default: _template_slug_
+                notification_category:
+                  type: string
+                  description: Category in which your notification belongs. You can understand more about them in the 'Notification Category' documentation
+                  default: transactional
+                users:
+                  type: array
+                  description: Array object of target users.
+                  items:
                     properties:
-                      smart:
-                        type: boolean
-                        description: You can enable smart delivery by setting "smart":True
-                        default: false
-                      success:
+                      distinct_id:
                         type: string
-                        description: Measure that defines the success of this notification. You can set notification status like delivery, interaction or custom success event
-                        default: seen
-                      time_to_live:
-                        type: string
-                        description: Time window for triggering notifications in case of smart delivery. notification on each channel will be sent with time-interval of [time_to_live / (number_of_channels - 1)] apart. Format - XXdXXhXXmXXs or if its number (n) then delay is in seconds (n)
-                      mandatory_channels:
+                        description: unique identifier of the user
+                        default: _distinct_id_
+                      $channels:
                         type: array
-                        description: 'Channels on which notification has to be sent immediately in case of smart delivery. Following channel keys can be used: email, sms, whatsapp, androidpush, iospush, slack, webpush'
+                        description: 'send notification on selected channels in user profile. Following channel keys can be used: email, sms, whatsapp, androidpush, iospush, slack, webpush'
+                        default: []
                         items:
                           type: string
-                  delay:
-                    type: string
-                    description: Workflow will be halted for the time mentioned in delay, and become active once the delay period is over. Format - `XXdXXhXXmXXs` or if its number (n) then delay is in seconds (n)
-                  trigger_at:
-                    type: string
-                    description: Trigger workflow on a specific date-time. Format - date string in ISO 8601 eg. "2022-08-27T20:14:51.643Z"
-                    format: date
-                  tenant_id:
-                    type: string
-                    description: string identifier of the tenant this workflow is associated with
-                  $idempotency_key:
-                    type: string
-                    description: Idempotency_key (valid for 24hrs)
-                  adding_email_attachment:
-                    type: string
-                    description: "You can add attachment as data->\"$attachments\". Attachments can be passed as the media URL or as base-64 file (allowed size limit for base-64 file < 50KB).\n\n```json\nadding base-64 file (supported limit < 50KB)\n\n{\n  \"data\": {\n    \"$attachments\":[\n      {\n        \"filename\": \"billing.pdf\",\n        \"contentType\": \"application/pdf\",\n        \"data\": \"Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh\" // this is base64 encoded content\n      }\n    ]\n  }\n} \n\n\n// adding URL directly (no limit on the file size)\n\n{\n  \"data\": {\n    \"$attachments\": [\n      { \n        \"filename\": \"Bitcoin-whitepaper.pdf\", // optional. if not present, filename will be picked from the url\n        \"url\": \"https://bitcoincore.org/bitcoin.pdf\", \n        \"ignore_if_error\": true/false\n      }\n    ]\n  }\n} \n\n```"
-                    format: json
-        responses:
-          '202':
-            description: '202'
-            content:
-              application/json:
-                examples:
-                  Result:
-                    value: '{}'
-                schema:
+                      $email:
+                        type: array
+                        description: To trigger notification on a particular email
+                        default: []
+                        items:
+                          type: string
+                      $sms:
+                        type: array
+                        description: Send SMS on a particular number.
+                        default: []
+                        items:
+                          type: string
+                      $whatsapp:
+                        type: array
+                        description: Send Whatsapp on a particular number.
+                        default: []
+                        items:
+                          type: string
+                      $androidpush:
+                        type: array
+                        description: Send androidpush on the given push token
+                        items:
+                          properties:
+                            token:
+                              type: string
+                              description: Androidpush token
+                              default: __android_push_token__
+                            provider:
+                              type: string
+                              description: vendor delivering the push notification
+                              default: fcm
+                            device_id:
+                              type: string
+                              description: unique identifier of user's device. This is used to avoid sending duplicate push notification on the user's device
+                          required:
+                            - token
+                            - provider
+                          type: object
+                      $iospush:
+                        type: array
+                        description: Send iOSpush on the given push token
+                        items:
+                          properties:
+                            token:
+                              type: string
+                              description: iOSpush token
+                              default: __ios_push_token__
+                            provider:
+                              type: string
+                              description: vendor delivering the push notification
+                              default: apns
+                            device_id:
+                              type: string
+                              description: unique identifier of user's device. This is used to avoid sending duplicate push notification on the same device
+                          required:
+                            - token
+                            - provider
+                          type: object
+                      $slack:
+                        type: string
+                        description: 'Send Slack on a particular channel in user''s profile. Use one of the methods to add slack token - 1. slack using email: {"email": "user@example.com", "access_token": "xoxb-XXXXXXXX"} ------ 2. slack using member_id: {"user_id": "U/WXXXXXXXX", "access_token": "xoxb-XXXXXXXX"} ------- 3. slack channel: {"channel": "CXXXXXXXX", "access_token": "xoxb-XXXXXXXX"} -------- 4. slack incoming webhook: {"incoming_webhook": { "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"}}'
+                        format: json
+                    required:
+                      - distinct_id
+                    type: object
+                data:
+                  type: string
+                  description: Mock data to replace the template variables.
+                  default: {
+                              "data": {
+                                "$attachments": [
+                                  {
+                                    "filename": "billing.pdf",
+                                    "contentType": "application/pdf",
+                                    "data": "Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh"
+                                  }
+                                ]
+                              }
+                            }
+
+                  format: json
+                delivery:
                   type: object
-                  properties: {}
-          '400':
-            description: '400'
-            content:
-              application/json:
-                examples:
-                  Result:
-                    value: '{_error_response_}'
-        deprecated: false
+                  description: delivery instructions for the workflow. You can set [Smart Delivery](https://docs.suprsend.com/docs/smart-delivery) preference by setting "smart":true
+                  properties:
+                    smart:
+                      type: boolean
+                      description: You can enable smart delivery by setting "smart":True
+                      default: false
+                    success:
+                      type: string
+                      description: Measure that defines the success of this notification. You can set notification status like delivery, interaction or custom success event
+                      default: seen
+                    time_to_live:
+                      type: string
+                      description: Time window for triggering notifications in case of smart delivery. notification on each channel will be sent with time-interval of [time_to_live / (number_of_channels - 1)] apart. Format - XXdXXhXXmXXs or if its number (n) then delay is in seconds (n)
+                    mandatory_channels:
+                      type: array
+                      description: 'Channels on which notification has to be sent immediately in case of smart delivery. Following channel keys can be used: email, sms, whatsapp, androidpush, iospush, slack, webpush'
+                      items:
+                        type: string
+                delay:
+                  type: string
+                  description: Workflow will be halted for the time mentioned in delay, and become active once the delay period is over. Format - `XXdXXhXXmXXs` or if its number (n) then delay is in seconds (n)
+                trigger_at:
+                  type: string
+                  description: Trigger workflow on a specific date-time. Format - date string in ISO 8601 eg. "2022-08-27T20:14:51.643Z"
+                  format: date
+                tenant_id:
+                  type: string
+                  description: string identifier of the tenant this workflow is associated with
+                $idempotency_key:
+                  type: string
+                  description: Idempotency_key (valid for 24hrs)
+                adding_email_attachment:
+                  type: string
+                  description: "You can add attachment as data->\"$attachments\". Attachments can be passed as the media URL or as base-64 file (allowed size limit for base-64 file < 50KB).\n\n```json\nadding base-64 file (supported limit < 50KB)\n\n{\n  \"data\": {\n    \"$attachments\":[\n      {\n        \"filename\": \"billing.pdf\",\n        \"contentType\": \"application/pdf\",\n        \"data\": \"Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh\" // this is base64 encoded content\n      }\n    ]\n  }\n} \n\n\n// adding URL directly (no limit on the file size)\n\n{\n  \"data\": {\n    \"$attachments\": [\n      { \n        \"filename\": \"Bitcoin-whitepaper.pdf\", // optional. if not present, filename will be picked from the url\n        \"url\": \"https://bitcoincore.org/bitcoin.pdf\", \n        \"ignore_if_error\": true/false\n      }\n    ]\n  }\n} \n\n```"
+                  format: json
+      responses:
+        '202':
+          description: '202'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{_error_response_}'
+      deprecated: false
   /v1/user/{distinct_id}/preference/category/:
     get:
       summary: All Categories
@@ -4177,7 +4177,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     description: HTTP status code indicating the error.
                     example: 405
@@ -4206,178 +4206,101 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: {
-                    "id": "<string>",
-                    "name": "user_name",
-                    "description": "<string>",
-                    "properties": {
-                      "timezone": "America/New York",
-                      "city": "San Francisco",
-                      "country": "United States of America",
-                      "state": "California",
-                      "first_name": "user_name",
-                      "org_name": "SuprSend"
-                    },
-                    "contacts": {
-                      "email": [
+                  value: |-
+                    {
+                      "distinct_id": "user1",
+                      "properties": {
+                        "$preferred_language": "en",
+                        "$timezone": "America/New_York",
+                        "prop1": "val1"
+                      },
+                      "created_at": "2024-11-05T06:19:14.184143+00:00",
+                      "updated_at": "2024-11-05T06:19:14.227839+00:00",
+                      "$email": [
                         {
-                          "value": "<string>",
+                          "value": "abc@example.com",
                           "status": "active",
                           "perma_status": "active"
                         }
                       ],
-                      "inbox": [
+                      "$inbox": [
                         {
-                          "value": "<string>",
+                          "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
                           "id_provider": "suprsend",
                           "status": "active",
                           "perma_status": "active"
                         }
                       ]
-                    },
-                    "filter": {
-                      "operator": "ENDS_WITH",
-                      "value": "param_value",
-                      "path": "<string>"
-                    },
-                    "created_at": "2025-02-06T09:12:14.874557+00:00",
-                    "updated_at": "2025-02-06T09:12:14.910696+00:00"
-                  }                  
+                    }
               schema:
                 type: object
                 properties:
-                  id:
+                  distinct_id:
                     type: string
-                    description: Unique identifier for the user.
-                    example: "<string>"
-                  name:
-                    type: string
-                    description: Name of the user.
-                    example: user_name
-                  description:
-                    type: string
-                    description: Description of the user.
-                    example: "<string>"
+                    example: user1
                   properties:
                     type: object
-                    description: Additional user properties.
                     properties:
-                      timezone:
+                      $preferred_language:
                         type: string
-                        description: Timezone of the user.
-                        example: America/New York
-                      city:
+                        example: en
+                      $timezone:
                         type: string
-                        description: City of the user.
-                        example: San Francisco
-                      country:
+                        example: America/New_York
+                      prop1:
                         type: string
-                        description: Country of the user.
-                        example: United States of America
-                      state:
-                        type: string
-                        description: State of the user.
-                        example: California
-                      first_name:
-                        type: string
-                        description: First name of the user.
-                        example: user_name
-                      org_name:
-                        type: string
-                        description: Organization name associated with the user.
-                        example: SuprSend
-                  contacts:
-                    type: object
-                    description: Communication channels associated with the user.
-                    properties:
-                      email:
-                        type: array
-                        description: List of email contacts.
-                        items:
-                          type: object
-                          properties:
-                            value:
-                              type: string
-                              description: Email address.
-                              example: "<string>"
-                            status:
-                              type: string
-                              description: Current status of the email.
-                              example: active
-                            perma_status:
-                              type: string
-                              description: Permanent status of the email.
-                              example: active
-                      inbox:
-                        type: array
-                        description: List of inbox contacts.
-                        items:
-                          type: object
-                          properties:
-                            value:
-                              type: string
-                              description: Identifier for the inbox.
-                              example: "<string>"
-                            id_provider:
-                              type: string
-                              description: Provider of the inbox.
-                              example: suprsend
-                            status:
-                              type: string
-                              description: Current status of the inbox.
-                              example: active
-                            perma_status:
-                              type: string
-                              description: Permanent status of the inbox.
-                              example: active
-                  filter:
-                    type: object
-                    description: Filtering criteria applied to the user.
-                    properties:
-                      operator:
-                        type: string
-                        description: Operator used in the filter.
-                        example: ENDS_WITH
-                      value:
-                        type: string
-                        description: Value used in the filter.
-                        example: param_value
-                      path:
-                        type: string
-                        description: Path of the filtered property.
-                        example: "<string>"
+                        example: val1
                   created_at:
                     type: string
-                    format: date-time
-                    description: Timestamp when the user was created.
-                    example: "2025-02-06T09:12:14.874557+00:00"
+                    example: '2024-11-05T06:19:14.184143+00:00'
                   updated_at:
                     type: string
-                    format: date-time
-                    description: Timestamp when the user was last updated.
-                    example: "2025-02-06T09:12:14.910696+00:00"            
-        '404':
-          description: '404'
+                    example: '2024-11-05T06:19:14.227839+00:00'
+                  $email:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        value:
+                          type: string
+                          example: abc@example.com
+                        status:
+                          type: string
+                          example: active
+                        perma_status:
+                          type: string
+                          example: active
+                  $inbox:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        value:
+                          type: string
+                          example: GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs
+                        id_provider:
+                          type: string
+                          example: suprsend
+                        status:
+                          type: string
+                          example: active
+                        perma_status:
+                          type: string
+                          example: active
+        '400':
+          description: '400'
           content:
             application/json:
               examples:
                 Result:
                   value:
                     {
-                      "code": 404,
+                      "code": 400,
                       "message": "User not found with distinct_id: 'user1'"
                     }
               schema:
                 type: object
-                properties:
-                  error-code:
-                    type: integer
-                    description: HTTP status code indicating the error type.
-                    example: 404
-                  message:
-                    type: string
-                    description: Error message providing details about the issue.
-                    example: "User not found with distinct_id: 'user1'"
+                properties: {}
       deprecated: false
     delete:
       summary: Delete user
@@ -4393,38 +4316,103 @@ paths:
             type: string
           required: true
       responses:
-        '204':
-          description: '204'
+        '200':
+          description: '200'
           content:
             application/json:
               examples:
                 Result:
-                  value: No Content
-              schema:
-                type: string
-                description: Indicates a successful request with no content in the response body.
-                example: "No Content"            
-        '404':
-          description: '404'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: {
-                    "code": 404,
-                    "message": "user [distinct_id: 'user1'] not found"
-                  }
+                  value: |-
+                    {
+                      "distinct_id": "user1",
+                      "properties": {
+                        "$preferred_language": "en",
+                        "$timezone": "America/New_York",
+                        "prop1": "val1"
+                      },
+                      "created_at": "2024-11-05T06:19:14.184143+00:00",
+                      "updated_at": "2024-11-05T06:19:14.227839+00:00",
+                      "$email": [
+                        {
+                          "value": "abc@example.com",
+                          "status": "active",
+                          "perma_status": "active"
+                        }
+                      ],
+                      "$inbox": [
+                        {
+                          "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
+                          "id_provider": "suprsend",
+                          "status": "active",
+                          "perma_status": "active"
+                        }
+                      ]
+                    }
               schema:
                 type: object
                 properties:
-                  error-code:
-                    type: integer
-                    description: HTTP status code indicating the error.
-                    example: 404
-                  message:
+                  distinct_id:
                     type: string
-                    description: Description of the error.
-                    example: "user [distinct_id: 'user1'] not found"
+                    example: user1
+                  properties:
+                    type: object
+                    properties:
+                      $preferred_language:
+                        type: string
+                        example: en
+                      $timezone:
+                        type: string
+                        example: America/New_York
+                      prop1:
+                        type: string
+                        example: val1
+                  created_at:
+                    type: string
+                    example: '2024-11-05T06:19:14.184143+00:00'
+                  updated_at:
+                    type: string
+                    example: '2024-11-05T06:19:14.227839+00:00'
+                  $email:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        value:
+                          type: string
+                          example: abc@example.com
+                        status:
+                          type: string
+                          example: active
+                        perma_status:
+                          type: string
+                          example: active
+                  $inbox:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        value:
+                          type: string
+                          example: GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs
+                        id_provider:
+                          type: string
+                          example: suprsend
+                        status:
+                          type: string
+                          example: active
+                        perma_status:
+                          type: string
+                          example: active
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
       deprecated: false
     patch:
       summary: Edit User Profile
@@ -4530,7 +4518,7 @@ paths:
                     },
                     "created_at": "2025-02-06T09:12:14.874557+00:00",
                     "updated_at": "2025-02-06T09:12:14.910696+00:00"
-                  }                                    
+                  }
               schema:
                 type: object
                 properties:
@@ -4643,7 +4631,7 @@ paths:
                     type: string
                     format: date-time
                     description: Timestamp when the user was last updated.
-                    example: "2025-02-06T09:12:14.910696+00:00"            
+                    example: "2025-02-06T09:12:14.910696+00:00"
         '400':
           description: '400'
           content:
@@ -4680,118 +4668,68 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: {
-                    "meta": {
-                      "count": 1201709,
-                      "limit": 10,
-                      "has_prev": false,
-                      "before": null,
-                      "has_next": true,
-                      "after": "01JXXXX99APxxxxxx8Wxxxx1B"
-                    },
-                    "results": [
-                      {
-                        "id": "<string>",
-                        "name": "user_name",
-                        "timezone": "America/New York",
-                        "city": "San Francisco",
-                        "country": "United States of America",
-                        "state": "California",
-                        "created_at": "2025-04-01T15:13:17.609942+00:00",
-                        "updated_at": "2025-04-01T15:13:17.609942+00:00"
-                      }
-                    ]
-                  }
-              schema:
-                type: object
-                properties:
-                  meta:
-                    type: object
-                    description: Metadata related to pagination.
-                    properties:
-                      count:
-                        type: integer
-                        description: Total number of records available.
-                        example: 1200002
-                      limit:
-                        type: integer
-                        description: Maximum number of records per page.
-                        example: 10
-                      has_prev:
-                        type: boolean
-                        description: Indicates if there is a previous page.
-                        example: false
-                      before:
-                        type: string
-                        nullable: true
-                        description: Cursor for the previous page.
-                        example: null
-                      has_next:
-                        type: boolean
-                        description: Indicates if there is a next page.
-                        example: true
-                      after:
-                        type: string
-                        description: Cursor for the next page.
-                        example: "01JXXXX99APxxxxxx8Wxxxx1B"
-                  results:
-                    type: array
-                    description: List of users.
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          description: Unique identifier for the user.
-                          example: "<string>"
-                        name:
-                          type: string
-                          description: Name of the user.
-                          example: "user_name"
-                        timezone:
-                          type: string
-                          description: Timezone associated with the user.
-                          example: "America/New York"
-                        city:
-                          type: string
-                          description: City where the user is located.
-                          example: "San Francisco"
-                        country:
-                          type: string
-                          description: Country where the user is located.
-                          example: "United States of America"
-                        state:
-                          type: string
-                          description: State where the user is located.
-                          example: "California"
-                        created_at:
-                          type: string
-                          format: date-time
-                          description: Timestamp when the user was created.
-                          example: "2025-04-01T15:13:17.609942+00:00"
-                        updated_at:
-                          type: string
-                          format: date-time
-                          description: Timestamp when the user was last updated.
-                          example: "2025-04-01T15:13:17.609942+00:00"                  
-        '401':
-          description: '401'
+                  value:
+                        {
+                          "meta": {
+                            "count": 1104824,
+                            "limit": 10,
+                            "has_prev": false,
+                            "before": null,
+                            "has_next": true,
+                            "after": "01JBV65642CV6FEQJ93JYBME67"
+                          },
+                          "results": [
+                            {
+                              "distinct_id": "user1",
+                              "properties": {
+                                "$preferred_language": "en",
+                                "$timezone": "America/New_York",
+                                "prop1": "val1"
+                              },
+                              "created_at": "2024-11-05T06:19:14.184143+00:00",
+                              "updated_at": "2024-11-05T06:19:14.227839+00:00",
+                              "$email": [
+                                {
+                                  "value": "abc@example.com",
+                                  "status": "active",
+                                  "perma_status": "active"
+                                }
+                              ],
+                              "$inbox": [
+                                {
+                                  "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
+                                  "id_provider": "suprsend",
+                                  "status": "active",
+                                  "perma_status": "active"
+                                }
+                              ]
+                            },
+                            {
+                              "distinct_id": "8b57af47-757a-49e9-8205-fb02ad7233ff",
+                              "properties": {},
+                              "created_at": "2024-11-05T03:30:04.507766+00:00",
+                              "updated_at": "2024-11-05T03:30:04.507766+00:00",
+                              "$inbox": [
+                                {
+                                  "value": "K2-al0hZXlyn5IcYq8l8fgS9KrJ5ic9uEUDSSEOGBI0",
+                                  "id_provider": "suprsend",
+                                  "status": "active",
+                                  "perma_status": "active"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+        '400':
+          description: '400'
           content:
             application/json:
               examples:
                 Result:
-                  value: Not Authenticated - could not find Workspace details
+                  value: '{}'
               schema:
                 type: object
-                properties:
-                  error-code:
-                    type: integer
-                    description: HTTP status code indicating the error.
-                    example: 401
-                  message:
-                    type: string
-                    description: Description of the authentication error.
-                    example: "Not Authenticated - could not find Workspace details"
+                properties: {}
       deprecated: false
   /v1/user/{distinct_id}/merge/:
     post:
@@ -4817,80 +4755,26 @@ paths:
                   type: string
                   description: Unique identifier of secondary user whose profile needs to be merged into primary user.
       responses:
-        '201':
-          description: '201'
+        '200':
+          description: '200'
           content:
             application/json:
               examples:
                 Result:
-                  value: {
-                    "id": "<string>",
-                    "name": "user_name",
-                    "timezone": "America/New York",
-                    "city": "San Francisco",
-                    "country": "United States of America",
-                    "state": "California",
-                    "created_at": "2025-04-02T15:05:57.256964+00:00",
-                    "updated_at": "2025-04-02T15:06:16.581195+00:00"
-                  }                  
+                  value: '{}'
               schema:
                 type: object
-                properties:
-                  id:
-                    type: string
-                    description: Unique identifier for the entity.
-                    example: "<string>"
-                  name:
-                    type: string
-                    description: Name of the user.
-                    example: "user_name"
-                  timezone:
-                    type: string
-                    description: Timezone associated with the user.
-                    example: "America/New York"
-                  city:
-                    type: string
-                    description: City of the user.
-                    example: "San Francisco"
-                  country:
-                    type: string
-                    description: Country of the user.
-                    example: "United States of America"
-                  state:
-                    type: string
-                    description: State of the user.
-                    example: "California"
-                  created_at:
-                    type: string
-                    format: date-time
-                    description: Timestamp of when the entity was created.
-                    example: "2025-04-02T15:05:57.256964+00:00"
-                  updated_at:
-                    type: string
-                    format: date-time
-                    description: Timestamp of when the entity was last updated.
-                    example: "2025-04-02T15:06:16.581195+00:00"            
-        '404':
-          description: '404'
+                properties: {}
+        '400':
+          description: '400'
           content:
             application/json:
               examples:
                 Result:
-                  value: {
-                    "code": 404,
-                    "message": "user [distinct_id: 'user1'] not found"
-                  }
+                  value: '{}'
               schema:
-              type: object
-              properties:
-                error-code:
-                  type: integer
-                  description: HTTP status code indicating the error.
-                  example: 404
-                message:
-                  type: string
-                  description: Description of the error.
-                  example: "user [distinct_id: 'user1'] not found"
+                type: object
+                properties: {}
       deprecated: false
   /v1/user/{distinct_id}/subscribed_to/object/:
     get:
@@ -4922,120 +4806,97 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: {
-                    "meta": {
-                      "count": 0,
-                      "limit": 1,
-                      "has_prev": false,
-                      "before": null,
-                      "has_next": false,
-                      "after": null
-                    },
-                    "results": []
-                  }
+                  value: |-
+                    {
+                      "distinct_id": "user1",
+                      "properties": {
+                        "$preferred_language": "en",
+                        "$timezone": "America/New_York",
+                        "prop1": "val1"
+                      },
+                      "created_at": "2024-11-05T06:19:14.184143+00:00",
+                      "updated_at": "2024-11-05T06:19:14.227839+00:00",
+                      "$email": [
+                        {
+                          "value": "abc@example.com",
+                          "status": "active",
+                          "perma_status": "active"
+                        }
+                      ],
+                      "$inbox": [
+                        {
+                          "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
+                          "id_provider": "suprsend",
+                          "status": "active",
+                          "perma_status": "active"
+                        }
+                      ]
+                    }
               schema:
                 type: object
                 properties:
-                  meta:
+                  distinct_id:
+                    type: string
+                    example: user1
+                  properties:
                     type: object
-                    description: Metadata related to pagination.
                     properties:
-                      count:
-                        type: integer
-                        description: Total number of results.
-                        example: 1
-                      limit:
-                        type: integer
-                        description: The maximum number of results per request.
-                        example: 10
-                      has_prev:
-                        type: boolean
-                        description: Indicates if there are previous results.
-                        example: false
-                      before:
+                      $preferred_language:
                         type: string
-                        nullable: true
-                        description: Cursor for fetching previous results.
-                        example: null
-                      has_next:
-                        type: boolean
-                        description: Indicates if there are more results available.
-                        example: false
-                      after:
+                        example: en
+                      $timezone:
                         type: string
-                        nullable: true
-                        description: Cursor for fetching next results.
-                        example: null
-                  results:
+                        example: America/New_York
+                      prop1:
+                        type: string
+                        example: val1
+                  created_at:
+                    type: string
+                    example: '2024-11-05T06:19:14.184143+00:00'
+                  updated_at:
+                    type: string
+                    example: '2024-11-05T06:19:14.227839+00:00'
+                  $email:
                     type: array
-                    description: List of retrieved results.
                     items:
                       type: object
                       properties:
-                        properties:
-                          type: object
-                          description: Additional properties associated with the result.
-                          properties:
-                            role:
-                              type: string
-                              description: Role of the user in the associated object.
-                              example: manager
-                        object:
-                          type: object
-                          description: Details about the associated object.
-                          properties:
-                            id:
-                              type: string
-                              description: Unique identifier for the object.
-                              example: frontend
-                            object_type:
-                              type: string
-                              description: Type of object.
-                              example: department
-                            properties:
-                              type: object
-                              description: Additional properties related to the object.
-                              example: {}
-                            subscriptions_count:
-                              type: integer
-                              description: Number of active subscriptions associated with the object.
-                              example: 1
-                            updated_at:
-                              type: string
-                              format: date-time
-                              description: Timestamp when the object was last updated.
-                              example: "2025-01-28T16:49:23.695448+00:00"
-                        created_at:
+                        value:
                           type: string
-                          format: date-time
-                          description: Timestamp when the result was created.
-                          example: "2025-01-23T16:34:56.093683+00:00"
-                        updated_at:
+                          example: abc@example.com
+                        status:
                           type: string
-                          format: date-time
-                          description: Timestamp when the result was last updated.
-                          example: "2025-01-23T16:34:56.093683+00:00"                       
-        '404':
-                  description: '404'
+                          example: active
+                        perma_status:
+                          type: string
+                          example: active
+                  $inbox:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        value:
+                          type: string
+                          example: GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs
+                        id_provider:
+                          type: string
+                          example: suprsend
+                        status:
+                          type: string
+                          example: active
+                        perma_status:
+                          type: string
+                          example: active
+        '400':
+                  description: '400'
                   content:
                     application/json:
                       examples:
                         Result:
-                          value: {
-                            "code": 404,
-                            "message": "User [distinct_id: 'user1'] not found"
-                          }
+                          value: '{}'
                       schema:
                         type: object
-                        properties:
-                          error-code:
-                            type: integer
-                            description: HTTP status code indicating the error type.
-                            example: 404
-                          message:
-                            type: string
-                            description: Error message providing details about the issue.
-                            example: "User [distinct_id: 'user1'] not found"
+                        properties: {}
       deprecated: false 
   /v1/user/{distinct_id}/subscribed_to/list/:
     get:
@@ -5067,143 +4928,97 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: {
-                    "meta": {
-                      "count": 8,
-                      "limit": 10,
-                      "has_prev": false,
-                      "before": null,
-                      "has_next": false,
-                      "after": null
-                    },
-                    "results": [
-                      {
-                        "id": "<string>",
-                        "name": "user_name",
-                        "description": "List of users to send newsletter to",
-                        "list_type": "Your_company_newsletter",
-                        "source": "csv_upload",
-                        "subscribers_count": 2,
-                        "timezone": "America/New York",
-                        "city": "San Francisco",
-                        "country": "United States of America",
-                        "state": "California",
-                        "created_at": "2024-08-04T13:16:12.825+00:00",
-                        "updated_at": "2024-09-26T10:20:33.636698+00:00"
-                      }
-                    ]
-                  }                
+                  value: |-
+                    {
+                      "distinct_id": "user1",
+                      "properties": {
+                        "$preferred_language": "en",
+                        "$timezone": "America/New_York",
+                        "prop1": "val1"
+                      },
+                      "created_at": "2024-11-05T06:19:14.184143+00:00",
+                      "updated_at": "2024-11-05T06:19:14.227839+00:00",
+                      "$email": [
+                        {
+                          "value": "abc@example.com",
+                          "status": "active",
+                          "perma_status": "active"
+                        }
+                      ],
+                      "$inbox": [
+                        {
+                          "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
+                          "id_provider": "suprsend",
+                          "status": "active",
+                          "perma_status": "active"
+                        }
+                      ]
+                    }
               schema:
                 type: object
                 properties:
-                  meta:
+                  distinct_id:
+                    type: string
+                    example: user1
+                  properties:
                     type: object
-                    description: Metadata related to pagination.
                     properties:
-                      count:
-                        type: integer
-                        description: Total number of records returned.
-                        example: 8
-                      limit:
-                        type: integer
-                        description: Maximum number of records per page.
-                        example: 10
-                      has_prev:
-                        type: boolean
-                        description: Indicates if there is a previous page.
-                        example: false
-                      before:
+                      $preferred_language:
                         type: string
-                        nullable: true
-                        description: Cursor for the previous page.
-                        example: null
-                      has_next:
-                        type: boolean
-                        description: Indicates if there is a next page.
-                        example: false
-                      after:
+                        example: en
+                      $timezone:
                         type: string
-                        nullable: true
-                        description: Cursor for the next page.
-                        example: null
-                  results:
+                        example: America/New_York
+                      prop1:
+                        type: string
+                        example: val1
+                  created_at:
+                    type: string
+                    example: '2024-11-05T06:19:14.184143+00:00'
+                  updated_at:
+                    type: string
+                    example: '2024-11-05T06:19:14.227839+00:00'
+                  $email:
                     type: array
-                    description: List of user lists.
                     items:
                       type: object
                       properties:
-                        id:
+                        value:
                           type: string
-                          description: Unique identifier for the list.
-                          example: "<string>"
-                        name:
+                          example: abc@example.com
+                        status:
                           type: string
-                          description: Name of the list.
-                          example: "user_name"
-                        description:
+                          example: active
+                        perma_status:
                           type: string
-                          description: Brief description of the list.
-                          example: "List of users to send newsletter to"
-                        list_type:
+                          example: active
+                  $inbox:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        value:
                           type: string
-                          description: Type of list (e.g., newsletter type).
-                          example: "Your_company_newsletter"
-                        source:
+                          example: GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs
+                        id_provider:
                           type: string
-                          nullable: true
-                          description: Source from which the list was created.
-                          example: "csv_upload"
-                        subscribers_count:
-                          type: integer
-                          description: Number of subscribers in the list.
-                          example: 2
-                        timezone:
+                          example: suprsend
+                        status:
                           type: string
-                          description: Timezone associated with the list.
-                          example: "America/New York"
-                        city:
+                          example: active
+                        perma_status:
                           type: string
-                          description: City associated with the list.
-                          example: "San Francisco"
-                        country:
-                          type: string
-                          description: Country associated with the list.
-                          example: "United States of America"
-                        state:
-                          type: string
-                          description: State associated with the list.
-                          example: "California"
-                        created_at:
-                          type: string
-                          format: date-time
-                          description: Timestamp when the list was created.
-                          example: "2024-08-04T13:16:12.825+00:00"
-                        updated_at:
-                          type: string
-                          format: date-time
-                          description: Timestamp when the list was last updated.
-                          example: "2024-09-26T10:20:33.636698+00:00"            
-        '404':
-                  description: '404'
+                          example: active
+        '400':
+                  description: '400'
                   content:
                     application/json:
                       examples:
                         Result:
-                          value: {
-                            "code": 404,
-                            "message": "user [distinct_id: 'user1'] not found"
-                          }
+                          value: '{}'
                       schema:
                         type: object
-                        properties:
-                          error-code:
-                            type: integer
-                            description: HTTP error status code.
-                            example: 404
-                          message:
-                            type: string
-                            description: Error message describing the issue.
-                            example: "user [distinct_id: 'user1'] not found"   
+                        properties: {}
       deprecated: false                           
   /{workspace_key}/trigger/adding-email-attachment/:
     post:
