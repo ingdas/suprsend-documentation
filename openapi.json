@@ -565,7 +565,8 @@ paths:
                       - distinct_id
                     type: object
                 data:
-                  type: string
+                  type: object
+                  properties: {}
                   description: Mock data to replace the template variables.
                   default: {
                               "data": {
@@ -578,7 +579,6 @@ paths:
                                 ]
                               }
                             }
-
                   format: json
                 delivery:
                   type: object
@@ -624,7 +624,7 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: Accepted - OK
               schema:
                 type: object
                 properties: {}
@@ -634,7 +634,19 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{_error_response_}'
+                  value: {
+                    "status": "fail",
+                    "message": "BAD REQUEST"
+                  }
+              scheme:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "fail"
+                  message:
+                    type: string
+                    example: "BAD REQUEST"
       deprecated: false
   /v1/user/{distinct_id}/preference/category/:
     get:
