@@ -2898,62 +2898,67 @@ paths:
               examples:
                 Result:
                   value: {
-                    "id": "<string>",
-                    "name": "user_name",
-                    "timezone": "America/New York",
-                    "city": "San Francisco",
-                    "country": "United States of America",
-                    "state": "California",
-                    "object_type": "ervfwcdsax",
+                    "object_type": "obj_type",
+                    "id": "obj_id",
                     "subscriptions_count": 0,
-                    "created_at": "2025-04-03T07:55:52.018199+00:00",
-                    "updated_at": "2025-04-03T07:57:59.161059+00:00"
-                  }                  
+                    "properties": {
+                      "RAW_BODY": "\"prop1\": \"val1\""
+                    },
+                    "created_at": "2025-04-03T10:45:15.333323+00:00",
+                    "updated_at": "2025-04-03T10:45:15.333323+00:00",
+                    "$inbox": [
+                      {
+                        "value": "Xtpxxxx_HlXxXxxxT1aulEXXXXmr7ixxM",
+                        "id_provider": "suprsend",
+                        "status": "active",
+                        "perma_status": "active"
+                      }
+                    ]
+                  }               
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                    example: "<string>"
-                    description: "Unique identifier for the object."
-                  name:
-                    type: string
-                    example: "user_name"
-                    description: "The name associated with the object."
-                  timezone:
-                    type: string
-                    example: "America/New York"
-                    description: "Timezone associated with the object."
-                  city:
-                    type: string
-                    example: "San Francisco"
-                    description: "City where the object is located."
-                  country:
-                    type: string
-                    example: "United States of America"
-                    description: "Country where the object is located."
-                  state:
-                    type: string
-                    example: "California"
-                    description: "State where the object is located."
                   object_type:
                     type: string
-                    example: "ervfwcdsax"
+                    example: "obj_type"
                     description: "Type of the object."
+                  id:
+                    type: string
+                    example: "obj_id"
+                    description: "Unique identifier of the object."
                   subscriptions_count:
                     type: integer
                     example: 0
                     description: "Number of subscriptions associated with the object."
+                  properties:
+                    type: object
+                    description: "Additional properties linked to the object."
+                    example:
+                      RAW_BODY: "\"prop1\": \"val1\""
                   created_at:
                     type: string
                     format: date-time
-                    example: "2025-04-03T07:55:52.018199+00:00"
-                    description: "Timestamp indicating when the object was created."
+                    example: "2025-04-03T10:45:15.333323+00:00"
+                    description: "Timestamp when the object was created."
                   updated_at:
                     type: string
                     format: date-time
-                    example: "2025-04-03T07:57:59.161059+00:00"
-                    description: "Timestamp indicating when the object was last updated."              
+                    example: "2025-04-03T10:45:15.333323+00:00"
+                    description: "Timestamp when the object was last updated."
+                  $inbox:
+                    type: array
+                    description: "List of inbox entries associated with the object."
+                    items:
+                      type: object
+                      properties:
+                        value:
+                          type: string
+                          example: "Xtpxxxx_HlXxXxxxT1aulEXXXXmr7ixxM"
+                          description: "Inbox value identifier."
+                        id_provider:
+                          type: string
+                          example: "suprsend"
+                          description: "Provider of the inbox"                            
         '405':
           description: '405'
           content:
@@ -3002,106 +3007,97 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: |-
-                    {
-                      "object_type": "object_type",
-                      "id": "id",
-                      "subscriptions_count": 2,
-                      "properties": {
-                        "$preferred_language": "en",
-                        "$timezone": "America/New_York",
-                        "prop1": "val1"
-                      },
-                      "created_at": "2024-11-04T09:18:19.544589+00:00",
-                      "updated_at": "2024-11-04T09:18:19.544589+00:00",
-                      "$email": [
-                        {
-                          "value": "abc@example.com",
-                          "status": "active",
-                          "perma_status": "active"
-                        }
-                      ],
-                      "$inbox": [
-                        {
-                          "value": "6qD05D7WDJOac76nANY_j3srHrINK0wysQUWN-7TNM8",
-                          "id_provider": "suprsend",
-                          "status": "active",
-                          "perma_status": "active"
-                        }
-                      ]
-                    }
+                  value: {
+                    "object_type": "obj_type",
+                    "id": "obj_id",
+                    "subscriptions_count": 0,
+                    "properties": {
+                      "RAW_BODY": "\"prop1\": \"val1\""
+                    },
+                    "created_at": "2025-04-03T07:55:52.018199+00:00",
+                    "updated_at": "2025-04-03T07:57:59.161059+00:00",
+                    "$inbox": [
+                      {
+                        "value": "vMUXXXXkNxx9-rM3_rxxxxFSrBvXXXXNuk",
+                        "id_provider": "suprsend",
+                        "status": "active",
+                        "perma_status": "active"
+                      }
+                    ]
+                  }
               schema:
                 type: object
                 properties:
                   object_type:
                     type: string
-                    example: object_type
+                    example: "obj_type"
+                    description: "Type of the object."
                   id:
                     type: string
-                    example: id
+                    example: "obj_id"
+                    description: "Unique identifier of the object."
                   subscriptions_count:
                     type: integer
-                    example: 2
-                    default: 0
+                    example: 0
+                    description: "Number of subscriptions associated with the object."
                   properties:
                     type: object
-                    properties:
-                      $preferred_language:
-                        type: string
-                        example: en
-                      $timezone:
-                        type: string
-                        example: America/New_York
-                      prop1:
-                        type: string
-                        example: val1
+                    description: "Additional properties linked to the object."
+                    example:
+                      RAW_BODY: "\"prop1\": \"val1\""
                   created_at:
                     type: string
-                    example: '2024-11-04T09:18:19.544589+00:00'
+                    format: date-time
+                    example: "2025-04-03T07:55:52.018199+00:00"
+                    description: "Timestamp when the object was created."
                   updated_at:
                     type: string
-                    example: '2024-11-04T09:18:19.544589+00:00'
-                  $email:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        value:
-                          type: string
-                          example: abc@example.com
-                        status:
-                          type: string
-                          example: active
-                        perma_status:
-                          type: string
-                          example: active
+                    format: date-time
+                    example: "2025-04-03T07:57:59.161059+00:00"
+                    description: "Timestamp when the object was last updated."
                   $inbox:
                     type: array
+                    description: "List of inbox entries associated with the object."
                     items:
                       type: object
                       properties:
                         value:
                           type: string
-                          example: 6qD05D7WDJOac76nANY_j3srHrINK0wysQUWN-7TNM8
+                          example: "vMUXXXXkNxx9-rM3_rxxxxFSrBvXXXXNuk"
+                          description: "Inbox value identifier."
                         id_provider:
                           type: string
-                          example: suprsend
+                          example: "suprsend"
+                          description: "Provider of the inbox ID."
                         status:
                           type: string
-                          example: active
+                          example: "active"
+                          description: "Current status of the inbox entry."
                         perma_status:
                           type: string
-                          example: active
-        '400':
-          description: '400'
+                          example: "active"
+                          description: "Permanent status of the inbox entry."            
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "object 'obj_type/obj_id' not found"
+                  }
               schema:
-                type: object
-                properties: {}
+                  type: object
+                  properties:
+                    error-code:
+                      type: integer
+                      example: 404
+                      description: "Error code indicating resource not found."
+                    message:
+                      type: string
+                      example: "object 'obj_type/obj_id' not found"
+                      description: "Error message describing the missing resource."
       deprecated: false
     delete:
       summary: Delete an Object
@@ -3123,26 +3119,38 @@ paths:
             type: string
           required: true
       responses:
-        '200':
-          description: '200'
+        '204':
+          description: '204'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: No Content
               schema:
-                type: object
-                properties: {}
-        '400':
-          description: '400'
+                type: string
+                example: "No Content"
+                description: "Indicates that the request was successful but there is no content to return."
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "object 'ervfwcdsax/khushiiii' not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                    description: "Error code indicating that the requested object was not found."
+                  message:
+                    type: string
+                    example: "object 'ervfwcdsax/khushiiii' not found"
+                    description: "Detailed error message specifying the missing object."
       deprecated: false
     patch:
       summary: Edit Object Profile
@@ -3219,8 +3227,8 @@ paths:
               examples:
                 Result:
                   value: {
-                    "object_type": "frontend",
-                    "id": "developer",
+                    "object_type": "obj_type",
+                    "id": "obj_id",
                     "subscriptions_count": 0,
                     "properties": {},
                     "created_at": "2025-04-03T10:22:50.21704+00:00",
@@ -3239,12 +3247,10 @@ paths:
                 properties:
                   object_type:
                     type: string
-                    example: "frontend"
-                    description: "The type of the object."
+                    example: "obj_id"
                   id:
                     type: string
-                    example: "developer"
-                    description: "Unique identifier of the object."
+                    example: "obj_type"
                   subscriptions_count:
                     type: integer
                     example: 0
@@ -3401,45 +3407,30 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: |-
-                    {
-                      "meta": {
-                        "count": 2,
-                        "limit": 10,
-                        "has_prev": false,
-                        "before": null,
-                        "has_next": false,
-                        "after": null
-                      },
-                      "results": [
-                        {
-                          "properties": {
-                            "role": "developer"
-                          },
-                          "user": {
-                            "distinct_id": "id1",
-                            "updated_at": "2024-11-04T09:30:05.136493+00:00"
-                          },
-                          "object": null,
-                          "created_at": "2024-11-04T09:30:05.15406+00:00",
-                          "updated_at": "2024-11-04T09:30:05.15406+00:00"
+                  value: {
+                    "meta": {
+                      "count": 1,
+                      "limit": 10,
+                      "has_prev": false,
+                      "before": null,
+                      "has_next": false,
+                      "after": null
+                    },
+                    "results": [
+                      {
+                        "properties": {
+                          "role": "intern"
                         },
-                        {
-                          "properties": {
-                            "role": "developer"
-                          },
-                          "user": null,
-                          "object": {
-                            "id": "devs",
-                            "object_type": "teams",
-                            "subscriptions_count": 0,
-                            "updated_at": "2024-11-04T09:30:05.141405+00:00"
-                          },
-                          "created_at": "2024-11-04T09:30:05.154058+00:00",
-                          "updated_at": "2024-11-04T09:30:05.154058+00:00"
-                        }
-                      ]
-                    }
+                        "user": {
+                          "distinct_id": "user1",
+                          "updated_at": "2023-08-25T13:31:24.517819+00:00"
+                        },
+                        "object": null,
+                        "created_at": "2024-11-10T21:40:02.169501+00:00",
+                        "updated_at": "2024-11-10T21:40:02.169501+00:00"
+                      }
+                    ]
+                  }
               schema:
                 type: object
                 properties:
@@ -3448,22 +3439,30 @@ paths:
                     properties:
                       count:
                         type: integer
-                        example: 2
-                        default: 0
+                        example: 1
+                        description: "Total number of results."
                       limit:
                         type: integer
                         example: 10
-                        default: 0
+                        description: "Maximum number of results returned per request."
                       has_prev:
                         type: boolean
                         example: false
-                        default: true
-                      before: {}
+                        description: "Indicates if there are previous results."
+                      before:
+                        type: string
+                        nullable: true
+                        example: null
+                        description: "Cursor for the previous page, if applicable."
                       has_next:
                         type: boolean
                         example: false
-                        default: true
-                      after: {}
+                        description: "Indicates if there are more results."
+                      after:
+                        type: string
+                        nullable: true
+                        example: null
+                        description: "Cursor for the next page, if applicable."
                   results:
                     type: array
                     items:
@@ -3471,39 +3470,64 @@ paths:
                       properties:
                         properties:
                           type: object
+                          description: "Additional properties associated with the result."
                           properties:
                             role:
                               type: string
-                              example: developer
+                              example: "intern"
+                              description: "Role associated with the user."
                         user:
                           type: object
+                          description: "Details about the user."
                           properties:
                             distinct_id:
                               type: string
-                              example: id1
+                              example: "user1"
+                              description: "Unique identifier for the user."
                             updated_at:
                               type: string
-                              example: '2024-11-04T09:30:05.136493+00:00'
-                        object: {}
+                              format: date-time
+                              example: "2023-08-25T13:31:24.517819+00:00"
+                              description: "Timestamp when the user was last updated."
+                        object:
+                          type: string
+                          nullable: true
+                          example: null
+                          description: "Associated object, if any."
                         created_at:
                           type: string
-                          example: '2024-11-04T09:30:05.15406+00:00'
+                          format: date-time
+                          example: "2024-11-10T21:40:02.169501+00:00"
+                          description: "Timestamp when the record was created."
                         updated_at:
                           type: string
-                          example: '2024-11-04T09:30:05.15406+00:00'
-        '400':
-          description: '400'
+                          format: date-time
+                          example: "2024-11-10T21:40:02.169501+00:00"
+                          description: "Timestamp when the record was last updated."                            
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "object 'obj_type/obj_id' not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                    description: "HTTP status code indicating the error."
+                  message:
+                    type: string
+                    example: "object 'obj_type/obj_id' not found"
+                    description: "Error message providing details about the issue."
       deprecated: false
     delete:
-      summary: Remove Object Subscription
+      summary: Remove Object Subscriptions
       security:
         - BearerAuth: []
       description: API to remove object subscribers
@@ -3528,27 +3552,40 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: |-
-                    {
-                      "success": true
-                    }
+                  value: {
+                    success: true
+                  }
               schema:
                 type: object
                 properties:
                   success:
-                    type: boolean
-                    example: true
-                    default: true
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                        example: true
+                        description: "Indicates subscription from object was deleted successfully."        
         '400':
           description: '400'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 400,
+                    "message": "Request body must not be empty"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 400
+                    description: "Error code indicating a bad request."
+                  message:
+                    type: string
+                    example: "Request body must not be empty"
+                    description: "Detailed error message explaining the issue."              
       deprecated: false
   /v1/object/{object_type}/:
     get:
@@ -3571,46 +3608,36 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: |-
-                    {
-                      "meta": {
-                        "count": 1,
-                        "limit": 10,
-                        "has_prev": false,
-                        "before": null,
-                        "has_next": false,
-                        "after": null
-                      },
-                      "results": [
-                        {
-                          "object_type": "object_type",
-                          "id": "id",
-                          "subscriptions_count": 2,
-                          "properties": {
-                            "$preferred_language": "en",
-                            "$timezone": "America/New_York",
-                            "prop1": "val1"
-                          },
-                          "created_at": "2024-11-04T09:18:19.544589+00:00",
-                          "updated_at": "2024-11-04T09:18:19.544589+00:00",
-                          "$email": [
-                            {
-                              "value": "abc@example.com",
-                              "status": "active",
-                              "perma_status": "active"
-                            }
-                          ],
-                          "$inbox": [
-                            {
-                              "value": "6qD05D7WDJOac76nANY_j3srHrINK0wysQUWN-7TNM8",
-                              "id_provider": "suprsend",
-                              "status": "active",
-                              "perma_status": "active"
-                            }
-                          ]
-                        }
-                      ]
-                    }
+                  value: {
+                    "meta": {
+                      "count": 1,
+                      "limit": 10,
+                      "has_prev": false,
+                      "before": null,
+                      "has_next": false,
+                      "after": null
+                    },
+                    "results": [
+                      {
+                        "object_type": "obj_type",
+                        "id": "obj_id",
+                        "subscriptions_count": 0,
+                        "properties": {
+                          "RAW_BODY": "\"prop1\": \"val1\""
+                        },
+                        "created_at": "2025-04-03T10:45:15.333323+00:00",
+                        "updated_at": "2025-04-03T10:45:15.333323+00:00",
+                        "$inbox": [
+                          {
+                            "value": "Xtxxxx_HljXXXXXO1aulxxxxp3mxxxmfTxMM",
+                            "id_provider": "suprsend",
+                            "status": "active",
+                            "perma_status": "active"
+                          }
+                        ]
+                      }
+                    ]
+                  }
               schema:
                 type: object
                 properties:
@@ -3620,21 +3647,29 @@ paths:
                       count:
                         type: integer
                         example: 1
-                        default: 0
+                        description: "Total number of results returned."
                       limit:
                         type: integer
                         example: 10
-                        default: 0
+                        description: "Maximum number of results that can be returned."
                       has_prev:
                         type: boolean
                         example: false
-                        default: true
-                      before: {}
+                        description: "Indicates if there are previous results."
+                      before:
+                        type: string
+                        nullable: true
+                        example: null
+                        description: "Cursor for paginating to previous results."
                       has_next:
                         type: boolean
                         example: false
-                        default: true
-                      after: {}
+                        description: "Indicates if there are more results."
+                      after:
+                        type: string
+                        nullable: true
+                        example: null
+                        description: "Cursor for paginating to next results."
                   results:
                     type: array
                     items:
@@ -3642,73 +3677,77 @@ paths:
                       properties:
                         object_type:
                           type: string
-                          example: object_type
+                          example: "obj_type"
+                          description: "Type of the object."
                         id:
                           type: string
-                          example: id
+                          example: "obj_id"
+                          description: "Unique identifier for the object."
                         subscriptions_count:
                           type: integer
-                          example: 2
-                          default: 0
+                          example: 0
+                          description: "Number of subscriptions associated with the object."
                         properties:
                           type: object
+                          description: "Additional properties related to the object."
                           properties:
-                            $preferred_language:
+                            RAW_BODY:
                               type: string
-                              example: en
-                            $timezone:
-                              type: string
-                              example: America/New_York
-                            prop1:
-                              type: string
-                              example: val1
+                              example: "\"prop1\": \"val1\""
+                              description: "Raw JSON string containing object properties."
                         created_at:
                           type: string
-                          example: '2024-11-04T09:18:19.544589+00:00'
+                          format: date-time
+                          example: "2025-04-03T10:45:15.333323+00:00"
+                          description: "Timestamp indicating when the object was created."
                         updated_at:
                           type: string
-                          example: '2024-11-04T09:18:19.544589+00:00'
-                        $email:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              value:
-                                type: string
-                                example: abc@example.com
-                              status:
-                                type: string
-                                example: active
-                              perma_status:
-                                type: string
-                                example: active
+                          format: date-time
+                          example: "2025-04-03T10:45:15.333323+00:00"
+                          description: "Timestamp indicating when the object was last updated."
                         $inbox:
                           type: array
+                          description: "List of inbox messages related to the object."
                           items:
                             type: object
                             properties:
                               value:
                                 type: string
-                                example: 6qD05D7WDJOac76nANY_j3srHrINK0wysQUWN-7TNM8
+                                example: "Xtxxxx_HljXXXXXO1aulxxxxp3mxxxmfTxMM"
+                                description: "Unique identifier for the inbox entry."
                               id_provider:
                                 type: string
-                                example: suprsend
+                                example: "suprsend"
+                                description: "Provider associated with the inbox entry."
                               status:
                                 type: string
-                                example: active
+                                example: "active"
+                                description: "Current status of the inbox entry."
                               perma_status:
                                 type: string
-                                example: active
-        '400':
-          description: '400'
+                                example: "active"
+                                description: "Permanent status of the inbox entry."              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "Cannot GET /v1/_your_workspace_key_/object/"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                    description: "Error code indicating that the requested resource was not found."
+                  message:
+                    type: string
+                    example: "Cannot GET /v1/_your_workspace_key_/object/"
+                    description: "Description of the error."
       deprecated: false
   /v1/object/{object_type}/{id}/preference/category/{category_slug}/:
     patch:
@@ -4352,7 +4391,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  code:
+                  error-code:
                     type: integer
                     description: HTTP status code indicating the error.
                     example: 405
@@ -5596,97 +5635,76 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: |-
-                    {
-                      "distinct_id": "user1",
-                      "properties": {
-                        "$preferred_language": "en",
-                        "$timezone": "America/New_York",
-                        "prop1": "val1"
-                      },
-                      "created_at": "2024-11-05T06:19:14.184143+00:00",
-                      "updated_at": "2024-11-05T06:19:14.227839+00:00",
-                      "$email": [
-                        {
-                          "value": "abc@example.com",
-                          "status": "active",
-                          "perma_status": "active"
-                        }
-                      ],
-                      "$inbox": [
-                        {
-                          "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
-                          "id_provider": "suprsend",
-                          "status": "active",
-                          "perma_status": "active"
-                        }
-                      ]
-                    }
-              schema:
+                  value: {
+                    "meta": {
+                      "count": 0,
+                      "limit": 5,
+                      "has_prev": false,
+                      "before": null,
+                      "has_next": false,
+                      "after": null
+                    },
+                    "results": [ ]
+                  }
+              schema:    
                 type: object
                 properties:
-                  distinct_id:
-                    type: string
-                    example: user1
-                  properties:
+                  meta:
                     type: object
+                    description: "Metadata about the results pagination."
                     properties:
-                      $preferred_language:
+                      count:
+                        type: integer
+                        example: 0
+                        description: "Total number of results."
+                      limit:
+                        type: integer
+                        example: 5
+                        description: "Maximum number of results per page."
+                      has_prev:
+                        type: boolean
+                        example: false
+                        description: "Indicates if there is a previous page."
+                      before:
                         type: string
-                        example: en
-                      $timezone:
+                        nullable: true
+                        example: null
+                        description: "Cursor for the previous page, if applicable."
+                      has_next:
+                        type: boolean
+                        example: false
+                        description: "Indicates if there is a next page."
+                      after:
                         type: string
-                        example: America/New_York
-                      prop1:
-                        type: string
-                        example: val1
-                  created_at:
-                    type: string
-                    example: '2024-11-05T06:19:14.184143+00:00'
-                  updated_at:
-                    type: string
-                    example: '2024-11-05T06:19:14.227839+00:00'
-                  $email:
+                        nullable: true
+                        example: null
+                        description: "Cursor for the next page, if applicable."
+                  results:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        value:
-                          type: string
-                          example: abc@example.com
-                        status:
-                          type: string
-                          example: active
-                        perma_status:
-                          type: string
-                          example: active
-                  $inbox:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        value:
-                          type: string
-                          example: GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs
-                        id_provider:
-                          type: string
-                          example: suprsend
-                        status:
-                          type: string
-                          example: active
-                        perma_status:
-                          type: string
-                          example: active
-        '400':
-                  description: '400'
+                    description: "List of results."
+                    items: {}
+                    example: []                  
+        '404':
+                  description: '404'
                   content:
                     application/json:
                       examples:
                         Result:
-                          value: '{}'
+                          value: {
+                            "code": 404,
+                            "message": "object 'obj_type/obj_id' not found"
+                          }
                       schema:
                         type: object
-                        properties: {}
+                        properties:
+                          error-code:
+                            type: integer
+                            example: 404
+                            description: "HTTP status code indicating the resource was not found."
+                          message:
+                            type: string
+                            example: "object 'obj_type/obj_id' not found"
+                            description: "Error message indicating the object was not found."
       deprecated: false 
 
 x-readme:
