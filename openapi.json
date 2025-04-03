@@ -4825,145 +4825,120 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: |-
-                    {
-                      "distinct_id": "user1",
-                      "properties": {
-                        "$preferred_language": "en",
-                        "$timezone": "America/New_York",
-                        "prop1": "val1"
-                      },
-                      "created_at": "2024-11-05T06:19:14.184143+00:00",
-                      "updated_at": "2024-11-05T06:19:14.227839+00:00",
-                      "$email": [
-                        {
-                          "value": "abc@example.com",
-                          "status": "active",
-                          "perma_status": "active"
-                        }
-                      ],
-                      "$inbox": [
-                        {
-                          "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
-                          "id_provider": "suprsend",
-                          "status": "active",
-                          "perma_status": "active"
-                        }
-                      ]
-                    }
+                  value: {
+                    "meta": {
+                      "count": 0,
+                      "limit": 1,
+                      "has_prev": false,
+                      "before": null,
+                      "has_next": false,
+                      "after": null
+                    },
+                    "results": []
+                  }
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                    description: Unique identifier for the user.
-                    example: "<string>"
-                  name:
-                    type: string
-                    description: Name of the user.
-                    example: user_name
-                  description:
-                    type: string
-                    description: Description of the user.
-                    example: "<string>"
-                  properties:
+                  meta:
                     type: object
-                    description: Additional user properties.
+                    description: Metadata related to pagination.
                     properties:
-                      timezone:
+                      count:
+                        type: integer
+                        description: Total number of results.
+                        example: 1
+                      limit:
+                        type: integer
+                        description: The maximum number of results per request.
+                        example: 10
+                      has_prev:
+                        type: boolean
+                        description: Indicates if there are previous results.
+                        example: false
+                      before:
                         type: string
-                        description: Timezone of the user.
-                        example: America/New York
-                      city:
+                        nullable: true
+                        description: Cursor for fetching previous results.
+                        example: null
+                      has_next:
+                        type: boolean
+                        description: Indicates if there are more results available.
+                        example: false
+                      after:
                         type: string
-                        description: City of the user.
-                        example: San Francisco
-                      country:
-                        type: string
-                        description: Country of the user.
-                        example: United States of America
-                      state:
-                        type: string
-                        description: State of the user.
-                        example: California
-                      first_name:
-                        type: string
-                        description: First name of the user.
-                        example: user_name
-                      org_name:
-                        type: string
-                        description: Organization name associated with the user.
-                        example: SuprSend
-                  contacts:
-                    type: object
-                    description: Communication channels associated with the user.
-                    properties:
-                      email:
-                        type: array
-                        description: List of email contacts.
-                        items:
+                        nullable: true
+                        description: Cursor for fetching next results.
+                        example: null
+                  results:
+                    type: array
+                    description: List of retrieved results.
+                    items:
+                      type: object
+                      properties:
+                        properties:
                           type: object
+                          description: Additional properties associated with the result.
                           properties:
-                            value:
+                            role:
                               type: string
-                              description: Email address.
-                              example: "<string>"
-                            status:
-                              type: string
-                              description: Current status of the email.
-                              example: active
-                            perma_status:
-                              type: string
-                              description: Permanent status of the email.
-                              example: active
-                      inbox:
-                        type: array
-                        description: List of inbox contacts.
-                        items:
+                              description: Role of the user in the associated object.
+                              example: manager
+                        object:
                           type: object
+                          description: Details about the associated object.
                           properties:
-                            value:
+                            id:
                               type: string
-                              description: Identifier for the inbox.
-                              example: "<string>"
-                            id_provider:
+                              description: Unique identifier for the object.
+                              example: frontend
+                            object_type:
                               type: string
-                              description: Provider of the inbox.
-                              example: suprsend
-                            status:
+                              description: Type of object.
+                              example: department
+                            properties:
+                              type: object
+                              description: Additional properties related to the object.
+                              example: {}
+                            subscriptions_count:
+                              type: integer
+                              description: Number of active subscriptions associated with the object.
+                              example: 1
+                            updated_at:
                               type: string
-                              description: Current status of the inbox.
-                              example: active
-                            perma_status:
-                              type: string
-                              description: Permanent status of the inbox.
-                              example: active
-                  filter:
-                    type: object
-                    description: Filtering criteria applied to the user.
-                    properties:
-                      operator:
-                        type: string
-                        description: Operator used in the filter.
-                        example: ENDS_WITH
-                      value:
-                        type: string
-                        description: Value used in the filter.
-                        example: param_value
-                      path:
-                        type: string
-                        description: Path of the filtered property.
-                        example: "<string>"
-                  created_at:
-                    type: string
-                    format: date-time
-                    description: Timestamp when the user was created.
-                    example: "2025-02-06T09:12:14.874557+00:00"
-                  updated_at:
-                    type: string
-                    format: date-time
-                    description: Timestamp when the user was last updated.
-                    example: "2025-02-06T09:12:14.910696+00:00" 
+                              format: date-time
+                              description: Timestamp when the object was last updated.
+                              example: "2025-01-28T16:49:23.695448+00:00"
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Timestamp when the result was created.
+                          example: "2025-01-23T16:34:56.093683+00:00"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: Timestamp when the result was last updated.
+                          example: "2025-01-23T16:34:56.093683+00:00"                       
+        '404':
+                  description: '404'
+                  content:
+                    application/json:
+                      examples:
+                        Result:
+                          value: {
+                            "code": 404,
+                            "message": "User [distinct_id: 'user1'] not found"
+                          }
+                      schema:
+                        type: object
+                        properties:
+                          error-code:
+                            type: integer
+                            description: HTTP status code indicating the error type.
+                            example: 404
+                          message:
+                            type: string
+                            description: Error message providing details about the issue.
+                            example: "User [distinct_id: 'user1'] not found"
       deprecated: false 
   /v1/user/{distinct_id}/subscribed_to/list/:
     get:
@@ -4995,97 +4970,143 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: |-
-                    {
-                      "distinct_id": "user1",
-                      "properties": {
-                        "$preferred_language": "en",
-                        "$timezone": "America/New_York",
-                        "prop1": "val1"
-                      },
-                      "created_at": "2024-11-05T06:19:14.184143+00:00",
-                      "updated_at": "2024-11-05T06:19:14.227839+00:00",
-                      "$email": [
-                        {
-                          "value": "abc@example.com",
-                          "status": "active",
-                          "perma_status": "active"
-                        }
-                      ],
-                      "$inbox": [
-                        {
-                          "value": "GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs",
-                          "id_provider": "suprsend",
-                          "status": "active",
-                          "perma_status": "active"
-                        }
-                      ]
-                    }
+                  value: {
+                    "meta": {
+                      "count": 8,
+                      "limit": 10,
+                      "has_prev": false,
+                      "before": null,
+                      "has_next": false,
+                      "after": null
+                    },
+                    "results": [
+                      {
+                        "id": "<string>",
+                        "name": "user_name",
+                        "description": "List of users to send newsletter to",
+                        "list_type": "Your_company_newsletter",
+                        "source": "csv_upload",
+                        "subscribers_count": 2,
+                        "timezone": "America/New York",
+                        "city": "San Francisco",
+                        "country": "United States of America",
+                        "state": "California",
+                        "created_at": "2024-08-04T13:16:12.825+00:00",
+                        "updated_at": "2024-09-26T10:20:33.636698+00:00"
+                      }
+                    ]
+                  }                
               schema:
                 type: object
                 properties:
-                  distinct_id:
-                    type: string
-                    example: user1
-                  properties:
+                  meta:
                     type: object
+                    description: Metadata related to pagination.
                     properties:
-                      $preferred_language:
+                      count:
+                        type: integer
+                        description: Total number of records returned.
+                        example: 8
+                      limit:
+                        type: integer
+                        description: Maximum number of records per page.
+                        example: 10
+                      has_prev:
+                        type: boolean
+                        description: Indicates if there is a previous page.
+                        example: false
+                      before:
                         type: string
-                        example: en
-                      $timezone:
+                        nullable: true
+                        description: Cursor for the previous page.
+                        example: null
+                      has_next:
+                        type: boolean
+                        description: Indicates if there is a next page.
+                        example: false
+                      after:
                         type: string
-                        example: America/New_York
-                      prop1:
-                        type: string
-                        example: val1
-                  created_at:
-                    type: string
-                    example: '2024-11-05T06:19:14.184143+00:00'
-                  updated_at:
-                    type: string
-                    example: '2024-11-05T06:19:14.227839+00:00'
-                  $email:
+                        nullable: true
+                        description: Cursor for the next page.
+                        example: null
+                  results:
                     type: array
+                    description: List of user lists.
                     items:
                       type: object
                       properties:
-                        value:
+                        id:
                           type: string
-                          example: abc@example.com
-                        status:
+                          description: Unique identifier for the list.
+                          example: "<string>"
+                        name:
                           type: string
-                          example: active
-                        perma_status:
+                          description: Name of the list.
+                          example: "user_name"
+                        description:
                           type: string
-                          example: active
-                  $inbox:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        value:
+                          description: Brief description of the list.
+                          example: "List of users to send newsletter to"
+                        list_type:
                           type: string
-                          example: GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs
-                        id_provider:
+                          description: Type of list (e.g., newsletter type).
+                          example: "Your_company_newsletter"
+                        source:
                           type: string
-                          example: suprsend
-                        status:
+                          nullable: true
+                          description: Source from which the list was created.
+                          example: "csv_upload"
+                        subscribers_count:
+                          type: integer
+                          description: Number of subscribers in the list.
+                          example: 2
+                        timezone:
                           type: string
-                          example: active
-                        perma_status:
+                          description: Timezone associated with the list.
+                          example: "America/New York"
+                        city:
                           type: string
-                          example: active
-        '400':
-                  description: '400'
+                          description: City associated with the list.
+                          example: "San Francisco"
+                        country:
+                          type: string
+                          description: Country associated with the list.
+                          example: "United States of America"
+                        state:
+                          type: string
+                          description: State associated with the list.
+                          example: "California"
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: Timestamp when the list was created.
+                          example: "2024-08-04T13:16:12.825+00:00"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: Timestamp when the list was last updated.
+                          example: "2024-09-26T10:20:33.636698+00:00"            
+        '404':
+                  description: '404'
                   content:
                     application/json:
                       examples:
                         Result:
-                          value: '{}'
+                          value: {
+                            "code": 404,
+                            "message": "user [distinct_id: 'user1'] not found"
+                          }
                       schema:
                         type: object
-                        properties: {}
+                        properties:
+                          error-code:
+                            type: integer
+                            description: HTTP error status code.
+                            example: 404
+                          message:
+                            type: string
+                            description: Error message describing the issue.
+                            example: "user [distinct_id: 'user1'] not found"   
       deprecated: false                           
   /{workspace_key}/trigger/adding-email-attachment/:
     post:
