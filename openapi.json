@@ -696,20 +696,156 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "meta": {
+                      "count": 12,
+                      "limit": 10,
+                      "offset": 0
+                    },
+                    "results": [
+                      {
+                        "name": "Chapter Added",
+                        "category": "chapter-added",
+                        "description": null,
+                        "preference": "opt_in",
+                        "is_editable": false,
+                        "channels": ["androidpush", "email", "iospush", "ms_teams", "slack", "sms", "webpush", "whatsapp"]
+                      },
+                      {
+                        "name": "Forecast",
+                        "category": "forecast",
+                        "description": "Send me updates when Sales Forecast is updated",
+                        "preference": "opt_in",
+                        "is_editable": false,
+                        "channels": ["androidpush", "email", "iospush", "ms_teams", "slack", "sms", "webpush", "whatsapp"]
+                      },
+                      {
+                        "name": "Newsletter",
+                        "category": "newsletter",
+                        "description": "Send me updates on new product updates",
+                        "preference": "opt_in",
+                        "is_editable": true,
+                        "channels": ["androidpush", "email", "iospush", "ms_teams", "slack", "sms", "webpush", "whatsapp"]
+                      },
+                      {
+                        "name": "Onboarding Guide",
+                        "category": "onboarding-guide",
+                        "description": "Alerts for a Smooth Onboarding Process",
+                        "preference": "opt_in",
+                        "is_editable": true,
+                        "channels": ["androidpush", "email", "iospush", "ms_teams", "slack", "sms", "webpush", "whatsapp"]
+                      },
+                      {
+                        "name": "Payment Initiated against Purchase",
+                        "category": "payment-initiated-against-purchase",
+                        "description": "Payment Initiated against Purchase when the user clicks on payment button",
+                        "preference": "opt_in",
+                        "is_editable": false,
+                        "channels": ["androidpush", "email", "iospush", "ms_teams", "slack", "sms", "webpush", "whatsapp"]
+                      },
+                      {
+                        "name": "Quote Approval",
+                        "category": "quote-approval",
+                        "description": "Send me an update when a rep requires approval on a quote",
+                        "preference": "opt_in",
+                        "is_editable": true,
+                        "channels": ["androidpush", "email", "iospush", "ms_teams", "slack", "sms", "webpush", "whatsapp"]
+                      },
+                      {
+                        "name": "Refund",
+                        "category": "refund",
+                        "description": null,
+                        "preference": "opt_in",
+                        "is_editable": false,
+                        "channels": ["androidpush", "email", "iospush", "ms_teams", "slack", "sms", "webpush", "whatsapp"]
+                      },
+                      {
+                        "name": "Sanjeev",
+                        "category": "sanjeev",
+                        "description": null,
+                        "preference": "opt_in",
+                        "is_editable": true,
+                        "channels": ["androidpush", "email", "iospush", "ms_teams", "slack", "sms", "webpush", "whatsapp"]
+                      },
+                      {
+                        "name": "Status Update Alert",
+                        "category": "status-update-alert",
+                        "description": "Send me updates when account status changes",
+                        "preference": "opt_in",
+                        "is_editable": true,
+                        "channels": ["androidpush", "email", "iospush", "ms_teams", "slack", "sms", "webpush", "whatsapp"]
+                      },
+                      {
+                        "name": "System Error v1",
+                        "category": "system-error-v1",
+                        "description": "v1 system errors",
+                        "preference": "opt_in",
+                        "is_editable": true,
+                        "channels": ["androidpush", "email", "iospush", "ms_teams", "slack", "sms", "webpush", "whatsapp"]
+                      }
+                    ]
+                  }                  
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        example: 12
+                      limit:
+                        type: integer
+                        example: 10
+                      offset:
+                        type: integer
+                        example: 0
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: "Chapter Added"
+                        category:
+                          type: string
+                          example: "chapter-added"
+                        description:
+                          type: string
+                          nullable: true
+                          example: null
+                        preference:
+                          type: string
+                          enum: ["opt_in", "opt_out"]
+                          example: "opt_in"
+                        is_editable:
+                          type: boolean
+                          example: false
+                        channels:
+                          type: array
+                          items:
+                            type: string
+                          example: ["androidpush", "email", "iospush", "ms_teams", "slack", "sms", "webpush", "whatsapp"]              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "user [distinct_id: 'user1'] not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "user [distinct_id: 'user1'] not found"              
       deprecated: false
   /v1/subscriber_list/{list_id}/subscriber/add:
     post:
@@ -904,20 +1040,79 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "channel_preferences": [
+                      {
+                        "channel": "androidpush",
+                        "is_restricted": false
+                      },
+                      {
+                        "channel": "email",
+                        "is_restricted": false
+                      },
+                      {
+                        "channel": "inbox",
+                        "is_restricted": false
+                      },
+                      {
+                        "channel": "iospush",
+                        "is_restricted": false
+                      },
+                      {
+                        "channel": "ms_teams",
+                        "is_restricted": false
+                      },
+                      {
+                        "channel": "slack",
+                        "is_restricted": false
+                      },
+                      {
+                        "channel": "sms",
+                        "is_restricted": false
+                      },
+                      {
+                        "channel": "webpush",
+                        "is_restricted": false
+                      },
+                      {
+                        "channel": "whatsapp",
+                        "is_restricted": false
+                      }
+                    ]
+                  }
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  channel_preferences:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        channel:
+                          type: string
+                          example: "androidpush"
+                        is_restricted:
+                          type: boolean
+                          example: false              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "user [distinct_id: 'user1'] not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "user [distinct_id: 'user1'] not found"              
       deprecated: false
     patch:
       summary: Overall Channel level
@@ -1438,20 +1633,118 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "name": "_category_preference_name_",
+                    "category": "category_slug",
+                    "description": null,
+                    "original_preference": null,
+                    "preference": "opt_in",
+                    "is_editable": false,
+                    "channels": [
+                      {
+                        "channel": "androidpush",
+                        "preference": "opt_in",
+                        "is_editable": false
+                      },
+                      {
+                        "channel": "email",
+                        "preference": "opt_in",
+                        "is_editable": false
+                      },
+                      {
+                        "channel": "iospush",
+                        "preference": "opt_in",
+                        "is_editable": false
+                      },
+                      {
+                        "channel": "ms_teams",
+                        "preference": "opt_in",
+                        "is_editable": false
+                      },
+                      {
+                        "channel": "slack",
+                        "preference": "opt_in",
+                        "is_editable": false
+                      },
+                      {
+                        "channel": "sms",
+                        "preference": "opt_in",
+                        "is_editable": false
+                      },
+                      {
+                        "channel": "webpush",
+                        "preference": "opt_in",
+                        "is_editable": false
+                      },
+                      {
+                        "channel": "whatsapp",
+                        "preference": "opt_in",
+                        "is_editable": false
+                      }
+                    ]
+                  }
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  name:
+                    type: string
+                    example: "_category_preference_name_"
+                  category:
+                    type: string
+                    example: "category_slug"
+                  description:
+                    type: string
+                    nullable: true
+                    example: null
+                  original_preference:
+                    type: string
+                    nullable: true
+                    example: null
+                  preference:
+                    type: string
+                    enum:
+                      - opt_in
+                      - opt_out
+                    example: "opt_in"
+                  is_editable:
+                    type: boolean
+                    example: false
+                  channels:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        channel:
+                          type: string
+                          example: "androidpush"
+                        preference:
+                          type: string
+                          enum:
+                            - opt_in
+                            - opt_out
+                          example: "opt_in"
+                        is_editable:
+                          type: boolean
+                          example: false              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "category 'category_slug' not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "category 'category_slug' not found"              
       deprecated: false
   /v1/tenant/{tenant_id}/category/:
     get:
@@ -3120,7 +3413,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  code:
+                  error-code:
                     type: integer
                     example: 404
                   message:
@@ -3159,20 +3452,109 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "sections": [
+                      {
+                        "subcategories": [
+                          {
+                            "name": "Newsletter",
+                            "category": "newsletter",
+                            "description": "Send me updates on new product updates",
+                            "preference": "opt_in",
+                            "is_editable": true,
+                            "channels": [
+                              { "channel": "androidpush", "preference": "opt_in", "is_editable": true },
+                              { "channel": "email", "preference": "opt_in", "is_editable": true },
+                              { "channel": "iospush", "preference": "opt_in", "is_editable": true },
+                              { "channel": "ms_teams", "preference": "opt_in", "is_editable": true },
+                              { "channel": "slack", "preference": "opt_in", "is_editable": true },
+                              { "channel": "sms", "preference": "opt_in", "is_editable": true },
+                              { "channel": "webpush", "preference": "opt_in", "is_editable": true },
+                              { "channel": "whatsapp", "preference": "opt_out", "is_editable": false }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "channel_preferences": [
+                      { "channel": "androidpush", "is_restricted": false },
+                      { "channel": "email", "is_restricted": false }
+                    ]
+                  }                  
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  sections:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        subcategories:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                example: "Newsletter"
+                              category:
+                                type: string
+                                example: "newsletter"
+                              description:
+                                type: string
+                                example: "Send me updates on new product updates"
+                              preference:
+                                type: string
+                                enum: ["opt_in", "opt_out"]
+                                example: "opt_in"
+                              is_editable:
+                                type: boolean
+                                example: true
+                              channels:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    channel:
+                                      type: string
+                                      example: "email"
+                                    preference:
+                                      type: string
+                                      enum: ["opt_in", "opt_out"]
+                                      example: "opt_in"
+                                    is_editable:
+                                      type: boolean
+                                      example: true
+                  channel_preferences:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        channel:
+                          type: string
+                          example: "androidpush"
+                        is_restricted:
+                          type: boolean
+                          example: false              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "user [distinct_id: 'user1'] not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "user [distinct_id: 'user1'] not found"              
       deprecated: false
   /v1/subscriber_list/{list_id}/subscriber/:
     get:
@@ -4239,26 +4621,91 @@ paths:
                   items:
                     type: string
       responses:
-        '200':
-          description: '200'
+        '202':
+          description: '202'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "name": "_category_name_",
+                    "category": "category_slug",
+                    "description": null,
+                    "original_preference": "opt_in",
+                    "preference": "opt_in",
+                    "is_editable": false,
+                    "channels": [
+                      {
+                        "channel": "email",
+                        "preference": "opt_in",
+                        "is_editable": false
+                      }
+                    ]
+                  }
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  name:
+                    type: string
+                    example: "_category_name_"
+                  category:
+                    type: string
+                    example: "category_slug"
+                  description:
+                    type: string
+                    nullable: true
+                    example: null
+                  original_preference:
+                    type: string
+                    enum:
+                      - opt_in
+                      - opt_out
+                    example: "opt_in"
+                  preference:
+                    type: string
+                    enum:
+                      - opt_in
+                      - opt_out
+                    example: "opt_in"
+                  is_editable:
+                    type: boolean
+                    example: false
+                  channels:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        channel:
+                          type: string
+                          example: "email"
+                        preference:
+                          type: string
+                          enum:
+                            - opt_in
+                            - opt_out
+                          example: "opt_in"
+                        is_editable:
+                          type: boolean
+                          example: false              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "object 'obj_type/obj_id' not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "object 'obj_type/obj_id' not found"              
       deprecated: false
   /v1/object/{object_type}/{id}/preference/channel_preference/:
     patch:
@@ -4306,26 +4753,57 @@ paths:
                         default: false
                     type: object
       responses:
-        '200':
-          description: '200'
+        '202':
+          description: '202'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "channel_preferences": [
+                      {
+                        "channel": "email",
+                        "is_restricted": false
+                      },
+                      {
+                        "channel": "inbox",
+                        "is_restricted": true
+                      }
+                    ]
+                  }
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  channel_preferences:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        channel:
+                          type: string
+                          example: "email"
+                        is_restricted:
+                          type: boolean
+                          example: false              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "object 'obj_type/obj_id' not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "object 'obj_type/obj_id' not found"              
       deprecated: false
     get:
       summary: All Channels
@@ -4352,26 +4830,62 @@ paths:
             type: string
           required: true
       responses:
-        '200':
-          description: '200'
+        '202':
+          description: '202'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "channel_preferences": [
+                      {
+                        "channel": "email",
+                        "is_restricted": false
+                      },
+                      {
+                        "channel": "inbox",
+                        "is_restricted": true
+                      }
+                    ]
+                  }
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  channel_preferences:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        channel:
+                          type: string
+                          example: "email"
+                        is_restricted:
+                          type: boolean
+                          example: false
+                    example:
+                      - channel: "email"
+                        is_restricted: false
+                      - channel: "inbox"
+                        is_restricted: true              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "object 'obj_type/obj_id' not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "object 'obj_type/obj_id' not found"  
       deprecated: false
   /v1/object/{object_type}/{id}/preference/:
     get:
@@ -4411,20 +4925,278 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "id": "<string>",
+                    "name": "user_name",
+                    "timezone": "America/New York",
+                    "city": "San Francisco",
+                    "country": "United States of America",
+                    "state": "California",
+                    "sections": [
+                      {
+                        "name": "<string>",
+                        "subcategories": [
+                          {
+                            "name": "Newsletter",
+                            "category": "newsletter",
+                            "description": "Send me updates on new product updates",
+                            "preference": "opt_out",
+                            "is_editable": true,
+                            "channels": [
+                              {
+                                "channel": "email",
+                                "preference": "opt_out",
+                                "is_editable": true
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Status Update Alert",
+                            "category": "status-update-alert",
+                            "description": "Send me updates when account status changes",
+                            "preference": "opt_in",
+                            "is_editable": true,
+                            "channels": [
+                              {
+                                "channel": "email",
+                                "preference": "opt_in",
+                                "is_editable": true
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Onboarding Guide",
+                            "category": "onboarding-guide",
+                            "description": "Alerts for a Smooth Onboarding Process",
+                            "preference": "opt_in",
+                            "is_editable": true,
+                            "channels": [
+                              {
+                                "channel": "email",
+                                "preference": "opt_in",
+                                "is_editable": true
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Training",
+                        "subcategories": [
+                          {
+                            "name": "Chapter Added",
+                            "category": "chapter-added",
+                            "preference": "opt_in",
+                            "is_editable": false,
+                            "channels": [
+                              {
+                                "channel": "email",
+                                "preference": "opt_in",
+                                "is_editable": false
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Payments and Refunds",
+                        "description": "Payments and Refunds",
+                        "subcategories": [
+                          {
+                            "name": "Payment Initiated against Purchase",
+                            "category": "payment-initiated-against-purchase",
+                            "description": "Payment Initiated against Purchase when the user clicks on payment button",
+                            "preference": "opt_in",
+                            "is_editable": false,
+                            "channels": [
+                              {
+                                "channel": "email",
+                                "preference": "opt_in",
+                                "is_editable": false
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Refund",
+                            "category": "refund",
+                            "preference": "opt_in",
+                            "is_editable": false,
+                            "channels": [
+                              {
+                                "channel": "email",
+                                "preference": "opt_in",
+                                "is_editable": false
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Payments",
+                        "subcategories": [
+                          {
+                            "name": "Tax Report",
+                            "category": "tax-report",
+                            "preference": "opt_out",
+                            "is_editable": true,
+                            "channels": [
+                              {
+                                "channel": "email",
+                                "preference": "opt_out",
+                                "is_editable": true
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "System Error",
+                        "description": "System errors corresponding to organisation",
+                        "subcategories": [
+                          {
+                            "name": "System Error v1",
+                            "category": "system-error-v1",
+                            "description": "v1 system errors",
+                            "preference": "opt_in",
+                            "is_editable": true,
+                            "channels": [
+                              {
+                                "channel": "email",
+                                "preference": "opt_in",
+                                "is_editable": true
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Quotes",
+                        "description": "Send updates related to quotes, like quote approval, confirmation",
+                        "subcategories": [
+                          {
+                            "name": "Quote Approval",
+                            "category": "quote-approval",
+                            "description": "Send me an update when a rep requires approval on a quote",
+                            "preference": "opt_in",
+                            "is_editable": true,
+                            "channels": [
+                              {
+                                "channel": "email",
+                                "preference": "opt_in",
+                                "is_editable": true
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "channel_preferences": [
+                      {
+                        "channel": "email",
+                        "is_restricted": false
+                      }
+                    ]
+                  }                  
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  id:
+                    type: string
+                    example: "<string>"
+                  name:
+                    type: string
+                    example: "user_name"
+                  timezone:
+                    type: string
+                    example: "America/New York"
+                  city:
+                    type: string
+                    example: "San Francisco"
+                  country:
+                    type: string
+                    example: "United States of America"
+                  state:
+                    type: string
+                    example: "California"
+                  sections:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: "<string>"
+                        description:
+                          type: string
+                          nullable: true
+                          example: null
+                        subcategories:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                example: "<string>"
+                              category:
+                                type: string
+                                example: "<category_slug>"
+                              description:
+                                type: string
+                                nullable: true
+                                example: "<string>"
+                              preference:
+                                type: string
+                                enum: ["opt_in", "opt_out"]
+                                example: "opt_in"
+                              is_editable:
+                                type: boolean
+                                example: true
+                              channels:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    channel:
+                                      type: string
+                                      example: "email"
+                                    preference:
+                                      type: string
+                                      enum: ["opt_in", "opt_out"]
+                                      example: "opt_in"
+                                    is_editable:
+                                      type: boolean
+                                      example: true
+                  channel_preferences:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        channel:
+                          type: string
+                          example: "email"
+                        is_restricted:
+                          type: boolean
+                          example: false              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "tenant 'brand/tenant_is' not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "tenant 'brand/tenant_id' not found"              
       deprecated: false
   /v1/object/{object_type}/{id}/preference/category/:
     get:
@@ -4464,20 +5236,155 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "meta": {
+                      "count": 11,
+                      "limit": 10,
+                      "offset": 0
+                    },
+                    "results": [
+                      {
+                        "name": "Newsletter",
+                        "category": "newsletter",
+                        "description": "Send me updates on new product updates",
+                        "preference": "opt_out",
+                        "is_editable": true,
+                        "channels": [
+                          {
+                            "channel": "email",
+                            "preference": "opt_out",
+                            "is_editable": true
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Onboarding Guide",
+                        "category": "onboarding-guide",
+                        "description": "Alerts for a Smooth Onboarding Process",
+                        "preference": "opt_in",
+                        "is_editable": true,
+                        "channels": [
+                          {
+                            "channel": "email",
+                            "preference": "opt_in",
+                            "is_editable": true
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Refund",
+                        "category": "refund",
+                        "preference": "opt_in",
+                        "is_editable": false,
+                        "channels": [
+                          {
+                            "channel": "email",
+                            "preference": "opt_in",
+                            "is_editable": false
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Status Update Alert",
+                        "category": "status-update-alert",
+                        "description": "Send me updates when account status changes",
+                        "preference": "opt_in",
+                        "is_editable": true,
+                        "channels": [
+                          {
+                            "channel": "email",
+                            "preference": "opt_in",
+                            "is_editable": true
+                          }
+                        ]
+                      },
+                      {
+                        "name": "System Error v1",
+                        "category": "system-error-v1",
+                        "description": "v1 system errors",
+                        "preference": "opt_in",
+                        "is_editable": true,
+                        "channels": [
+                          {
+                            "channel": "email",
+                            "preference": "opt_in",
+                            "is_editable": true
+                          }
+                        ]
+                      }
+                    ]
+                  }                  
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        example: 11
+                      limit:
+                        type: integer
+                        example: 10
+                      offset:
+                        type: integer
+                        example: 0
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: "<string>"
+                        category:
+                          type: string
+                          example: "<category_slug>"
+                        description:
+                          type: string
+                          nullable: true
+                          example: "<string>"
+                        preference:
+                          type: string
+                          enum: ["opt_in", "opt_out"]
+                          example: "opt_in"
+                        is_editable:
+                          type: boolean
+                          example: true
+                        channels:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              channel:
+                                type: string
+                                example: "email"
+                              preference:
+                                type: string
+                                enum: ["opt_in", "opt_out"]
+                                example: "opt_in"
+                              is_editable:
+                                type: boolean
+                                example: true              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "object 'obj_type/obj_id' not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "object 'obj_type/obj_id' not found"              
       deprecated: false
   /v1/object/{object_type}/{id}/preference/category/{category_slug}:
     get:
@@ -4523,20 +5430,80 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "name": "category_name",
+                    "category": "category_slug",
+                    "description": null,
+                    "original_preference": "opt_in",
+                    "preference": "opt_in",
+                    "is_editable": false,
+                    "channels": [
+                      {
+                        "channel": "email",
+                        "preference": "opt_in",
+                        "is_editable": false
+                      }
+                    ]
+                  }
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  name:
+                    type: string
+                    example: "category_name"
+                  category:
+                    type: string
+                    example: "category_slug"
+                  description:
+                    type: string
+                    nullable: true
+                    example: null
+                  original_preference:
+                    type: string
+                    example: "opt_in"
+                  preference:
+                    type: string
+                    example: "opt_in"
+                  is_editable:
+                    type: boolean
+                    example: false
+                  channels:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        channel:
+                          type: string
+                          example: "email"
+                        preference:
+                          type: string
+                          example: "opt_in"
+                        is_editable:
+                          type: boolean
+                          example: false
+                    example:
+                      - channel: "email"
+                        preference: "opt_in"
+                        is_editable: false              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "category 'category_slug' not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "category 'category_slug' not found"              
       deprecated: false
   /v1/user/{distinct_id}/:
     post:
