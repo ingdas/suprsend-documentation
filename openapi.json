@@ -1243,17 +1243,17 @@ paths:
                     format: date-time
                     example: "2025-04-02T12:51:36.589603+00:00"              
       deprecated: false
-  /v1/tenant/{tenant_id}/category/{category_slug}/:
+  /v1/brand/{brand_id}/category/{category_slug}/:
     post:
-      summary: Update Tenant Default Preference
+      summary: Update Brand Default Preference
       security:
         - BearerAuth: []
-      description: API to update user default preferences for a tenant
-      operationId: update-tenant-default-preference
+      description: API to update user default preferences for a brand (now named as tenant)
+      operationId: update-brand-default-preference
       parameters:
-        - name: tenant_id
+        - name: brand_id
           in: path
-          description: unique identifier of the tenant you want to update default preferences for
+          description: unique identifier of the brand/tenant you want to update default preferences for
           schema:
             type: string
           required: true
@@ -1282,26 +1282,87 @@ paths:
                   items:
                     type: string
       responses:
-        '200':
-          description: '200'
+        '202':
+          description: '202'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "name": "brand/tenant_id",
+                    "category": "category_slug",
+                    "description": null,
+                    "root_category": "transactional",
+                    "default_preference": "cant_unsubscribe",
+                    "default_mandatory_channels": [],
+                    "visible_to_subscriber": true,
+                    "preference": "opt_in",
+                    "mandatory_channels": null,
+                    "blocked_channels": null
+                  }
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  name:
+                    type: string
+                    example: "brand/tenant_id"
+                  category:
+                    type: string
+                    example: "category_slug"
+                  description:
+                    type: string
+                    nullable: true
+                    example: null
+                  root_category:
+                    type: string
+                    example: "transactional"
+                  default_preference:
+                    type: string
+                    enum: ["cant_unsubscribe", "opt_in", "opt_out"]
+                    example: "cant_unsubscribe"
+                  default_mandatory_channels:
+                    type: array
+                    items:
+                      type: string
+                    example: []
+                  visible_to_subscriber:
+                    type: boolean
+                    example: true
+                  preference:
+                    type: string
+                    enum: ["opt_in", "opt_out"]
+                    example: "opt_in"
+                  mandatory_channels:
+                    type: array
+                    nullable: true
+                    items:
+                      type: string
+                    example: []
+                  blocked_channels:
+                    type: array
+                    nullable: true
+                    items:
+                      type: string
+                    example: []              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "tenant 'brand/tenant_id' not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "tenant 'brand/tenant_id' not found"              
       deprecated: false
   /v1/subscriber_list/{list_id}/delete:
     patch:
