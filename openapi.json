@@ -1474,20 +1474,215 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "meta": {
+                      "count": 12,
+                      "limit": 10,
+                      "offset": 0
+                    },
+                    "results": [
+                      {
+                        "name": "user_name",
+                        "category": "training-new",
+                        "description": null,
+                        "root_category": "transactional",
+                        "default_preference": "cant_unsubscribe",
+                        "default_mandatory_channels": [],
+                        "visible_to_subscriber": true,
+                        "preference": null,
+                        "mandatory_channels": null,
+                        "blocked_channels": null
+                      },
+                      {
+                        "name": "user_name",
+                        "category": "sanjeev",
+                        "description": null,
+                        "root_category": "promotional",
+                        "default_preference": "opt_in",
+                        "default_mandatory_channels": null,
+                        "visible_to_subscriber": true,
+                        "preference": null,
+                        "mandatory_channels": null,
+                        "blocked_channels": null
+                      },
+                      {
+                        "name": "user_name",
+                        "category": "refund",
+                        "description": null,
+                        "root_category": "transactional",
+                        "default_preference": "cant_unsubscribe",
+                        "default_mandatory_channels": [],
+                        "visible_to_subscriber": true,
+                        "preference": null,
+                        "mandatory_channels": null,
+                        "blocked_channels": null
+                      },
+                      {
+                        "name": "user_name",
+                        "category": "onboarding-guide",
+                        "description": "Alerts for a Smooth Onboarding Process",
+                        "root_category": "promotional",
+                        "default_preference": "opt_in",
+                        "default_mandatory_channels": null,
+                        "visible_to_subscriber": true,
+                        "preference": null,
+                        "mandatory_channels": null,
+                        "blocked_channels": null
+                      },
+                      {
+                        "name": "user_name",
+                        "category": "forecast",
+                        "description": "Send me updates when Sales Forecast is updated",
+                        "root_category": "transactional",
+                        "default_preference": "cant_unsubscribe",
+                        "default_mandatory_channels": [],
+                        "visible_to_subscriber": true,
+                        "preference": null,
+                        "mandatory_channels": null,
+                        "blocked_channels": null
+                      },
+                      {
+                        "name": "user_name",
+                        "category": "status-update-alert",
+                        "description": "Send me updates when account status changes",
+                        "root_category": "transactional",
+                        "default_preference": "opt_in",
+                        "default_mandatory_channels": null,
+                        "visible_to_subscriber": true,
+                        "preference": null,
+                        "mandatory_channels": null,
+                        "blocked_channels": null
+                      },
+                      {
+                        "name": "user_name",
+                        "category": "quote-approval",
+                        "description": "Send me an update when a rep requires approval on a quote",
+                        "root_category": "transactional",
+                        "default_preference": "opt_in",
+                        "default_mandatory_channels": null,
+                        "visible_to_subscriber": true,
+                        "preference": null,
+                        "mandatory_channels": null,
+                        "blocked_channels": null
+                      },
+                      {
+                        "name": "user_name",
+                        "category": "payment-initiated-against-purchase",
+                        "description": "Payment Initiated against Purchase when the user clicks on payment button",
+                        "root_category": "transactional",
+                        "default_preference": "cant_unsubscribe",
+                        "default_mandatory_channels": [],
+                        "visible_to_subscriber": true,
+                        "preference": null,
+                        "mandatory_channels": null,
+                        "blocked_channels": null
+                      },
+                      {
+                        "name": "user_name",
+                        "category": "system-error-v1",
+                        "description": "v1 system errors",
+                        "root_category": "transactional",
+                        "default_preference": "opt_in",
+                        "default_mandatory_channels": null,
+                        "visible_to_subscriber": true,
+                        "preference": null,
+                        "mandatory_channels": null,
+                        "blocked_channels": null
+                      },
+                      {
+                        "name": "user_name",
+                        "category": "tax-report",
+                        "description": null,
+                        "root_category": "transactional",
+                        "default_preference": "opt_out",
+                        "default_mandatory_channels": null,
+                        "visible_to_subscriber": true,
+                        "preference": null,
+                        "mandatory_channels": null,
+                        "blocked_channels": null
+                      }
+                    ]
+                  }                  
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        example: 12
+                      limit:
+                        type: integer
+                        example: 10
+                      offset:
+                        type: integer
+                        example: 0
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: "user_name"
+                        category:
+                          type: string
+                          example: "training-new"
+                        description:
+                          type: string
+                          nullable: true
+                          example: null
+                        root_category:
+                          type: string
+                          example: "transactional"
+                        default_preference:
+                          type: string
+                          enum: ["cant_unsubscribe", "opt_in", "opt_out"]
+                          example: "cant_unsubscribe"
+                        default_mandatory_channels:
+                          type: array
+                          items:
+                            type: string
+                          example: []
+                        visible_to_subscriber:
+                          type: boolean
+                          example: true
+                        preference:
+                          type: string
+                          nullable: true
+                          example: null
+                        mandatory_channels:
+                          type: array
+                          nullable: true
+                          items:
+                            type: string
+                          example: null
+                        blocked_channels:
+                          type: array
+                          nullable: true
+                          items:
+                            type: string
+                          example: null              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "tenant 'brand/tenant_id' not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: "tenant 'brand/tenant_id' not found"              
       deprecated: false
   /v1/subscriber_list/{list_id}/version/{version_id}/subscriber/add:
     post:
