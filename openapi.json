@@ -2465,7 +2465,8 @@ paths:
                       type: string
                       description: in IANA timezone format e.g. 'America/Los_Angeles'
                 data:
-                  type: string
+                  type: object
+                  properties: {}
                   description: variable data required to render dynamic template content or workflow properties like dynamic delay or channel override in send node.
                   default: { "key": { "k1": "v1", "k2": "v2" } }
                   format: json
@@ -2482,26 +2483,34 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: |-
-                    {
-                      success: true,
-                      status: 'success',
-                      status_code: 202,
-                      message: { status: 'success' }
-                    }
+                  value: {
+                    "status": "success"
+                  }
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
         '400':
           description: '400'
           content:
             application/json:
               examples:
                 Result:
-                  value: |-
-                    {
-                      success: false,
-                      status: 'fail',
-                      status_code: 500,
-                      message: '_failure_message_'
-                    }
+                  value: {
+                    "status": "fail",
+                    "message": "BAD REQUEST"
+                  }
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "fail"
+                  message:
+                    type: string
+                    example: "BAD REQUEST"
       deprecated: false
   /v1/bulk/subscriber/preference/:
     patch:
