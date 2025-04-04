@@ -1125,20 +1125,108 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "drafts": null,
+                    "source": null,
+                    "status": "active",
+                    "list_id": "list_id_01",
+                    "list_name": "sample list",
+                    "list_type": "static_list",
+                    "created_at": "2025-04-04T07:33:06.943+00:00",
+                    "updated_at": "2025-04-04T07:33:06.943+00:00",
+                    "is_readonly": false,
+                    "track_user_exit": false,
+                    "list_description": "_some sample description_",
+                    "track_user_entry": false,
+                    "subscribers_count": 0,
+                    "requested_for_delete": false
+                  }
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  list_id:
+                    type: string
+                    example: "list_id_01"
+                  list_name:
+                    type: string
+                    example: "sample list"
+                  list_description:
+                    type: string
+                    example: "_some sample description_"
+                  list_type:
+                    type: string
+                    example: "static_list"
+                  subscribers_count:
+                    type: integer
+                    example: 0
+                  source:
+                    type: string
+                    nullable: true
+                    example: null
+                  is_readonly:
+                    type: boolean
+                    example: false
+                  status:
+                    type: string
+                    example: "active"
+                  track_user_entry:
+                    type: boolean
+                    example: false
+                  track_user_exit:
+                    type: boolean
+                    example: false
+                  requested_for_delete:
+                    type: boolean
+                    example: false
+                  created_at:
+                    type: string
+                    format: date-time
+                    example: "2025-04-04T07:33:06.943+00:00"
+                  updated_at:
+                    type: string
+                    format: date-time
+                    example: "2025-04-04T07:33:06.943+00:00"
+                  drafts:
+                    type: string
+                    nullable: true
+                    example: null              
+        '404':
+          description: '404'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "error_code": "not_found",
+                    "type": "NotFound",
+                    "message": "list_id: list_id_01 not found",
+                    "detail": "list_id: list_id_01 not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                  error_code:
+                    type: string
+                    example: "not_found"
+                  type:
+                    type: string
+                    example: "NotFound"
+                  message:
+                    type: string
+                    example: "list_id: list_id_01 not found"
+                  detail:
+                    type: string
+                    example: "list_id: list_id_01 not found"
+                required:
+                  - code
+                  - error_code
+                  - type
+                  - message
+                  - detail              
       deprecated: false
   /{workspace_key}/broadcast:
     post:
