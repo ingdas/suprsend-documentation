@@ -400,20 +400,135 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "meta": {
+                      "count": 53,
+                      "limit": 2,
+                      "offset": 0
+                    },
+                    "results": [
+                      {
+                        "drafts": null,
+                        "source": null,
+                        "status": "active",
+                        "list_id": "list_01",
+                        "list_name": "sample list 01",
+                        "list_type": "static_list",
+                        "created_at": "2025-04-04T07:33:06.943+00:00",
+                        "updated_at": "2025-04-04T07:33:06.943+00:00",
+                        "version_id": null,
+                        "is_readonly": false,
+                        "track_user_exit": false,
+                        "list_description": "_some sample description_",
+                        "track_user_entry": false,
+                        "subscribers_count": 0,
+                        "requested_for_delete": false
+                      },
+                      {
+                        "drafts": null,
+                        "source": "database_sync",
+                        "status": "active",
+                        "list_id": "list_02",
+                        "list_name": "sample list 02",
+                        "list_type": "static_list",
+                        "created_at": "2024-12-20T12:09:28.727+00:00",
+                        "updated_at": "2025-04-04T07:32:32.127275+00:00",
+                        "version_id": null,
+                        "is_readonly": false,
+                        "track_user_exit": true,
+                        "list_description": "_some sample description_",
+                        "track_user_entry": true,
+                        "subscribers_count": 31,
+                        "requested_for_delete": false
+                      }
+                    ]
+                  }
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        example: 53
+                      limit:
+                        type: integer
+                        example: 2
+                      offset:
+                        type: integer
+                        example: 0
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        list_id:
+                          type: string
+                          example: "list_01"
+                        list_name:
+                          type: string
+                          example: "sample list 01"
+                        list_description:
+                          type: string
+                          example: "_some sample description_"
+                        list_type:
+                          type: string
+                          example: "static_list"
+                        subscribers_count:
+                          type: integer
+                          example: 0
+                        source:
+                          type: string
+                          nullable: true
+                          example: "database_sync"
+                        is_readonly:
+                          type: boolean
+                          example: false
+                        status:
+                          type: string
+                          example: "active"
+                        track_user_entry:
+                          type: boolean
+                          example: false
+                        track_user_exit:
+                          type: boolean
+                          example: false
+                        requested_for_delete:
+                          type: boolean
+                          example: false
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: "2025-04-04T07:33:06.943+00:00"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: "2025-04-04T07:33:06.943+00:00"
+                        version_id:
+                          type: string
+                          nullable: true
+                          example: null
+                        drafts:
+                          type: string
+                          nullable: true
+                          example: null              
+        '401':
+          description: '401'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: Not Authenticated - could not find Workspace details
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: "Not Authenticated - could not find Workspace details"             
       deprecated: false
     post:
       summary: Create a List
@@ -441,26 +556,117 @@ paths:
                   type: string
                   default: _some sample description_
       responses:
-        '200':
-          description: '200'
+        '201':
+          description: '201'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "list_id": "list_01",
+                    "list_name": "Publisher List",
+                    "list_description": "here goes the list description",
+                    "list_type": "static_list",
+                    "subscribers_count": 3,
+                    "source": "database_sync",
+                    "is_readonly": false,
+                    "status": "active",
+                    "track_user_entry": false,
+                    "track_user_exit": false,
+                    "requested_for_delete": false,
+                    "created_at": "2024-02-21T19:10:01.906000Z",
+                    "updated_at": "2025-04-04T07:25:43.186475Z",
+                    "drafts": null
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  list_id:
+                    type: string
+                    example: "list_01"
+                  list_name:
+                    type: string
+                    example: "Example List"
+                  list_description:
+                    type: string
+                    example: "here goes the list description"
+                  list_type:
+                    type: string
+                    example: "static_list"
+                  subscribers_count:
+                    type: integer
+                    example: 3
+                  source:
+                    type: string
+                    example: "database_sync"
+                  is_readonly:
+                    type: boolean
+                    example: false
+                  status:
+                    type: string
+                    example: "active"
+                  track_user_entry:
+                    type: boolean
+                    example: false
+                  track_user_exit:
+                    type: boolean
+                    example: false
+                  requested_for_delete:
+                    type: boolean
+                    example: false
+                  created_at:
+                    type: string
+                    format: date-time
+                    example: "2024-02-21T19:10:01.906000Z"
+                  updated_at:
+                    type: string
+                    format: date-time
+                    example: "2025-04-04T07:25:43.186475Z"
+                  drafts:
+                    type: string
+                    nullable: true
+                    example: null              
         '400':
           description: '400'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 400,
+                    "error_code": "error",
+                    "type": "ValidationError",
+                    "message": "{\"list_id\": [\"This field may not be blank.\"]}",
+                    "detail": {
+                      "list_id": [
+                        "This field may not be blank."
+                      ]
+                    }
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 400
+                  error_code:
+                    type: string
+                    example: "error"
+                  type:
+                    type: string
+                    example: "ValidationError"
+                  message:
+                    type: string
+                    example: "{\"list_id\": [\"This field may not be blank.\"]}"
+                  detail:
+                    type: object
+                    properties:
+                      list_id:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                          - "This field may not be blank."              
       deprecated: false
   /{workspace_key}/trigger/:
     post:
@@ -5505,7 +5711,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  code:
+                  error-code:
                     type: integer
                     example: 404
                   message:
