@@ -4,6 +4,19 @@ title: "Product Updates"
 mode: "wide"
 ---
 
+<Update label="12 Feb 2025">
+  ## Batch - Flush First Item Immediately
+
+
+  We've introduced a new setting in batch processing: [Flush First Item in Batch](/docs/batch#flush-first-item-immediately). Previously, batches were only sent once the batch window closed. Now, this setting allows the first trigger to flow past the batch immediately while subsequent triggers are batched within the specified time window.
+
+
+
+  This will help you to build leading debounce logic in workflow, where users are notified about critical updates like anomaly alerts immediately, while batching rest of the alerts and sending them at regular intervals until the issue is resolved.
+
+  You can find this option in **batch -> advanced configuration**.
+</Update>
+
 <Update label="07 Feb 2025">
   ## Workflow - Relative Delay and Batch window
 
@@ -60,19 +73,6 @@ mode: "wide"
   * \[SDK] [Object methods](/docs/java-objects) and [User APIs](/docs/java-create-user-profile) to fetch user and their subscription exposed in Java SDK
 
   * Added support to trigger multi-lingual templates in [broadcast](/docs/broadcast)
-</Update>
-
-<Update label="12 Feb 2025">
-  ## Batch - Flush First Item Immediately
-
-
-  We've introduced a new setting in batch processing: [Flush First Item in Batch](/docs/batch#flush-first-item-immediately). Previously, batches were only sent once the batch window closed. Now, this setting allows the first trigger to flow past the batch immediately while subsequent triggers are batched within the specified time window.
-
-
-
-  This will help you to build leading debounce logic in workflow, where users are notified about critical updates like anomaly alerts immediately, while batching rest of the alerts and sending them at regular intervals until the issue is resolved.
-
-  You can find this option in **batch -> advanced configuration**.
 </Update>
 
 <Update label="29 Jan 2025">
