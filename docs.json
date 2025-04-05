@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "maple",
   "name": "SuprSend, Notification infrastructure for Product teams",
   "colors": {
     "primary": "#2E70E8",
@@ -440,9 +440,9 @@
             "group": "API Reference",
             "pages": [
               "reference/overview",
-              "reference/api-keys",
+              "reference/authentication",
               "reference/idempotent-requests",
-              "reference/using-suprsnd-apis-on-postman"
+              "reference/suprsend-postman-collection"
             ]
           },
           {
@@ -665,6 +665,14 @@
     {
       "source": "/docs/node-brands",
       "destination": "/docs/node-tenants"
+    },
+    {
+      "source": "/reference/using-suprsnd-apis-on-postman",
+      "destination": "/reference/suprsend-postman-collection"
+    },
+    {
+      "source": "/reference/api-keys",
+      "destination": "/reference/authentication"
     },
     {
       "source": "/docs/brands-java",

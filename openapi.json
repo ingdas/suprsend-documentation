@@ -5863,13 +5863,25 @@ paths:
         content:
           application/json:
             schema:
-              type: object
               properties:
-                RAW_BODY:
+                $email:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                  description: List of email addresses. You can add other channels in the same format by replacing $email with respective channel keys. Available channel keys - `$email`, `$sms`, `$inbox`, `$webpush`, `$androidpush`, `$iospush`, `$slack`, `$ms_teams`.
+                $timezone:
                   type: string
-                  description: 'add properties and channels of user. Following channel keys can be used: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`. There are 2 reserved properties- timezone(`$timezone`), language(`$preferred_language`). Other properties can be added at parent level as `prop1`'
-                  default: {"prop1":"val1","$email":["abc@example.com"],"$timezone":"America/New_York","$preferred_language":"en"}
-                  format: json
+                  description: User's timezone in [IANA format]("https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List")
+                  example: America/New_York
+                $preferred_language:
+                  type: string
+                  description: Preferred language in [ISO 639-1 Alpha-2 format]("https://gist.github.com/jrnk/8eb57b065ea0b098d571")
+                  example: en
+              additionalProperties:
+                  type: string
+                  description: add any additional property in key-value pair
+                  example: val
       responses:
         '201':
           description: '201'
@@ -5878,33 +5890,38 @@ paths:
               examples:
                 Result:
                   value: {
-                    "distinct_id": "user_01",
+                    "distinct_id": "_distinct_id_",
                     "properties": {
-                      "RAW_BODY": "\"prop1\": \"val1\""
+                      "$preferred_language": "en",
+                      "$timezone": "America/New_York"
                     },
-                    "created_at": "2025-04-04T09:55:12.397856+00:00",
-                    "updated_at": "2025-04-04T09:55:12.422388+00:00",
+                    "created_at": "2025-04-04T21:37:36.712496+00:00",
+                    "updated_at": "2025-04-04T21:37:36.743167+00:00",
+                    "$email": [
+                      {
+                        "value": "john@example.com",
+                        "status": "active",
+                        "perma_status": "active"
+                      }
+                    ],
                     "$inbox": [
                       {
-                        "value": "VFzXXXXJZ_k6xxxxPh5-tW4xxXXxxlcOxJxxxA",
+                        "value": "4nlPk4t4kurG5kChOELB8Q1LcDI9DHzHQ70st2E2C24",
                         "id_provider": "suprsend",
                         "status": "active",
                         "perma_status": "active"
                       }
                     ]
-                  }
+                    }
               schema:
                 type: object
                 properties:
                   distinct_id:
                     type: string
-                    example: user_01
+                    example: _distinct_id_
                   properties:
                     type: object
-                    additionalProperties:
-                      type: string
-                    example:
-                      RAW_BODY: "\"prop1\": \"val1\""
+                    description: all user properties in key-value pair. SuprSend reserved properties start with $ 
                   created_at:
                     type: string
                     format: date-time
@@ -5913,29 +5930,20 @@ paths:
                     type: string
                     format: date-time
                     example: 2025-04-04T09:55:12.422388+00:00
-                  $inbox:
+                  $<channel>:
                     type: array
                     items:
                       type: object
                       properties:
                         value:
                           type: string
-                          example: VFzXXXXJZ_k6xxxxPh5-tW4xxXXxxlcOxJxxxA
-                        id_provider:
-                          type: string
-                          example: suprsend
+                          description: channel value
                         status:
                           type: string
                           example: active
                         perma_status:
                           type: string
-                          example: active
-                required:
-                  - distinct_id
-                  - properties
-                  - created_at
-                  - updated_at
-                  - $inbox                           
+                          description: active/disabled. Perma_status is marked disabled in case of hard bounce on the channel.                        
         '400':
           description: '400'
           content:
@@ -5943,20 +5951,18 @@ paths:
               examples:
                 Result:
                   value: {
-                    "error-code": 405,
+                    "code": 400,
                     "message": "invalid_request_error"
                   }
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     description: HTTP status code indicating the error.
-                    example: 405
                   message:
                     type: string
                     description: Description of the error type.
-                    example: invalid_request_error
       deprecated: false
     get:
       summary: Fetch User by id
@@ -5979,119 +5985,79 @@ paths:
               examples:
                 Result:
                   value: {
-                    "id": "<string>",
-                    "name": "user_name",
-                    "description": "<string>",
+                    "distinct_id": "_distinct_id_",
                     "properties": {
-                      "timezone": "America/New York",
-                      "city": "San Francisco",
-                      "country": "United States of America",
-                      "state": "California",
-                      "first_name": "user_name",
-                      "org_name": "SuprSend"
+                      "$preferred_language": "en",
+                      "$timezone": "America/New_York"
                     },
-                    "contacts": {
-                      "email": [
-                        {
-                          "value": "<string>",
-                          "status": "active",
-                          "perma_status": "active"
-                        }
-                      ],
-                      "inbox": [
-                        {
-                          "value": "<string>",
-                          "id_provider": "suprsend",
-                          "status": "active",
-                          "perma_status": "active"
-                        }
-                      ]
-                    },
-                    "filter": {
-                      "operator": "ENDS_WITH",
-                      "value": "param_value",
-                      "path": "<string>"
-                    },
-                    "created_at": "2025-02-06T09:12:14.874557+00:00",
-                    "updated_at": "2025-02-06T09:12:14.910696+00:00"
-                  }
+                    "created_at": "2025-04-04T21:37:36.712496+00:00",
+                    "updated_at": "2025-04-04T21:37:36.743167+00:00",
+                    "$email": [
+                      {
+                        "value": "john@example.com",
+                        "status": "active",
+                        "perma_status": "active"
+                      }
+                    ],
+                    "$inbox": [
+                      {
+                        "value": "4nlPk4t4kurG5kChOELB8Q1LcDI9DHzHQ70st2E2C24",
+                        "id_provider": "suprsend",
+                        "status": "active",
+                        "perma_status": "active"
+                      }
+                    ]
+                    }
               schema:
                 type: object
                 properties:
                   distinct_id:
                     type: string
-                    example: user1
+                    example: _distinct_id_
                   properties:
                     type: object
-                    properties:
-                      $preferred_language:
-                        type: string
-                        example: en
-                      $timezone:
-                        type: string
-                        example: America/New_York
-                      prop1:
-                        type: string
-                        example: val1
+                    description: all user properties in key-value pair. SuprSend reserved properties start with $ 
                   created_at:
                     type: string
-                    example: '2024-11-05T06:19:14.184143+00:00'
+                    format: date-time
+                    example: 2025-04-04T09:55:12.397856+00:00
                   updated_at:
                     type: string
-                    example: '2024-11-05T06:19:14.227839+00:00'
-                  $email:
+                    format: date-time
+                    example: 2025-04-04T09:55:12.422388+00:00
+                  $<channel>:
                     type: array
                     items:
                       type: object
                       properties:
                         value:
                           type: string
-                          example: abc@example.com
+                          description: channel value
                         status:
                           type: string
                           example: active
                         perma_status:
                           type: string
-                          example: active
-                  $inbox:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        value:
-                          type: string
-                          example: GvpTa4xNb2l7ONXXXXXXqH4Gx5bdXUjhnZmsU2elEIs
-                        id_provider:
-                          type: string
-                          example: suprsend
-                        status:
-                          type: string
-                          example: active
-                        perma_status:
-                          type: string
-                          example: active
-        '404':
-          description: '404'
+                          description: active/disabled. Perma_status is marked disabled in case of hard bounce on the channel.                        
+        '400':
+          description: '400'
           content:
             application/json:
               examples:
                 Result:
-                  value:
-                    {
-                      "code": 404,
-                      "message": "User not found with distinct_id: 'user1'"
-                    }
+                  value: {
+                    "code": 400,
+                    "message": "invalid_request_error"
+                  }
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
-                    description: HTTP status code indicating the error type.
-                    example: 404
+                    description: HTTP status code indicating the error.
                   message:
                     type: string
-                    description: Error message providing details about the issue.
-                    example: "User not found with distinct_id: 'user1'"
+                    description: Description of the error type.
       deprecated: false
     delete:
       summary: Delete user
@@ -6159,38 +6125,24 @@ paths:
             schema:
               type: object
               properties:
-                channel_preferences:
+                operations:
                   type: array
                   description: |
                     You can use the following operations to edit user profile.
-                    - `$set` to add/update a string
+                    - `$set` to add/update a property
                     - `$unset` to delete property/channel
                     - `$append` to insert values in property/channel array
                     - `$remove` to remove values from property/channel array
+                    - `$set_once` to remove immutable properties
+                    - `$increment` to increase/decrease integer values on further update
                   items:
                     type: object
                     properties:
-                      $append:
-                        type: object
-                        description: |
-                          Use this to add communication channels or update array properties in user profile. 
-                          Channels: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`
-                          Example: `{"$email":"user@example.com"}`
-                        additionalProperties:
-                          type: string
-                      $remove:
-                        type: object
-                        description: |
-                          Use this to remove communication channels or remove values from an array in user profile. 
-                          Channels: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`
-                          Example: `{"$email":"user@example.com"}`
-                        additionalProperties:
-                          type: string
                       $set:
                         type: object
                         description: |
                           Use this to set user properties like name, location, preferred language, etc.
-                          Example: `{"prop1":"val1","$preferred_language":"hi","$timezone":"America/New_York"}`
+                          Example: `{"name":"Marge Simpson","$preferred_language":"hi","$timezone":"America/New_York"}`
                         additionalProperties:
                           type: string
                       $unset:
@@ -6198,8 +6150,36 @@ paths:
                         description: |
                           Use this to delete channels or properties from user profile.
                           Channels: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`
-                          Example: `["$sms", "$whatsapp", "prop1"]`
+                          Example: `["$sms", "$whatsapp", "name"]`
                         items:
+                          type: string
+                      $append:
+                        type: object
+                        description: |
+                          Use this to add communication channels or update array properties in user profile. Available channel keys: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`
+                          Example: `{"$email":"user@example.com"}`
+                        additionalProperties:
+                          type: string
+                      $remove:
+                        type: object
+                        description: |
+                          Use this to remove communication channels or remove values from an array in user profile. Available channel keys: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`
+                          Example: `{"$email":"user@example.com"}`
+                        additionalProperties:
+                          type: string
+                      $set_once:
+                        type: object
+                        description: |
+                          Use this to set properties which are not set once and not changed on further updates.
+                          Example: `{"first_login_at":"2025-01-01T14:00:00Z"}`
+                        additionalProperties:
+                          type: string
+                      $increment:
+                        type: object
+                        description: |
+                          Use this to increase / decrease integer values on further updates
+                          Example: `{"login_count":1}`
+                        additionalProperties:
                           type: string
       responses:
         '202':
@@ -6209,176 +6189,62 @@ paths:
               examples:
                 Result:
                   value: {
-                    "id": "<string>",
-                    "name": "user_name",
-                    "description": "<string>",
+                    "distinct_id": "_distinct_id_",
                     "properties": {
-                      "timezone": "America/New York",
-                      "city": "San Francisco",
-                      "country": "United States of America",
-                      "state": "California",
-                      "first_name": "user_name",
-                      "org_name": "SuprSend"
+                      "name":"Marge Simpson",
+                      "$preferred_language": "en",
+                      "$timezone": "America/New_York"
                     },
-                    "contacts": {
-                      "email": [
-                        {
-                          "value": "<string>",
-                          "status": "active",
-                          "perma_status": "active"
-                        }
-                      ],
-                      "inbox": [
-                        {
-                          "value": "<string>",
-                          "id_provider": "suprsend",
-                          "status": "active",
-                          "perma_status": "active"
-                        }
-                      ]
-                    },
-                    "filter": {
-                      "operator": "ENDS_WITH",
-                      "value": "param_value",
-                      "path": "<string>"
-                    },
-                    "created_at": "2025-02-06T09:12:14.874557+00:00",
-                    "updated_at": "2025-02-06T09:12:14.910696+00:00"
-                  }
+                    "created_at": "2025-04-04T21:37:36.712496+00:00",
+                    "updated_at": "2025-04-04T21:37:36.743167+00:00",
+                    "$email": [
+                      {
+                        "value": "john@example.com",
+                        "status": "active",
+                        "perma_status": "active"
+                      }
+                    ],
+                    "$inbox": [
+                      {
+                        "value": "4nlPk4t4kurG5kChOELB8Q1LcDI9DHzHQ70st2E2C24",
+                        "id_provider": "suprsend",
+                        "status": "active",
+                        "perma_status": "active"
+                      }
+                    ]
+                    }
               schema:
                 type: object
                 properties:
-                  id:
+                  distinct_id:
                     type: string
-                    description: Unique identifier for the user.
-                    example: "<string>"
-                  name:
-                    type: string
-                    description: Name of the user.
-                    example: user_name
-                  description:
-                    type: string
-                    description: Description of the user.
-                    example: "<string>"
+                    example: _distinct_id_
                   properties:
                     type: object
-                    description: Additional user attributes.
-                    properties:
-                      timezone:
-                        type: string
-                        description: User's timezone.
-                        example: America/New York
-                      city:
-                        type: string
-                        description: User's city.
-                        example: San Francisco
-                      country:
-                        type: string
-                        description: User's country.
-                        example: United States of America
-                      state:
-                        type: string
-                        description: User's state.
-                        example: California
-                      first_name:
-                        type: string
-                        description: User's first name.
-                        example: user_name
-                      org_name:
-                        type: string
-                        description: Organization associated with the user.
-                        example: SuprSend
-                  contacts:
-                    type: object
-                    description: Contact information of the user.
-                    properties:
-                      email:
-                        type: array
-                        description: List of email contacts.
-                        items:
-                          type: object
-                          properties:
-                            value:
-                              type: string
-                              description: Email address of the user.
-                              example: "<string>"
-                            status:
-                              type: string
-                              description: Current status of the email.
-                              example: active
-                            perma_status:
-                              type: string
-                              description: Permanent status of the email.
-                              example: active
-                      inbox:
-                        type: array
-                        description: List of inbox contacts.
-                        items:
-                          type: object
-                          properties:
-                            value:
-                              type: string
-                              description: Identifier for the inbox.
-                              example: "<string>"
-                            id_provider:
-                              type: string
-                              description: Provider of the inbox service.
-                              example: suprsend
-                            status:
-                              type: string
-                              description: Current status of the inbox.
-                              example: active
-                            perma_status:
-                              type: string
-                              description: Permanent status of the inbox.
-                              example: active
-                  filter:
-                    type: object
-                    description: Filter criteria for user segmentation.
-                    properties:
-                      operator:
-                        type: string
-                        description: Filtering operator used.
-                        example: ENDS_WITH
-                      value:
-                        type: string
-                        description: Value for filtering.
-                        example: param_value
-                      path:
-                        type: string
-                        description: Path of the attribute being filtered.
-                        example: "<string>"
+                    description: all user properties in key-value pair. SuprSend reserved properties start with $ 
                   created_at:
                     type: string
                     format: date-time
-                    description: Timestamp when the user was created.
-                    example: "2025-02-06T09:12:14.874557+00:00"
+                    example: 2025-04-04T09:55:12.397856+00:00
                   updated_at:
                     type: string
                     format: date-time
-                    description: Timestamp when the user was last updated.
-                    example: "2025-02-06T09:12:14.910696+00:00"
-        '400':
-          description: '400'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: {
-                    "code": 400,
-                    "message": "invalid_request_error"
-                  }
-              schema:
-                type: object
-                properties:
-                  error-code:
-                    type: integer
-                    description: HTTP status code indicating the error.
-                    example: 400
-                  message:
-                    type: string
-                    description: Error message describing the issue.
-                    example: invalid_request_error
+                    example: 2025-04-04T09:55:12.422388+00:00
+                  $<channel>:
+                    type: array
+                    description: list of all active channels.
+                    items:
+                      type: object
+                      properties:
+                        value:
+                          type: string
+                          description: channel value
+                        status:
+                          type: string
+                          example: active
+                        perma_status:
+                          type: string
+                          description: active/disabled. Perma_status is marked disabled in case of hard bounce on the channel. 
       deprecated: false
   /v1/user/:
     get:
@@ -6405,14 +6271,20 @@ paths:
                     },
                     "results": [
                       {
-                        "id": "<string>",
-                        "name": "user_name",
-                        "timezone": "America/New York",
-                        "city": "San Francisco",
-                        "country": "United States of America",
-                        "state": "California",
-                        "created_at": "2025-04-01T15:13:17.609942+00:00",
-                        "updated_at": "2025-04-01T15:13:17.609942+00:00"
+                        "distinct_id": "_distinct_id_",
+                        "properties": {
+                          "name":"Marge Simpson"
+                        },
+                        "created_at": "2025-04-04T21:37:36.712496+00:00",
+                        "updated_at": "2025-04-04T21:37:36.743167+00:00",
+                        "$inbox": [
+                          {
+                            "value": "4nlPk4t4kurG5kChOELB8Q1LcDI9DHzHQ70st2E2C24",
+                            "id_provider": "suprsend",
+                            "status": "active",
+                            "perma_status": "active"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -6450,62 +6322,7 @@ paths:
                         example: "01JXXXX99APxxxxxx8Wxxxx1B"
                   results:
                     type: array
-                    description: List of users.
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          description: Unique identifier for the user.
-                          example: "<string>"
-                        name:
-                          type: string
-                          description: Name of the user.
-                          example: "user_name"
-                        timezone:
-                          type: string
-                          description: Timezone associated with the user.
-                          example: "America/New York"
-                        city:
-                          type: string
-                          description: City where the user is located.
-                          example: "San Francisco"
-                        country:
-                          type: string
-                          description: Country where the user is located.
-                          example: "United States of America"
-                        state:
-                          type: string
-                          description: State where the user is located.
-                          example: "California"
-                        created_at:
-                          type: string
-                          format: date-time
-                          description: Timestamp when the user was created.
-                          example: "2025-04-01T15:13:17.609942+00:00"
-                        updated_at:
-                          type: string
-                          format: date-time
-                          description: Timestamp when the user was last updated.
-                          example: "2025-04-01T15:13:17.609942+00:00"                    
-        '401':
-          description: '401'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: Not Authenticated - could not find Workspace details
-              schema:
-                type: object
-                properties:
-                  error-code:
-                    type: integer
-                    description: HTTP status code indicating the error.
-                    example: 401
-                  message:
-                    type: string
-                    description: Description of the authentication error.
-                    example: "Not Authenticated - could not find Workspace details"
+                    description: List of users objects
       deprecated: false
   /v1/user/{distinct_id}/merge/:
     post:
@@ -6532,67 +6349,37 @@ paths:
                   description: Unique identifier of secondary user whose profile needs to be merged into primary user.
       responses:
         '201':
-          description: '201'
+          description: '201 - Created'
           content:
             application/json:
               examples:
                 Result:
                   value: {
-                    "id": "<string>",
-                    "name": "user_name",
-                    "timezone": "America/New York",
-                    "city": "San Francisco",
-                    "country": "United States of America",
-                    "state": "California",
-                    "created_at": "2025-04-02T15:05:57.256964+00:00",
-                    "updated_at": "2025-04-02T15:06:16.581195+00:00"
-                  }
+                    "distinct_id": "_distinct_id_",
+                    "properties": {},
+                    "created_at": "2025-04-04T21:37:36.712496+00:00",
+                    "updated_at": "2025-04-04T21:37:36.743167+00:00",
+                    "$inbox": [
+                      {
+                        "value": "4nlPk4t4kurG5kChOELB8Q1LcDI9DHzHQ70st2E2C24",
+                        "id_provider": "suprsend",
+                        "status": "active",
+                        "perma_status": "active"
+                      }
+                    ]
+                    }
               schema:
                 type: object
-                properties:
-                  id:
-                    type: string
-                    description: Unique identifier for the entity.
-                    example: "<string>"
-                  name:
-                    type: string
-                    description: Name of the user.
-                    example: "user_name"
-                  timezone:
-                    type: string
-                    description: Timezone associated with the user.
-                    example: "America/New York"
-                  city:
-                    type: string
-                    description: City of the user.
-                    example: "San Francisco"
-                  country:
-                    type: string
-                    description: Country of the user.
-                    example: "United States of America"
-                  state:
-                    type: string
-                    description: State of the user.
-                    example: "California"
-                  created_at:
-                    type: string
-                    format: date-time
-                    description: Timestamp of when the entity was created.
-                    example: "2025-04-02T15:05:57.256964+00:00"
-                  updated_at:
-                    type: string
-                    format: date-time
-                    description: Timestamp of when the entity was last updated.
-                    example: "2025-04-02T15:06:16.581195+00:00" 
+                description: user object of the primary user after the merge.
         '404':
-          description: '404'
+          description: '404 - Not Found'
           content:
             application/json:
               examples:
                 Result:
                   value: {
                     "code": 404,
-                    "message": "user [distinct_id: 'user1'] not found"
+                    "message": "from_user_id: [distinct_id: 'secondary_user'] not found / user [distinct_id: 'primary_user'] not found"
                   }
               schema:
                 type: object
@@ -6623,12 +6410,10 @@ paths:
         - name: limit
           in: query
           description: number of results to be returned in API response
-          required: true
+          required: false
           schema:
             type: integer
             format: int32
-            minimum: -2147483648
-            maximum: 2147483647
       responses:
         '200':
           description: '200'
@@ -6638,14 +6423,29 @@ paths:
                 Result:
                   value: {
                     "meta": {
-                      "count": 0,
+                      "count": 4,
                       "limit": 1,
                       "has_prev": false,
                       "before": null,
                       "has_next": false,
                       "after": null
                     },
-                    "results": []
+                    "results": [
+                      {
+                        "properties": {
+                          "role": "manager"
+                        },
+                        "object": {
+                          "id": "frontend",
+                          "object_type": "department",
+                          "properties": {},
+                          "subscriptions_count": 10,
+                          "updated_at": "2025-01-28T16:49:23.695448+00:00"
+                        },
+                        "created_at": "2025-01-23T16:34:56.093683+00:00",
+                        "updated_at": "2025-01-23T16:34:56.093683+00:00"
+                      }
+                    ]
                   }
               schema:
                 type: object
@@ -6657,7 +6457,7 @@ paths:
                       count:
                         type: integer
                         description: Total number of results.
-                        example: 1
+                        example: 4
                       limit:
                         type: integer
                         description: The maximum number of results per request.
@@ -6670,7 +6470,7 @@ paths:
                         type: string
                         nullable: true
                         description: Cursor for fetching previous results.
-                        example: null
+                        example: "01JXXXX99APxxxxxx8Wxxxx1B"
                       has_next:
                         type: boolean
                         description: Indicates if there are more results available.
@@ -6679,7 +6479,7 @@ paths:
                         type: string
                         nullable: true
                         description: Cursor for fetching next results.
-                        example: null
+                        example: "02KXXXX99APxxxxxx0Wxxxx1A"
                   results:
                     type: array
                     description: List of retrieved results.
@@ -6688,15 +6488,10 @@ paths:
                       properties:
                         properties:
                           type: object
-                          description: Additional properties associated with the result.
-                          properties:
-                            role:
-                              type: string
-                              description: Role of the user in the associated object.
-                              example: manager
+                          description: Object subscription property referred as `$recipient.subscription.<prop>` in templates or workflows.
                         object:
                           type: object
-                          description: Details about the associated object.
+                          description: Details of the subscribed object.
                           properties:
                             id:
                               type: string
@@ -6709,7 +6504,6 @@ paths:
                             properties:
                               type: object
                               description: Additional properties related to the object.
-                              example: {}
                             subscriptions_count:
                               type: integer
                               description: Number of active subscriptions associated with the object.
@@ -6730,7 +6524,7 @@ paths:
                           description: Timestamp when the result was last updated.
                           example: "2025-01-23T16:34:56.093683+00:00"                       
         '404':
-                  description: '404'
+                  description: '404 - Not Found'
                   content:
                     application/json:
                       examples:
@@ -6768,15 +6562,13 @@ paths:
         - name: limit
           in: query
           description: number of results to be returned in API response
-          required: true
+          required: false
           schema:
             type: integer
             format: int32
-            minimum: -2147483648
-            maximum: 2147483647
       responses:
         '200':
-          description: '200'
+          description: '200 - OK'
           content:
             application/json:
               examples:
@@ -6788,22 +6580,20 @@ paths:
                       "has_prev": false,
                       "before": null,
                       "has_next": false,
-                      "after": null
+                      "after": "01HPMFF5V2CFCF5882QX9FQXYB"
                     },
                     "results": [
                       {
-                        "id": "<string>",
-                        "name": "user_name",
-                        "description": "List of users to send newsletter to",
-                        "list_type": "Your_company_newsletter",
-                        "source": "csv_upload",
-                        "subscribers_count": 2,
-                        "timezone": "America/New York",
-                        "city": "San Francisco",
-                        "country": "United States of America",
-                        "state": "California",
-                        "created_at": "2024-08-04T13:16:12.825+00:00",
-                        "updated_at": "2024-09-26T10:20:33.636698+00:00"
+                        "list": {
+                          "list_description": "List of users to send newsletter to (Qualified leads + Product Users)",
+                          "list_id": "product_update",
+                          "list_name": "",
+                          "list_type": "static_list",
+                          "source": "csv_upload",
+                          "subscribers_count": 2,
+                          "updated_at": "2024-09-26T10:20:33.636698+00:00"
+                        },
+                        "created_at": "2024-08-04T13:16:12.825+00:00"
                       }
                     ]
                   }                
@@ -6830,7 +6620,7 @@ paths:
                         type: string
                         nullable: true
                         description: Cursor for the previous page.
-                        example: null
+                        example: "01HPMFF5V2CFCF5882QX9FQXYB"
                       has_next:
                         type: boolean
                         description: Indicates if there is a next page.
@@ -6839,66 +6629,53 @@ paths:
                         type: string
                         nullable: true
                         description: Cursor for the next page.
-                        example: null
+                        example: "01HPMFF5V2CFCF5882QX9FQXYB"
                   results:
                     type: array
                     description: List of user lists.
                     items:
                       type: object
                       properties:
-                        id:
-                          type: string
-                          description: Unique identifier for the list.
-                          example: "<string>"
-                        name:
-                          type: string
-                          description: Name of the list.
-                          example: "user_name"
-                        description:
-                          type: string
-                          description: Brief description of the list.
-                          example: "List of users to send newsletter to"
-                        list_type:
-                          type: string
-                          description: Type of list (e.g., newsletter type).
-                          example: "Your_company_newsletter"
-                        source:
-                          type: string
-                          nullable: true
-                          description: Source from which the list was created.
-                          example: "csv_upload"
-                        subscribers_count:
-                          type: integer
-                          description: Number of subscribers in the list.
-                          example: 2
-                        timezone:
-                          type: string
-                          description: Timezone associated with the list.
-                          example: "America/New York"
-                        city:
-                          type: string
-                          description: City associated with the list.
-                          example: "San Francisco"
-                        country:
-                          type: string
-                          description: Country associated with the list.
-                          example: "United States of America"
-                        state:
-                          type: string
-                          description: State associated with the list.
-                          example: "California"
+                        list:
+                          type: object
+                          properties:
+                            list_id:
+                              type: string
+                              description: Unique identifier for the list.
+                              example: "product_update"
+                            list_name:
+                              type: string
+                              description: Name of the list.
+                              example: "Newsletter subscriber users"
+                            description:
+                              type: string
+                              description: Brief description of the list.
+                              example: "List of users to send newsletter to"
+                            list_type:
+                              type: string
+                              description: Type of list (static_list, query_based)
+                              example: "static_list"
+                            source:
+                              type: string
+                              nullable: true
+                              description: Source from which the list was created (csv_upload, database_sync, mixpanel)
+                              example: "csv_upload"
+                            subscribers_count:
+                              type: integer
+                              description: Number of subscribers in the list.
+                              example: 2
+                            updated_at:
+                              type: string
+                              format: date-time
+                              description: Timestamp when the list was last updated.
+                              example: "2024-09-26T10:20:33.636698+00:00"  
                         created_at:
                           type: string
                           format: date-time
-                          description: Timestamp when the list was created.
-                          example: "2024-08-04T13:16:12.825+00:00"
-                        updated_at:
-                          type: string
-                          format: date-time
-                          description: Timestamp when the list was last updated.
-                          example: "2024-09-26T10:20:33.636698+00:00"            
+                          description: Timestamp when the user was added to the list.
+                          example: "2024-09-26T10:20:33.636698+00:00"           
         '404':
-                  description: '404'
+                  description: '404 - Not Found'
                   content:
                     application/json:
                       examples:
