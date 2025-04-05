@@ -46,10 +46,47 @@ paths:
                   description: string identifier for the event like `product_purchased`
                   default: _event_name_
                 properties:
-                  type: string
-                  description: a dictionary representing event attributes like `first_name`. Event properties can be used to pass template variables in case of event based trigger
-                  default: '{}'
-                  format: json
+                  type: object
+                  description: Properties are used to render template or workflow variables in the trigger.
+                  properties:
+                    $attachments:
+                      type: array
+                      description: Use this key to pass email attachment in the trigger. You can either pass attachment as a public URL or as a base64-encoded file (limit < 50KB).
+                      items:
+                        oneOf:
+                          - type: object
+                            description: Pass file as **publicly accessible URL** (No limit on file size)
+                            required: [url]
+                            properties:
+                              url:
+                                type: string
+                                format: uri
+                                description: Publicly accessible URL of the file
+                                example: "https://bitcoincore.org/bitcoin.pdf"
+                              filename:
+                                type: string
+                                description: Filename to be shown in email
+                                example: "billing.pdf"
+                              ignore_if_error:
+                                type: boolean
+                                description: Ignore the attachment if it fails to load
+                
+                          - type: object
+                            description: Pass file as a **base-64 file** (supported limit < 50KB)
+                            required: [file]
+                            properties:
+                              data:
+                                type: string
+                                format: string
+                                description: Base64-encoded content of the file
+                              filename:
+                                type: string
+                                description: Filename to be shown in email
+                              contentType:
+                                type: string
+                                example: application/pdf
+                  additionalProperties:
+                    type: string
                 tenant_id:
                   type: string
                   description: string identifier of the tenant this event is associated with
@@ -68,36 +105,12 @@ paths:
                     locations: San Francisco
       responses:
         '202':
-          description: '202'
+          description: '202 - Accepted'
           content:
             application/json:
               examples:
                 Result:
-                  value: Accepted - OK
-              schema:
-                type: string
-                example: "Accepted - OK"              
-        '404':
-          description: '404'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: {
-                    "code": 404,
-                    "message": "User not found with distinct_id: 'user1'"
-                  }
-              schema:
-                type: object
-                properties:
-                  error-code:
-                    type: integer
-                    description: HTTP status code indicating the error type.
-                    example: 404
-                  message:
-                    type: string
-                    description: Error message providing details about the issue.
-                    example: "User not found with distinct_id: 'user1'"
+                  value: OK
       deprecated: false
   /v1/tenant/{tenant_id}:
     post:
@@ -698,11 +711,11 @@ paths:
                   default: _workflow_name_
                 template:
                   type: string
-                  description: Unique slug name of the template created on SuprSend dashboard. You can get this by clicking on the clipboard icon next to the Template name on SuprSend templates page.
+                  description: Unique slug of the template created on SuprSend dashboard. You can get this by clicking on the clipboard icon next to the Template name on SuprSend templates page.
                   default: _template_slug_
                 notification_category:
                   type: string
-                  description: Category in which your notification belongs. You can understand more about them in the 'Notification Category' documentation
+                  description: Used to apply user category level [preferences]("/docs/user-preferences") on notification trigger.
                   default: transactional
                 users:
                   type: array
@@ -715,7 +728,7 @@ paths:
                         default: _distinct_id_
                       $channels:
                         type: array
-                        description: 'send notification on selected channels in user profile. Following channel keys can be used: email, sms, whatsapp, androidpush, iospush, slack, webpush'
+                        description: send notification on selected channels in user profile. Following channel keys can be used - email, sms, whatsapp, androidpush, iospush, slack, webpush
                         default: []
                         items:
                           type: string
@@ -779,45 +792,78 @@ paths:
                           type: object
                       $slack:
                         type: string
-                        description: 'Send Slack on a particular channel in user''s profile. Use one of the methods to add slack token - 1. slack using email: {"email": "user@example.com", "access_token": "xoxb-XXXXXXXX"} ------ 2. slack using member_id: {"user_id": "U/WXXXXXXXX", "access_token": "xoxb-XXXXXXXX"} ------- 3. slack channel: {"channel": "CXXXXXXXX", "access_token": "xoxb-XXXXXXXX"} -------- 4. slack incoming webhook: {"incoming_webhook": { "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"}}'
+                        description: |
+                          Send Slack on a particular channel in user's profile. Use one of the methods to add slack token -
+                          1. slack using email: `{"email": "user@example.com", "access_token": "xoxb-XXXXXXXX"}`
+                          2. slack using member_id: `{"user_id": "U/WXXXXXXXX", "access_token": "xoxb-XXXXXXXX"}`
+                          3. slack channel: `{"channel": "CXXXXXXXX", "access_token": "xoxb-XXXXXXXX"}`
+                          4. slack incoming webhook: `{"incoming_webhook": { "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"}}'`
                         format: json
                     required:
                       - distinct_id
                     type: object
                 data:
                   type: object
-                  properties: {}
-                  description: Mock data to replace the template variables.
-                  default: {
-                              "data": {
-                                "$attachments": [
-                                  {
-                                    "filename": "billing.pdf",
-                                    "contentType": "application/pdf",
-                                    "data": "Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh"
-                                  }
-                                ]
-                              }
-                            }
-                  format: json
+                  description: variable data required to render dynamic template content or workflow properties like dynamic delay or channel override in send node.
+                  properties:
+                    $attachments:
+                      type: array
+                      description: Use this key to pass email attachment in the trigger. You can either pass attachment as a public URL or as a base64-encoded file (limit < 50KB).
+                      items:
+                        oneOf:
+                          - type: object
+                            description: Pass file as **publicly accessible URL** (No limit on file size)
+                            required: [url]
+                            properties:
+                              url:
+                                type: string
+                                format: uri
+                                description: Publicly accessible URL of the file
+                                example: "https://bitcoincore.org/bitcoin.pdf"
+                              filename:
+                                type: string
+                                description: Filename to be shown in email
+                                example: "billing.pdf"
+                              ignore_if_error:
+                                type: boolean
+                                description: Ignore the attachment if it fails to load
+                
+                          - type: object
+                            description: Pass file as a **base-64 file** (supported limit < 50KB)
+                            required: [file]
+                            properties:
+                              data:
+                                type: string
+                                format: string
+                                description: Base64-encoded content of the file
+                              filename:
+                                type: string
+                                description: Filename to be shown in email
+                              contentType:
+                                type: string
+                                example: application/pdf
+                  additionalProperties:
+                    type: string
                 delivery:
                   type: object
                   description: delivery instructions for the workflow. You can set [Smart Delivery](https://docs.suprsend.com/docs/smart-delivery) preference by setting "smart":true
                   properties:
                     smart:
                       type: boolean
-                      description: You can enable smart delivery by setting "smart":True
+                      description: You can enable smart delivery by setting it true
                       default: false
                     success:
                       type: string
-                      description: Measure that defines the success of this notification. You can set notification status like delivery, interaction or custom success event
+                      description: Success event for stopping further notification in case smart is set to true. You can set notification status like delivery, interaction or custom success event
                       default: seen
                     time_to_live:
                       type: string
-                      description: Time window for triggering notifications in case of smart delivery. notification on each channel will be sent with time-interval of [time_to_live / (number_of_channels - 1)] apart. Format - XXdXXhXXmXXs or if its number (n) then delay is in seconds (n)
+                      description: |
+                        Time window to define delay between subsequent channel trigger in case of smart delivery. 
+                        Delay = `time_to_live / (number_of_channels - 1)`. Format - `XXdXXhXXmXXs` or if its number (n) then delay is in seconds (n)
                     mandatory_channels:
                       type: array
-                      description: 'Channels on which notification has to be sent immediately in case of smart delivery. Following channel keys can be used: email, sms, whatsapp, androidpush, iospush, slack, webpush'
+                      description: Channels on which notification has to be sent immediately in case of smart delivery. Following channel keys can be used - email, sms, whatsapp, androidpush, iospush, slack, webpush
                       items:
                         type: string
                 delay:
@@ -832,11 +878,7 @@ paths:
                   description: string identifier of the tenant this workflow is associated with
                 $idempotency_key:
                   type: string
-                  description: Idempotency_key (valid for 24hrs)
-                adding_email_attachment:
-                  type: string
-                  description: "You can add attachment as data->\"$attachments\". Attachments can be passed as the media URL or as base-64 file (allowed size limit for base-64 file < 50KB).\n\n```json\nadding base-64 file (supported limit < 50KB)\n\n{\n  \"data\": {\n    \"$attachments\":[\n      {\n        \"filename\": \"billing.pdf\",\n        \"contentType\": \"application/pdf\",\n        \"data\": \"Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh\" // this is base64 encoded content\n      }\n    ]\n  }\n} \n\n\n// adding URL directly (no limit on the file size)\n\n{\n  \"data\": {\n    \"$attachments\": [\n      { \n        \"filename\": \"Bitcoin-whitepaper.pdf\", // optional. if not present, filename will be picked from the url\n        \"url\": \"https://bitcoincore.org/bitcoin.pdf\", \n        \"ignore_if_error\": true/false\n      }\n    ]\n  }\n} \n\n```"
-                  format: json
+                  description: Unique identifier of the request (deduplicates request for 24hrs)
       responses:
         '202':
           description: '202'
@@ -3482,7 +3524,6 @@ paths:
               required:
                 - workflow
                 - recipients
-                - actor
               properties:
                 workflow:
                   type: string
@@ -3492,36 +3533,54 @@ paths:
                   type: array
                   description: List of recipients to be notified. You can either add recipient as array of distinct_ids or array of recipient objects. You can add upto 100 recipients in a single API.
                   items:
-                    properties:
-                      is_transient:
-                        type: boolean
-                        description: set `is_transient = true` to send notification to anonymous user. You don't need to pass `distinct_id` for anonymous sending.
-                      distinct_id:
-                        type: string
-                        description: unique identifier of the user who needs to be notified
-                        default: id1
-                      $email:
-                        type: array
-                        description: You can pass user channel information using $<channel> key. `$email` is used to override email channel. <br> This will override existing channel value from the user profile and use the channel value defined in the key for notification trigger. The same channel information will also be appended to user profile in the background  Refer how different [communication channels](https://docs.suprsend.com/docs/trigger-workflow#add-user-communication-channel) can be passed here
-                        default: []
-                        items:
+                    oneOf:
+                      - type: object
+                        description: Notify user
+                        required: [distinct_id]
+                        properties:
+                          is_transient:
+                            type: boolean
+                            description: set `is_transient = true` to send notification to anonymous user. You don't need to pass `distinct_id` for anonymous sending.
+                          distinct_id:
+                            type: string
+                            description: unique identifier of the user who needs to be notified
+                            default: id1
+                          $channels:
+                            type: array
+                            description: Use this key to pass user channel preferences in trigger. By default all channels active in user profile are picked.
+                            items:
+                              type: string
+                          $email:
+                            type: array
+                            description: List of email addresses. You can add other channels in the same format by replacing $email with respective channel keys. Available channel keys - `$email`, `$sms`, `$inbox`, `$webpush`, `$androidpush`, `$iospush`, `$slack`, `$ms_teams`.
+                            items:
+                              type: string
+                          $preferred_language:
+                            type: string
+                            description: 2-letter language code in ISO 639-1 Alpha-2 code format. e.g. 'en' (for English)
+                          $timezone:
+                            type: string
+                            description: in IANA timezone format e.g. 'America/Los_Angeles'
+                        additionalProperties:
                           type: string
-                      user_prop1:
-                        type: string
-                        description: You can pass other user properties to render dynamic template content in key-value pair as "user_prop1":"value1" . Extra properties will be set in subscriber profile (as subscriber properties) which can then be used in the template as $recipient.<property>.
-                        default: value_1
-                      $preferred_language:
-                        type: string
-                        description: 2-letter language code in ISO 639-1 Alpha-2 code format. e.g. 'en' (for English)
-                      $timezone:
-                        type: string
-                        description: in IANA timezone format e.g. 'America/Los_Angeles'
-                    required:
-                      - distinct_id
-                    type: object
+                          description: You can pass other user properties to render dynamic template content in key-value pair as "user_prop1":"value1" . Extra properties will be set in subscriber profile (as subscriber properties) which can then be used in the template as $recipient.<property>.
+                      - type: object
+                        description: Notify object
+                        required: [id,object_type]
+                        properties:
+                          id:
+                            type: string
+                            description: Unique identifier of the object
+                            example: frontend
+                          object_type:
+                            type: string
+                            description: Filename to be shown in email
+                        additionalProperties:
+                          type: string
+                          description: You can pass other user properties similar to recipient payload. It will be used when notification is sent to object channels as $recipient.<property>. 
                 actor:
                   type: object
-                  description: Includes distinct_id and properties of the user who performed the action. You can use it for [cross-user notifications](https://docs.suprsend.com/docs/trigger-workflow#sending-cross-user-notifications) where you need to include actor properties in notification template. Actor properties can be added as `$actor.<prop>`.
+                  description: Includes distinct_id and properties of the user who performed the action. You can use it for [cross-user notifications]("https://docs.suprsend.com/docs/trigger-workflow#sending-cross-user-notifications"). Actor properties can be added as `$actor.<prop>`.
                   properties:
                     is_transient:
                       type: boolean
@@ -3530,22 +3589,52 @@ paths:
                       type: string
                       description: unique identifier of the actor who performed the action
                       default: id1
-                    user_prop1:
-                      type: string
-                      description: You can pass other user properties to render dynamic template content in key-value pair as "user_prop1":"value1" . Extra properties will be set in subscriber profile (as subscriber properties) which can then be used in the template as $actor.<property>.
-                      default: value_1
-                    $preferred_language:
-                      type: string
-                      description: 2-letter language code in ISO 639-1 Alpha-2 code format. e.g. 'en' (for English)
-                    $timezone:
-                      type: string
-                      description: in IANA timezone format e.g. 'America/Los_Angeles'
+                  additionalProperties:
+                    type: string
+                    description: You can pass additional actor properties as `"user_prop1":"value1"` . Extra properties will be update in user profile which can then be used in the template as `$actor.<property>`.
+                    
                 data:
                   type: object
-                  properties: {}
                   description: variable data required to render dynamic template content or workflow properties like dynamic delay or channel override in send node.
-                  default: { "key": { "k1": "v1", "k2": "v2" } }
-                  format: json
+                  properties:
+                    $attachments:
+                      type: array
+                      description: Use this key to pass email attachment in the trigger. You can either pass attachment as a public URL or as a base64-encoded file (limit < 50KB).
+                      items:
+                        oneOf:
+                          - type: object
+                            description: Pass file as **publicly accessible URL** (No limit on file size)
+                            required: [url]
+                            properties:
+                              url:
+                                type: string
+                                format: uri
+                                description: Publicly accessible URL of the file
+                                example: "https://bitcoincore.org/bitcoin.pdf"
+                              filename:
+                                type: string
+                                description: Filename to be shown in email
+                                example: "billing.pdf"
+                              ignore_if_error:
+                                type: boolean
+                                description: Ignore the attachment if it fails to load
+                
+                          - type: object
+                            description: Pass file as a **base-64 file** (supported limit < 50KB)
+                            required: [file]
+                            properties:
+                              data:
+                                type: string
+                                format: string
+                                description: Base64-encoded content of the file
+                              filename:
+                                type: string
+                                description: Filename to be shown in email
+                              contentType:
+                                type: string
+                                example: application/pdf
+                  additionalProperties:
+                    type: string
                 tenant_id:
                   type: string
                   description: string identifier of the tenant/tenant this workflow is associated with. Used to trigger [multi-tenant](https://docs.suprsend.com/docs/tenant-workflows) notifications
@@ -3554,7 +3643,7 @@ paths:
                   description: Idempotency_key (valid for 24hrs)
       responses:
         '202':
-          description: '202'
+          description: '202 - Accepted'
           content:
             application/json:
               examples:
@@ -3564,12 +3653,13 @@ paths:
                   }
               schema:
                 type: object
+                description: All workflow requests will be accepted as long as the API request is correct. To verify if the execution was successful, check the 'Requests' tab under the 'Logs' section on the SuprSend dashboard.
                 properties:
                   status:
                     type: string
                     example: "success"
         '400':
-          description: '400'
+          description: '400 - Bad Request'
           content:
             application/json:
               examples:
@@ -3580,6 +3670,7 @@ paths:
                   }
               schema:
                 type: object
+                description: This error would come if the API request format is incorrect.
                 properties:
                   status:
                     type: string
@@ -6629,7 +6720,7 @@ paths:
                         type: string
                         nullable: true
                         description: Cursor for the next page.
-                        example: "01HPMFF5V2CFCF5882QX9FQXYB"
+                        example: "01HPMFF5V2CFCFti5882QX9FQXYB"
                   results:
                     type: array
                     description: List of user lists.
@@ -6696,236 +6787,6 @@ paths:
                             description: Error message describing the issue.
                             example: "user [distinct_id: 'user1'] not found"   
       deprecated: false                           
-  /{workspace_key}/trigger/adding-email-attachment/:
-    post:
-      summary: Adding Email Attachment
-      security:
-        - BearerAuth: []
-      operationId: adding-email-attachment
-      description: "You can add attachment as ```data->\"$attachments\"```. Attachments can be passed as             base-64 file (allowed size limit for base-64 file < 50KB) or directly as the media              URL.\n\n```json\n// adding base-64 file (supported limit < 50KB)\n\n{\n  \"data\": {\n    \"$attachments\":[\n      {\n        \"filename\": \"billing.pdf\",\n        \"contentType\": \"application/pdf\",\n        \"data\": \"Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh\" // this is base64 encoded content\n      }\n    ]\n  }\n} \n\n\n// adding URL directly (no limit on the file size)\n\n{\n  \"data\": {\n    \"$attachments\": [\n      { \n        \"filename\": \"Bitcoin-whitepaper.pdf\", // optional. if not present, filename will be picked from the url\n        \"url\": \"https://bitcoincore.org/bitcoin.pdf\", \n        \"ignore_if_error\": true/false\n      }\n    ]\n  }\n} \n\n```"
-      parameters:
-        - name: workspace_key
-          in: path
-          schema:
-            type: string
-          required: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - name
-                - template
-                - notification_category
-                - users
-              properties:
-                name:
-                  type: string
-                  description: Unique name of the workflow. The workflow name should be easily identifiable for your reference at a later stage. You can see workflow-related analytics on the workflow page (how many notifications were sent, delivered, clicked or interacted).
-                  default: _workflow_name_
-                template:
-                  type: string
-                  description: Unique slug name of the template created on SuprSend dashboard. You can get this by clicking on the clipboard icon next to the Template name on SuprSend templates page.
-                  default: _template_slug_
-                notification_category:
-                  type: string
-                  description: Category in which your notification belongs. You can understand more about them in the 'Notification Category' documentation
-                  default: transactional
-                users:
-                  type: array
-                  description: Array object of target users.
-                  items:
-                    properties:
-                      distinct_id:
-                        type: string
-                        description: unique identifier of the user
-                        default: _distinct_id_
-                      $channels:
-                        type: array
-                        description: 'send notification on selected channels in user profile. Following channel keys can be used: email, sms, whatsapp, androidpush, iospush, slack, webpush'   
-                        default: []
-                        items:
-                          type: string
-                      $email:
-                        type: array
-                        description: To trigger notification on a particular email
-                        default: []
-                        items:
-                          type: string
-                      $sms:
-                        type: array
-                        description: Send SMS on a particular number.
-                        default: []
-                        items:
-                          type: string
-                      $whatsapp:
-                        type: array
-                        description: Send Whatsapp on a particular number.
-                        default: []
-                        items:
-                          type: string
-                      $androidpush:
-                        type: array
-                        description: Send androidpush on the given push token
-                        items:
-                          properties:
-                            token:
-                              type: string
-                              description: Androidpush token
-                              default: __android_push_token__
-                            provider:
-                              type: string
-                              description: vendor delivering the push notification
-                              default: fcm
-                            device_id:
-                              type: string
-                              description: unique identifier of user's device. This is used to avoid sending duplicate push notification on the user's device
-                          required:
-                            - token
-                            - provider
-                          type: object
-                      $iospush:
-                        type: array
-                        description: Send iOSpush on the given push token
-                        items:
-                          properties:
-                            token:
-                              type: string
-                              description: iOSpush token
-                              default: __ios_push_token__
-                            provider:
-                              type: string
-                              description: vendor delivering the push notification
-                              default: apns
-                            device_id:
-                              type: string
-                              description: unique identifier of user's device. This is used to avoid sending duplicate push notification on the same device
-                          required:
-                            - token
-                            - provider
-                          type: object
-                      $slack:
-                        type: string
-                        description: 'Send Slack on a particular channel in user''s profile. Use one of the methods to add slack token - 1. slack using email: {"email": "user@example.com", "access_token": "xoxb-XXXXXXXX"} ------ 2. slack using member_id: {"user_id": "U/WXXXXXXXX", "access_token": "xoxb-XXXXXXXX"} ------- 3. slack channel: {"channel": "CXXXXXXXX", "access_token": "xoxb-XXXXXXXX"} -------- 4. slack incoming webhook: {"incoming_webhook": { "url": "https://hooks.slack.com/services/TXXXXXXXXX/BXXXXXXXX/XXXXXXXXXXXXXXXXXXX"}}'
-                        format: json
-                    required:
-                      - distinct_id
-                    type: object
-                data:
-                  type: string
-                  description: Mock data to replace the template variables.
-                  default: '{ "$attachments":[ { "filename":"Bitcoin-whitepaper.pdf", "url":"https://bitcoincore.org/bitcoin.pdf", "ignore_if_error":true } ] }'
-                  format: json
-                delivery:
-                  type: object
-                  description: delivery instructions for the workflow. You can set [Smart Delivery](https://docs.suprsend.com/docs/smart-delivery) preference by setting "smart":true
-                  properties:
-                    smart:
-                      type: boolean
-                      description: You can enable smart delivery by setting "smart":True
-                      default: false
-                    success:
-                      type: string
-                      description: Measure that defines the success of this notification. You can set notification status like delivery, interaction or custom success event
-                      default: seen
-                    time_to_live:
-                      type: string
-                      description: Time window for triggering notifications in case of smart delivery. notification on each channel will be sent with time-interval of [time_to_live / (number_of_channels - 1)] apart. Format - XXdXXhXXmXXs or if its number (n) then delay is in seconds (n)
-                    mandatory_channels:
-                      type: array
-                      description: 'Channels on which notification has to be sent immediately in case of smart delivery. Following channel keys can be used: email, sms, whatsapp, androidpush, iospush, slack, webpush'
-                      items:
-                        type: string
-                delay:
-                  type: string
-                  description: Workflow will be halted for the time mentioned in delay, and become active once the delay period is over. Format - `XXdXXhXXmXXs` or if its number (n) then delay is in seconds (n)
-                trigger_at:
-                  type: string
-                  description: Trigger workflow on a specific date-time. Format - date string in ISO 8601 eg. "2022-08-27T20:14:51.643Z"
-                  format: date
-                tenant_id:
-                  type: string
-                  description: string identifier of the tenant this workflow is associated with
-                $idempotency_key:
-                  type: string
-                  description: Idempotency_key (valid for 24hrs)
-      responses:
-        '202':
-          description: '202'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: '{}'
-              schema:
-                type: object
-                properties: {}
-        '400':
-          description: '400'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: '{_error_response_}'
-      deprecated: false
-  /event/trigger/adding-email-attachment/:
-    post:
-      summary: Adding Email Attachment (event)
-      security:
-        - BearerAuth: []
-      operationId: adding-email-attachment-event
-      description: "You can add attachment as properties->\"$attachments\". Attachments can be passed as base-64 file (allowed size limit for base-64 file < 50KB) or directly as the media URL.\n\n```json\n// adding base-64 file (supported limit < 50KB)\n\n{\n  \"properties\": {\n    \"$attachments\":[\n      {\n        \"filename\": \"billing.pdf\",\n        \"contentType\": \"application/pdf\",\n        \"data\": \"Q29uZ3JhdHVsYXRpb25zLCB5b3UgY2FuIGJhc2U2NCBkZWNvZGUh\" // this is base64 encoded content\n      }\n    ]\n  }\n} \n\n\n// adding URL directly (no limit on the file size)\n\n{\n  \"properties\": {\n    \"$attachments\": [\n      { \n        \"filename\": \"Bitcoin-whitepaper.pdf\", // optional. if not present, filename will be picked from the url\n        \"url\": \"https://bitcoincore.org/bitcoin.pdf\", \n        \"ignore_if_error\": true/false\n      }\n    ]\n  }\n} \n\n```"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: string
-              required:
-                - distinct_id
-                - event
-                - properties
-                - tenant_id
-                - $idempotency_key
-              properties:
-                distinct_id:
-                  type: string
-                  description: distinct_id of recipient who should receive the notification
-                  default: distinct_id
-                event:
-                  type: string
-                  description: string identifier for the event like product_purchased
-                  default: _event_name_
-                properties:
-                  type: string
-                  description: a dictionary representing event attributes like first_name. Event properties can be used to pass template variables in case of event based trigger
-                  default: '{ "$attachments":[ { "filename":"Bitcoin-whitepaper.pdf", "url":"https://bitcoincore.org/bitcoin.pdf", "ignore_if_error":true } ] }'
-                  format: json
-                tenant_id:
-                    type: string
-                    description: string identifier of the tenant this event is associated with
-                idempotency_key:
-                    type: string
-                    description: Idempotency key (valid for 24hours)
-      responses:
-        '202':
-          description: '202'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: '{}'
-              schema:
-                type: object
-                properties: {}
-        '400':
-          description: '400'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: '{_error_response_}'
-      deprecated: false
   /v1/object/{object_type}/{id}/subscribed_to/object/:
     get:
       summary: Fetch Object subscriptions

@@ -462,15 +462,13 @@
             "group": "WORKFLOWS",
             "pages": [
               "reference/trigger-workflow-api",
-              "reference/add-email-attachment",
               "reference/dynamic-workflow-trigger"
             ]
           },
           {
             "group": "EVENTS",
             "pages": [
-              "reference/trigger-event",
-              "reference/adding-email-attachment-event"
+              "reference/trigger-event"
             ]
           },
           {
