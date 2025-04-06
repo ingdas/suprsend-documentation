@@ -2482,10 +2482,10 @@ paths:
                 Result:
                   value: 
                     {
-                      "id": 2445,
-                      "name": "Grocery Purchased",
-                      "slug": "grocery-purchased",
-                      "description": null,
+                      "id": "166277",
+                      "name": "Task Reminder",
+                      "slug": "task-reminder",
+                      "description": "Batched template for all pending tasks",
                       "is_active": true,
                       "default_language": {
                         "name": "English",
@@ -2494,22 +2494,18 @@ paths:
                       "created_at": "2023-01-25T04:53:39.237291Z",
                       "updated_at": "2023-08-28T05:06:22.461443Z",
                       "updated_by": {
-                        "name": "Joe",
-                        "email": "joe@example.com"
+                        "name": "team_member",
+                        "email": "user@example.com"
                       },
                       "last_triggered_at": "2023-08-10T12:44:03.361158Z",
                       "is_auto_translate_enabled": false,
-                      "enabled_languages": [
-                        "en",
-                        "hi",
-                        "kn"
-                      ],
+                      "enabled_languages": ["en", "fr", "es"],
                       "channels": [
                         {
-                          "id": 3944,
+                          "id": "1244",
                           "channel": {
-                            "name": "SMS",
-                            "slug": "sms",
+                            "name": "Email",
+                            "slug": "email",
                             "is_template_approval_needed": true
                           },
                           "is_active": true,
@@ -2517,133 +2513,13 @@ paths:
                           "created_at": "2023-01-25T04:53:39.268299Z",
                           "updated_at": "2023-01-25T04:53:39.404273Z",
                           "disabled_languages": [],
-                          "versions": [
-                            {
-                              "id": 10820,
-                              "templates": [
-                                {
-                                  "id": 11866,
-                                  "language": {
-                                    "name": "English",
-                                    "slug": "en"
-                                  },
-                                  "is_enabled": true,
-                                  "approval_status": "approved",
-                                  "content": {
-                                    "text": "You purchased product {#var#} worth Rs. {#var#} will reach to you {#var#}. You can track your order here: {#var#}\n- SuprSend",
-                                    "header": "SPRSND",
-                                    "example": [
-                                      "Winter Raincoat",
-                                      "INR 5",
-                                      "999",
-                                      "Bengaluru",
-                                      "https://www.google.com"
-                                    ],
-                                    "vendor_slug": "acl-sms",
-                                    "content_type": "1",
-                                    "message_type": "SERVICE_IMPLICIT",
-                                    "template_name": "purchase_made_en_v2",
-                                    "enterprise_name": "SPRSND",
-                                    "handlebars_text": "You purchased product {{event.product_name}} worth Rs. {{event.amount}} will reach to you {{event.location.city}}. You can track your order here: {{event.link}}\n- SuprSend",
-                                    "vendor_template_id": "1007xxxxxxxxxx"
-                                  },
-                                  "created_at": "2023-01-25T04:53:39.295289Z",
-                                  "updated_at": "2023-01-25T04:53:39.328651Z",
-                                  "updated_by": {
-                                    "name": "Steve",
-                                    "email": "steve@example.com"
-                                  },
-                                  "approval_cycle": {
-                                    "status": "approved",
-                                    "comment": null,
-                                    "request_received_at": "2022-03-31T10:35:51+0000",
-                                    "sent_for_approval_at": null,
-                                    "approval_status_received_at": "2022-03-31T10:43:44+0000"
-                                  },
-                                  "is_approval_needed": true,
-                                  "is_cloned_from_last_version": false
-                                }
-                              ],
-                              "status": "active",
-                              "version_tag": "1",
-                              "created_at": "2023-01-25T04:53:39.276782Z",
-                              "updated_at": "2023-01-25T04:53:39.342850Z",
-                              "updated_by": {
-                                "name": "Joe",
-                                "email": "joe@example.com"
-                              },
-                              "version_tag_user": "v1",
-                              "published_languages": [
-                                "en"
-                              ],
-                              "apparent_published_languages": [
-                                "en"
-                              ]
-                            },
-                            {
-                              "id": 10821,
-                              "templates": [
-                                {
-                                  "id": 11867,
-                                  "language": {
-                                    "name": "English",
-                                    "slug": "en"
-                                  },
-                                  "is_enabled": true,
-                                  "approval_status": "pending",
-                                  "content": {
-                                    "text": "You purchased product {#var#} worth Rs. {#var#} will reach to you {#var#}. You can track your order here: {#var#}\n- SuprSend",
-                                    "header": "SPRSND",
-                                    "example": [
-                                      "Winter Raincoat",
-                                      "INR 5",
-                                      "999",
-                                      "Bengaluru",
-                                      "https://www.google.com"
-                                    ],
-                                    "vendor_slug": "acl-sms",
-                                    "content_type": "1",
-                                    "message_type": "SERVICE_IMPLICIT",
-                                    "template_name": "purchase_made_en_v2",
-                                    "enterprise_name": "SPRSND",
-                                    "handlebars_text": "You purchased product {{event.product_name}} worth Rs. {{event.amount}} will reach to you {{event.location.city}}. You can track your order here: {{event.link}}\n- SuprSend",
-                                    "vendor_template_id": "1007017737717135821"
-                                  },
-                                  "created_at": "2023-01-25T04:53:39.367525Z",
-                                  "updated_at": "2023-01-25T04:53:39.367556Z",
-                                  "updated_by": {
-                                    "name": "Joe",
-                                    "email": "joe@example.com"
-                                  },
-                                  "approval_cycle": null,
-                                  "is_approval_needed": true,
-                                  "is_cloned_from_last_version": false
-                                },
-                                {
-                                  "id": 11891,
-                                  "language": {
-                                    "name": "French",
-                                    "slug": "fr"
-                                  },
-                                  "is_enabled": true,
-                                  "approval_status": "pending",
-                                  "content": {
-                                    "template_name": "grocery_purchased_hi"
-                                  },
-                                  "created_at": "2023-01-25T05:46:26.753095Z",
-                                  "updated_at": "2023-01-25T05:46:26.753121Z",
-                                  "updated_by": {
-                                    "name": "Joe",
-                                    "email": "joe@example.com"
-                                  },
-                                  "approval_cycle": null,
-                                  "is_approval_needed": true,
-                                  "is_cloned_from_last_version": false
-                                }
-                              ]
-                            }
-                          ],
-                          "tags": []
+                          "versions": []
+                        }
+                      ],
+                      "tags": [
+                        {
+                          "id":"01H9HPT1C5ABN61S12D85J9DJ7",
+                          "name": "tag"
                         }
                       ]
                     }
@@ -2652,20 +2528,20 @@ paths:
                 properties:
                   id:
                     type: integer
-                    example: 2445
+                    description: internal template_id
                   name:
                     type: string
-                    example: "Grocery Purchased"
+                    description: template name given by user
                   slug:
                     type: string
-                    example: "grocery-purchased"
+                    description: unique template slug generated from name
                   description:
                     type: string
                     nullable: true
-                    example: null
+                    description: template description given by user
                   is_active:
                     type: boolean
-                    example: true
+                    description: "is true when atleast 1 template version is live for the channel"
                   default_language:
                     type: object
                     properties:
@@ -2678,25 +2554,25 @@ paths:
                   created_at:
                     type: string
                     format: date-time
-                    example: "2023-01-25T04:53:39.237291Z"
+                    description: template creation time
                   updated_at:
                     type: string
                     format: date-time
-                    example: "2023-08-28T05:06:22.461443Z"
+                    description: latest template modification time
                   updated_by:
                     type: object
                     properties:
                       name:
                         type: string
-                        example: "user_name"
+                        description: team member name who last updated the template
                       email:
                         type: string
                         format: email
-                        example: "user@example.com"
+                        description: team member email who last updated the template
                   last_triggered_at:
                     type: string
                     format: date-time
-                    example: "2023-08-10T12:44:03.361158Z"
+                    description: time when the workflow was last triggered
                   is_auto_translate_enabled:
                     type: boolean
                     example: false
@@ -2704,131 +2580,17 @@ paths:
                     type: array
                     items:
                       type: string
-                    example: ["en", "hi", "kn"]
+                    example: ["en", "fr", "es"]
                   channels:
                     type: array
+                    description: array of all template enabled channels along with their language and active status 
                     items:
                       type: object
-                      properties:
-                        id:
-                          type: integer
-                          example: 3944
-                        channel:
-                          type: object
-                          properties:
-                            name:
-                              type: string
-                              example: "SMS"
-                            slug:
-                              type: string
-                              example: "sms"
-                            is_template_approval_needed:
-                              type: boolean
-                              example: true
-                        is_active:
-                          type: boolean
-                          example: true
-                        is_enabled:
-                          type: boolean
-                          example: true
-                        created_at:
-                          type: string
-                          format: date-time
-                          example: "2023-01-25T04:53:39.268299Z"
-                        updated_at:
-                          type: string
-                          format: date-time
-                          example: "2023-01-25T04:53:39.404273Z"
-                        disabled_languages:
-                          type: array
-                          items:
-                            type: string
-                          example: []
-                        versions:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              id:
-                                type: integer
-                                example: 10820
-                              templates:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    id:
-                                      type: integer
-                                      example: 11866
-                                    language:
-                                      type: object
-                                      properties:
-                                        name:
-                                          type: string
-                                          example: "English"
-                                        slug:
-                                          type: string
-                                          example: "en"
-                                    is_enabled:
-                                      type: boolean
-                                      example: true
-                                    approval_status:
-                                      type: string
-                                      example: "approved"
-                                    content:
-                                      type: object
-                                      properties:
-                                        template_name:
-                                          type: string
-                                          example: "purchase_made_en_v2"
-                              version_tag:
-                                type: string
-                                example: "1"
-                              created_at:
-                                type: string
-                                format: date-time
-                                example: "2023-01-25T04:53:39.276782Z"
-                              updated_at:
-                                type: string
-                                format: date-time
-                                example: "2023-01-25T04:53:39.342850Z"
-                              updated_by:
-                                type: object
-                                properties:
-                                  name:
-                                    type: string
-                                    example: "user_name"
-                                  email:
-                                    type: string
-                                    format: email
-                                    example: "user@example.com"             
-        '404':
-          description: '404'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: {
-                    "code": 404,
-                    "type": "DoesNotExist",
-                    "message": "TemplateGroup matching query does not exist."
-                  }
-              schema:
-                type: object
-                properties:
-                  error-code:
-                    type: integer
-                    example: 404
-                  type:
-                    type: string
-                    example: "DoesNotExist"
-                  message:
-                    type: string
-                    example: "TemplateGroup matching query does not exist."
-                required:
-                  - code
-                  - type
-                  - message            
+                  tags:
+                    type: array
+                    description: tags added in the template group
+                    items:
+                      type: string                      
       deprecated: false
   /v1/subscriber_list/{list_id}/version/{version_id}/finish_sync:
     patch:
@@ -2996,131 +2758,86 @@ paths:
               examples:
                 Result:
                   value: {
-                      "id": 3949,
-                      "channel": {
-                        "name": "In-App Inbox",
-                        "slug": "inbox",
-                        "is_template_approval_needed": false
-                      },
-                      "is_active": true,
-                      "is_enabled": true,
-                      "created_at": "2023-01-25T04:53:40.011112Z",
-                      "updated_at": "2023-07-27T14:55:23.939438Z",
-                      "disabled_languages": [],
-                      "versions": [
-                        {
-                          "id": 10830,
-                          "templates": [
-                            {
-                              "id": 11876,
-                              "language": {
-                                "name": "English",
-                                "slug": "en"
-                              },
-                              "is_enabled": true,
-                              "approval_status": "auto_approved",
-                              "content": {
-                                "url": "",
-                                "text": "We will soon deliver {{event.product_name}} to {{event.location.city}} 😀",
-                                "image": "",
-                                "header": "Order Confirmed {{event.date}}",
-                                "schema": "1.0",
-                                "extra_data": "{\n\"city\": \"{{event.amount}}\"\n}"
-                              },
-                              "created_at": "2023-01-25T04:53:40.035836Z",
-                              "updated_at": "2023-01-25T04:53:40.069659Z",
-                              "updated_by": {
-                                "name": "Joe",
-                                "email": "joe@example.com"
-                              },
-                              "approval_cycle": null,
-                              "is_approval_needed": false,
-                              "is_cloned_from_last_version": false
-                            }
-                          ],
-                          "status": "active",
-                          "version_tag": "1",
-                          "created_at": "2023-01-25T04:53:40.016463Z",
-                          "updated_at": "2023-01-25T04:53:40.083969Z",
-                          "updated_by": {
-                            "name": "Steve",
-                            "email": "steve@example.com"
-                          },
-                          "version_tag_user": "v1",
-                          "published_languages": [
-                            "en"
-                          ],
-                          "apparent_published_languages": [
-                            "en"
-                          ]
+                    "id": 1121,
+                    "channel": {
+                      "name": "In-App Inbox",
+                      "slug": "inbox",
+                      "is_template_approval_needed": false
+                    },
+                    "is_active": true,
+                    "is_enabled": true,
+                    "created_at": "2022-06-18T04:53:58.690274Z",
+                    "updated_at": "2025-01-21T11:49:23.247217Z",
+                    "disabled_languages": [],
+                    "versions": [
+                      {
+                        "id": 69989,
+                        "templates": [
+                          {
+                            "id": 74660,
+                            "language": {
+                              "name": "English",
+                              "slug": "en"
+                            },
+                            "is_enabled": true,
+                            "approval_status": "auto_approved",
+                            "content": {...},
+                            "created_at": "2024-09-15T04:33:22.727005Z",
+                            "updated_at": "2024-09-15T04:36:56.103368Z",
+                            "updated_by": {
+                              "name": "Siva",
+                              "email": "katta.sivaram@suprsend.com"
+                            },
+                            "approval_cycle": null,
+                            "is_approval_needed": false,
+                            "is_cloned_from_last_version": false
+                          }
+                        ],
+                        "status": "active",
+                        "version_tag": "17",
+                        "created_at": "2024-09-15T04:33:22.714274Z",
+                        "updated_at": "2024-09-15T04:36:58.752580Z",
+                        "updated_by": {
+                          "name": "Siva",
+                          "email": "katta.sivaram@suprsend.com"
                         },
-                        {
-                          "id": 10831,
-                          "templates": [
-                            {
-                              "id": 11877,
-                              "language": {
-                                "name": "English",
-                                "slug": "en"
-                              },
-                              "is_enabled": true,
-                              "approval_status": "auto_approved",
-                              "content": {
-                                "url": "",
-                                "text": "We will soon deliver {{event.product_name}} to {{event.location.city}} 😀 {{$embedded_preference_url}}",
-                                "image": "",
-                                "header": "Order Confirmed {{event.date}}",
-                                "schema": "1.0",
-                                "extra_data": "{\n\"city\": \"{{event.amount}}\"\n}"
-                              },
-                              "created_at": "2023-01-25T04:53:40.112492Z",
-                              "updated_at": "2023-07-27T14:55:23.933072Z",
-                              "updated_by": {
-                                "name": "Joe",
-                                "email": "joe@example.com"
-                              },
-                              "approval_cycle": null,
-                              "is_approval_needed": false,
-                              "is_cloned_from_last_version": false
-                            }
-                          ],
-                          "status": "draft",
-                          "version_tag": "_",
-                          "created_at": "2023-01-25T04:53:40.098853Z",
-                          "updated_at": "2023-07-27T14:55:23.937661Z",
-                          "updated_by": {
-                            "name": "Steve",
-                            "email": "steve@example.com"
-                          },
-                          "version_tag_user": null,
-                          "published_languages": [],
-                          "apparent_published_languages": []
-                        }
-                      ]
-                    }
+                        "version_tag_user": "v1",
+                        "published_languages": [
+                          "en"
+                        ],
+                        "apparent_published_languages": [
+                          "en"
+                        ],
+                        "system_approval_info": {}
+                      }]
+                  }
               schema:
                 type: object
                 properties:
                   id:
                     type: integer
-                    example: 3949
+                    description: template id generated by SuprSend
                   channel:
                     type: object
                     properties:
                       name:
                         type: string
+                        description: channel type
                         example: "In-App Inbox"
                       slug:
                         type: string
+                        description: unique slug of the channel
                         example: "inbox"
                       is_template_approval_needed:
                         type: boolean
+                        description: "is true for channels like whatsapp where template needs to be pre-approved for sending notification"
                         example: false
                   is_active:
                     type: boolean
-                    example: true
+                    description: active templates have atleast 1 live version
                   is_enabled:
                     type: boolean
+                    description: disabled channels are not picked for sending the message
                     example: true
                   created_at:
                     type: string
@@ -3134,7 +2851,6 @@ paths:
                     type: array
                     items:
                       type: string
-                    example: []
                   versions:
                     type: array
                     items:
@@ -3160,65 +2876,33 @@ paths:
                                   slug:
                                     type: string
                                     example: "en"
-                              is_enabled:
-                                type: boolean
-                                example: true
-                              approval_status:
-                                type: string
-                                example: "auto_approved"
                               content:
                                 type: object
-                                properties:
-                                  url:
-                                    type: string
-                                    example: ""
-                                  text:
-                                    type: string
-                                    example: "We will soon deliver {{event.product_name}} to {{event.location.city}} 😀"
-                                  image:
-                                    type: string
-                                    example: ""
-                                  header:
-                                    type: string
-                                    example: "Order Confirmed {{event.date}}"
-                                  schema:
-                                    type: string
-                                    example: "1.0"
-                                  extra_data:
-                                    type: string
-                                    example: "{\n\"city\": \"{{event.amount}}\"\n}"
+                                description: json content of the template
                               created_at:
                                 type: string
                                 format: date-time
-                                example: "2023-01-25T04:53:40.035836Z"
+                                description: timestamp of template creation
                               updated_at:
                                 type: string
                                 format: date-time
-                                example: "2023-01-25T04:53:40.069659Z"
+                                description: timestamp when the template channel content was last updated
                               updated_by:
                                 type: object
                                 properties:
                                   name:
                                     type: string
-                                    example: "user_name"
+                                    description: team member name who last updated the content
                                   email:
                                     type: string
+                                    description: email of the team member who last updated the content
                                     example: "user@example.com"
-                              approval_cycle:
-                                type: object
-                                nullable: true
-                              is_approval_needed:
-                                type: boolean
-                                example: false
-                              is_cloned_from_last_version:
-                                type: boolean
-                                example: false
                         status:
                           type: string
                           example: "active"
                         version_tag:
                           type: string
-                          example: "1"
+                          description: version number
                         created_at:
                           type: string
                           format: date-time
@@ -3229,38 +2913,18 @@ paths:
                           example: "2023-01-25T04:53:40.083969Z"
                         updated_by:
                           type: object
-                          properties:
-                            name:
-                              type: string
-                              example: "user_name"
-                            email:
-                              type: string
-                              example: "user@example.com"
+                          description: team member details who last updated the content for the channel
                         version_tag_user:
                           type: string
-                          nullable: true
-                          example: "v1"
+                          description: version name added on publish
                         published_languages:
                           type: array
+                          description: languages last published in the channel
                           items:
                             type: string
-                          example: ["en"]
-                        apparent_published_languages:
-                          type: array
-                          items:
-                            type: string
-                          example: ["en"]
-                required:
-                  - id
-                  - channel
-                  - is_active
-                  - is_enabled
-                  - created_at
-                  - updated_at
-                  - disabled_languages
-                  - versions            
+                          example: ["en"]          
         '404':
-          description: '404'
+          description: '404 - Not Found'
           content:
             application/json:
               examples:
@@ -3273,19 +2937,15 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
-                    example: 404
+                    description: error code
                   type:
                     type: string
-                    example: "DoesNotExist"
+                    description: error type
                   message:
                     type: string
-                    example: "TemplateGroup matching query does not exist."
-                required:
-                  - code
-                  - type
-                  - message            
+                    description: error message giving reason of the failure    
       deprecated: false
   /v1/template:
     get:
@@ -3330,10 +2990,10 @@ paths:
                     },
                     "results": [
                       {
-                        "id": "<integer>",
-                        "name": "Grocery Purchased",
-                        "slug": "grocery-purchased",
-                        "description": null,
+                        "id": "166277",
+                        "name": "Task Reminder",
+                        "slug": "task-reminder",
+                        "description": "Batched template for all pending tasks",
                         "is_active": true,
                         "default_language": {
                           "name": "English",
@@ -3342,12 +3002,12 @@ paths:
                         "created_at": "2023-01-25T04:53:39.237291Z",
                         "updated_at": "2023-08-28T05:06:22.461443Z",
                         "updated_by": {
-                          "name": "user_name",
+                          "name": "team_member",
                           "email": "user@example.com"
                         },
                         "last_triggered_at": "2023-08-10T12:44:03.361158Z",
                         "is_auto_translate_enabled": false,
-                        "enabled_languages": ["en", "hi", "kn"],
+                        "enabled_languages": ["en", "fr", "es"],
                         "channels": [
                           {
                             "id": "<integer>",
@@ -3364,7 +3024,12 @@ paths:
                             "versions": []
                           }
                         ],
-                        "tags": []
+                        "tags": [
+                          {
+                            "id":"01H9HPT1C5ABN61S12D85J9DJ7",
+                            "name": "tag"
+                          }
+                        ]
                       }
                     ]
                   }                  
@@ -3376,13 +3041,15 @@ paths:
                     properties:
                       count:
                         type: integer
+                        description: total template count
                         example: 1
                       limit:
                         type: integer
+                        description: number of results per page
                         example: 10
                       offset:
                         type: integer
-                        example: 0
+                        description: offset value passed in the request
                   results:
                     type: array
                     items:
@@ -3390,20 +3057,20 @@ paths:
                       properties:
                         id:
                           type: integer
-                          example: 2445
+                          description: internal template_id
                         name:
                           type: string
-                          example: "Grocery Purchased"
+                          description: template name given by user
                         slug:
                           type: string
-                          example: "grocery-purchased"
+                          description: unique template slug generated from name
                         description:
                           type: string
                           nullable: true
-                          example: null
+                          description: template description given by user
                         is_active:
                           type: boolean
-                          example: true
+                          description: "is true when atleast 1 template version is live for the channel"
                         default_language:
                           type: object
                           properties:
@@ -3416,25 +3083,25 @@ paths:
                         created_at:
                           type: string
                           format: date-time
-                          example: "2023-01-25T04:53:39.237291Z"
+                          description: template creation time
                         updated_at:
                           type: string
                           format: date-time
-                          example: "2023-08-28T05:06:22.461443Z"
+                          description: latest template modification time
                         updated_by:
                           type: object
                           properties:
                             name:
                               type: string
-                              example: "user_name"
+                              description: team member name who last updated the template
                             email:
                               type: string
                               format: email
-                              example: "user@example.com"
+                              description: team member email who last updated the template
                         last_triggered_at:
                           type: string
                           format: date-time
-                          example: "2023-08-10T12:44:03.361158Z"
+                          description: time when the workflow was last triggered
                         is_auto_translate_enabled:
                           type: boolean
                           example: false
@@ -3445,69 +3112,14 @@ paths:
                           example: ["en", "hi", "kn"]
                         channels:
                           type: array
+                          description: array of all template enabled channels along with their language and active status 
                           items:
                             type: object
-                            properties:
-                              id:
-                                type: integer
-                                example: 3944
-                              channel:
-                                type: object
-                                properties:
-                                  name:
-                                    type: string
-                                    example: "Email"
-                                  slug:
-                                    type: string
-                                    example: "email"
-                                  is_template_approval_needed:
-                                    type: boolean
-                                    example: true
-                              is_active:
-                                type: boolean
-                                example: true
-                              is_enabled:
-                                type: boolean
-                                example: true
-                              created_at:
-                                type: string
-                                format: date-time
-                                example: "2023-01-25T04:53:39.268299Z"
-                              updated_at:
-                                type: string
-                                format: date-time
-                                example: "2023-01-25T04:53:39.404273Z"
-                              disabled_languages:
-                                type: array
-                                items:
-                                  type: string
-                                example: []
-                              versions:
-                                type: array
-                                items:
-                                  type: string
-                                example: []
                         tags:
                           type: array
                           items:
                             type: string
-                          example: []              
-        '401':
-          description: '401'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: Not Authenticated - could not find Workspace details
-              schema:
-                type: object
-                properties:
-                  error-code:
-                    type: integer
-                    example: 401
-                  message:
-                    type: string
-                    example: "Not Authenticated - could not find Workspace details"
+                          example: []
       deprecated: false
   /trigger/:
     post:
