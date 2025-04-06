@@ -4136,106 +4136,93 @@ paths:
             type: string
           required: true
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                RAW_BODY:
-                  type: string
-                  description: 'add properties and channels of object. Used when notification is triggered to object as a user. Following channel keys can be used: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`'
-                  default: {"prop1":"val1","$email":["abc@example.com"],"$timezone":"America/New_York","$preferred_language":"en"}
-                  format: json
-      responses:
-        '201':
-          description: '201'
           content:
             application/json:
-              examples:
-                Result:
-                  value: {
-                    "object_type": "obj_type",
-                    "id": "obj_id",
-                    "subscriptions_count": 0,
-                    "properties": {
-                      "RAW_BODY": "\"prop1\": \"val1\""
-                    },
-                    "created_at": "2025-04-03T10:45:15.333323+00:00",
-                    "updated_at": "2025-04-03T10:45:15.333323+00:00",
-                    "$inbox": [
-                      {
-                        "value": "Xtpxxxx_HlXxXxxxT1aulEXXXXmr7ixxM",
-                        "id_provider": "suprsend",
-                        "status": "active",
-                        "perma_status": "active"
-                      }
-                    ]
-                  }               
               schema:
-                type: object
                 properties:
-                  object_type:
-                    type: string
-                    example: "obj_type"
-                    description: "Type of the object."
-                  id:
-                    type: string
-                    example: "obj_id"
-                    description: "Unique identifier of the object."
-                  subscriptions_count:
-                    type: integer
-                    example: 0
-                    description: "Number of subscriptions associated with the object."
-                  properties:
-                    type: object
-                    description: "Additional properties linked to the object."
-                    example:
-                      RAW_BODY: "\"prop1\": \"val1\""
-                  created_at:
-                    type: string
-                    format: date-time
-                    example: "2025-04-03T10:45:15.333323+00:00"
-                    description: "Timestamp when the object was created."
-                  updated_at:
-                    type: string
-                    format: date-time
-                    example: "2025-04-03T10:45:15.333323+00:00"
-                    description: "Timestamp when the object was last updated."
-                  $inbox:
+                  $email:
                     type: array
-                    description: "List of inbox entries associated with the object."
                     items:
-                      type: object
-                      properties:
-                        value:
-                          type: string
-                          example: "Xtpxxxx_HlXxXxxxT1aulEXXXXmr7ixxM"
-                          description: "Inbox value identifier."
-                        id_provider:
-                          type: string
-                          example: "suprsend"
-                          description: "Provider of the inbox"                            
-        '405':
-          description: '405'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: {
-                    "code": 405,
-                    "message": "Method Not Allowed"
-                  }
-              schema:
-                type: object
-                properties:
-                  error-code:
-                    type: integer
-                    example: 405
-                    description: "HTTP status code indicating that the method is not allowed for the requested resource."
-                  message:
+                      type: string
+                      format: email
+                    description: List of email addresses. You can add other channels in the same format by replacing $email with respective channel keys. Available channel keys - `$email`, `$sms`, `$inbox`, `$webpush`, `$androidpush`, `$iospush`, `$slack`, `$ms_teams`.
+                  $timezone:
                     type: string
-                    example: "Method Not Allowed"
-                    description: "Describes the error indicating that the HTTP method used is not allowed for this endpoint."              
+                    description: User's timezone in [IANA format]("https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List")
+                    example: America/New_York
+                  $preferred_language:
+                    type: string
+                    description: Preferred language in [ISO 639-1 Alpha-2 format]("https://gist.github.com/jrnk/8eb57b065ea0b098d571")
+                    example: en
+                additionalProperties:
+                    type: string
+                    description: add any additional property in key-value pair
+                    example: val
+      responses:
+          '201':
+            description: '201 - Created'
+            content:
+              application/json:
+                examples:
+                  Result:
+                    value: {
+                      "object_type": "departments",
+                      "id": "engineering",
+                      "subscriptions_count": 0,
+                      "properties": {
+                        "$preferred_language": "en"
+                      },
+                      "created_at": "2025-04-06T10:00:37.893892+00:00",
+                      "updated_at": "2025-04-06T10:00:37.893892+00:00",
+                      "$inbox": [
+                        {
+                          "value": "pO7w6x_HFZxCs30N4SHab05e3QIdB1e0xT2r4vQWjvM",
+                          "id_provider": "suprsend",
+                          "status": "active",
+                          "perma_status": "active"
+                        }
+                      ]
+                    }
+                schema:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: unique identifier of the object
+                      example: engineering
+                    object_type:
+                      type: string
+                      description: Used to group similar objects together. Give plural namespace like teams, organizations, and roles.
+                      example: departments
+                    subscriptions_count:
+                      type: integer
+                      description: number of users/child objects subscribed to the object
+                      example: departments
+                    properties:
+                      type: object
+                      description: all user properties in key-value pair. SuprSend reserved properties start with $ 
+                    created_at:
+                      type: string
+                      format: date-time
+                      example: 2025-04-04T09:55:12.397856+00:00
+                    updated_at:
+                      type: string
+                      format: date-time
+                      example: 2025-04-04T09:55:12.422388+00:00
+                    $<channel>:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          value:
+                            type: string
+                            description: channel value
+                          status:
+                            type: string
+                            example: active
+                          perma_status:
+                            type: string
+                            description: active/disabled. Perma_status is marked disabled in case of hard bounce on the channel.                        
       deprecated: false
     get:
       summary: Fetch Object by id
@@ -4258,23 +4245,23 @@ paths:
           required: true
       responses:
         '200':
-          description: '200'
+          description: '200 - OK'
           content:
             application/json:
               examples:
                 Result:
                   value: {
-                    "object_type": "obj_type",
-                    "id": "obj_id",
+                    "object_type": "departments",
+                    "id": "engineering",
                     "subscriptions_count": 0,
                     "properties": {
-                      "RAW_BODY": "\"prop1\": \"val1\""
+                      "$preferred_language": "en"
                     },
-                    "created_at": "2025-04-03T07:55:52.018199+00:00",
-                    "updated_at": "2025-04-03T07:57:59.161059+00:00",
+                    "created_at": "2025-04-06T10:00:37.893892+00:00",
+                    "updated_at": "2025-04-06T10:00:37.893892+00:00",
                     "$inbox": [
                       {
-                        "value": "vMUXXXXkNxx9-rM3_rxxxxFSrBvXXXXNuk",
+                        "value": "pO7w6x_HFZxCs30N4SHab05e3QIdB1e0xT2r4vQWjvM",
                         "id_provider": "suprsend",
                         "status": "active",
                         "perma_status": "active"
@@ -4284,57 +4271,45 @@ paths:
               schema:
                 type: object
                 properties:
-                  object_type:
-                    type: string
-                    example: "obj_type"
-                    description: "Type of the object."
                   id:
                     type: string
-                    example: "obj_id"
-                    description: "Unique identifier of the object."
+                    description: unique identifier of the object
+                    example: engineering
+                  object_type:
+                    type: string
+                    description: Used to group similar objects together. Give plural namespace like teams, organizations, and roles.
+                    example: departments
                   subscriptions_count:
                     type: integer
-                    example: 0
-                    description: "Number of subscriptions associated with the object."
+                    description: number of users/child objects subscribed to the object
+                    example: departments
                   properties:
                     type: object
-                    description: "Additional properties linked to the object."
-                    example:
-                      RAW_BODY: "\"prop1\": \"val1\""
+                    description: all user properties in key-value pair. SuprSend reserved properties start with $ 
                   created_at:
                     type: string
                     format: date-time
-                    example: "2025-04-03T07:55:52.018199+00:00"
-                    description: "Timestamp when the object was created."
+                    example: 2025-04-04T09:55:12.397856+00:00
                   updated_at:
                     type: string
                     format: date-time
-                    example: "2025-04-03T07:57:59.161059+00:00"
-                    description: "Timestamp when the object was last updated."
-                  $inbox:
+                    example: 2025-04-04T09:55:12.422388+00:00
+                  $<channel>:
                     type: array
-                    description: "List of inbox entries associated with the object."
                     items:
                       type: object
                       properties:
                         value:
                           type: string
-                          example: "vMUXXXXkNxx9-rM3_rxxxxFSrBvXXXXNuk"
-                          description: "Inbox value identifier."
-                        id_provider:
-                          type: string
-                          example: "suprsend"
-                          description: "Provider of the inbox ID."
+                          description: channel value
                         status:
                           type: string
-                          example: "active"
-                          description: "Current status of the inbox entry."
+                          example: active
                         perma_status:
                           type: string
-                          example: "active"
-                          description: "Permanent status of the inbox entry."            
+                          description: active/disabled. Perma_status is marked disabled in case of hard bounce on the channel.            
         '404':
-          description: '404'
+          description: '404 - Not Found'
           content:
             application/json:
               examples:
@@ -4349,10 +4324,8 @@ paths:
                     error-code:
                       type: integer
                       example: 404
-                      description: "Error code indicating resource not found."
                     message:
                       type: string
-                      example: "object 'obj_type/obj_id' not found"
                       description: "Error message describing the missing resource."
       deprecated: false
     delete:
@@ -4376,25 +4349,16 @@ paths:
           required: true
       responses:
         '204':
-          description: '204'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: No Content
-              schema:
-                type: string
-                example: "No Content"
-                description: "Indicates that the request was successful but there is no content to return."
+          description: '204 - No Content'
         '404':
-          description: '404'
+          description: '404 - Not Found'
           content:
             application/json:
               examples:
                 Result:
                   value: {
                     "code": 404,
-                    "message": "object 'ervfwcdsax/khushiiii' not found"
+                    "message": "object 'object_type/object_id' not found"
                   }
               schema:
                 type: object
@@ -4402,11 +4366,9 @@ paths:
                   error-code:
                     type: integer
                     example: 404
-                    description: "Error code indicating that the requested object was not found."
                   message:
                     type: string
-                    example: "object 'ervfwcdsax/khushiiii' not found"
-                    description: "Detailed error message specifying the missing object."
+                    description: "Error message indicating object_id and type combination is not found"
       deprecated: false
     patch:
       summary: Edit Object Profile
@@ -4433,38 +4395,24 @@ paths:
             schema:
               type: object
               properties:
-                channel_preferences:
+                operations:
                   type: array
                   description: |
-                    You can use following operations to edit object profile. 
-                    - `$set` to add/update string, 
-                    - `$unset` to delete property/channel, 
-                    - `$append` to insert values in property/channel array, 
-                    - `$remove` to remove values from property/channel array.
+                    You can use the following operations to edit user profile.
+                    - `$set` to add/update a property
+                    - `$unset` to delete property/channel
+                    - `$append` to insert values in property/channel array
+                    - `$remove` to remove values from property/channel array
+                    - `$set_once` to remove immutable properties
+                    - `$increment` to increase/decrease integer values on further update
                   items:
                     type: object
                     properties:
-                      $append:
-                        type: object
-                        description: |
-                          Use this to add communication channels or update array properties in user profile. 
-                          Channels: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`
-                          Example: `{"$email":"user@example.com"}`
-                        additionalProperties:
-                          type: string
-                      $remove:
-                        type: object
-                        description: |
-                          Use this to remove communication channels or remove values from an array in user profile. 
-                          Channels: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`
-                          Example: `{"$email":"user@example.com"}`
-                        additionalProperties:
-                          type: string
                       $set:
                         type: object
                         description: |
                           Use this to set user properties like name, location, preferred language, etc.
-                          Example: `{"prop1":"val1","$preferred_language":"hi","$timezone":"America/New_York"}`
+                          Example: `{"team":"Engineering","$preferred_language":"hi","$timezone":"America/New_York"}`
                         additionalProperties:
                           type: string
                       $unset:
@@ -4472,26 +4420,56 @@ paths:
                         description: |
                           Use this to delete channels or properties from user profile.
                           Channels: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`
-                          Example: `["$sms", "$whatsapp", "prop1"]`
+                          Example: `["$sms", "$whatsapp", "name"]`
                         items:
                           type: string
+                      $append:
+                        type: object
+                        description: |
+                          Use this to add communication channels or update array properties in user profile. Available channel keys: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`
+                          Example: `{"$email":"devs@company.com"}`
+                        additionalProperties:
+                          type: string
+                      $remove:
+                        type: object
+                        description: |
+                          Use this to remove communication channels or remove values from an array in user profile. Available channel keys: `$email`, `$sms`, `$whatsapp`, `$androidpush`, `$iospush`, `$slack`, `$webpush`, `$ms_teams`
+                          Example: `{"$email":"devs@company.com"}`
+                        additionalProperties:
+                          type: string
+                      $set_once:
+                        type: object
+                        description: |
+                          Use this to set properties which are not set once and not changed on further updates.
+                          Example: `{"first_login_at":"2025-01-01T14:00:00Z"}`
+                        additionalProperties:
+                          type: string
+                      $increment:
+                        type: object
+                        description: |
+                          Use this to increase / decrease integer values on further updates
+                          Example: `{"login_count":1}`
+                        additionalProperties:
+                          type: string
       responses:
-        '202':
-          description: '202'
+        '200':
+          description: '200 - OK'
           content:
             application/json:
               examples:
                 Result:
                   value: {
-                    "object_type": "obj_type",
-                    "id": "obj_id",
+                    "object_type": "departments",
+                    "id": "engineering",
                     "subscriptions_count": 0,
-                    "properties": {},
-                    "created_at": "2025-04-03T10:22:50.21704+00:00",
-                    "updated_at": "2025-04-03T10:22:50.21704+00:00",
+                    "properties": {
+                      "$preferred_language": "en"
+                    },
+                    "created_at": "2025-04-06T10:00:37.893892+00:00",
+                    "updated_at": "2025-04-06T10:00:37.893892+00:00",
                     "$inbox": [
                       {
-                        "value": "oX38xxxxxV9mbxXXXXQyByxxxx_nZKXXXX4",
+                        "value": "pO7w6x_HFZxCs30N4SHab05e3QIdB1e0xT2r4vQWjvM",
                         "id_provider": "suprsend",
                         "status": "active",
                         "perma_status": "active"
@@ -4501,54 +4479,45 @@ paths:
               schema:
                 type: object
                 properties:
-                  object_type:
-                    type: string
-                    example: "obj_id"
                   id:
                     type: string
-                    example: "obj_type"
+                    description: unique identifier of the object
+                    example: engineering
+                  object_type:
+                    type: string
+                    description: Used to group similar objects together. Give plural namespace like teams, organizations, and roles.
+                    example: departments
                   subscriptions_count:
                     type: integer
-                    example: 0
-                    description: "Number of subscriptions associated with the object."
+                    description: number of users/child objects subscribed to the object
+                    example: departments
                   properties:
                     type: object
-                    description: "Additional properties linked to the object."
-                    example: {}
+                    description: all user properties in key-value pair. SuprSend reserved properties start with $ 
                   created_at:
                     type: string
                     format: date-time
-                    example: "2025-04-03T10:22:50.217040+00:00"
-                    description: "Timestamp indicating when the object was created."
+                    example: 2025-04-04T09:55:12.397856+00:00
                   updated_at:
                     type: string
                     format: date-time
-                    example: "2025-04-03T10:22:50.217040+00:00"
-                    description: "Timestamp indicating when the object was last updated."
-                  $inbox:
+                    example: 2025-04-04T09:55:12.422388+00:00
+                  $<channel>:
                     type: array
-                    description: "Inbox information associated with the object."
                     items:
                       type: object
                       properties:
                         value:
                           type: string
-                          example: "oX38xxxxxV9mbxXXXXQyByxxxx_nZKXXXX4"
-                          description: "Unique identifier for the inbox item."
-                        id_provider:
-                          type: string
-                          example: "suprsend"
-                          description: "Provider associated with the inbox."
+                          description: channel value
                         status:
                           type: string
-                          example: "active"
-                          description: "Current status of the inbox item."
+                          example: active
                         perma_status:
                           type: string
-                          example: "active"
-                          description: "Permanent status of the inbox item."              
+                          description: active/disabled. Perma_status is marked disabled in case of hard bounce on the channel.             
         '400':
-          description: '400'
+          description: '400 - Bad Request'
           content:
             application/json:
               examples:
@@ -4557,17 +4526,6 @@ paths:
                     "code": 400,
                     "message": "Request body must not be empty"
                   }
-              schema:
-                type: object
-                properties:
-                  error-code:
-                    type: integer
-                    example: 400
-                    description: "Error code indicating a bad request."
-                  message:
-                    type: string
-                    example: "Request body must not be empty"
-                    description: "Description of the error."
       deprecated: false
   /v1/object/{object_type}/{id}/subscription/:
     post:
@@ -4596,25 +4554,49 @@ paths:
               type: object
               properties:
                 recipients:
-                  type: string
-                  description: you can pass upto 100 recipients in the call. Pass users directly as array of distinct_ids `["id1","id2","id3"]` or array of objects as shown in example to create user profiles inline.
-                  default: [
-                            {
-                              "distinct_id": "id1",
-                              "$email": "abc@suprsend.com"
-                            },
-                            {
-                              "object_type": "teams",
-                              "id": "devs"
-                            }
-                          ]
-
-                  format: json
+                  type: array
+                  description: List of recipients to be notified. You can either add recipient as array of distinct_ids or array of recipient objects. You can add upto 100 recipients in a single API.
+                  items:
+                    oneOf:
+                      - type: object
+                        description: Add user subscription by passing user json. You can pass user distinct_ids in array as `["id1","id2"]` or as user object to identify recipient inline.
+                        required: [distinct_id]
+                        properties:
+                          distinct_id:
+                            type: string
+                            description: unique identifier of the user
+                            default: id1
+                          $email:
+                            type: array
+                            description: List of email addresses. You can add other channels in the same format by replacing $email with respective channel keys. Available channel keys - `$email`, `$sms`, `$inbox`, `$webpush`, `$androidpush`, `$iospush`, `$slack`, `$ms_teams`.
+                            items:
+                              type: string
+                          $preferred_language:
+                            type: string
+                            description: 2-letter language code in ISO 639-1 Alpha-2 code format. e.g. 'en' (for English)
+                          $timezone:
+                            type: string
+                            description: in IANA timezone format e.g. 'America/Los_Angeles'
+                        additionalProperties:
+                          type: string
+                          description: You can pass other user properties to render dynamic template content in key-value pair as "user_prop1":"value1" . Extra properties will be set in subscriber profile (as subscriber properties) which can then be used in the template as $recipient.<property>.
+                      - type: object
+                        description: Add other object as child subscriber to the parent object
+                        required: [id,object_type]
+                        properties:
+                          id:
+                            type: string
+                            description: Unique identifier of the object
+                            example: frontend
+                          object_type:
+                            type: string
+                        additionalProperties:
+                          type: string
+                          description: You can pass other user properties similar to recipient payload. It will be used when notification is sent to object channels as $recipient.<property>. 
                 properties:
-                  type: string
-                  description: properties linked to object subscription. Can be referenced under `recipient.subscription` namespace in workflow and template.
-                  default: {"role":"developer"}
-                  format: json
+                  type: object
+                  description: properties defining the relation between object and its subscribers. Can be referenced as `recipient.subscription.<key>` in workflow and template.
+                  example: {"role":"developer"}
       responses:
         '200':
           description: '200'
@@ -4622,20 +4604,91 @@ paths:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "results": [
+                      {
+                        "properties": {
+                          "department":"frontend"
+                        },
+                        "user": {
+                          "distinct_id": "_distinct_id_",
+                          "updated_at": "2025-04-05T10:33:33.629736+00:00"
+                        },
+                        "object": {
+                          "id": "_object_id_",
+                          "object_type": "_object_type_",
+                          "subscriptions_count": 10,
+                          "updated_at": "2025-04-06T11:00:24.257046+00:00"
+                        },
+                        "created_at": "2025-04-06T10:59:07.726336+00:00",
+                        "updated_at": "2025-04-06T10:59:07.726336+00:00"
+                      }
+                    ]
+                  }
               schema:
                 type: object
-                properties: {}
-        '400':
-          description: '400'
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      distinct_id:
+                        type: string
+                        description: unique identifier of the user
+                        example: _distinct_id_
+                      updated_at:
+                        type: string
+                        format: date-time
+                        description: time when user was subscribed to this list
+                        example: 2025-04-04T09:55:12.422388+00:00
+                  object:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: unique identifier of the object
+                          example: frontend
+                        object_type:
+                          type: string
+                          description: type of object like teams, organizations, and roles. Used to group similar objects together.
+                          example: frontend
+                        subscriptions_count:
+                          type: integer
+                          description: number of users/child objects subscribed to this object
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: timestamp when subscription was first created 
+                          example: 2025-04-04T09:55:12.422388+00:00
+                  properties:
+                    type: object
+                    description: object subscription properties, referred as `$recipient.subscription.<key>` in template or workflow.
+                  created_at:
+                    type: string
+                    format: date-time
+                    example: 2025-04-04T09:55:12.397856+00:00
+                  updated_at:
+                    type: string
+                    format: date-time
+                    example: 2025-04-04T09:55:12.422388+00:00
+        '404':
+          description: '404 - Not Found'
           content:
             application/json:
               examples:
                 Result:
-                  value: '{}'
+                  value: {
+                    "code": 404,
+                    "message": "object 'object_type/id' not found"
+                  }
               schema:
                 type: object
-                properties: {}
+                properties:
+                  error-code:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    description: "Error message indicating object_id and type combination is not found"
       deprecated: false
     get:
       summary: List Object Subscriptions
@@ -4665,7 +4718,7 @@ paths:
                 Result:
                   value: {
                     "meta": {
-                      "count": 1,
+                      "count": 3,
                       "limit": 10,
                       "has_prev": false,
                       "before": null,
@@ -4674,11 +4727,23 @@ paths:
                     },
                     "results": [
                       {
+                        "properties": {},
+                        "user": null,
+                        "object": {
+                          "id": "devs",
+                          "object_type": "teams",
+                          "subscriptions_count": 1,
+                          "updated_at": "2025-04-06T11:00:24.257046+00:00"
+                        },
+                        "created_at": "2025-04-06T11:00:24.260496+00:00",
+                        "updated_at": "2025-04-06T11:00:24.260496+00:00"
+                      },
+                      {
                         "properties": {
-                          "role": "intern"
+                          "role": "employee"
                         },
                         "user": {
-                          "distinct_id": "user1",
+                          "distinct_id": "akhil.m@suprsend.com",
                           "updated_at": "2023-08-25T13:31:24.517819+00:00"
                         },
                         "object": null,
@@ -4703,65 +4768,65 @@ paths:
                         description: "Maximum number of results returned per request."
                       has_prev:
                         type: boolean
-                        example: false
                         description: "Indicates if there are previous results."
                       before:
                         type: string
-                        nullable: true
-                        example: null
                         description: "Cursor for the previous page, if applicable."
                       has_next:
                         type: boolean
-                        example: false
                         description: "Indicates if there are more results."
                       after:
                         type: string
-                        nullable: true
-                        example: null
                         description: "Cursor for the next page, if applicable."
                   results:
                     type: array
                     items:
                       type: object
                       properties:
-                        properties:
-                          type: object
-                          description: "Additional properties associated with the result."
-                          properties:
-                            role:
-                              type: string
-                              example: "intern"
-                              description: "Role associated with the user."
                         user:
                           type: object
-                          description: "Details about the user."
                           properties:
                             distinct_id:
                               type: string
-                              example: "user1"
-                              description: "Unique identifier for the user."
+                              description: unique identifier of the user
+                              example: _distinct_id_
                             updated_at:
                               type: string
                               format: date-time
-                              example: "2023-08-25T13:31:24.517819+00:00"
-                              description: "Timestamp when the user was last updated."
+                              description: time when user was subscribed to this list
+                              example: 2025-04-04T09:55:12.422388+00:00
                         object:
-                          type: string
-                          nullable: true
-                          example: null
-                          description: "Associated object, if any."
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                description: unique identifier of the object
+                                example: frontend
+                              object_type:
+                                type: string
+                                description: type of object like teams, organizations, and roles. Used to group similar objects together.
+                                example: frontend
+                              subscriptions_count:
+                                type: integer
+                                description: number of users/child objects subscribed to this object
+                              updated_at:
+                                type: string
+                                format: date-time
+                                description: timestamp when subscription was first created 
+                                example: 2025-04-04T09:55:12.422388+00:00
+                        properties:
+                          type: object
+                          description: object subscription properties, referred as `$recipient.subscription.<key>` in template or workflow.
                         created_at:
                           type: string
                           format: date-time
-                          example: "2024-11-10T21:40:02.169501+00:00"
-                          description: "Timestamp when the record was created."
+                          example: 2025-04-04T09:55:12.397856+00:00
                         updated_at:
                           type: string
                           format: date-time
-                          example: "2024-11-10T21:40:02.169501+00:00"
-                          description: "Timestamp when the record was last updated."                            
+                          example: 2025-04-04T09:55:12.422388+00:00                          
         '404':
-          description: '404'
+          description: '404 - Not Found'
           content:
             application/json:
               examples:
@@ -4775,12 +4840,10 @@ paths:
                 properties:
                   error-code:
                     type: integer
-                    example: 404
                     description: "HTTP status code indicating the error."
                   message:
                     type: string
-                    example: "object 'obj_type/obj_id' not found"
-                    description: "Error message providing details about the issue."
+                    description: "Error message indicating object_id and type combination is not found"
       deprecated: false
     delete:
       summary: Remove Object Subscriptions
@@ -4801,46 +4864,50 @@ paths:
           schema:
             type: string
           required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recipients:
+                  type: array
+                  description: List of recipients to be notified. You can either add recipient as array of distinct_ids or array of recipient objects. You can add upto 100 recipients in a single API.
+                  items:
+                    oneOf:
+                      - type: string
+                        description: Pass user distinct_ids in array as `["id1","id2"]`
+                      - type: object
+                        description: Pass object to be deleted in json
+                        required: [id,object_type]
+                        properties:
+                          id:
+                            type: string
+                            description: Unique identifier of the object
+                            example: frontend
+                          object_type:
+                            type: string
       responses:
-        '200':
-          description: '200'
+        '204':
+          description: '204 - No Content'       
+        '404':
+          description: '404 - Not Found'
           content:
             application/json:
               examples:
                 Result:
                   value: {
-                    success: true
+                    "code": 404,
+                    "message": "object 'object_type/id' not found"
                   }
               schema:
                 type: object
                 properties:
-                  success:
-                    type: object
-                    properties:
-                      success:
-                        type: boolean
-                        example: true
-                        description: "Indicates subscription from object was deleted successfully."        
-        '400':
-          description: '400'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: {
-                    "code": 400,
-                    "message": "Request body must not be empty"
-                  }
-              schema:
-                type: object
-                properties:
-                  error-code:
+                  code:
                     type: integer
-                    example: 400
                     description: "Error code indicating a bad request."
                   message:
                     type: string
-                    example: "Request body must not be empty"
                     description: "Detailed error message explaining the issue."              
       deprecated: false
   /v1/object/{object_type}/:
@@ -4859,7 +4926,7 @@ paths:
           required: true
       responses:
         '200':
-          description: '200'
+          description: '200 - OK'
           content:
             application/json:
               examples:
@@ -4875,17 +4942,15 @@ paths:
                     },
                     "results": [
                       {
-                        "object_type": "obj_type",
-                        "id": "obj_id",
-                        "subscriptions_count": 0,
-                        "properties": {
-                          "RAW_BODY": "\"prop1\": \"val1\""
-                        },
-                        "created_at": "2025-04-03T10:45:15.333323+00:00",
-                        "updated_at": "2025-04-03T10:45:15.333323+00:00",
+                        "object_type": "teams",
+                        "id": "devs",
+                        "subscriptions_count": 1,
+                        "properties": {},
+                        "created_at": "2024-11-04T09:30:05.141405+00:00",
+                        "updated_at": "2025-04-06T11:00:24.257046+00:00",
                         "$inbox": [
                           {
-                            "value": "Xtxxxx_HljXXXXXO1aulxxxxp3mxxxmfTxMM",
+                            "value": "mwjNxXS-z5IvY6VwyXweG0mqc14WL-z9ctBlJ-4wx60",
                             "id_provider": "suprsend",
                             "status": "active",
                             "perma_status": "active"
@@ -4928,82 +4993,7 @@ paths:
                         description: "Cursor for paginating to next results."
                   results:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        object_type:
-                          type: string
-                          example: "obj_type"
-                          description: "Type of the object."
-                        id:
-                          type: string
-                          example: "obj_id"
-                          description: "Unique identifier for the object."
-                        subscriptions_count:
-                          type: integer
-                          example: 0
-                          description: "Number of subscriptions associated with the object."
-                        properties:
-                          type: object
-                          description: "Additional properties related to the object."
-                          properties:
-                            RAW_BODY:
-                              type: string
-                              example: "\"prop1\": \"val1\""
-                              description: "Raw JSON string containing object properties."
-                        created_at:
-                          type: string
-                          format: date-time
-                          example: "2025-04-03T10:45:15.333323+00:00"
-                          description: "Timestamp indicating when the object was created."
-                        updated_at:
-                          type: string
-                          format: date-time
-                          example: "2025-04-03T10:45:15.333323+00:00"
-                          description: "Timestamp indicating when the object was last updated."
-                        $inbox:
-                          type: array
-                          description: "List of inbox messages related to the object."
-                          items:
-                            type: object
-                            properties:
-                              value:
-                                type: string
-                                example: "Xtxxxx_HljXXXXXO1aulxxxxp3mxxxmfTxMM"
-                                description: "Unique identifier for the inbox entry."
-                              id_provider:
-                                type: string
-                                example: "suprsend"
-                                description: "Provider associated with the inbox entry."
-                              status:
-                                type: string
-                                example: "active"
-                                description: "Current status of the inbox entry."
-                              perma_status:
-                                type: string
-                                example: "active"
-                                description: "Permanent status of the inbox entry."              
-        '404':
-          description: '404'
-          content:
-            application/json:
-              examples:
-                Result:
-                  value: {
-                    "code": 404,
-                    "message": "Cannot GET /v1/_your_workspace_key_/object/"
-                  }
-              schema:
-                type: object
-                properties:
-                  error-code:
-                    type: integer
-                    example: 404
-                    description: "Error code indicating that the requested resource was not found."
-                  message:
-                    type: string
-                    example: "Cannot GET /v1/_your_workspace_key_/object/"
-                    description: "Description of the error."
+                    description: List of objects belonging to given object type. Response JSON is similar to object upsert API.
       deprecated: false
   /v1/object/{object_type}/{id}/preference/category/{category_slug}/:
     patch:
@@ -6814,16 +6804,12 @@ paths:
           schema:
             type: integer
             format: int32
-            minimum: -2147483648
-            maximum: 2147483647
         - name: after
           in: query
           required: true
           schema:
             type: integer
             format: int32
-            minimum: -2147483648
-            maximum: 2147483647
       responses:
         '200':
           description: '200'
@@ -6833,74 +6819,97 @@ paths:
                 Result:
                   value: {
                     "meta": {
-                      "count": 0,
-                      "limit": 5,
+                      "count": 1,
+                      "limit": 10,
                       "has_prev": false,
                       "before": null,
                       "has_next": false,
                       "after": null
                     },
-                    "results": [ ]
+                    "results": [
+                      {
+                        "properties": {},
+                        "object": {
+                          "id": "frontend",
+                          "object_type": "developer",
+                          "properties": {
+                            "name": "frontend",
+                            "technology": "react"
+                          },
+                          "subscriptions_count": 3,
+                          "updated_at": "2024-11-10T21:41:02.673661+00:00"
+                        },
+                        "created_at": "2025-04-06T11:00:24.260496+00:00",
+                        "updated_at": "2025-04-06T11:00:24.260496+00:00"
+                      }
+                    ]
                   }
-              schema:    
+              schema:
                 type: object
                 properties:
                   meta:
                     type: object
-                    description: "Metadata about the results pagination."
                     properties:
                       count:
                         type: integer
-                        example: 0
+                        example: 1
                         description: "Total number of results."
                       limit:
                         type: integer
-                        example: 5
-                        description: "Maximum number of results per page."
+                        example: 10
+                        description: "Maximum number of results returned per request."
                       has_prev:
                         type: boolean
-                        example: false
-                        description: "Indicates if there is a previous page."
+                        description: "Indicates if there are previous results."
                       before:
                         type: string
-                        nullable: true
-                        example: null
                         description: "Cursor for the previous page, if applicable."
                       has_next:
                         type: boolean
-                        example: false
-                        description: "Indicates if there is a next page."
+                        description: "Indicates if there are more results."
                       after:
                         type: string
-                        nullable: true
-                        example: null
                         description: "Cursor for the next page, if applicable."
                   results:
                     type: array
-                    description: "List of results."
-                    items: {}
-                    example: []                  
-        '404':
-                  description: '404'
-                  content:
-                    application/json:
-                      examples:
-                        Result:
-                          value: {
-                            "code": 404,
-                            "message": "object 'obj_type/obj_id' not found"
-                          }
-                      schema:
-                        type: object
+                    items:
+                      type: object
+                      properties:
                         properties:
-                          error-code:
-                            type: integer
-                            example: 404
-                            description: "HTTP status code indicating the resource was not found."
-                          message:
-                            type: string
-                            example: "object 'obj_type/obj_id' not found"
-                            description: "Error message indicating the object was not found."
+                          type: object
+                          description: Subscription Properties
+                        object:
+                          type: object
+                          description: payload of the parent object
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: "2024-11-10T21:40:02.169501+00:00"
+                          description: "Timestamp when the record was created."
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: "2024-11-10T21:40:02.169501+00:00"
+                          description: "Timestamp when the record was last updated."                            
+        '404':
+          description: '404 - Not Found'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: {
+                    "code": 404,
+                    "message": "object 'obj_type/obj_id' not found"
+                  }
+              schema:
+                type: object
+                properties:
+                  error-code:
+                    type: integer
+                    description: "HTTP status code indicating the error."
+                  message:
+                    type: string
+                    description: "Error message indicating object_id and type combination is not found"
       deprecated: false 
 
 x-readme:
