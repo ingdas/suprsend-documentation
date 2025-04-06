@@ -523,8 +523,13 @@
                   "reference/get-user-category-preferences"
                 ]
               },
-              "reference/update-tenant-default-preference",
-              "reference/get-tenant-category-preferences",
+              {
+                "group": "Manage Tenant Preferences",
+                "pages":[
+                  "reference/update-tenant-default-preference",
+                  "reference/get-tenant-category-preferences"
+                ]
+              },
               {
                 "group": "Update Object Preferences",
                 "pages": [
