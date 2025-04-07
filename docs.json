@@ -12,7 +12,7 @@
   },
   "integrations": {
     "mixpanel": {"projectToken": "2febb9e078d777860c5624f2579507a7"},
-    "ga4": {"measurementId": "G-N4LT1BFQS6"},
+    "ga4": {"measurementId": "G-PPDYBESP2L"},
     "gtm": {"tagId": "GTM-T6W3P8RG"}},
   "seo":{"indexing": "all"},
   "background": {

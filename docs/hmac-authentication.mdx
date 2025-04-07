@@ -48,25 +48,25 @@ Use the below function in your server-side code to generate a unique unguessable
   ```javascript Node
   import crypto from "crypto";
 
-  // node versions >= v15.7.0, v14.18.0
-  function hmac_rawurlsafe_base64_string(distinct_id, secret) {
-    const hash = crypto
-      .createHmac("sha256", secret)
-      .update(distinct_id)
-      .digest("base64url");
-    return hash.trimEnd("=");
-  }
+// node versions >= v15.7.0, v14.18.0
+function hmac_rawurlsafe_base64_string(distinct_id, secret) {
+  const hash = crypto
+    .createHmac("sha256", secret)
+    .update(distinct_id)
+    .digest("base64url");
+  return hash.replace(/=+$/, "");
+}
 
-  // node versions < v15.7.0, v14.18.0
-  function hmac_rawurlsafe_base64_string(distinct_id, secret) {
-    return crypto
-      .createHmac("sha256", secret)
-      .update(distinct_id)
-      .digest("base64")
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=+$/, "");
-  }
+// node versions < v15.7.0, v14.18.0
+function hmac_rawurlsafe_base64_string(distinct_id, secret) {
+  return crypto
+    .createHmac("sha256", secret)
+    .update(distinct_id)
+    .digest("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
   ```
 
   ```java java
