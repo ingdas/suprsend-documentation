@@ -4,6 +4,19 @@ title: "Product Updates"
 mode: "wide"
 ---
 
+<Update label="12 Feb 2025">
+  ## Batch - Flush First Item Immediately
+
+
+  We've introduced a new setting in batch processing: [Flush First Item in Batch](/docs/batch#flush-first-item-immediately). Previously, batches were only sent once the batch window closed. Now, this setting allows the first trigger to flow past the batch immediately while subsequent triggers are batched within the specified time window.
+
+
+
+  This will help you to build leading debounce logic in workflow, where users are notified about critical updates like anomaly alerts immediately, while batching rest of the alerts and sending them at regular intervals until the issue is resolved.
+
+  You can find this option in **batch -> advanced configuration**.
+</Update>
+
 <Update label="07 Feb 2025">
   ## Workflow - Relative Delay and Batch window
 
@@ -57,22 +70,9 @@ mode: "wide"
 
   ### Fixes and Improvements:
 
-  * \[SDK] [Object methods](/docs/objects-java-sdk) and [User APIs](/docs/java-create-user-profile) to fetch user and their subscription exposed in Java SDK
+  * \[SDK] [Object methods](/docs/java-objects) and [User APIs](/docs/java-create-user-profile) to fetch user and their subscription exposed in Java SDK
 
   * Added support to trigger multi-lingual templates in [broadcast](/docs/broadcast)
-</Update>
-
-<Update label="12 Feb 2025">
-  ## Batch - Flush First Item Immediately
-
-
-  We've introduced a new setting in batch processing: [Flush First Item in Batch](/docs/batch#flush-first-item-immediately). Previously, batches were only sent once the batch window closed. Now, this setting allows the first trigger to flow past the batch immediately while subsequent triggers are batched within the specified time window.
-
-
-
-  This will help you to build leading debounce logic in workflow, where users are notified about critical updates like anomaly alerts immediately, while batching rest of the alerts and sending them at regular intervals until the issue is resolved.
-
-  You can find this option in **batch -> advanced configuration**.
 </Update>
 
 <Update label="29 Jan 2025">
@@ -230,7 +230,7 @@ mode: "wide"
 
   * [Delete tenant/brand](/reference/delete-tenant)
 
-  * [Delete Object](/reference/delete-object) and [Remove object subscription](/reference/delete-object-subscriptions)
+  * [Delete Object](/reference/delete-object) and [Remove object subscription](/reference/delete-object-subscription)
 
   These actions are also available on the dashboard for manual management.
 
@@ -260,7 +260,7 @@ mode: "wide"
 
   Being developer first, we have made significant updates and enhancements to the User APIs for easier user management in SuprSend. Also, subscriber is renamed to users in all APIs to avoid confusion with object subscription. Here's a list of all the changes:
 
-  * Introduced new APIs to [fetch user profile](/reference/fetch-user-profile), [list users](/reference/list-users) and [delete user](/reference/delete-user).
+  * Introduced new APIs to [fetch user profile](/reference/get-user-profile), [list users](/reference/list-users) and [delete user](/reference/delete-user).
 
   * User update API endpoint has been changed from `/event` to `/user/{{distinct_id}}`.
 
@@ -437,9 +437,9 @@ mode: "wide"
 
   ## Documentation
 
-  For a comprehensive list of changes and migration instructions, please refer to our [detailed migration guide](/docs/js-migration-from-v1)
+  For a comprehensive list of changes and migration instructions, please refer to our [detailed migration guide](/docs/migration-guide-from-v1)
 
-  For users who need to reference the previous version, v1 documentation is still accessible [here](/v1.2.1/docs/javascript-sdk)
+  For users who need to reference the previous version, v1 documentation is still accessible [here](https://docs.suprsend.com/v1.2.1/docs/javascript-sdk)
 
   ## Feedback
 
@@ -451,7 +451,7 @@ mode: "wide"
 <Update label="4 Sep 2024">
   ## View and fetch list users
 
-  We’ve added a List Users tab to the lists page, giving you direct access to view all users in a list. Being API first, the same functionality is also exposed to API. Refer [GET list users API](/reference/get-subscriber-list-users) or checkout the [postman collection](https://www.postman.com/suprsend/workspace/suprsend/collection/27786422-d77a13c1-8f59-406d-9669-078a10d52521).
+  We’ve added a List Users tab to the lists page, giving you direct access to view all users in a list. Being API first, the same functionality is also exposed to API. Refer [GET list users API](/reference/get-subscriber-list) or checkout the [postman collection](https://www.postman.com/suprsend/workspace/suprsend/collection/27786422-d77a13c1-8f59-406d-9669-078a10d52521).
 
   ![](https://files.readme.io/b9995645ad6bfa51bb4b9de937459c287d041ef2047412dcdec3d493df5dd15e-list.png)
 
