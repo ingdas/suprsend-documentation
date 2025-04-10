@@ -509,7 +509,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     example: 404
                   error_code:
@@ -1162,7 +1162,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     example: 404
                   error_code:
@@ -1281,7 +1281,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     example: 404
                   error_code:
@@ -1784,7 +1784,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     example: 404
                   message:
@@ -1932,7 +1932,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     example: 404
                   message:
@@ -3161,7 +3161,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     example: 404
                   message:
@@ -3363,7 +3363,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     example: 404
                   message:
@@ -3711,7 +3711,7 @@ paths:
               schema:
                   type: object
                   properties:
-                    error-code:
+                    code:
                       type: integer
                       example: 404
                     message:
@@ -3753,7 +3753,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     example: 404
                   message:
@@ -4073,7 +4073,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     example: 404
                   message:
@@ -4228,7 +4228,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     description: "HTTP status code indicating the error."
                   message:
@@ -4822,7 +4822,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     example: 404
                   message:
@@ -5061,7 +5061,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     example: 404
                   message:
@@ -5320,7 +5320,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     description: HTTP status code indicating the error.
                     example: 404
@@ -5607,7 +5607,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     description: HTTP status code indicating the error.
                     example: 404
@@ -5759,7 +5759,7 @@ paths:
                       schema:
                         type: object
                         properties:
-                          error-code:
+                          code:
                             type: integer
                             description: HTTP status code indicating the error type.
                             example: 404
@@ -5910,7 +5910,7 @@ paths:
                       schema:
                         type: object
                         properties:
-                          error-code:
+                          code:
                             type: integer
                             description: HTTP error status code.
                             example: 404
@@ -6046,7 +6046,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  error-code:
+                  code:
                     type: integer
                     description: "HTTP status code indicating the error."
                   message:
