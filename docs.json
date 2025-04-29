@@ -675,6 +675,58 @@
   },
   "redirects": [
     {
+      "source": "/docs/python-sdk",
+      "destination": "/docs/integrate-python-sdk"
+    },
+    {
+      "source": "/docs/go-sdk",
+      "destination": "/docs/integrate-go-sdk"
+    },
+    {
+      "source": "/docs/java-sdk",
+      "destination": "/docs/integrate-java-sdk"
+    },
+    {
+      "source": "/docs/nodejs-sdk",
+      "destination": "/docs/integrate-node-sdk"
+    },
+    {
+      "source": "/docs/android-sdk",
+      "destination": "/docs/integrate-android-sdk"
+    },
+    {
+      "source": "/docs/ios-sdk",
+      "destination": "/docs/integrate-ios-sdk"
+    },
+    {
+      "source": "/docs/react-native",
+      "destination": "/docs/react-native-android-integration"
+    },
+    {
+      "source": "/docs/flutter",
+      "destination": "/docs/integrate-flutter-sdk-android"
+    },
+    {
+      "source": "/docs/quickstart",
+      "destination": "/docs/quick-start-guide"
+    },
+    {
+      "source": "/docs/sms-vendor-integration",
+      "destination": "/docs/acl-sinch"
+    },
+    {
+      "source": "/docs/android-push-vendor-integration",
+      "destination": "/docs/firebase-fcm-androidpush"
+    },
+    {
+      "source": "/docs/whatsapp-vendor-integration",
+      "destination": "/docs/karix-whatsapp"
+    },
+    {
+      "source": "/docs/chat-vendor-integration",
+      "destination": "/docs/slack"
+    },
+    {
       "source": "/docs/brands-python",
       "destination": "/docs/python-tenants"
     },
