@@ -63,8 +63,14 @@ Here's a list of all edit methods:
 <AccordionGroup>
   <Accordion title="Add User Channels" >
     Add communication channels on which you want to notify user. Push sand Inbox tokens are automatically tracked on user identification when the corresponding frontend SDK is integrated. Other channels (Email, SMS, Slack, MS teams, Whatsapp) need to be explicitly set in user profile.
-
+    
+    <pre>
+    < !-- vale Google.OptionalPlurals = NO -->
+    
     Use `user.Add*` method(s) to add user channels.
+    
+    < !-- vale Google.OptionalPlurals = YES -->
+    </pre>
 
     <CodeGroup>
 
@@ -73,10 +79,10 @@ Here's a list of all edit methods:
     // Add email channel
     user.AddEmail("user@example.com")
     
-    // add sms channel
+    // add SMS channel
     user.AddSms("+1444455555")
     
-    // Add whatsapp channel
+    // Add WhatsApp channel
     user.AddWhatsapp("+1444455555")
     
     // Add androidpush token, token providers: fcm/xiaomi
@@ -98,8 +104,19 @@ Here's a list of all edit methods:
 
     </CodeGroup>
   </Accordion>
+  
+  <pre>
+  < !-- vale disable -->
+
   <Accordion title="Remove User Channels" >
+    
+    <pre>
+    < !-- vale Google.OptionalPlurals = NO -->
+
     Use `user.Remove*` method(s) to remove channels.
+
+    < !-- vale Google.OptionalPlurals = YES -->
+    </pre>
 
     <CodeGroup>
 
@@ -108,10 +125,10 @@ Here's a list of all edit methods:
     // remove email channel
     user.RemoveEmail("user@example.com")
     
-    // remove sms channel
+    // remove SMS channel
     user.RemoveSms("+1444455555")
     
-    // remove whatsapp channel
+    // remove WhatsApp channel
     user.RemoveWhatsapp("+1444455555")
     
     // remove androidpush token
@@ -130,9 +147,13 @@ Here's a list of all edit methods:
     }, "vapid")
 
     ```
-
+    
     </CodeGroup>
   </Accordion>
+  
+  < !-- vale enable -->
+  </pre>
+
   <Accordion title="Remove Channel types">
     This method will delete/unset all values in specified channel for user (ex: remove all emails attached to user).
 
@@ -208,6 +229,8 @@ Here's a list of all edit methods:
     ```
   </Accordion>
 
+  <pre>
+  < !-- vale Google.Spacing = NO >
   <Accordion title="Set Once" >
     Works just like user.Set, except it will not override already existing property values. This is useful for properties like first_login_date.
 
@@ -229,11 +252,18 @@ Here's a list of all edit methods:
     user.Increment(map[string]interface{}{"login_count" : 1, "order_count" : 1})
     ```
   </Accordion>
+  
+  < !-- vale Google.Spacing = YES >
+  </pre>
 </AccordionGroup>
 
+<pre>
+< !-- vale Google.Spacing = NO >
 <Warning>
   After calling `Add/Remove/Unset` methods, don't forget to call `user.Save()` since user edit is async update and the changes will be sent to SuprSend only after calling this method.
 </Warning>
+< !-- vale Google.Spacing = YES >
+</pre>
 
 ## Bulk Update Users
 
