@@ -12,12 +12,441 @@ components:
       scheme: bearer
       bearerFormat: API_Key  # Just for documentation, doesn't enforce behavior
       description: "Pass as `Bearer <API_KEY>`. Get API Key from SuprSend dashboard Developers -> API Keys section."
+    ServiceTokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      x-default-value: "ServiceToken YOUR_SERVICE_TOKEN"
+      description: "Pass as `ServiceToken <Service_Token>`. Get Service Token from [SuprSend dashboard -> Account Settings -> Service Tokens](https://app.suprsend.com/en/account-settings/service-tokens) section."
     sec0:
       type: apiKey
       in: header
       name: Authorization
       x-bearer-format: bearer
       description: Bearer authentication header of the form `Bearer <token>`, where <token> is your auth token.
+  schemas:
+    Workflow:
+      type: object
+      properties:
+        $schema:
+          type: string
+          description: Schema URL for workflow validation
+          example: "https://schema.suprsend.com/workflow/v1/schema.json"
+        slug:
+          type: string
+          description: Unique identifier for the workflow
+          example: "welcome-sequence"
+        is_enabled:
+          type: boolean
+          description: Whether the workflow is enabled
+          example: true
+        created_at:
+          type: string
+          format: date-time
+          description: When the workflow was created
+        last_executed_at:
+          type: string
+          format: date-time
+          description: When the workflow was last executed
+          nullable: true
+        name:
+          type: string
+          description: Human-readable name of the workflow
+          example: "Welcome Sequence"
+        description:
+          type: string
+          nullable: true
+          description: Description explaining the usecase of the workflow
+        updated_at:
+          type: string
+          format: date-time
+          description: When the workflow was last updated
+        commit_message:
+          type: string
+          nullable: true
+          description: Last commit message
+        hash:
+          type: string
+          nullable: true
+          description: Git-like hash for version tracking
+        status:
+          type: string
+          enum: [active, inactive, draft]
+          description: Current status of the workflow
+        category:
+          type: string
+          description: Notification category of the workflow. Used to apply category-specific settings and preferences.
+          example: "transactional"
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags for organizing and filtering workflows in API.
+        ratelimit:
+          type: object
+          nullable: true
+          description: Workflow [throttle](https://docs.suprsend.com/docs/throttle) settings. This is used to limit the number of times a workflow can be executed per user in a given time period.
+        conditions:
+          type: array
+          items:
+            type: object
+          description: Trigger Conditions for workflow execution. Workflow will only be executed if trigger conditions evaluate to true.
+        trigger_type:
+          type: string
+          enum: [event, dynamic, api]
+          description: How the workflow is triggered. You can refer to all trigger types [here](https://docs.suprsend.com/reference/trigger-workflows#trigger-types).
+        trigger_events:
+          type: array
+          items:
+            type: string
+          description: Events that trigger this workflow. This will be set for trigger_type = `event`.
+        override_recipients_type:
+          type: string
+          nullable: true
+          description: Type of recipient override. Define whether to override and run this workflow for user, list of users or a single object.
+          enum: [user, single_object_fields]
+        override_recipients_user_expr:
+          type: string
+          nullable: true
+          description: Expression for overriding recipients when override_recipients_type = `user`.
+        override_recipients_single_object_fields_expr:
+          type: string
+          nullable: true
+          description: Expression for overriding recipients when override_recipients_type = `single_object_fields`.
+        override_actor_user_expr:
+          type: string
+          nullable: true
+          description: Expression for overriding actor
+        override_tenant_expr:
+          type: string
+          nullable: true
+          description: Expression for overriding tenant
+        active_at:
+          type: string
+          format: date-time
+          description: When the workflow's live version became active. Will be `null` for draft version.
+        updated_by:
+          type: object
+          nullable: true
+          properties:
+            name:
+              type: string
+              description: Name of the user who last updated the workflow
+            email:
+              type: string
+              description: Email of the user who last updated the workflow
+          description: User who last updated the workflow
+        tree:
+          type: object
+          description: Node tree structure of the workflow. Shows the list of all nodes used in the workflow along with their configuration.
+        validation_result:
+          type: object
+          properties:
+            is_valid:
+              type: boolean
+              description: true if the workflow tree is valid to be published.
+            errors:
+              type: array
+              items:
+                type: string
+              description: List of errors if the workflow tree is not valid.
+          description: Validation status of the workflow
+    DigestNode:
+      type: object
+      description: "Batches and sends summary notifications at a recurring digest schedule."
+      required:
+        - node_type
+        - name
+        - schedule_type
+      properties:
+        name:
+          type: string
+          description: Human-readable name of the node
+          example: "Daily digest"
+        node_type:
+          type: string
+          const: digest
+        description:
+          type: string
+          nullable: true
+          description: Description of what this node does
+        schema_version:
+          type: string
+          description: Schema version for the node
+          example: "1"
+        schedule_type:
+          type: string
+          enum: ["static", "dynamic"]
+          description: "Type of schedule. Determines if the schedule is static or dynamic."
+        dynamic_schedule_expr:
+          type: string
+          description: "jq-expression for deriving dynamic digest schedule at runtime."
+          example: ".digest_schedule"
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+        retain_count:
+          type: integer
+          minimum: 1
+          maximum: 100
+          description: "Maximum number of items to retain after digest closes (1-100)."
+        retain_order:
+          type: string
+          enum: ["first", "last"]
+          description: "Retain items in this order when retain_count is specified."
+        trigger_min_count:
+          type: integer
+          minimum: 1
+          description: "Digest will be sent if number of triggers are greater than or equal to this count."
+    Schedule:
+      type: object
+      description: "Static schedule configuration for digest notifications."
+      properties:
+        frequency:
+          type: string
+          enum: ["minutely", "hourly", "daily", "weekly_mo2fr", "weekly", "monthly"]
+          description: "Frequency of the digest schedule."
+        interval:
+          type: integer
+          minimum: 1
+          description: "Multiplier for recurrence schedule."
+        weekdays:
+          type: array
+          items:
+            type: string
+            enum: ["su", "mo", "tu", "we", "th", "fr", "sa"]
+          description: "Which days to include when frequency is 'weekly'."
+        monthdays:
+          type: array
+          items:
+            type: object
+            properties:
+              pos:
+                type: integer
+                minimum: -31
+                maximum: 31
+              day:
+                type: string
+                enum: [null, "su", "mo", "tu", "we", "th", "fr", "sa"]
+          description: "Which days to include when frequency is 'monthly'."
+        time:
+          type: string
+          description: "Time of day to send digest in HH:MM format (24-hour)."
+          examples: ["09:00", "18:30"]
+        dtstart:
+          type: string
+          description: "When to start schedule calculation from in ISO datetime format."
+        tz_selection:
+          type: string
+          enum: ["fixed", "recipient"]
+          description: "timezone of the recurring schedule."
+        tz_fixed:
+          type: string
+          description: "Fixed IANA timezone."
+          examples: ["America/New_York", "Europe/London"]
+
+    WorkflowCreateUpdate:
+      type: object
+      required:
+        - name
+        - trigger_type
+        - category
+        - tree
+      properties:
+        name:
+          type: string
+          description: Human-readable name of the workflow. Workflow slug is generated from this name for new workflows.
+          example: "Welcome Sequence"
+        description:
+          type: string
+          nullable: true
+          description: Description explaining the usecase of the workflow
+        is_enabled:
+          type: boolean
+          default: true
+          description: Whether the workflow should be enabled
+        category:
+          type: string
+          description: Notification category of the workflow. Used to apply category-specific settings and preferences.
+          example: "transactional"
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags are used for grouping and filtering workflows in list.
+          example: ["onboarding-sequence"]
+        trigger_type:
+          type: string
+          enum: [event, api]
+          description: You can trigger a workflow either via API by passing its slug directly, or through an event-based system where the workflow runs when a specific event occurs. You can compare both methods [here](https://docs.suprsend.com/docs/event-vs-api-trigger). If the workflow should run when a user enters or exits a list, use `trigger_type = event`.
+        trigger_events:
+          type: array
+          items:
+            type: string
+          description: Events that trigger this workflow (required if trigger_type = event). In case of list entry/exit, event names will be `$USER_ENTERED_LIST - <list_id>` and `$USER_EXITED_LIST - <list_id>` respectively.
+        ratelimit:
+          type: object
+          nullable: true
+          description: Throttle settings for the workflow. This is used to limit the number of times a workflow can be executed per user in a given time period.
+          properties:
+            count:
+              type: integer
+              description: Maximum number of executions allowed within the sliding window
+              example: 4
+            sliding_window:
+              type: string
+              description: Time window for rate limiting to be passed in format `00d00h00m00s`, d (days), h (hours), m (minutes), s (seconds). Rate limit is applied within this window.
+              example: "6m"
+        conditions:
+          type: array
+          nullable: true
+          description: Trigger Conditions. Workflow will be executed if any of the conditions in this array evaluate to true.
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: Type of condition expression. Currently only `expression_v1` is supported.
+                example: "expression_v1"
+                enum: ["expression_v1"]
+              expression_v1:
+                type: object
+                description: Expression object containing the condition logic
+                properties:
+                  op:
+                    type: string
+                    description: Logical operator to combine conditions. Currently only `AND` is supported.
+                    enum: ["AND"]
+                  args:
+                    type: array
+                    description: Array of conditions. Each condition is defined as key (variable) <op> value. Refer to [how to construct a condition here](https://docs.suprsend.com/docs/branch#constructing-a-condition).
+                    items:
+                      type: object
+                      properties:
+                        op:
+                          type: string
+                          description: Comparison operator between variable and value. Refer to list of [comparison operators here](https://docs.suprsend.com/docs/branch#key-value-pair).
+                          example: "=="
+                          enum: ["==", "!=", ">", "<", ">=", "<=", "EMPTY", "NON_EMPTY", "CONTAINS", "NOT_CONTAINS", "ARRAY_INTERSECTS", "NOT_ARRAY_INTERSECTS", "DATETIME_EQUALS", "DATETIME_LT", "DATETIME_GT"]
+                        value:
+                          type: string
+                          description: Value to compare against. Can add fixed value as ".." or variable in JSONNET format as data.<prop>.
+                          example: "\"admin\""
+                        variable:
+                          type: string
+                          description: key from your trigger payload to compare the value against. Direct key name is passed here.
+                          example: "role"
+                        variable_ns:
+                          type: string
+                          description: Variable namespace (empty for data passed in trigger, `$recipient` for recipient or object subscription properties, `$tenant` for tenant properties)
+                          example: "$recipient"
+                          enum: ["", "$recipient", "$tenant"]
+        override_recipients_type:
+          type: string
+          description: Override recipients using a property from the trigger payload. Type defines if the workflow should run for a list of users or a single [object](https://docs.suprsend.com/docs/objects). Only applicable for trigger_type = `event`.
+          example: "user"
+          enum: ["user", "single_object_fields"]
+        override_recipients_user_expr:
+          type: string
+          nullable: true
+          description: JQ expression to override recipients when override_recipients_type = `user`. Only applicable for trigger_type = `event`.
+          example: ".distinct_id"
+        override_recipients_single_object_fields_expr:
+          type: object
+          nullable: true
+          description: JQ expression to override recipients with object when override_recipients_type = `single_object_fields`. Only applicable for trigger_type = `event`.
+          properties:
+            id:
+              type: string
+              description: JQ expression to extract object ID from trigger payload
+              example: ".object_id"
+            object_type:
+              type: string
+              description: JQ expression to extract object type from trigger payload. You can also pass fixed value as "..".
+              example: ".object_type"
+            "$object_subscriptions_query.depth":
+              type: string
+              description: Depth [Optional] is used to specify how deep to traverse object subscriptions. `depth=0`  would only send notification to object channels and not its subscribers,  `depth=1`  would fetch 1 level of subscriptions, `depth=2`  (maximum) → Also fetches subscriptions of child objects, eg. <department -> teams -> team members>.
+              example: "2"
+          example:
+            id: ".object_id"
+            object_type: ".object_type"
+            "$object_subscriptions_query.depth": "2"
+        override_actor_user_expr:
+          type: string
+          nullable: true
+          description: JQ expression to override actor. Only applicable for trigger_type = `event`.
+          example: ".actor_id"
+        override_tenant_expr:
+          type: string
+          nullable: true
+          description: JQ expression to override [tenant](https://docs.suprsend.com/docs/tenants). Only applicable for trigger_type = `event`.
+          example: ".tenant_id"
+        tree:
+          type: array
+          items:
+            $ref: '#/components/schemas/DigestNode'
+          description: Node tree structure of the workflow. Shows the list of all nodes used in the workflow along with their configuration.
+        
+        
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP status code
+        error_code:
+          type: string
+          description: Specific error code identifier
+        type:
+          type: string
+          description: Error type classification
+        message:
+          type: string
+          description: Human-readable error message
+        detail:
+          type: string
+          description: Additional error details
+
+  responses:
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            error_code: "not_found"
+            type: "NotFound"
+            message: "Resource not found"
+            detail: "Resource not found"
+    
+    AuthenticationError:
+      description: Authentication failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            error_code: "authentication_failed"
+            type: "AuthenticationFailed"
+            message: "Invalid service token."
+            detail: "Invalid service token."
+
+    UnauthorizedError:
+      description: Not Authenticated - could not find Workspace details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            error_code: "unauthorized"
+            type: "Unauthorized"
+            message: "Not Authenticated - could not find Workspace details"
+            detail: "Authentication failed"
+
 security:
   - sec0: []
   - BearerAuth: []
@@ -3243,7 +3672,7 @@ paths:
                     type: string
                     example: "BAD REQUEST"
       deprecated: false
-  /v1/bulk/subscriber/preference/:
+  /v1/bulk/user/preference/:
     patch:
       summary: Bulk Update
       security:
@@ -3342,7 +3771,7 @@ paths:
                     type: string
                     example: "tenant '_tenant_id_' not found"
       deprecated: false
-  /v1/bulk/subscriber/preference/reset/:
+  /v1/bulk/user/preference/reset/:
     patch:
       summary: Reset
       security:
@@ -4740,21 +5169,21 @@ paths:
                     "preference":"opt_in",
                     "is_editable":true,
                     "channels":[
-                        {
+                       {
                           "channel":"email",
                           "preference":"opt_in",
                           "is_editable":true
-                        },
-                        {
+                       },
+                       {
                           "channel":"ms_teams",
                           "preference":"opt_in",
                           "is_editable":true
-                        },
-                        {
+                       },
+                       {
                           "channel":"slack",
                           "preference":"opt_in",
                           "is_editable":true
-                        }
+                       }
                     ]
                   }
               schema:
@@ -6547,6 +6976,379 @@ paths:
                     description: "Error message indicating object_id and type combination is not found"
       deprecated: false
 
+  /v1/{workspace}/workflow/:
+    get:
+      summary: List Workflows
+      description: Retrieve a list of workflows in a workspace.
+      operationId: list-workflows
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace slug (staging, production, etc.)
+        - in: query
+          name: mode
+          schema:
+            type: string
+            enum: [draft, live]
+            default: draft
+          description: Mode to filter workflows (draft or live). By default, draft workflows are returned.
+        - in: query
+          name: slugs
+          schema:
+            type: string
+          description: Comma-separated list of workflow slugs to filter. This can be used to filter workflows by slug.
+      responses:
+        '200':
+          description: Successfully retrieved list of workflows
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        description: Total number of workflows matching the query
+                        example: 92
+                      limit:
+                        type: integer
+                        description: Number of results returned per page
+                        example: 10
+                      offset:
+                        type: integer
+                        description: Offset value passed in the request
+                        example: 0
+                    description: Metadata related to pagination information
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Workflow'
+                    description: Array of workflows along with their node tree.
+              example:
+                meta:
+                  count: 92
+                  limit: 10
+                  offset: 0
+                results:
+                  - $schema: "https://schema.suprsend.com/workflow/v1/schema.json"
+                    slug: "survey-reminder"
+                    is_enabled: true
+                    created_at: "2025-06-27T03:26:48.793551Z"
+                    last_executed_at: "2025-06-27T04:48:20.653366Z"
+                    name: "Survey Reminder"
+                    description: null
+                    updated_at: "2025-06-27T03:36:05.623939Z"
+                    commit_message: "Survey completed"
+                    hash: "ed3e630c1526170564c962db00dbfcfef997e995f62f67c068a8c9c1d5efbc13"
+                    status: "active"
+                    category: "transactional"
+                    tags: ["reminder"]
+                    ratelimit: null
+                    conditions: []
+                    trigger_type: "api"
+                    trigger_events: []
+                    override_recipients_type: null
+                    override_recipients_user_expr: null
+                    override_recipients_single_object_fields_expr: null
+                    override_actor_user_expr: null
+                    override_tenant_expr: null
+                    active_at: "2025-06-27T03:36:05.623845Z"
+                    updated_by:
+                      name: "Nikita"
+                      email: "nikita@suprsend.com"
+                    tree:
+                      nodes:
+                        - name: "Multi-Channel"
+                          node_type: "send_multi_channel"
+                          properties:
+                            template: "11-performance-review-session"
+                            channels: []
+                            channels_expr: null
+                            success: "seen"
+                            success_is_event: false
+                          description: ""
+                          schema_version: "1"
+                    validation_result:
+                      is_valid: true
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+          description: Workflow not found
+   
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed
+
+  /v1/{workspace}/workflow/{slug}/:
+    get:
+      summary: Get Workflow Details
+      description: Fetch workflow corresponding to the given slug in a workspace.
+      operationId: get-workflow
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace slug (staging, production, etc.)
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the workflow. You can get it from workflow settings.
+        - in: query
+          name: mode
+          schema:
+            type: string
+            enum: [draft, live]
+            default: draft
+          description: Which workflow version to fetch (draft or live). By default, draft version is returned.
+      responses:
+        '200':
+          description: Successfully retrieved workflow
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workflow'
+              example:
+                $schema: "https://schema.suprsend.com/workflow/v1/schema.json"
+                slug: "survey-reminder"
+                is_enabled: true
+                created_at: "2025-06-27T03:26:48.793551Z"
+                last_executed_at: "2025-06-27T04:48:20.653366Z"
+                name: "Survey Reminder"
+                description: null
+                updated_at: "2025-06-27T03:36:05.623939Z"
+                commit_message: "Survey completed"
+                hash: "ed3e630c1526170564c962db00dbfcfef997e995f62f67c068a8c9c1d5efbc13"
+                status: "active"
+                category: "transactional"
+                tags: ["reminder"]
+                ratelimit: null
+                conditions: []
+                trigger_type: "api"
+                trigger_events: []
+                override_recipients_type: null
+                override_recipients_user_expr: null
+                override_recipients_single_object_fields_expr: null
+                override_actor_user_expr: null
+                override_tenant_expr: null
+                active_at: "2025-06-27T03:36:05.623845Z"
+                updated_by:
+                  name: "Nikita"
+                  email: "nikita@suprsend.com"
+                tree:
+                  nodes:
+                    - name: "Multi-Channel"
+                      node_type: "send_multi_channel"
+                      properties:
+                        template: "11-performance-review-session"
+                        channels: []
+                        channels_expr: null
+                        success: "seen"
+                        success_is_event: false
+                      description: ""
+                      schema_version: "1"
+                validation_result:
+                  is_valid: true
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+          description: Workflow not found
+
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+
+    post:
+      summary: Create or Update Workflow
+      description: Create a new workflow or update an existing one
+      operationId: upsert-workflow
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace where the workflow should be created (staging, production, etc.)
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the workflow. You can get it from workflow settings for existing workflows.
+        - in: query
+          name: commit
+          schema:
+            type: boolean
+            default: false
+          description: Whether to commit the workflow immediately. Workflow will be successfully committed only if validation_result.is_valid is true.
+        - in: query
+          name: commit_message
+          schema:
+            type: string
+          description: Commit message describing the changes (required if commit=true)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowCreateUpdate'
+      responses:
+        '201':
+          description: Workflow created/updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workflow'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+
+    delete:
+      summary: Delete Workflow
+      description: Permanently deletes a workflow by providing it's slug.
+      operationId: delete-workflow
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Which workspace workflow belongs to (staging, production, etc.)
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the workflow. You can get it from workflow settings.
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+          description: Workflow not found
+
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+
+
+  /v1/{workspace}/workflow/{slug}/commit/:
+    patch:
+      summary: Commit Workflow
+      description: Commit a workflow to make the draft version live.
+      operationId: commit-workflow
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace to which the workflow belongs (staging, production, etc.)
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the workflow. You can get it from workflow settings.
+        - in: query
+          name: commit_message
+          required: false
+          schema:
+            type: string
+          description: Commit message describing the changes
+      responses:
+        '202':
+          description: Workflow committed successfully. The response will be the latest draft version after the commit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workflow'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+          description: Workflow not found
+          
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+
+  /v1/{workspace}/workflow/{slug}/enable/:
+    patch:
+      summary: Enable/Disable Workflow
+      description: Enable or disable a workflow. Disabled workflows will not be executed when triggered. By default, workflows are enabled unless you explicitly disable them.
+      operationId: toggle-workflow
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace to which the workflow belongs (staging, production, etc.)
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the workflow. You can get it from workflow settings.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - is_enabled
+              properties:
+                is_enabled:
+                  type: boolean
+                  description: Set to true to enable the workflow, false to disable it.
+              example:
+                is_enabled: true
+      responses:
+        '202':
+          description: Workflow status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workflow'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+          description: Workflow not found
+          
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+          
 x-readme:
   headers: []
   explorer-enabled: true

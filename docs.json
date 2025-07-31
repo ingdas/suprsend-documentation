@@ -456,7 +456,19 @@
             ]
           },
           {
-            "group": "WORKFLOWS",
+            "group": "MANAGE WORKFLOWS",
+            "pages": [
+              "reference/service-token-authentication",
+              "reference/create-update-workflow",
+              "reference/commit-workflow",
+              "reference/get-workflow",
+              "reference/list-workflows",
+              "reference/enable-disable-workflow",
+              "reference/delete-workflow"
+            ]
+          },
+          {
+            "group": "TRIGGER WORKFLOWS",
             "pages": [
               "reference/trigger-workflow-api",
               "reference/dynamic-workflow-trigger"
