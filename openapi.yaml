@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.1.1
 info:
   title: SuprSend API
   description: APIs supported on suprsend platform
@@ -165,8 +165,7 @@ components:
           example: "Daily digest"
         node_type:
           type: string
-          enum: ["digest"]
-          # const: digest
+          const: digest
         description:
           type: string
           nullable: true
@@ -232,8 +231,7 @@ components:
         time:
           type: string
           description: "Time of day to send digest in HH:MM format (24-hour)."
-          example: "09:00"
-          # examples: ["09:00", "18:30"]
+          examples: ["09:00", "18:30"]
         dtstart:
           type: string
           description: "When to start schedule calculation from in ISO datetime format."
@@ -244,8 +242,7 @@ components:
         tz_fixed:
           type: string
           description: "Fixed IANA timezone."
-          example: "America/New_York"
-          # example: ["America/New_York", "Europe/London"]
+          example: ["America/New_York", "Europe/London"]
 
     WorkflowCreateUpdate:
       type: object
