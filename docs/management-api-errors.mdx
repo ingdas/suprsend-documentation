@@ -1,0 +1,97 @@
+---
+title: 'Errors'
+description: 'Common error codes and troubleshooting for the SuprSend Management API.'
+---
+
+SuprSend uses standard HTTP response codes to indicate the success or failure of your API requests. This page covers common error codes and how to handle them.
+
+
+### Success Codes
+
+| Code | Description |
+|------|-------------|
+| `200` | OK - Request succeeded |
+| `201` | Created - Resource was successfully created |
+| `204` | No Content - Request succeeded but no content returned |
+
+### Error Codes
+
+| Code | Description |
+|------|-------------|
+| `400` | Bad Request - Invalid request syntax or parameters |
+| `401` | Unauthorized - Authentication required or failed |
+| `404` | Not Found - Resource not found |
+| `5xx` | Internal Server Error - Unexpected server error |
+
+
+## Error Response Format
+
+All error responses follow a consistent format:
+
+```json
+{
+  "code": 400,
+  "error_code": "validation_error",
+  "type": "ValidationError",
+  "message": "Invalid request parameters",
+  "detail": "The 'name' field is required"
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `code` | integer | HTTP status code |
+| `error_code` | string | Machine-readable error identifier |
+| `type` | string | Error type classification |
+| `message` | string | Human-readable error message |
+| `detail` | string | Additional error details (optional) |
+
+## Common Error Codes and their solutions
+
+#### 401 Unauthorized - `authentication_failed`
+
+**Causes**:
+- Missing or invalid service token
+- Expired service token
+- Using environment API key instead of service token
+
+**Correct Syntax to authorizate Management API**:
+```bash
+# Ensure you're using a valid service token
+curl -H "Authorization: ServiceToken YOUR_SERVICE_TOKEN" \
+     https://api.suprsend.com/v1/workflows
+```
+
+#### 400 Bad Request - `validation_error`
+
+**Common Causes**:
+- Missing required fields
+- Invalid field formats
+- Invalid enum values
+
+**Example**:
+```json
+{
+  "code": 400,
+  "error_code": "validation_error",
+  "type": "ValidationError",
+  "message": "Invalid request parameters",
+  "detail": "The 'name' field is required and cannot be empty"
+}
+```
+
+#### 404 Not Found
+
+**Common Causes**:
+- Given entity in the request is not found
+
+**Example**:
+```json
+{
+  "code": 404,
+  "error_code": "not_found",
+  "type": "NotFound",
+  "message": "Workflow not found",
+  "detail": "Workflow with slug 'welcome-sequence' does not exist"
+}
+```

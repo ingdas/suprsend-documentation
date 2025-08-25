@@ -4,6 +4,90 @@ title: "Product Updates"
 mode: "wide"
 ---
 
+<Update label="19 August 2025">
+  ## Message logs revamp
+
+  - **Redesigned UI** for seamless tracking of notification lifecycles. Quickly view delivery status, opens, clicks, and errors across all channels in a single log view.
+  - **Entity-level visibility**: Drill down into logs by workflow, user, object, or list to understand exactly what happened in context.
+  - **Advanced filtering**: Filter logs by status, workflow, template, channel, category, or time range to debug faster.
+  - **Consistent date range filter** across all log pages, making it easier to trace the journey of a notification from request → workflow → final message delivery and it's interaction state.
+
+  ### Fixes and Improvements
+  - **react-sdk (v0.3.0)** - Introduced a custom infinite-scroll component with robust Shadow DOM compatibility.
+  - **web-components (v0.3.0)**  - Enhanced Shadow DOM rendering support to ensure component isolation and consistent styling.
+
+</Update>
+
+<Update label="16 August 2025">
+  ## Analytics 2.0 - faster, real-time, with one click filters to drill down into insights
+  - **Real-time insights** → Trends update as messages go out. Track performance across channels and spot dips in engagement instantly.
+  - **Workflow-level comparisons** → Compare workflows, templates, channels, and categories side by side to spot under performers and validate experiments.
+  - **Know when your users opt-out** → See which channels/categories drive opt-outs so you can adjust before churn sets in.
+  - **Over-messaging trends** → Track avg notifications per user, find patterns by category, and identify fatigue triggers to keep comms helpful—not noisy.
+  - **Granular filtering** → Multi-select filters for workflow, tenant, template, channel, category, time range
+  - **Centralized error tracking** → All API, workflow, and provider delivery errors in one place. Filter by tenant/workflow/template/channel, open the exact log, and debug in seconds.
+ 
+ ### Fixes and Improvements
+  - Fixed a critical race condition affecting notification status updates, ensuring consistency and reliability in status reporting.
+
+</Update>
+
+<Update label="23 July 2025">
+  ## Sendgrid IP Pool support
+
+  Enabled creation and management of SendGrid IP Pools, allowing granular control over email delivery, IP reputation, and segmentation of email traffic base on notification category.
+ 
+ ### Fixes and Improvements
+  - Added support to send slack messages using broadcast.
+
+</Update>
+
+
+<Update label="11 July 2025">
+  ## Workflow Management APIs
+
+  Released comprehensive Management APIs to programmatically create, update, and commit workflows.
+  Supports dynamic workflow orchestration — from your platform or third-party systems — to automate creation and modification of workflows from your codebase.
+
+  You can checkout the [documentation here](/docs/management-api-overview).
+
+</Update>
+
+<Update label="4 July 2025">
+  ## Proxy support in Java SDK
+
+  Java SDK can now route outbound requests through HTTP/S proxies, enabling deployments behind corporate firewalls and network controls.
+  
+
+</Update>
+
+<Update label="16 June 2025">
+  ## iOS Native SDK Revamp with JWT based authentication & Preferences support
+
+  The new iOS SDK now has our latest JWT authentication. You can use it to:
+  - JWT-based auth for secure event ingestion, profile updates and push token management.
+  - Support to add In-app Preferences Center in mobile apps with UI and example code available for quick setup.
+  
+  ### Fixes and Improvements
+  - Flutter sdk released (v2.5.0) - Fixed an Android push client issue and added silent push support for background updates.
+
+</Update>
+
+
+<Update label="22 May 2025">
+  ## Role based auth in AWS SNS
+
+  In line with our ongoing efforts to enhance platform security, we’ve also enabled IAM Role- based auth in AWS SNS vendor. Previously, authentication required creating an **IAM User** and sharing long-term access keys. With **IAM Role-based auth**, you can grant **temporary, scoped access** without exposing sensitive credentials.
+
+</Update>
+
+<Update label="13 May 2025">
+  ## New SMS Vendor: Bird
+
+  We’ve added support for sending SMS using the new Bird APIs. The setup is straightforward with a simple vendor form to fill to get started, and full integration details are available here.
+
+</Update>
+
 <Update label="30 Apr 2025">
   ## SuprSend tracked Properties Now Available in Recipients Payload
 
