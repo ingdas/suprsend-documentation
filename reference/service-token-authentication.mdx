@@ -1,0 +1,26 @@
+---
+title: "Authentication"
+description: "Learn how to authenticate management API requests using service tokens."
+---
+
+Management APIs in SuprSend use Service Token authentication instead of the usual API Key authentication used in other APIs. 
+Service tokens are created at account level and are used to manage resources and assets (like workflows, templates, schemas, etc.) across workspaces.
+
+## Generating Service Tokens
+
+Service tokens can be generated from your SuprSend dashboard:
+
+1. Go to [SuprSend dashboard → Account Settings → Service Tokens](https://app.suprsend.com/en/account-settings/service-tokens)
+2. `Generate a new Token` and provide a descriptive name which tells the purpose of the token.
+3. Click on `Create and View`. Copy and store the token somewhere safe. For security purposes, token will only be shown at the time of generation.
+
+
+## Authorizing Management APIs
+
+To authorize your API request, pass service token in the `Authorization` header as `ServiceToken XXXX`, where XXXX is the service token.
+
+**Example Header:**
+
+``` curl
+Authorization: ServiceToken <service_token>
+```

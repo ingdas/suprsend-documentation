@@ -430,6 +430,7 @@
           }
         ]
       },
+      
       {
         "tab": "API Reference",
         "groups": [
@@ -456,7 +457,7 @@
             ]
           },
           {
-            "group": "WORKFLOWS",
+            "group": "TRIGGER WORKFLOWS",
             "pages": [
               "reference/trigger-workflow-api",
               "reference/dynamic-workflow-trigger"
@@ -573,6 +574,30 @@
         ]
       },
       {
+        "tab": "Management API",
+        "groups": [
+          {
+            "group": "API Reference",
+            "pages": [
+              "docs/management-api-overview",
+              "reference/service-token-authentication",
+              "docs/management-api-errors"
+            ]
+          },
+          {
+            "group": "MANAGE WORKFLOWS",
+            "pages": [
+              "reference/create-update-workflow",
+              "reference/commit-workflow",
+              "reference/get-workflow",
+              "reference/list-workflows",
+              "reference/enable-disable-workflow",
+              "reference/delete-workflow"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Changelog",
         "groups": [
           {
@@ -629,6 +654,264 @@
   "logo": "/images/suprsend-logo.svg",
   "api": {
     "openapi": "openapi.yaml"
+  },
+  "components": {
+    "WorkflowBuilder": {
+      "nodeTypeOptions": [
+        {
+          "value": "delay",
+          "label": "Delay",
+          "description": "Pauses workflow execution for a specified duration."
+        },
+        {
+          "value": "batch",
+          "label": "Batch",
+          "description": "Batches incoming workflow triggers/events for a duration."
+        },
+        {
+          "value": "digest",
+          "label": "Digest",
+          "description": "Batches and sends summary notifications at a recurring digest schedule."
+        },
+        {
+          "value": "httpapi_webhook",
+          "label": "HTTP API Webhook",
+          "description": "Makes an HTTP API request to an endpoint."
+        },
+        {
+          "value": "httpapi_fetch",
+          "label": "HTTP API Fetch",
+          "description": "Fetches data from an API endpoint using GET method only."
+        },
+        {
+          "value": "branch_waituntil",
+          "label": "Branch Wait Until",
+          "description": "Waits until a condition is met or the maximum time is reached."
+        },
+        {
+          "value": "branch",
+          "label": "Branch",
+          "description": "Branches workflow execution based on conditions."
+        },
+        {
+          "value": "transform",
+          "label": "Transform",
+          "description": "Transforms data or generates/overrides variables using scripting languages."
+        },
+        {
+          "value": "timewindow",
+          "label": "Time Window",
+          "description": "Restricts workflow execution to specific time windows."
+        },
+        {
+          "value": "subscriberlistoperation_adduser",
+          "label": "Add User to List",
+          "description": "Adds users to a subscriber list."
+        },
+        {
+          "value": "subscriberlistoperation_removeuser",
+          "label": "Remove User from List",
+          "description": "Removes users from a subscriber list."
+        },
+        {
+          "value": "objectoperation_addsubscription",
+          "label": "Add Object Subscription",
+          "description": "Adds users as subscribers to an object."
+        },
+        {
+          "value": "objectoperation_removesubscription",
+          "label": "Remove Object Subscription",
+          "description": "Removes users as subscribers from an object."
+        },
+        {
+          "value": "userupdate",
+          "label": "Update User",
+          "description": "Updates user profile properties."
+        },
+        {
+          "value": "invokeworkflow",
+          "label": "Invoke Workflow",
+          "description": "Triggers another workflow using data from the current workflow run."
+        },
+        {
+          "value": "send_email",
+          "label": "Send Email",
+          "description": "Sends email notifications using a specified template."
+        },
+        {
+          "value": "send_sms",
+          "label": "Send SMS",
+          "description": "Sends SMS text message notifications."
+        },
+        {
+          "value": "send_whatsapp",
+          "label": "Send WhatsApp",
+          "description": "Sends WhatsApp message notifications."
+        },
+        {
+          "value": "send_mobile_push",
+          "label": "Send Mobile Push",
+          "description": "Sends push notifications to mobile devices."
+        },
+        {
+          "value": "send_inbox",
+          "label": "Send Inbox",
+          "description": "Sends in-app inbox notifications."
+        },
+        {
+          "value": "send_webpush",
+          "label": "Send Web Push",
+          "description": "Sends web push notifications."
+        },
+        {
+          "value": "send_slack",
+          "label": "Send Slack",
+          "description": "Sends Slack message notifications."
+        },
+        {
+          "value": "send_ms_teams",
+          "label": "Send MS Teams",
+          "description": "Sends Microsoft Teams chat notifications."
+        },
+        {
+          "value": "send_multi_channel",
+          "label": "Send Multi Channel",
+          "description": "Sends notifications across multiple channels simultaneously."
+        },
+        {
+          "value": "send_smart_channel_routing",
+          "label": "Send Smart Channel Routing",
+          "description": "Intelligently routes notifications through channels."
+        }
+             ],
+       "nodeTypes": [
+        {
+          "value": "delay",
+          "label": "Delay",
+          "description": "Pauses workflow execution for a specified duration."
+        },
+        {
+          "value": "batch",
+          "label": "Batch",
+          "description": "Batches incoming workflow triggers/events for a duration."
+        },
+        {
+          "value": "digest",
+          "label": "Digest",
+          "description": "Batches and sends summary notifications at a recurring digest schedule."
+        },
+        {
+          "value": "httpapi_webhook",
+          "label": "HTTP API Webhook",
+          "description": "Makes an HTTP API request to an endpoint."
+        },
+        {
+          "value": "httpapi_fetch",
+          "label": "HTTP API Fetch",
+          "description": "Fetches data from an API endpoint using GET method only."
+        },
+        {
+          "value": "branch_waituntil",
+          "label": "Branch Wait Until",
+          "description": "Waits until a condition is met or the maximum time is reached."
+        },
+        {
+          "value": "branch",
+          "label": "Branch",
+          "description": "Branches workflow execution based on conditions."
+        },
+        {
+          "value": "transform",
+          "label": "Transform",
+          "description": "Transforms data or generates/overrides variables using scripting languages."
+        },
+        {
+          "value": "timewindow",
+          "label": "Time Window",
+          "description": "Restricts workflow execution to specific time windows."
+        },
+        {
+          "value": "subscriberlistoperation_adduser",
+          "label": "Add User to List",
+          "description": "Adds users to a subscriber list."
+        },
+        {
+          "value": "subscriberlistoperation_removeuser",
+          "label": "Remove User from List",
+          "description": "Removes users from a subscriber list."
+        },
+        {
+          "value": "objectoperation_addsubscription",
+          "label": "Add Object Subscription",
+          "description": "Adds users as subscribers to an object."
+        },
+        {
+          "value": "objectoperation_removesubscription",
+          "label": "Remove Object Subscription",
+          "description": "Removes users as subscribers from an object."
+        },
+        {
+          "value": "userupdate",
+          "label": "Update User",
+          "description": "Updates user profile properties."
+        },
+        {
+          "value": "invokeworkflow",
+          "label": "Invoke Workflow",
+          "description": "Triggers another workflow using data from the current workflow run."
+        },
+        {
+          "value": "send_email",
+          "label": "Send Email",
+          "description": "Sends email notifications using a specified template."
+        },
+        {
+          "value": "send_sms",
+          "label": "Send SMS",
+          "description": "Sends SMS text message notifications."
+        },
+        {
+          "value": "send_whatsapp",
+          "label": "Send WhatsApp",
+          "description": "Sends WhatsApp message notifications."
+        },
+        {
+          "value": "send_mobile_push",
+          "label": "Send Mobile Push",
+          "description": "Sends push notifications to mobile devices."
+        },
+        {
+          "value": "send_inbox",
+          "label": "Send Inbox",
+          "description": "Sends in-app inbox notifications."
+        },
+        {
+          "value": "send_webpush",
+          "label": "Send Web Push",
+          "description": "Sends web push notifications."
+        },
+        {
+          "value": "send_slack",
+          "label": "Send Slack",
+          "description": "Sends Slack message notifications."
+        },
+        {
+          "value": "send_ms_teams",
+          "label": "Send MS Teams",
+          "description": "Sends Microsoft Teams chat notifications."
+        },
+        {
+          "value": "send_multi_channel",
+          "label": "Send Multi Channel",
+          "description": "Sends notifications across multiple channels simultaneously."
+        },
+        {
+          "value": "send_smart_channel_routing",
+          "label": "Send Smart Channel Routing",
+          "description": "Intelligently routes notifications through channels."
+        }
+      ]
+    }
   },
   "navbar": {
     "links": [
