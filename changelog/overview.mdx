@@ -4,6 +4,42 @@ title: "Product Updates"
 mode: "wide"
 ---
 
+<Update label="30 August 2025">
+  ## Validate workflow triger Payload using JSON Schema
+
+  We’ve introduced **API-level JSON Schema validation** for workflow trigger payloads. This catches payload mismatches before execution, preventing runtime failures and ensuring consistent, correct notifications.
+
+  ### Why it matters
+  When you trigger a workflow, you pass data (payload) that is used to resolve workflow variables and populate dynamic content in templates. Currently, If the payload does not include all the variables expected in the workflow, the execution may fail at different stages. With this change, Validation will happen at API level and there'll be:
+
+  - **Fewer runtime failures**: Stop workflows from starting with missing or malformed data.
+  - **Faster debugging**: Get a clear, structured error list at request time—no more hunting through multi-step logs.
+  - **More reliable messaging**: Prevent partial runs, inconsistent behavior, and incorrect or incomplete notifications.
+
+  ### How it works
+  You can add JSON schema from [Schema page](https://app.suprsend.com/en/staging/developers/schema) and then link it to the workflow [Trigger step](https://docs.suprsend.com/docs/validate-workflow-payload#linking-schema-to-workflow) or trigger Event from [events page](https://app.suprsend.com/en/staging/events).
+
+  - When you trigger a workflow, the payload is validated against a JSON Schema that describes the expected data used to resolve variables and populate dynamic content.
+  - If the payload doesn’t match the schema, the Trigger API returns error response with a list of validation errors (e.g., path, expected type, missing fields).
+  - If validation passes, the workflow proceeds as usual.
+
+  ### Fixes and Improvements:
+  Workflow slug validation at the API layer: If a referenced workflow slug isn’t available, the error is now returned directly in the API response (in addition to request logs) for faster debugging.
+
+  <Note> This validation will only apply to new workflows created after this change. If you want to apply it all your existing workflows, reach out to SuprSend support.</Note>
+
+</Update>
+
+
+<Update label="23 August 2025">
+  ## Tenancy social links update
+
+  - Added support for TikTok in tenant `social_links`.
+  - Twitter renamed to **x** in descriptions and examples (field name remains compatible as per API changes).
+  - Updated social link icons for better visual consistency.
+
+</Update>
+
 <Update label="19 August 2025">
   ## Message logs revamp
 

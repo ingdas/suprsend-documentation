@@ -13,10 +13,10 @@ components:
       bearerFormat: API_Key  # Just for documentation, doesn't enforce behavior
       description: "Pass as `Bearer <API_KEY>`. Get API Key from SuprSend dashboard Developers -> API Keys section."
     ServiceTokenAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: ServiceToken
-      description: "Pass as `ServiceToken <Service_Token>`. Get Service Token from [SuprSend dashboard -> Account Settings -> Service Tokens](https://app.suprsend.com/en/account-settings/service-tokens) section."
+      type: apiKey
+      in: header
+      name: ServiceToken <token>
+      description: You can get Service Token from [SuprSend dashboard -> Account Settings -> Service Tokens](https://app.suprsend.com/en/account-settings/service-tokens) section.
     sec0:
       type: apiKey
       in: header
@@ -1389,6 +1389,19 @@ components:
           type: string
           enum: [event, api]
           description: You can trigger a workflow either via API by passing its slug directly, or through an event-based system where the workflow runs when a specific event occurs. You can compare both methods [here](https://docs.suprsend.com/docs/event-vs-api-trigger). If the workflow should run when a user enters or exits a list, use `trigger_type = event`.
+        payload_schema:
+          type: object
+          nullable: true
+          properties:
+            schema:
+              type: string
+              description: Linked schema slug. You can create a schema via [Create Schema](/reference/create-schema) endpoint and then link it here.
+              example: "onboarding-sequence-schema"
+            version_no:
+              type: integer
+              description: Schema version number to link. By default, live version is always picked for validation
+              example: 1
+          description: Schema to validate workflow api data structure. Used only when trigger_type = api.
         trigger_events:
           type: array
           items:
@@ -8572,6 +8585,1258 @@ paths:
           $ref: '#/components/responses/NotFoundError'
           description: Workflow not found
           
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+
+  /v1/{workspace}/schema/:
+    get:
+      summary: List Schemas
+      description: Retrieve a list of schemas in a workspace.
+      operationId: list-schemas
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      x-codeSamples:
+        - lang: cURL
+          source: |
+            curl -X GET "https://api.suprsend.com/v1/{workspace}/schema/" \
+              --header 'Authorization: ServiceToken <token>' \
+              --header 'Content-Type: application/json'
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace slug (staging, production, etc.)
+        - in: query
+          name: mode
+          schema:
+            type: string
+            enum: [draft, live]
+            default: draft
+          description: Specify if you want to fetch draft or live schema.
+      responses:
+        '200':
+          description: Successfully retrieved list of schemas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        description: Total number of schemas matching the query
+                        example: 5
+                      limit:
+                        type: integer
+                        description: Number of results returned per page
+                        example: 10
+                      offset:
+                        type: integer
+                        description: Offset value passed in the request
+                        example: 0
+                    description: Metadata related to pagination information
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        slug:
+                          type: string
+                          description: Unique identifier for the schema
+                          example: "new-order-placed"
+                        name:
+                          type: string
+                          description: Human-readable name of the schema
+                          example: "Order Placed Event"
+                        description:
+                          type: string
+                          nullable: true
+                          description: Description of the schema
+                          example: "Schema for order placement action"
+                        status:
+                          type: string
+                          enum: [draft, live]
+                          description: Status of returned schema. By default, draft version is returned. You can set `mode=live` to fetch the live schema.
+                          example: "draft"
+                        hash:
+                          type: string
+                          description: Git-like hash for version tracking
+                          example: "382b707d4b1f8999a1xxxxxxxx"
+                        json_schema:
+                          type: object
+                          nullable: true
+                          description: Structure of the workflow or event payload. Follows standard [json schema specification](https://json-schema.org/draft/2020-12/schema). You can link this schema to a workflow or event to validate their input payload in API response. Same schema can be linked to multiple workflows and events.
+                          example:
+                            type: "object"
+                            $schema: "https://json-schema.org/draft/2020-12/schema"
+                            required: ["order_id", "amount"]
+                            properties:
+                              order_id:
+                                type: "string"
+                              amount:
+                                type: "string"
+                            additionalProperties: true
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: When the schema was created
+                          example: "2025-08-27T09:30:57.945326Z"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the schema was last updated
+                          example: "2025-08-29T15:37:37.650177Z"
+                        committed_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          description: When the schema was last committed. Only available for live schema.
+                          example: null
+                        commit_message:
+                          type: string
+                          nullable: true
+                          description: Last commit message. Only available for live schema.
+                          example: null
+                    description: Array of schemas
+        '404':
+          description: Schema not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: HTTP status code
+                    example: 404
+                  error_code:
+                    type: string
+                    description: Error code identifier
+                    example: "not_found"
+                  type:
+                    type: string
+                    description: Error type
+                    example: "NotFound"
+                  message:
+                    type: string
+                    description: Error message
+                    example: "workspace 'demo' not found"
+                  detail:
+                    type: string
+                    description: Detailed error information
+                    example: "workspace 'demo' not found"
+              example:
+                code: 404
+                error_code: "not_found"
+                type: "NotFound"
+                message: "workspace 'demo' not found"
+                detail: "workspace 'demo' not found"
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+
+  /v1/{workspace}/schema/{schema_slug}/:
+    get:
+      summary: Get Schema
+      description: Fetch the JSON schema corresponding to a slug.
+      operationId: get-schema
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      x-codeSamples:
+        - lang: cURL
+          source: |
+            curl -X GET "https://api.suprsend.com/v1/{workspace}/schema/{schema_slug}/" \
+              --header 'Authorization: ServiceToken <token>' \
+              --header 'Content-Type: application/json'
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace slug (staging, production, etc.)
+        - in: path
+          name: schema_slug
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the schema
+        - in: query
+          name: mode
+          schema:
+            type: string
+            enum: [draft, live]
+            default: draft
+          description: Mode to fetch schema (draft or live). By default, draft schema is returned.
+      responses:
+        '200':
+          description: Successfully retrieved schema object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  slug:
+                    type: string
+                    description: Unique identifier for the schema
+                    example: "new-order-placed"
+                  name:
+                    type: string
+                    description: Human-readable name of the schema
+                    example: "Order Placed Event"
+                  description:
+                    type: string
+                    nullable: true
+                    description: Description of the schema
+                    example: "Schema for order placement action"
+                  status:
+                    type: string
+                    enum: [draft, live]
+                    description: Status of returned schema. By default, draft version is returned. You can set `mode=live` to fetch the live schema.
+                    example: "draft"
+                  hash:
+                    type: string
+                    description: Git-like hash for version tracking
+                    example: "382b707d4b1f8999a1xxxxxxxx"
+                  json_schema:
+                    type: object
+                    nullable: true
+                    description: Structure of the workflow or event payload. Follows standard [json schema specification](https://json-schema.org/draft/2020-12/schema). You can link this schema to a workflow or event to validate their input payload in API response. Same schema can be linked to multiple workflows and events.
+                    example:
+                      type: "object"
+                      $schema: "https://json-schema.org/draft/2020-12/schema"
+                      required: ["order_id", "amount"]
+                      properties:
+                        order_id:
+                          type: "string"
+                        amount:
+                          type: "string"
+                      additionalProperties: true
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: When the schema was created
+                    example: "2025-08-27T09:30:57.945326Z"
+                  updated_at:
+                    type: string
+                    format: date-time
+                    description: When the schema was last updated
+                    example: "2025-08-29T15:37:37.650177Z"
+                  committed_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                    description: When the schema was last committed. Only available for live schema.
+                    example: null
+                  commit_message:
+                    type: string
+                    nullable: true
+                    description: Last commit message. Only available for live schema.
+                    example: null
+                example:
+                  slug: "new-order-placed"
+                  name: "Order Placed Event"
+                  description: "Schema for order placement action"
+                  status: "draft"
+                  hash: "382b707d4b1f8999a1xxxxxxxx"
+                  json_schema:
+                    type: "object"
+                    $schema: "https://json-schema.org/draft/2020-12/schema"
+                    required: ["order_id", "amount"]
+                    properties:
+                      order_id:
+                        type: "string"
+                      amount:
+                        type: "string"
+                    additionalProperties: true
+                  created_at: "2025-08-27T09:30:57.945326Z"
+                  updated_at: "2025-08-29T15:37:37.650177Z"
+                  committed_at: null
+                  commit_message: null
+        '404':
+          description: Schema not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: HTTP status code
+                    example: 404
+                  error_code:
+                    type: string
+                    description: Error code identifier
+                    example: "not_found"
+                  type:
+                    type: string
+                    description: Error type
+                    example: "NotFound"
+                  message:
+                    type: string
+                    description: Error message
+                    example: "workspace 'staging4' not found"
+                  detail:
+                    type: string
+                    description: Detailed error information
+                    example: "workspace 'staging4' not found"
+              example:
+                code: 404
+                error_code: "not_found"
+                type: "NotFound"
+                message: "workspace 'staging4' not found"
+                detail: "workspace 'staging4' not found"
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+
+    post:
+      summary: Create/Update Schema
+      description: Upset draft version of a JSON schema. Creates a new schema if it doesn't exist.
+      operationId: upsert-schema
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      x-codeSamples:
+        - lang: cURL
+          source: |
+            curl -X POST "https://api.suprsend.com/v1/{workspace}/schema/{schema_slug}/?commit=true&commit_message=Initial%20schema%20creation" \
+              --header 'Authorization: ServiceToken <token>' \
+              --header 'Content-Type: application/json' \
+              --data '{
+                "name": "Order Placed Event",
+                "description": "Schema for order placement action",
+                "json_schema": {
+                  "type": "object",
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "required": ["order_id", "amount"],
+                  "properties": {
+                    "order_id": {
+                      "type": "string"
+                    },
+                    "amount": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              }'
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace slug (staging, production, etc.)
+        - in: path
+          name: schema_slug
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the schema
+        - in: query
+          name: commit
+          required: false
+          schema:
+            type: boolean
+            default: false
+          description: Set to true to commit the schema immediately after creation/update
+        - in: query
+          name: commit_message
+          required: false
+          schema:
+            type: string
+          description: Commit message describing the changes (required when commit=true)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - json_schema
+              properties:
+                name:
+                  type: string
+                  description: Human-readable name of the schema
+                  example: "Order Placed Event"
+                description:
+                  type: string
+                  nullable: true
+                  description: Description of the schema. Can be used to describe which action this schema is linked to.
+                  example: "Schema for order placement action"
+                json_schema:
+                  type: object
+                  description: Structure of the workflow or event payload. Follows standard [json schema specification](https://json-schema.org/draft/2020-12/schema). You can link this schema to a workflow or event to validate their input payload in API response. Same schema can be linked to multiple workflows and events.
+                  example:
+                    type: "object"
+                    $schema: "https://json-schema.org/draft/2020-12/schema"
+                    required: ["order_id", "amount"]
+                    properties:
+                      order_id:
+                        type: "string"
+                      amount:
+                        type: "string"
+                    additionalProperties: true
+              example:
+                name: "Order Placed Event"
+                description: "Schema for order placement action"
+                json_schema:
+                  type: "object"
+                  $schema: "https://json-schema.org/draft/2020-12/schema"
+                  required: ["order_id", "amount"]
+                  properties:
+                    order_id:
+                      type: "string"
+                    amount:
+                      type: "string"
+                  additionalProperties: true
+      responses:
+        '200':
+          description: Successfully retrieved schema object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  slug:
+                    type: string
+                    description: Unique identifier for the schema
+                    example: "new-order-placed"
+                  name:
+                    type: string
+                    description: Human-readable name of the schema
+                    example: "Order Placed Event"
+                  description:
+                    type: string
+                    nullable: true
+                    description: Description of the schema
+                    example: "Schema for order placement action"
+                  status:
+                    type: string
+                    enum: [draft, live]
+                    description: Status of returned schema. By default, draft version is returned. You can set `mode=live` to fetch the live schema.
+                    example: "draft"
+                  hash:
+                    type: string
+                    description: Git-like hash for version tracking
+                    example: "382b707d4b1f8999a1xxxxxxxx"
+                  json_schema:
+                    type: object
+                    nullable: true
+                    description: JSON schema passed in the request body.
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: When the schema was created
+                    example: "2025-08-27T09:30:57.945326Z"
+                  updated_at:
+                     type: string
+                     format: date-time
+                     description: When the schema was last updated
+                     example: "2025-08-29T15:37:37.650177Z"
+                  commit_result:
+                    type: object
+                    nullable: true
+                    description: Commit result when commit=true is passed in query parameter
+                    properties:
+                      is_committed:
+                        type: boolean
+                        description: Whether the schema was successfully committed
+                        example: false
+                      errors:
+                        type: array
+                        items:
+                          type: string
+                        description: List of errors if commit failed
+                        example: ["hash: no uncommitted changes found"]
+                    example:
+                      is_committed: false
+                      errors: ["hash: no uncommitted changes found"]
+                example:
+                  slug: "new-order-placed"
+                  name: "Order Placed Event"
+                  description: "Schema for order placement action"
+                  status: "draft"
+                  hash: "382b707d4b1f8999a1xxxxxxxx"
+                  json_schema:
+                    type: "object"
+                    $schema: "https://json-schema.org/draft/2020-12/schema"
+                    required: ["order_id", "amount"]
+                    properties:
+                      order_id:
+                        type: "string"
+                      amount:
+                        type: "string"
+                    additionalProperties: true
+                  created_at: "2025-08-27T09:30:57.945326Z"
+                  updated_at: "2025-08-29T15:37:37.650177Z"
+                  commit_result:
+                    is_committed: false
+                    errors: ["hash: no uncommitted changes found"]
+        '400':
+          description: Invalid schema format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: HTTP status code
+                    example: 400
+                  error_code:
+                    type: string
+                    description: Error code identifier.
+                    example: "error"
+                  type:
+                    type: string
+                    description: Error type
+                    example: "ValidationError"
+                  message:
+                    type: string
+                    description: Error message
+                    example: "{\"json_schema\": [\"Schema looks like JSON data, not a JSON Schema. Include keywords like '$schema', 'type', 'properties', or '$defs'.\"]}"
+                  detail:
+                    type: object
+                    description: Detailed error information
+                    example:
+                      json_schema:
+                        - "Schema looks like JSON data, not a JSON Schema. Include keywords like '$schema', 'type', 'properties', or '$defs'."
+              example:
+                code: 400
+                error_code: "error"
+                type: "ValidationError"
+                message: "{\"json_schema\": [\"Schema looks like JSON data, not a JSON Schema. Include keywords like '$schema', 'type', 'properties', or '$defs'.\"]}"
+                detail:
+                  json_schema:
+                    - "Schema looks like JSON data, not a JSON Schema. Include keywords like '$schema', 'type', 'properties', or '$defs'."
+        '404':
+          description: Schema not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: HTTP status code
+                    example: 404
+                  error_code:
+                    type: string
+                    description: Error code identifier
+                    example: "not_found"
+                  type:
+                    type: string
+                    description: Error type
+                    example: "NotFound"
+                  message:
+                    type: string
+                    description: Error message
+                    example: "workspace 'staging4' not found"
+                  detail:
+                    type: string
+                    description: Detailed error information
+                    example: "workspace 'staging4' not found"
+              example:
+                code: 404
+                error_code: "not_found"
+                type: "NotFound"
+                message: "workspace 'staging4' not found"
+                detail: "workspace 'staging4' not found"
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+
+  /v1/{workspace}/schema/{schema_slug}/commit/:
+    patch:
+      summary: Commit Schema
+      description: Commit a draft schema to make it live. Changes will start to take effect as soon as it's live.
+      operationId: commit-schema
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      x-codeSamples:
+        - lang: cURL
+          source: |
+            curl -X PATCH "https://api.suprsend.com/v1/{workspace}/schema/{schema_slug}/commit/" \
+              --header 'Authorization: ServiceToken <token>' \
+              --header 'Content-Type: application/json'
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace slug (staging, production, etc.)
+        - in: path
+          name: schema_slug
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the schema
+        - in: query
+          name: commit_message
+          required: false
+          schema:
+            type: string
+          description: Commit message describing the changes
+      responses:
+        '200':
+          description: Successfully retrieved schema object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  slug:
+                    type: string
+                    description: Unique identifier for the schema
+                    example: "new-order-placed"
+                  name:
+                    type: string
+                    description: Human-readable name of the schema
+                    example: "Order Placed Event"
+                  description:
+                    type: string
+                    nullable: true
+                    description: Description of the schema. Can be used to describe which action this schema is linked to.
+                    example: "Schema for order placement action"
+                  status:
+                    type: string
+                    enum: [draft, live]
+                    description: Status of returned schema. By default, draft version is returned. You can set `mode=live` to fetch the live schema.
+                    example: "live"
+                  hash:
+                    type: string
+                    description: Git-like hash for version tracking
+                    example: "382b707d4b1f8999a1xxxxxxxx"
+                  json_schema:
+                    type: object
+                    nullable: true
+                    description: updated json schema
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: When the schema was created
+                    example: "2025-08-27T09:30:57.945326Z"
+                  updated_at:
+                    type: string
+                    format: date-time
+                    description: When the schema was last updated
+                    example: "2025-08-29T15:37:37.650177Z"
+                  committed_at:
+                    type: string
+                    format: date-time
+                    description: When the schema was last committed
+                    example: "2025-09-01T18:35:00.270698Z"
+                  commit_message:
+                    type: string
+                    description: Last commit message
+                    example: "required fields updated"
+                example:
+                  slug: "new-order-placed"
+                  name: "Order Placed Event"
+                  description: "Schema for order placement action"
+                  status: "live"
+                  hash: "382b707d4b1f8999a1xxxxxxxx"
+                  json_schema:
+                    type: "object"
+                    $schema: "https://json-schema.org/draft/2020-12/schema"
+                    required: ["order_id", "amount"]
+                    properties:
+                      order_id:
+                        type: "string"
+                      amount:
+                        type: "string"
+                    additionalProperties: true
+                  created_at: "2025-08-27T09:30:57.945326Z"
+                  updated_at: "2025-08-29T15:37:37.650177Z"
+                  committed_at: "2025-09-01T18:35:00.270698Z"
+                  commit_message: "required fields updated"
+        '404':
+          description: Schema not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: HTTP status code
+                    example: 404
+                  error_code:
+                    type: string
+                    description: Error code identifier
+                    example: "not_found"
+                  type:
+                    type: string
+                    description: Error type
+                    example: "NotFound"
+                  message:
+                    type: string
+                    description: Error message
+                    example: "workspace 'staging4' not found"
+                  detail:
+                    type: string
+                    description: Detailed error information
+                    example: "workspace 'staging4' not found"
+              example:
+                code: 404
+                error_code: "not_found"
+                type: "NotFound"
+                message: "workspace 'staging4' not found"
+                detail: "workspace 'staging4' not found"
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+
+  /v1/{workspace}/event/:
+    get:
+      summary: List Events
+      description: Retrieve a list of events in a workspace.
+      operationId: list-events
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      x-codeSamples:
+        - lang: cURL
+          source: |
+            curl -X GET "https://api.suprsend.com/v1/{workspace}/event/?limit=10&offset=0" \
+              --header 'Authorization: ServiceToken <token>' \
+              --header 'Content-Type: application/json'
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace slug (staging, production, etc.)
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of events to return per page (max 100)
+        - in: query
+          name: offset
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Number of events to skip for pagination
+      responses:
+        '200':
+          description: Successfully retrieved list of events
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        description: Total number of events matching the query
+                        example: 15
+                      limit:
+                        type: integer
+                        description: Number of results returned per page
+                        example: 10
+                      offset:
+                        type: integer
+                        description: Offset value passed in the request
+                        example: 0
+                    description: Metadata related to pagination information
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Event name
+                          example: "user_signup"
+                        description:
+                          type: string
+                          description: Description of the event
+                          example: "Triggered whenever a new user successfully signs up on the platform"
+                        payload_schema:
+                          type: object
+                          properties:
+                            schema:
+                              type: string
+                              description: Linked schema identifier
+                              example: "user_signup_v1"
+                            version_no:
+                              type: integer
+                              description: Schema version number
+                              example: 1
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: When the event was created
+                          example: "2025-08-27T09:30:57.945326Z"
+                        $schema:
+                          type: string
+                          description: JSON Schema reference for how the event API call should be structured
+                          example: "https://schema.suprsend.com/event/v1/schema.json"
+                    description: Array of events
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+
+    post:
+      summary: Create Event
+      description: Add events and their linked schemas in SuprSend
+      operationId: create-event
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      x-codeSamples:
+        - lang: cURL
+          source: |
+            curl -X POST "https://api.suprsend.com/v1/{workspace}/event/" \
+              --header 'Authorization: ServiceToken <token>' \
+              --header 'Content-Type: application/json' \
+              --data '{
+                "name": "User Signup Event",
+                "description": "Triggered whenever a new user successfully signs up on the platform",
+                "payload_schema": {
+                  "schema": "user_signup_v1"
+                }
+              }'
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace slug (staging, production, etc.)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: Unique Identifier of the Event.
+                  example: "User Signup Event"
+                description:
+                  type: string
+                  description: Description of the event. Can be used to describe which action this event is linked to.
+                  example: "Triggered whenever a new user successfully signs up on the platform"
+                payload_schema:
+                  type: object
+                  required:
+                    - schema
+                  properties:
+                    schema:
+                      type: string
+                      description: Linked schema slug to validate event properties structure. You can create a schema via [Create Schema](/reference/create-schema) endpoint and then link it here.
+                      example: "user_signup_v1"
+                    version_no:
+                      type: integer
+                      description: Schema version number to link. By default, live version is always picked for validation.
+                      example: 1
+              example:
+                name: "User Signup Event"
+                description: "Triggered whenever a new user successfully signs up on the platform"
+                payload_schema:
+                  schema: "user_signup_v1"
+                  version_no: 1
+      responses:
+        '200':
+          description: Updated event details
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                name: "user_signup"
+                description: "Triggered whenever a new user successfully signs up on the platform"
+                payload_schema:
+                  schema: "user_signup_v1"
+                  version_no: 1
+                created_at: "2025-08-27T09:30:57.945326Z"
+                $schema: "https://schema.suprsend.com/event/v1/schema.json"
+        '400':
+          description: Invalid event format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: HTTP status code
+                    example: 400
+                  error_code:
+                    type: string
+                    description: Error code identifier
+                    example: "error"
+                  type:
+                    type: string
+                    description: Error type
+                    example: "ValidationError"
+                  message:
+                    type: string
+                    description: Error message
+                    example: "{\"name\": [\"This field is required.\"]}"
+                  detail:
+                    type: object
+                    description: Detailed error information
+                    example:
+                      name: ["This field is required."]
+              example:
+                code: 400
+                error_code: "error"
+                type: "ValidationError"
+                message: "{\"name\": [\"This field is required.\"]}"
+                detail:
+                  name: ["This field is required."]
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+
+  /v1/{workspace}/event/{url_encoded_event_name}/:
+    get:
+      summary: Get Event Details
+      description: Fetch event details and its linked schema.
+      operationId: get-event
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      x-codeSamples:
+        - lang: cURL
+          source: |
+            curl -X GET "https://api.suprsend.com/v1/{workspace}/event/{url_encoded_event_name}/" \
+              --header 'Authorization: ServiceToken <token>' \
+              --header 'Content-Type: application/json'
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace slug (staging, production, etc.)
+        - in: path
+          name: url_encoded_event_name
+          required: true
+          schema:
+            type: string
+          description: URL encoded event name. Example - `SHIPMENT%20ARRIVED`
+      responses:
+        '200':
+          description: Successfully retrieved event
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Event name
+                    example: "user_signup"
+                  description:
+                    type: string
+                    description: Description of the event
+                    example: "Triggered whenever a new user successfully signs up on the platform"
+                  payload_schema:
+                    type: object
+                    properties:
+                      schema:
+                        type: string
+                        description: Linked schema slug
+                        example: "user_signup_v1"
+                      version_no:
+                        type: integer
+                        description: Linked schema version number. if `null`, live version will be picked for validation.
+                        example: 1
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: When the event was created
+                    example: "2025-08-27T09:30:57.945326Z"
+                  $schema:
+                    type: string
+                    description: JSON Schema reference for how the event API call should be structured.
+                    example: "https://schema.suprsend.com/event/v1/schema.json"
+                example:
+                  name: "user_signup"
+                  description: "Triggered whenever a new user successfully signs up on the platform"
+                  payload_schema:
+                    schema: "user_signup_v1"
+                    version_no: 1
+                  created_at: "2025-08-27T09:30:57.945326Z"
+                  $schema: "https://schema.suprsend.com/event/v1/schema.json"
+        '400':
+          description: Invalid event format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: HTTP status code
+                    example: 400
+                  error_code:
+                    type: string
+                    description: Error code identifier
+                    example: "error"
+                  type:
+                    type: string
+                    description: Error type
+                    example: "ValidationError"
+                  message:
+                    type: string
+                    description: Error message
+                    example: "{\"name\": [\"This field is required.\"]}"
+                  detail:
+                    type: object
+                    description: Detailed error information
+                    example:
+                      name: ["This field is required."]
+              example:
+                code: 400
+                error_code: "error"
+                type: "ValidationError"
+                message: "{\"name\": [\"This field is required.\"]}"
+                detail:
+                  name: ["This field is required."]
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+
+    patch:
+      summary: Update Event
+      description: Update event description and its linked schema.
+      operationId: update-event
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      x-codeSamples:
+        - lang: cURL
+          source: |
+            curl -X POST "https://api.suprsend.com/v1/{workspace}/event/{url_encoded_event_name}/" \
+              --header 'Authorization: ServiceToken <token>' \
+              --header 'Content-Type: application/json' \
+              --data '{
+                "description": "Triggered whenever a new user successfully signs up on the platform",
+                "payload_schema": {
+                  "schema": "user_signup_v1"
+                }
+              }'
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace slug (staging, production, etc.)
+        - in: path
+          name: url_encoded_event_name
+          required: true
+          schema:
+            type: string
+          description: URL encoded event name
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  description: Description of the event. Can be used to describe which action this event is linked to.
+                  example: "Triggered whenever a new user successfully signs up on the platform"
+                payload_schema:
+                  type: object
+                  required:
+                    - schema
+                  properties:
+                    schema:
+                      type: string
+                      description: Linked schema slug to validate event properties structure. You can create a schema via [Create Schema](/reference/create-schema) endpoint and then link it here.
+                      example: "user_signup_v1"
+                    version_no:
+                      type: integer
+                      description: Schema version number to link. By default, live version is always picked for validation.
+                      example: null
+              example:
+                description: "Triggered whenever a new user successfully signs up on the platform"
+                payload_schema:
+                  schema: "user_signup_v1"
+      responses:
+        '200':
+          description: Updated event details
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                name: "user_signup"
+                description: "Triggered whenever a new user successfully signs up on the platform"
+                payload_schema:
+                  schema: "user_signup_v1"
+                  version_no: 1
+                created_at: "2025-08-27T09:30:57.945326Z"
+                $schema: "https://schema.suprsend.com/event/v1/schema.json"
+        '400':
+          description: Invalid event format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: HTTP status code
+                    example: 400
+                  error_code:
+                    type: string
+                    description: Error code identifier
+                    example: "error"
+                  type:
+                    type: string
+                    description: Error type
+                    example: "ValidationError"
+                  message:
+                    type: string
+                    description: Error message
+                    example: "{\"payload_schema\": [\"Schema is required\"]}"
+                  detail:
+                    type: object
+                    description: Detailed error information
+                    example:
+                      payload_schema: ["Schema is required"]
+              example:
+                code: 400
+                error_code: "error"
+                type: "ValidationError"
+                message: "{\"payload_schema\": [\"Schema is required\"]}"
+                detail:
+                  payload_schema: ["Schema is required"]
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+
+  /v1/{workspace}/event/{url_encoded_event_name}/linked_workflows/:
+    get:
+      summary: Get Linked Workflows
+      description: Fetch list of all workflows where this event is used
+      operationId: get-linked-workflows
+      servers:
+        - url: https://api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      x-codeSamples:
+        - lang: cURL
+          source: |
+            curl -X GET "https://api.suprsend.com/v1/{workspace}/event/{url_encoded_event_name}/linked_workflows/" \
+              --header 'Authorization: ServiceToken <token>' \
+              --header 'Content-Type: application/json'
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace slug (staging, production, etc.)
+        - in: path
+          name: url_encoded_event_name
+          required: true
+          schema:
+            type: string
+          description: URL encoded event name. Example - `SHIPMENT%20ARRIVED`
+      responses:
+        '200':
+          description: Successfully retrieved linked workflows
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        slug:
+                          type: string
+                          description: Workflow slug where this event is used
+                          example: "onbaording_series"
+                        usage:
+                          type: array
+                          items:
+                            type: string
+                            description: Usage of the event in the workflow. Could be one of `Trigger Event`, `Wait Event` or `Success Metric Event`
+                            example: "Wait Event"
+              example:
+                results:
+                  - slug: "onbaording_series"
+                    usage:
+                      - "Trigger Event"
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: HTTP status code
+                    example: 404
+                  error_code:
+                    type: string
+                    description: Error code identifier
+                    example: "not_found"
+                  type:
+                    type: string
+                    description: Error type
+                    example: "NotFound"
+                  message:
+                    type: string
+                    description: Error message
+                    example: "Event 'user_signup' not found in workspace 'staging'"
+                  detail:
+                    type: string
+                    description: Detailed error information
+                    example: "Event 'user_signup' not found in workspace 'staging'"
+              example:
+                code: 404
+                error_code: "not_found"
+                type: "NotFound"
+                message: "Event 'user_signup' not found in workspace 'staging'"
+                detail: "Event 'user_signup' not found in workspace 'staging'"
         '401':
           $ref: '#/components/responses/AuthenticationError'
           description: AuthenticationFailed - Invalid service token.
