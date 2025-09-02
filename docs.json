@@ -159,6 +159,7 @@
                 "pages": ["docs/throttle"]
               },
               "docs/trigger-workflow",
+              "docs/validate-workflow-payload",
               "docs/tenant-workflows"
             ]
           },
@@ -585,7 +586,7 @@
             ]
           },
           {
-            "group": "MANAGE WORKFLOWS",
+            "group": "WORKFLOWS",
             "pages": [
               "reference/create-update-workflow",
               "reference/commit-workflow",
@@ -593,6 +594,25 @@
               "reference/list-workflows",
               "reference/enable-disable-workflow",
               "reference/delete-workflow"
+            ]
+          },
+          {
+            "group": "SCHEMAS",
+            "pages": [
+              "reference/upsert-schema",
+              "reference/commit-schema",
+              "reference/list-schemas",
+              "reference/get-schema"
+            ]
+          },
+          {
+            "group": "EVENTS",
+            "pages": [
+              "reference/create-event",
+              "reference/update-event",
+              "reference/list-events",
+              "reference/get-event",
+              "reference/get-linked-workflows"
             ]
           }
         ]
