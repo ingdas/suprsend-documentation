@@ -9,6 +9,10 @@ keywords:
   - notification infrastructure cli
 ---
 
+<Note>
+**Beta Feature** - The SuprSend CLI is under active development. Commands and flags may change, and new functionality will be added over time. If you encounter issues or need additional commands, please open an issue on GitHub or contribute directly — the project is open source.
+</Note>
+
 The **SuprSend CLI** is a powerful command-line interface that enables developers to setup CI/CD pipeline for notification changes and manage, automate, and sync SuprSend assets across multiple workspaces. With a few commands, you can handle workflows, schemas, events, and even integrate directly with AI agents.
 
 ---
@@ -39,7 +43,7 @@ By using the CLI, you can:
 
 ### Profile
 
-Manage [profiles](/docs/profiles): create, update, list, and promote across workspaces. Also, see <Link href="/reference/create-update-profile">Profile Management APIs</Link>.
+Manage [objects](/docs/objects): create, update, list, and promote across workspaces. Also, see <Link href="/reference/create-update-objects">Object Management APIs</Link>.
 
 | Command | Description |
 |---------|-------------|
@@ -62,7 +66,7 @@ Manage [workflows](/docs/workflows): create, update, enable, disable, and promot
 | [`workflow disable`](/reference/cli-workflow-disable) | Disable a workflow |
 
 ### Schema
-Manage [schemas](/docs/schemas): create, update, commit, reset, and promote across workspaces. Also, see <Link href="/reference/create-update-schema">Schema Management APIs</Link>.  
+Manage [schemas](/docs/validate-workflow-payload): create, update, commit, reset, and promote across workspaces. Also, see <Link href="/reference/upsert-schema">Schema Management APIs</Link>.  
 
 | Command | Description |
 |---------|-------------|
@@ -70,7 +74,6 @@ Manage [schemas](/docs/schemas): create, update, commit, reset, and promote acro
 | [`schema push`](/reference/cli-schema-push) | Push local schemas to SuprSend |
 | [`schema pull`](/reference/cli-schema-pull) | Pull schemas from SuprSend to local files |
 | [`schema commit`](/reference/cli-schema-commit) | Commit a schema to make it live |
-| [`schema reset`](/reference/cli-schema-reset) | Reset schema to previous version |
 | [`generate-types`](/reference/cli-schema-generate-types) | Generate type definitions from JSON schemas |
 
 ### Event
@@ -85,7 +88,7 @@ Manage [events](/docs/events): create, update, list, and promote across workspac
 
 ### Category
 
-Manage [categories](/docs/categories): create, update, list, and promote across workspaces. Also, see <Link href="/reference/create-update-category">Category Management APIs</Link>. 
+Manage [categories](/docs/notification-category): create, update, list, and promote across workspaces. Also, see <Link href="/reference/create-update-category">Category Management APIs</Link>. 
 
 | Command | Description |
 |---------|-------------|
@@ -94,10 +97,10 @@ Manage [categories](/docs/categories): create, update, list, and promote across 
 | [`category push`](/reference/cli-category-push) | Push local categories to SuprSend |
 | [`category commit`](/reference/cli-category-commit) | Commit categories to make them live |
 
-
 ### Sync
 
-Manage [sync](/docs/sync): sync assets between workspaces. Also, see <Link href="/reference/create-update-sync">Sync Management APIs</Link>.
+Manage [sync](/reference/cli-sync): sync assets between workspaces.
+
 
 | Command | Description |
 |---------|-------------|
