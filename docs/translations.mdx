@@ -13,14 +13,16 @@ Translations localize the notifications you send with SuprSend. Instead of maint
 
 ## How translations work
 
-SuprSend's translation system works behind the scenes. When a user receives a notification, SuprSend automatically:
+SuprSend handles localization behind the scenes. When a user receives a notification, it:
 
-1. **Identifies user's locale** from their profile (e.g., `es_MX` for Spanish-Mexico)
-2. **Locates the best translation file** using smart fallback logic
-3. **Replaces template keys** with the appropriate translated content
-4. **Delivers the localized notification** in the user's preferred language
+| Step | Process | How it works | Example |
+|------|---------|--------------|---------|
+| 1 | Detect user locale | Identifies from user profile | `es_MX` |
+| 2 | Find best translation file | Uses smart fallback logic | `es-MX.json` → `es.json` → `en.json` |
+| 3 | Replace keys | Substitutes with translated content | `{{t "welcome"}}` → `¡Bienvenido!` |
+| 4 | Send localized notification | Delivers in user's preferred language | Delivered in Spanish (Mexico) |
 
-This happens automatically—no additional code required. Translation files must be structured to work with this system.
+All this happens automatically — no extra code on your end. Translation files must follow this structure for SuprSend's system to work correctly.
 
 ### Translation directory structure
 
@@ -35,6 +37,10 @@ translations/
     ├── en-GB.json      # General translations
     └── orders.en-GB.json # Order management translations
 ```
+
+<Note>
+**Naming convention**: SuprSend supports both underscore (`en_GB`) and hyphen (`en-GB`) formats. Internally, both map to the same locale.
+</Note>
 
 <Tabs>
   <Tab title="Language only">
@@ -115,6 +121,14 @@ Translation keys can be organized using two main approaches:
     - **Quick to set up** - No need to plan namespaces upfront
     - **Perfect for small projects** - Ideal when you have limited translation keys
     - **Direct access** - Shorter syntax in templates
+    
+    **Potential conflict example:**
+    ```json
+    {
+      "title": "Welcome to our app",     // Auth page title
+      "title": "Order confirmation"      // Order page title - CONFLICT!
+    }
+    ```
   </Tab>
   <Tab title="Namespaced keys">
     **Organize by feature or module:**
@@ -151,51 +165,12 @@ Implementing translations in SuprSend requires three steps:
     ![Upload translation files interface](/images/translations.png)
     
     **Commit changes** to make translations live. Learn more about [managing translation files](#managing-translation-files).
+    
+
   </Step>
   
   <Step title="Set user locale">
-    Set the user's preferred language in their profile. Learn more about [user locale settings](/docs/user-api-locale):
-    
-    <CodeGroup>
-      ```python Python
-      from suprsend import User
-      
-      user = User(
-        distinct_id="user_123",
-        properties={"locale": "es_ES"}
-      )
-      supr_client.users.upsert(user)
-      ```
-
-      ```javascript Node.js
-      const { User } = require("@suprsend/node-sdk");
-      
-      const user = new User("user_123", {
-        locale: "fr_FR"
-      });
-      supr_client.users.upsert(user);
-      ```
-
-      ```java Java
-      import suprsend.User;
-      
-      User user = new User("user_123");
-      user.setProperty("locale", "de_DE");
-      suprClient.users.upsert(user);
-      ```
-
-      ```go Go
-      import "github.com/suprsend/suprsend-go"
-      
-      user := &suprsend.User{
-        DistinctId: "user_123",
-        Properties: map[string]interface{}{
-          "locale": "ja_JP",
-        },
-      }
-      suprClient.Users.Upsert(user)
-      ```
-    </CodeGroup>
+    Set the user's locale via API using the `$locale` parameter. The locale determines which translation file SuprSend will use for that user's notifications. Use standard ISO locale codes like `en_US`, `es_ES`, `fr_FR`, etc.
   </Step>
   
   <Step title="Use in templates">
@@ -214,7 +189,7 @@ Implementing translations in SuprSend requires three steps:
     
     ![Language dropdown for previewing translations](/images/translations-dropdown.png)
     
-    Notifications will now automatically display in each user's preferred language.
+    🎉 Notifications will now automatically display in each user's preferred language.
   </Step>
 </Steps>
 
@@ -291,7 +266,7 @@ SuprSend supports plural forms automatically based on the count variable:
 - `count≥2` → other
 
 <Note>
-The `count` variable is built-in. Always define `zero`, `one`, and `other` forms for consistent behavior across locales.
+The `count` variable is built-in. Always define `zero`, `one`, and `other` forms for consistent behavior across locales. This logic adapts automatically based on locale rules.
 </Note>
 
 ### Combining translation with other helpers
@@ -344,7 +319,7 @@ The `{{t}}` tag can be combined with other Handlebars helpers to create more dyn
 
 ### JSONNET support
 
-For advanced conditional logic beyond simple Handlebars helpers, use JSONNET expressions directly in your templates:
+JSONNET is useful when translation behavior depends on dynamic logic — for instance, tailoring messages based on subscription tier or user status. For advanced conditional logic beyond simple Handlebars helpers, use JSONNET expressions directly in your templates:
 
 **In template:**
 ```handlebars
@@ -411,39 +386,53 @@ SuprSend uses a single template architecture with translation keys, eliminating 
 </div>
 ```
 
+**Benefits:**
+- **Simplifies updates** - Change styling once, applies to all locales
+- **Ensures styling consistency** - No risk of layout differences between languages
+- **Reduces maintenance overhead** - Single template to maintain instead of multiple
+
 This architecture reduces template maintenance overhead and ensures consistent styling across locales.
 
 ## Managing translation files
 
 <Tabs>
-  <Tab title="Workflow">
-    Translation files follow a simple workflow:
+  <Tab title="📋 Workflow">
+    Translation file workflow:
     
-    1. **Upload** JSON files to the dashboard
-    2. **Review** changes (saved as drafts)
-    3. **Commit** to make translations live
-    4. **Delete** by removing files and committing
+    1. **Add translated files** to the dashboard
+    2. **Commit changes** to make translations live
+    3. **Delete translations** by removing files and publishing changes
+    
+    SuprSend automatically maintains [version control](#version-control) for all translation files, tracking every change with timestamps and author information.
     
     <Note>
-    **Important**: Changes must be committed to become active. Uncommitted translations remain as drafts.
+    To delete a translation, you'll need to publish the changes after removing the files.
     </Note>
   </Tab>
-  <Tab title="Version control">
-    SuprSend automatically tracks all changes:
+  <Tab title="🔄 Version control">
+    SuprSend automatically tracks all translation changes:
     
-    - **Complete history** - All changes with timestamps and authors
-    - **Rollback capability** - Revert to any previous version
-    - **Audit trail** - Full compliance and debugging support
+    ### What's tracked
+    - **📅 Complete history** - All changes with timestamps and authors
+    - **⏪ Rollback capability** - Revert to any previous version instantly
+    - **📊 Audit trail** - Full compliance and debugging support
+    - **🔍 Change comparison** - See exactly what changed between versions
     
-    **To rollback:**
-    1. Navigate to translations dashboard
-    2. Click on translation file → **Version History** tab
-    3. Select version to restore → Click Rollback
-    4. Changes take effect immediately
+    ### How to rollback
+    1. **Navigate** to translations dashboard
+    2. **Click** on translation file → **Version History** tab
+    3. **Select** version to restore → Click **Rollback**
+    4. **Confirm** changes take effect immediately
     
     <Warning>
     **Rollback impact**: Rolling back immediately affects all users in that locale. Test thoroughly before rolling back.
     </Warning>
+    
+    ### Version history features
+    - **📈 Visual diff** - See line-by-line changes between versions
+    - **👤 Author tracking** - Know who made each change
+    - **🏷️ Version labels** - Tag important versions for easy reference
+    - **📋 Change notes** - Add descriptions to significant updates
   </Tab>
 </Tabs>
 
@@ -459,6 +448,14 @@ Programmatically manage translations using SuprSend's Management APIs. Upload, d
 
 For complete API reference and examples, see our [Management API translations documentation](/docs/management-api-translations).
 
+## Best practices
+
+- 🔑 Keep keys short**: `auth:login` > `authentication_login_button_text`
+- 🔢 Always define plural forms**: `zero`, `one`, `other` for consistent behavior
+- 📄 Maintain `en.json`** as your canonical source
+- 🏷️ Use translation keys everywhere** — avoid raw text in templates
+- 🏢 **Don't translate brand names** — keep them consistent across locales
+
 ## Supported locales
 
 <Accordion title="View all supported locales">
@@ -467,25 +464,108 @@ SuprSend supports standard ISO locale codes following the `language_COUNTRY` for
 
 | Locale Code | Language | Country/Region |
 |-------------|----------|----------------|
-| `en_US` | English | United States |
+| `af_ZA` | Afrikaans | South Africa |
+| `ar_AE` | Arabic | United Arab Emirates |
+| `ar_SA` | Arabic | Saudi Arabia |
+| `ar_EG` | Arabic | Egypt |
+| `az_AZ` | Azerbaijani | Azerbaijan |
+| `be_BY` | Belarusian | Belarus |
+| `bg_BG` | Bulgarian | Bulgaria |
+| `bn_BD` | Bengali | Bangladesh |
+| `bs_BA` | Bosnian | Bosnia and Herzegovina |
+| `ca_ES` | Catalan | Spain |
+| `cs_CZ` | Czech | Czech Republic |
+| `cy_GB` | Welsh | United Kingdom |
+| `da_DK` | Danish | Denmark |
+| `de_AT` | German | Austria |
+| `de_CH` | German | Switzerland |
+| `de_DE` | German | Germany |
+| `el_GR` | Greek | Greece |
+| `en_AU` | English | Australia |
+| `en_CA` | English | Canada |
 | `en_GB` | English | United Kingdom |
+| `en_IE` | English | Ireland |
+| `en_IN` | English | India |
+| `en_NZ` | English | New Zealand |
+| `en_US` | English | United States |
+| `en_ZA` | English | South Africa |
+| `es_AR` | Spanish | Argentina |
+| `es_CL` | Spanish | Chile |
+| `es_CO` | Spanish | Colombia |
 | `es_ES` | Spanish | Spain |
 | `es_MX` | Spanish | Mexico |
+| `es_PE` | Spanish | Peru |
+| `es_VE` | Spanish | Venezuela |
+| `et_EE` | Estonian | Estonia |
+| `eu_ES` | Basque | Spain |
+| `fa_IR` | Persian | Iran |
+| `fi_FI` | Finnish | Finland |
+| `fr_BE` | French | Belgium |
+| `fr_CA` | French | Canada |
+| `fr_CH` | French | Switzerland |
 | `fr_FR` | French | France |
-| `de_DE` | German | Germany |
-| `ja_JP` | Japanese | Japan |
-| `ko_KR` | Korean | South Korea |
-| `zh_CN` | Chinese (Simplified) | China |
-| `zh_TW` | Chinese (Traditional) | Taiwan |
-| `pt_BR` | Portuguese | Brazil |
-| `it_IT` | Italian | Italy |
-| `ru_RU` | Russian | Russia |
-| `ar_SA` | Arabic | Saudi Arabia |
+| `gl_ES` | Galician | Spain |
+| `gu_IN` | Gujarati | India |
+| `he_IL` | Hebrew | Israel |
 | `hi_IN` | Hindi | India |
+| `hr_HR` | Croatian | Croatia |
+| `hu_HU` | Hungarian | Hungary |
+| `hy_AM` | Armenian | Armenia |
+| `id_ID` | Indonesian | Indonesia |
+| `is_IS` | Icelandic | Iceland |
+| `it_CH` | Italian | Switzerland |
+| `it_IT` | Italian | Italy |
+| `ja_JP` | Japanese | Japan |
+| `ka_GE` | Georgian | Georgia |
+| `kk_KZ` | Kazakh | Kazakhstan |
+| `km_KH` | Khmer | Cambodia |
+| `kn_IN` | Kannada | India |
+| `ko_KR` | Korean | South Korea |
+| `ky_KG` | Kyrgyz | Kyrgyzstan |
+| `lo_LA` | Lao | Laos |
+| `lt_LT` | Lithuanian | Lithuania |
+| `lv_LV` | Latvian | Latvia |
+| `mk_MK` | Macedonian | North Macedonia |
+| `ml_IN` | Malayalam | India |
+| `mn_MN` | Mongolian | Mongolia |
+| `mr_IN` | Marathi | India |
+| `ms_MY` | Malay | Malaysia |
+| `my_MM` | Burmese | Myanmar |
+| `ne_NP` | Nepali | Nepal |
+| `nl_BE` | Dutch | Belgium |
+| `nl_NL` | Dutch | Netherlands |
+| `no_NO` | Norwegian | Norway |
+| `pa_IN` | Punjabi | India |
+| `pl_PL` | Polish | Poland |
+| `pt_BR` | Portuguese | Brazil |
+| `pt_PT` | Portuguese | Portugal |
+| `ro_MD` | Romanian | Moldova |
+| `ro_RO` | Romanian | Romania |
+| `ru_RU` | Russian | Russia |
+| `si_LK` | Sinhala | Sri Lanka |
+| `sk_SK` | Slovak | Slovakia |
+| `sl_SI` | Slovenian | Slovenia |
+| `sq_AL` | Albanian | Albania |
+| `sr_RS` | Serbian | Serbia |
+| `sv_SE` | Swedish | Sweden |
+| `sw_KE` | Swahili | Kenya |
+| `ta_IN` | Tamil | India |
+| `te_IN` | Telugu | India |
+| `th_TH` | Thai | Thailand |
+| `tr_TR` | Turkish | Turkey |
+| `uk_UA` | Ukrainian | Ukraine |
+| `ur_PK` | Urdu | Pakistan |
+| `uz_UZ` | Uzbek | Uzbekistan |
+| `vi_VN` | Vietnamese | Vietnam |
+| `zh_CN` | Chinese (Simplified) | China |
+| `zh_HK` | Chinese (Traditional) | Hong Kong |
+| `zh_TW` | Chinese (Traditional) | Taiwan |
+| `zu_ZA` | Zulu | South Africa |
 
 <Note>
 Don't see your locale? SuprSend supports all standard ISO 639-1 language codes and ISO 3166-1 alpha-2 country codes. Contact support if you need help with a specific locale.
 </Note>
+</Accordion>
 
 ## Troubleshooting
 
@@ -529,4 +609,3 @@ Even with proper setup, issues may be encountered. Here are common problems and 
 3. **Namespace format** - Use `namespace:key`, not `namespace.key`
 </Accordion>
 
-</Accordion>
