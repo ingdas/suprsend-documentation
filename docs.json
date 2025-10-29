@@ -490,6 +490,18 @@
               "reference/create-update-category",
               "reference/commit-category"
             ]
+          },
+          {
+            "group": "TRANSLATIONS",
+            "pages": [
+              "reference/list-translations",
+              "reference/get-translation",
+              "reference/add-translation",
+              "reference/delete-translation",
+              "reference/commit-translation",
+              "reference/rollback-translation",
+              "reference/get-translation-history"
+            ]
           }        ]
       },
       {
@@ -560,6 +572,16 @@
               "reference/cli-category-pull",
               "reference/cli-category-push",
               "reference/cli-category-commit"
+            ]
+          },
+          {
+            "group": "Translation",
+            "pages": [
+              "reference/cli-translation-overview",
+              "reference/cli-translation-list",
+              "reference/cli-translation-pull",
+              "reference/cli-translation-push",
+              "reference/cli-translation-commit"
             ]
           }
         ]
