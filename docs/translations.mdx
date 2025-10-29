@@ -13,25 +13,21 @@ Translations localize the notifications you send with SuprSend. Instead of maint
 
 ## How translations work
 
-SuprSend automatically localizes your notifications without requiring any additional code in your application. The process happens seamlessly when a notification is sent to a user.
+SuprSend handles localization automatically when sending notifications—no extra code required.
 
-**Step 1: Detect user locale**
+**The flow:**
 
-When SuprSend prepares to send a notification, it first checks the user's profile for their locale setting. The locale is picked from the user's locale property. This locale can be set when you create or update a user via the API using the `$locale` parameter or `$set_locale` action (for example, `"$set_locale": "en-GB"`). The locale follows standard ISO format, such as `es_MX` for Spanish (Mexico), `fr_FR` for French (France), or `en_US` for English (United States). If no locale is specified for a user, SuprSend uses your account's default locale.
+1. **Detect locale** → Reads user's `$locale` (set via API with `$set_locale` action or `$locale` parameter). Falls back to account default if unset.
 
-**Step 2: Find best translation file**
+2. **Find translation file** → Searches using fallback hierarchy:
+   - Exact match: `es-MX.json` (for `es_MX` locale)
+   - Language fallback: `es.json`
+   - Default fallback: `en.json`
 
-Once the user's locale is identified, SuprSend searches for the appropriate translation file using an intelligent fallback hierarchy. It first looks for a file matching the exact locale (for example, `es-MX.json` for a user with `es_MX` locale). If that file doesn't exist, it falls back to the language-only file (`es.json`). If the language file is also missing, it uses the default locale file (typically `en.json`). This ensures users always receive translated content, even when some language files are incomplete.
+3. **Replace keys** → Replaces `{{t "key_name"}}` tags with translated values from the selected file. Interpolates variables like `{{t "greeting" name=user.first_name}}`.
 
-**Step 3: Replace keys**
+4. **Send notification** → Delivers localized content to the user.
 
-After selecting the translation file, SuprSend scans your template for translation keys (marked with `{{t "key_name"}}` tags) and replaces each key with the corresponding translated text from the selected file. For instance, a template containing `{{t "welcome"}}` will be replaced with `¡Bienvenido!` when the user's locale is Spanish. If variables are included (like `{{t "greeting" name=user.first_name}}`), those are also interpolated into the translated string during this step.
-
-**Step 4: Send localized notification**
-
-The final notification, with all translation keys replaced and variables populated, is delivered to the user in their preferred language. The entire localization process is transparent to your application—you simply send notifications as usual, and SuprSend handles the rest automatically.
-
-All of this happens behind the scenes without any extra code on your end. Your only responsibility is to ensure translation files follow the required structure and contain the necessary keys for SuprSend's system to work correctly.
 
 ### Translation directory structure
 
@@ -61,29 +57,33 @@ Files within each locale directory follow naming patterns based on their scope. 
 
 ### Fallback logic
 
-SuprSend uses a built-in fallback system to make sure localized content always loads correctly. The fallback automatically triggers in two cases:
+SuprSend automatically finds the best translation using a fallback system. If a translation isn't available, it tries the next best option:
 
-**Missing file:** When the system cannot find the file for a specific locale (for example, `es-MX.json`).
+1. **First try:** Exact match for the user's locale (`es-MX.json` for Spanish - Mexico)
+2. **Second try:** General language file (`es.json` for Spanish)
+3. **Last try:** Default language file (`en.json` for English)
 
-**Missing key:** When the system finds the correct file but the requested key isn't defined inside it (for example, `welcome_message` is missing in `es-MX.json`).
+**When does fallback happen?**
+- The translation file doesn't exist
+- The translation key isn't in the file
 
-In both cases, SuprSend tries to find the next best match by moving up the language hierarchy:
-
-1. **Exact locale match** → `es-MX.json` (Spanish – Mexico)
-2. **Language-only fallback** → `es.json` (Spanish – General)
-3. **Default fallback** → `en.json` (Base language)
-
-**Namespaced keys:** For namespaced keys, fallback occurs within the same namespace using the same language hierarchy.
+**Result:** Users always get a translation, even if it's not in their exact language.
 
 ```mermaid
 flowchart TD
-    Start[User: es-MX<br/>Key: welcome] --> Check1[1. Check es-MX.json]
-    Check1 -->|Found| Done[✓ Use translation]
-    Check1 -->|Missing| Check2[2. Check es.json]
-    Check2 -->|Found| Done
-    Check2 -->|Missing| Check3[3. Check en.json]
-    Check3 -->|Found| Done
-    Check3 -->|Missing| Fallback[✗ Show key name]
+    Start["User wants translation<br/>for es-MX locale"] --> Step1["Step 1: Check es-MX.json<br/>(Spanish - Mexico)"]
+    Step1 -->|"Translation found ✓"| Success["✅ Use this translation"]
+    Step1 -->|"Translation not found<br/>(file missing or key missing)"| Step2["Step 2: Check es.json<br/>(Spanish - General)"]
+    Step2 -->|"Translation found ✓"| Success
+    Step2 -->|"Translation not found"| Step3["Step 3: Check en.json<br/>(English - Default)"]
+    Step3 -->|"Translation found ✓"| Success
+    Step3 -->|"Translation not found"| Fallback["⚠️ Show original key name"]
+    
+    style Step1 fill:#fff3cd,stroke:#856404,stroke-width:2px
+    style Step2 fill:#fff3cd,stroke:#856404,stroke-width:2px
+    style Step3 fill:#fff3cd,stroke:#856404,stroke-width:2px
+    style Success fill:#d4edda,stroke:#155724,stroke-width:3px
+    style Fallback fill:#f8d7da,stroke:#721c24,stroke-width:2px
 ```
 
 <Note>
@@ -195,70 +195,68 @@ Setting up translations in SuprSend requires three steps:
 
 ## Using translations in templates
 
-The `{{t}}` tag replaces translation keys with localized content based on the user's locale. Choose the approach that fits your needs:
+Use the `{{t}}` tag to localize content. Examples for common scenarios:
 
 <Tabs>
-  <Tab title="Simple translations">
-    **When to use:** Static text that doesn't change based on user data or context.
+  <Tab title="Basic usage">
+    <Accordion title="Simple translations">
+      Static text that doesn't change based on user data.
     
     ```handlebars
     Subject: {{t "welcome"}}
     Body: {{t "goodbye"}}
     ```
-    
-    **Output:** "Welcome!" and "See you later!" (or localized versions)
-    
-    **Translation file (`en.json`):**
     ```json
     {
       "welcome": "Welcome!",
       "goodbye": "See you later!"
     }
     ```
-  </Tab>
-  <Tab title="Namespaced translations">
-    **When to use:** Group related translations by feature/module to avoid key name conflicts across different parts of your app.
+      **Output:** `"Welcome!"` and `"See you later!"`
+    </Accordion>
+
+    <Accordion title="Namespaced translations">
+      Group related translations by feature/module to avoid key name conflicts.
     
     ```handlebars
-    {{t "auth:login"}}     <!-- Authentication module -->
-    {{t "orders:status"}}   <!-- Orders module -->
+      {{t "auth:login"}}
+      {{t "orders:status"}}
     ```
-    
-    **Output:** "Sign in to continue" and "Order status"
-    
-    **Translation file (`en.json`):**
     ```json
     {
       "auth:login": "Sign in to continue",
       "orders:status": "Order status"
     }
     ```
+      **Output:** `"Sign in to continue"` and `"Order status"`
     
-    This prevents conflicts if both modules have a "title" key: use `auth:title` and `orders:title` instead.
+      Use `auth:title` and `orders:title` instead of conflicting `title` keys.
+    </Accordion>
   </Tab>
-  <Tab title="With variables">
-    **When to use:** Need to include dynamic user data or handle pluralization.
-    
-    **Interpolation (dynamic content):**
+
+  <Tab title="Dynamic content">
+    <Accordion title="Variable interpolation">
+      Pass dynamic data into translations for personalized content.
+
     ```handlebars
     {{t "greeting" name=user.first_name}}
     {{t "order_confirmation" order_id=order.id customer=user.name}}
     ```
-    
-    **Translation file (`en.json`):**
 ```json
 {
   "greeting": "Hello, {{name}}!",
   "order_confirmation": "Hi {{customer}}, your order #{{order_id}} is confirmed!"
 }
 ```
+      **Output:** `"Hello, John!"` and `"Hi Sarah, your order #12345 is confirmed!"`
+    </Accordion>
 
-    **Pluralization (count-based forms):**
+    <Accordion title="Pluralization">
+      Automatically handle singular/plural forms based on count.
+
 ```handlebars
 {{t "items_count" count=cart.items.length}}
 ```
-
-    **Translation file (`en.json`):**
 ```json
 {
   "items_count": {
@@ -268,19 +266,46 @@ The `{{t}}` tag replaces translation keys with localized content based on the us
   }
 }
 ```
+      **Rules:** 
+      - `count = 0` → uses `zero` form → `"No items"`
+      - `count = 1` → uses `one` form → `"1 item"`
+      - `count ≥ 2` → uses `other` form → `"5 items"`
 
-    **Rules:** `count=0` → zero, `count=1` → one, `count≥2` → other
-    
-    **Fallback:** If the `count` variable is missing, it defaults to `0` (uses the `zero` form).
+      <Note>
+      If `count` variable is missing, it defaults to `0` (uses the `zero` form).
+      </Note>
+    </Accordion>
+
+    <Accordion title="Combining with Handlebars helpers">
+      Use translation tags with other Handlebars helpers for advanced formatting.
+
+      ```handlebars
+      {{t "welcome" | uppercase}}                    <!-- Uppercase -->
+      {{default (t "name") "Guest"}}                  <!-- Default value -->
+      
+      {{#if user.is_premium}}
+        {{t "premium_welcome"}}
+      {{else}}
+        {{t "standard_welcome"}}
+      {{/if}}                                          <!-- Conditional -->
+      
+      {{#each items}}
+        <li>{{t "item_name" name=this.name price=this.price}}</li>
+      {{/each}}                                        <!-- Loops -->
+      
+      {{t "email_subject" company=tenant.name}}       <!-- Tenant data -->
+      ```
+    </Accordion>
   </Tab>
-  <Tab title="JSONNET">
-    **When to use:** Complex conditional logic that goes beyond simple Handlebars helpers.
-    
-    ```handlebars
-    {{t "welcome_message" is_vip=user.is_premium tier=user.subscription_tier}}
-    ```
-    
-    **For complex logic, use JSONNET in templates:**
+
+  <Tab title="Advanced: JSONNET">
+    <Note>
+      **Tip:** For most cases, simple variable interpolation is sufficient. Use JSONNET only when you need complex conditional logic that goes beyond Handlebars helpers.
+    </Note>
+
+    <Accordion title="JSONNET for complex logic">
+      Use JSONNET when translation behavior depends on dynamic business rules that require conditional logic.
+
     ```jsonnet
     local message = if user.is_premium then
       "Welcome, VIP member!"
@@ -292,54 +317,17 @@ The `{{t}}` tag replaces translation keys with localized content based on the us
       body: suprsend.t("welcome_body", {name: user.name})
     }
     ```
-  </Tab>
-</Tabs>
 
-### Combining translation with other helpers
-
-The `{{t}}` tag can be combined with other Handlebars helpers to create more dynamic content:
-
-<Tabs>
-  <Tab title="Uppercase">
-    **Text transformation** - Applies uppercase formatting to translated text.
-    
+      **Simple alternative (when possible):**
     ```handlebars
-    {{t "welcome" | uppercase}}        <!-- "WELCOME!" -->
-    ```
-  </Tab>
-  <Tab title="Default values">
-    **Fallback handling** - Provides a default value when translation is missing or empty.
-    
-    ```handlebars
-    {{default (t "name") "Guest"}}     <!-- Shows translated name or "Guest" -->
-    ```
-  </Tab>
-  <Tab title="Conditional content (if)">
-    **Conditional rendering** - Shows different translations based on application state or user properties.
-    
-    ```handlebars
-    {{#if user.is_premium}}
-      {{t "premium_welcome"}}
-    {{else}}
-      {{t "standard_welcome"}}
-    {{/if}}
-    ```
-  </Tab>
-  <Tab title="Loops with translations (each)">
-    **Iterative translation** - Applies translations to each item in a collection with item-specific data.
-    
-    ```handlebars
-    {{#each items}}
-      <li>{{t "item_name" name=this.name price=this.price}}</li>
-    {{/each}}
-    ```
-  </Tab>
-  <Tab title="Email merge tags">
-    **Email-specific data** - Uses tenant or organization data in email translations.
-    
-    ```handlebars
-    {{t "email_subject" company=tenant.name}}
-    ```
+      {{t "welcome_message" tier=user.subscription_tier}}
+      ```
+      ```json
+      {
+        "welcome_message": "Welcome, {{tier}} member!"
+      }
+      ```
+    </Accordion>
   </Tab>
 </Tabs>
 
@@ -402,54 +390,9 @@ Create one template with translation keys, and SuprSend automatically replaces t
 
 Manage your translation files through the SuprSend dashboard or programmatically via API and CLI.
 
-### Add new translation files
+### Translation process
 
-Upload new translation files to add support for additional languages or create namespaced translations.
-
-1. Navigate to **Developers** → **Translations** in the dashboard
-2. Click **Upload** or **Add File**
-3. Select your JSON translation file
-4. Verify the file structure matches the required format
-5. Click **Upload** to add the file
-
-![Add translation file interface](/images/translations.png)
-
-<Note>
-**File naming:** Ensure your file follows the correct naming convention (`en.json`, `es-MX.json`, or `auth.en.json` for namespaced files).
-</Note>
-
-### Edit existing translation files
-
-Update translation content directly in the dashboard editor.
-
-1. Navigate to **Developers** → **Translations**
-2. Click on the translation file you want to edit
-3. Make your changes in the JSON editor
-4. Click **Save** to preserve changes (changes remain in draft until committed)
-5. **Commit changes** to make translations live
-
-![Edit translation file interface](/images/translations.png)
-
-<Note>
-Changes are saved as drafts until you commit them. Preview your changes before committing to ensure they work correctly.
-</Note>
-
-### Delete translation files
-
-Remove translation files that are no longer needed.
-
-1. Navigate to **Developers** → **Translations**
-2. Find the translation file you want to remove
-3. Click **Delete** or remove the file
-4. **Commit changes** to publish the deletion
-
-<Warning>
-**Deletion impact:** Removing a translation file affects all users in that locale. They will fall back to the language file or default locale. Ensure you have fallback translations available.
-</Warning>
-
-### Translation workflow
-
-SuprSend uses a commit-based workflow to manage translation changes safely.
+SuprSend uses a commit-based process to manage translation changes safely.
 
 **Development → Commit → Production**
 
@@ -458,57 +401,109 @@ SuprSend uses a commit-based workflow to manage translation changes safely.
 3. **Commit changes** - Commit translations to make them live
 4. **Version control** - Every commit creates a new version with full history
 
-![Translation workflow](/images/translations.png)
+![Translation process](/images/translations.png)
 
-SuprSend automatically maintains version control for all translation files, tracking every change with timestamps and author information.
+### Add new translation files
+
+Upload new translation files to add support for additional languages or create namespaced translations.
+
+<Steps>
+  <Step title="Navigate and select file">
+    Go to **Developers** → **Translations**. Upload your JSON translation file and verify the file structure matches the required format.
+
+<Note>
+    **File naming:** Use correct naming convention (`en.json`, `es-MX.json`, or `auth.en.json` for namespaced files).
+</Note>
+  </Step>
+  
+  <Step title="Upload file">
+    Click the **Next** button to add the file.
+    
+    ![Upload translation file](/images/upload-tran.png)
+  </Step>
+  
+  <Step title="Commit changes">
+    Click **Commit** to make the translation file live.
+    
+    ![Commit translations](/images/commit-tran.png)
+  </Step>
+</Steps>
+
+### Edit existing translation files
+
+Download, edit locally, and re-upload translation files.
+
+<Steps>
+  <Step title="Open translation file">
+    Go to the translation file you want to edit.
+  </Step>
+  
+  <Step title="Download file">
+    Click **Download** to save the translation file locally for editing.
+    
+    ![Download translation file](/images/download-tran.png)
+  </Step>
+  
+  <Step title="Edit, upload and commit">
+    Make your edits to the downloaded JSON file, then click **Upload** to replace the existing file. Finally, click **Commit** to make your translation changes live.
+  </Step>
+</Steps>
+
+### Delete translation files
+
+Remove translation files that are no longer needed.
+
+<Steps>
+  <Step title="Delete file">
+    Find the translation file you want to remove, and click **Delete**.
+    
+    ![Delete translation file](/images/delete-tran.png)
+  </Step>
+  
+  <Step title="Commit deletion">
+    Click **Commit** to publish the deletion.
+    
+    ![Commit translations](/images/commit-tran.png)
+  </Step>
+</Steps>
+
+<Warning>
+**Deletion impact:** Removing a translation file affects all users in that locale. They will fall back to the language file or default locale. Ensure you have fallback translations available.
+</Warning>
 
 ### Version control
 
-SuprSend tracks all translation changes automatically, providing complete history and rollback capabilities.
+All translation changes are automatically versioned with complete history and rollback capabilities.
 
-**What's tracked:**
-- Complete history with timestamps and authors
-- Rollback capability to revert to any previous version
-- Audit trail for compliance and debugging
-- Change comparison showing exactly what changed
-
-**How to rollback:**
-
-1. Navigate to **Developers** → **Translations**
-2. Click on the translation file → **Version History** tab
-3. Select the version you want to restore
-4. Click **Rollback**
-5. Confirm the rollback
+<Steps>
+  <Step title="Open version history">
+    Go to **Developers** → **Translations**, click on a translation file, then open the **Version History** tab.
+  </Step>
+  
+  <Step title="Select and rollback">
+    Select the version you want to restore and click **Rollback**. Confirm the action.
+    
+    ![Rollback translation](/images/rollback-tran.png)
+  </Step>
+  
+  <Step title="Commit changes">
+    Click **Commit** to make the rollback live.
+    
+    ![Commit translations](/images/commit-tran.png)
+  </Step>
+</Steps>
 
 <Warning>
-**Rollback impact:** Rolling back immediately affects all users in that locale. Test thoroughly before rolling back.
+Rollback immediately affects all users in that locale. Test before rolling back.
 </Warning>
-
-**Version history features:**
-- Visual diff showing line-by-line changes between versions
-- Author tracking to know who made each change
-- Version labels to tag important versions
-- Change notes to add descriptions to significant updates
 
 ## Automating translation with CLI
 
-Manage your translations programmatically using SuprSend's Command Line Interface. Pull, push, and sync translation files with your local environment.
-
-For detailed CLI commands and workflows, see our [CLI translations documentation](/docs/cli-translations).
+Manage your translations programmatically using SuprSend's CLI. For CLI commands and workflows, see the [CLI translations overview](/reference/cli-translation-overview).
 
 ## Translation Management APIs
 
-Programmatically manage translations using SuprSend's Management APIs. Upload, delete, and manage translation files via API.
-
-The following endpoints are available:
-
-- **[List Translations](/reference/list-translations)** - Retrieve all translation files in a workspace
-- **[Get Translation](/reference/get-translation)** - Get translation content for a specific locale
-- **[Add Translation](/reference/add-translation)** - Upload or create a new translation file
-- **[Delete Translation](/reference/delete-translation)** - Remove a translation file
-- **[Commit Translation](/reference/commit-translation)** - Commit draft translations to make them live
-- **[Rollback Translation](/reference/rollback-translation)** - Rollback to a previous version of a translation
-- **[Get Translation History](/reference/get-translation-history)** - Retrieve version history for translations
+Programmatically manage translations using SuprSend's Management APIs. For API documentation and endpoints, see the [Translation Management API reference](/reference/list-translations).
 
 
 
