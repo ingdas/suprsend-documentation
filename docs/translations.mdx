@@ -20,7 +20,7 @@ SuprSend handles localization automatically when sending notifications—no extr
 1. **Detect locale** → Reads user's `$locale` (set via API with `$set_locale` action or `$locale` parameter). Falls back to account default if unset.
 
 2. **Find translation file** → Searches using fallback hierarchy:
-   - Exact match: `es-MX.json` (for `es_MX` locale)
+   - Exact match: `es_MX.json` (for `es_MX` locale)
    - Language fallback: `es.json`
    - Default fallback: `en.json`
 
@@ -38,13 +38,13 @@ translations/
 ├── en/                  # English (base language)
 │   ├── en.json         # General translations
 │   └── auth.en.json    # Authentication-specific translations
-└── en-GB/              # English (Great Britain)
-    ├── en-GB.json      # General translations
-    └── orders.en-GB.json # Order management translations
+└── en_GB/              # English (Great Britain)
+    ├── en_GB.json      # General translations
+    └── orders.en_GB.json # Order management translations
 ```
 
 <Note>
-**Naming convention**: SuprSend supports both underscore (`en_GB`) and hyphen (`en-GB`) formats. Internally, both map to the same locale.
+**Naming convention**: SuprSend supports underscore format (`en_GB`) for locale codes.
 </Note>
 
 Files within each locale directory follow naming patterns based on their scope. Use the format that matches your needs:
@@ -52,14 +52,14 @@ Files within each locale directory follow naming patterns based on their scope. 
 | Type | Format | Description | Example |
 | :--- | :--- | :--- | :--- |
 | **Language only** | `{language}.json` | Translations for a specific language without regional variations | `en.json` |
-| **Language + Region** | `{language}_{region}.json`<br />`{language}-{region}.json` | Translations for a specific language in a specific region or country | `en_GB.json`<br />`en-GB.json` |
+| **Language + Region** | `{language}_{region}.json` | Translations for a specific language in a specific region or country | `en_GB.json` |
 | **Namespaced files** | `{namespace}.{language}.json` | Translations for a specific feature or module in a specific language | `auth.en.json` |
 
 ### Fallback logic
 
 SuprSend automatically finds the best translation using a fallback system. If a translation isn't available, it tries the next best option:
 
-1. **First try:** Exact match for the user's locale (`es-MX.json` for Spanish - Mexico)
+1. **First try:** Exact match for the user's locale (`es_MX.json` for Spanish - Mexico)
 2. **Second try:** General language file (`es.json` for Spanish)
 3. **Last try:** Default language file (`en.json` for English)
 
@@ -71,7 +71,7 @@ SuprSend automatically finds the best translation using a fallback system. If a 
 
 ```mermaid
 flowchart TD
-    Start["User wants translation<br/>for es-MX locale"] --> Step1["Step 1: Check es-MX.json<br/>(Spanish - Mexico)"]
+    Start["User wants translation<br/>for es_MX locale"] --> Step1["Step 1: Check es_MX.json<br/>(Spanish - Mexico)"]
     Step1 -->|"Translation found ✓"| Success["✅ Use this translation"]
     Step1 -->|"Translation not found<br/>(file missing or key missing)"| Step2["Step 2: Check es.json<br/>(Spanish - General)"]
     Step2 -->|"Translation found ✓"| Success
@@ -166,11 +166,11 @@ Setting up translations in SuprSend requires three steps:
     **Example:**
     ```json
     {
-      "$set_locale": "en-GB"
+      "$set_locale": "en_GB"
     }
     ```
     
-    Use standard ISO locale codes like `en_US`, `es_ES`, `fr_FR`, `en-GB`, etc.
+    Use standard ISO locale codes like `en_US`, `es_ES`, `fr_FR`, `en_GB`, etc.
   </Step>
   
   <Step title="Use in templates">
@@ -412,7 +412,7 @@ Upload new translation files to add support for additional languages or create n
     Go to **Developers** → **Translations**. Upload your JSON translation file and verify the file structure matches the required format.
 
 <Note>
-    **File naming:** Use correct naming convention (`en.json`, `es-MX.json`, or `auth.en.json` for namespaced files).
+    **File naming:** Use correct naming convention (`en.json`, `es_MX.json`, or `auth.en.json` for namespaced files).
 </Note>
   </Step>
   
@@ -651,7 +651,7 @@ Even with proper setup, issues may be encountered. Here are common problems and 
 - Outdated version
 
 **Solutions:**
-1. **Verify locale format** - Use `en_US` or `en-US`, not `en-us`
+1. **Verify locale format** - Use `en_US`, not `en-us`
 2. **Check key name** - Keys are case-sensitive (`greeting` ≠ `Greeting`)
 3. **Review version history** - Ensure you're on the latest version
 </Accordion>
