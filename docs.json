@@ -494,13 +494,13 @@
           {
             "group": "TRANSLATIONS",
             "pages": [
-              "reference/list-translations",
-              "reference/get-translation",
               "reference/add-translation",
-              "reference/delete-translation",
               "reference/commit-translation",
+              "reference/get-translation",
+              "reference/list-translations",
+              "reference/get-translation-history",
               "reference/rollback-translation",
-              "reference/get-translation-history"
+              "reference/delete-translation"
             ]
           }        ]
       },

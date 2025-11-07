@@ -1668,8 +1668,8 @@ components:
             code: 404
             error_code: "not_found"
             type: "NotFound"
-            message: "Resource not found"
-            detail: "Resource not found"
+            message: "workspace 'demo' not found"
+            detail: "workspace 'demo' not found"
     
     AuthenticationError:
       description: Authentication failed
@@ -5160,9 +5160,9 @@ paths:
                           $timezone:
                             type: string
                             example: "America/New_York"
-                          $preferred_language:
+                          $locale:
                             type: string
-                            example: "en"
+                            example: "en_GB"
                       - type: object
                         title: "Notify object"
                         required: [id,object_type]
@@ -5929,12 +5929,12 @@ paths:
                                 example: "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
                 $timezone:
                   type: string
-                  description: User's timezone in [IANA format](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List)
+                  description: Object's timezone in [IANA format](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List)
                   example: America/New_York
-                $preferred_language:
+                $locale:
                   type: string
-                  description: Preferred language in [ISO 639-1 Alpha-2 format](https://gist.github.com/jrnk/8eb57b065ea0b098d571)
-                  example: en
+                  description: Object's locale for [translating](https://suprsend.com/docs/translations) template content in SuprSend.
+                  example: en_GB
       responses:
           '201':
             description: '201 - Created'
@@ -5947,7 +5947,7 @@ paths:
                       "id": "engineering",
                       "subscriptions_count": 0,
                       "properties": {
-                        "$preferred_language": "en",
+                        "$locale": "en_GB",
                         "department": "Engineering"
                       },
                       "created_at": "2025-04-06T10:00:37.893892+00:00",
@@ -6069,7 +6069,7 @@ paths:
                     "id": "engineering",
                     "subscriptions_count": 0,
                     "properties": {
-                      "$preferred_language": "en"
+                      "$locale": "en_GB"
                     },
                     "created_at": "2025-04-06T10:00:37.893892+00:00",
                     "updated_at": "2025-04-06T10:00:37.893892+00:00",
@@ -6206,7 +6206,7 @@ paths:
                   {
                     "$set": {
                       "name": "Engineering Department",
-                      "$preferred_language": "en",
+                      "$locale": "en_GB",
                       "$timezone": "America/New_York"
                     }
                   },
@@ -6252,8 +6252,8 @@ paths:
                       $set:
                         type: object
                         description: |
-                          Use this to set user properties like name, location, preferred language, etc.
-                          Example: `{"team":"Engineering","$preferred_language":"hi","$timezone":"America/New_York"}`
+                          Use this to set user properties like name, location, locale, etc.
+                          Example: `{"team":"Engineering","$locale":"en_GB","$timezone":"America/New_York"}`
                         additionalProperties:
                           type: string
                       $unset:
@@ -6304,7 +6304,7 @@ paths:
                     "id": "engineering",
                     "subscriptions_count": 0,
                     "properties": {
-                      "$preferred_language": "en"
+                      "$locale": "en_GB"
                     },
                     "created_at": "2025-04-06T10:00:37.893892+00:00",
                     "updated_at": "2025-04-06T10:00:37.893892+00:00",
@@ -6557,9 +6557,10 @@ paths:
                                           format: uri
                                           description: Microsoft Teams incoming webhook URL
                                           example: "https://wnk1z.webhook.office.com/webhookb2/XXXXXXXXX"
-                          $preferred_language:
+                          $locale:
                             type: string
-                            description: 2-letter language code in ISO 639-1 Alpha-2 code format. e.g. 'en' (for English)
+                            description: User's locale for [translating](https://suprsend.com/docs/translations) template content in SuprSend.
+                            example: en_GB
                           $timezone:
                             type: string
                             description: in IANA timezone format e.g. 'America/Los_Angeles'
@@ -7862,7 +7863,7 @@ paths:
                   tenant_id: "tenant_12345"
                   conversation_id: "conversation_12345"
               $timezone: America/New_York
-              $preferred_language: en
+              $locale: en_GB
               custom_key: custom_value
             schema:
               type: object
@@ -8009,10 +8010,10 @@ paths:
                   type: string
                   description: User's timezone in [IANA format](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List)
                   example: America/New_York
-                $preferred_language:
+                $locale:
                   type: string
-                  description: Preferred language in [ISO 639-1 Alpha-2 format](https://gist.github.com/jrnk/8eb57b065ea0b098d571)
-                  example: en
+                  description: User's locale for [translating](https://suprsend.com/docs/translations) template content in SuprSend.
+                  example: en_GB
               additionalProperties:
                 type: string
                 description: Add any additional property in key-value pair
@@ -8027,7 +8028,7 @@ paths:
                   value: {
                     "distinct_id": "_distinct_id_",
                     "properties": {
-                      "$preferred_language": "en",
+                      "$locale": "en_GB",
                       "$timezone": "America/New_York"
                     },
                     "created_at": "2025-04-04T21:37:36.712496+00:00",
@@ -8150,7 +8151,7 @@ paths:
                   value: {
                     "distinct_id": "_distinct_id_",
                     "properties": {
-                      "$preferred_language": "en",
+                      "$locale": "en_GB",
                       "$timezone": "America/New_York"
                     },
                     "created_at": "2025-04-04T21:37:36.712496+00:00",
@@ -8278,7 +8279,7 @@ paths:
                   {
                     "$set": {
                       "name": "John Doe",
-                      "$preferred_language": "en",
+                      "$locale": "en_GB",
                       "$timezone": "America/New_York"
                     }
                   },
@@ -8318,8 +8319,8 @@ paths:
                       $set:
                         type: object
                         description: |
-                          Use this to set user properties like name, location, preferred language, etc.
-                          Example: `{"name":"Marge Simpson","$preferred_language":"hi","$timezone":"America/New_York"}`
+                          Use this to set user properties like name, location, locale, etc.
+                          Example: `{"name":"Marge Simpson","$locale":"en_GB","$timezone":"America/New_York"}`
                         additionalProperties:
                           type: string
                       $unset:
@@ -8369,7 +8370,7 @@ paths:
                     "distinct_id": "_distinct_id_",
                     "properties": {
                       "name":"Marge Simpson",
-                      "$preferred_language": "en",
+                      "$locale": "en_GB",
                       "$timezone": "America/New_York"
                     },
                     "created_at": "2025-04-04T21:37:36.712496+00:00",
@@ -11559,9 +11560,8 @@ paths:
         - lang: cURL
           label: List Translations
           source: |
-            curl -X GET "https://management-api.suprsend.com/v1/{workspace}/translation/?mode=draft" \
-              --header 'Authorization: ServiceToken <token>' \
-              --header 'Content-Type: application/json'
+            curl -X GET "https://management-api.suprsend.com/v1/{workspace}/translation/" \
+              --header 'Authorization: ServiceToken <token>' 
       parameters:
         - in: path
           name: workspace
@@ -11576,6 +11576,19 @@ paths:
             enum: ["draft", "live"]
             default: draft
           description: Mode to filter translations (draft or live). By default, draft translations are returned.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            description: Maximum number of results per page
+            example: 10
+          description: Maximum number of results per page
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            example: 0
+          description: Number of results to skip
       responses:
         '200':
           description: Successfully retrieved list of translations
@@ -11584,45 +11597,75 @@ paths:
               schema:
                 type: object
                 properties:
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        description: Total number of translation files
+                      limit:
+                        type: integer
+                        description: Maximum number of results per page
+                      offset:
+                        type: integer
+                        description: Number of results to skip in case offset is passed in the request
                   results:
                     type: array
                     items:
                       type: object
                       properties:
+                        filename:
+                          type: string
+                          description: Name of the translation file. Should be in the format of <locale>.json or <namespace>.<locale>.json.
+                          example: "en.json"
                         locale:
                           type: string
-                          description: Locale code for the translation file
-                          example: "fr.json"
-                        status:
+                          description: Locale code for the translation file. This would be matched with user locale code to fetch translation.
+                          example: "en"
+                        locale_name:
                           type: string
-                          enum: ["draft", "live"]
-                          description: Status of the translation file
-                          example: "draft"
-                        created_at:
+                          description: Human-readable name of the locale
+                          example: "English"
+                        namespace:
                           type: string
-                          format: date-time
-                          description: When the translation file was created
+                          nullable: true
+                          description: Namespace for the translation file, if any. Namespace can be used to group translations by feature or module.
+                          example: task
+                        action:
+                          type: string
+                          description: action done in the version compared to last commit.
+                          enum: ["added", "updated", "deleted", "unchanged"]
+                          example: "added"
                         updated_at:
                           type: string
                           format: date-time
                           description: When the translation file was last updated
               example:
+                meta:
+                  count: 2
+                  limit: 10
+                  offset: 0
                 results:
-                  - locale: "fr.json"
-                    status: "draft"
-                    created_at: "2025-06-27T03:26:48.793551Z"
-                    updated_at: "2025-06-27T04:48:20.653366Z"
-                  - locale: "es.json"
-                    status: "live"
-                    created_at: "2025-05-15T10:20:30.123456Z"
-                    updated_at: "2025-06-20T14:30:45.789012Z"
+                  - filename: "en.json"
+                    locale: "en"
+                    locale_name: "English"
+                    namespace: null
+                    action: "unchanged"
+                    updated_at: "2025-10-30T12:23:50.380614Z"
+                  - filename: "fr.json"
+                    locale: "fr"
+                    locale_name: "French"
+                    namespace: null
+                    action: "added"
+                    updated_at: "2025-10-28T07:59:43.397124Z"
         '401':
           $ref: '#/components/responses/AuthenticationError'
           description: AuthenticationFailed - Invalid service token.
         '404':
           $ref: '#/components/responses/NotFoundError'
           description: Workspace not found
-
+  
+  /v1/{workspace}/translation/content/{locale_file}/:
     post:
       summary: Add Translation
       description: Upload or create a new translation file. The file content should be valid JSON following the translation file structure.
@@ -11635,11 +11678,10 @@ paths:
         - lang: cURL
           label: Add Translation
           source: |
-            curl -X POST "https://management-api.suprsend.com/v1/{workspace}/translation/" \
+            curl -X POST "https://management-api.suprsend.com/v1/{workspace}/translation/content/{locale_file}/" \
               --header 'Authorization: ServiceToken <token>' \
               --header 'Content-Type: application/json' \
               --data '{
-                "locale": "fr.json",
                 "content": {
                   "welcome": "Bienvenue",
                   "goodbye": "Au revoir"
@@ -11652,6 +11694,12 @@ paths:
           schema:
             type: string
           description: Workspace slug (staging, production, etc.)
+        - in: path
+          name: locale_file
+          required: true
+          schema:
+            type: string
+          description: Locale file name (e.g., "fr.json", "es-MX.json", "auth.en.json")
       requestBody:
         required: true
         content:
@@ -11678,36 +11726,55 @@ paths:
                 greeting: "Bonjour, {{name}}!"
       responses:
         '201':
-          description: Translation file created successfully
+          description: Translation file successfully updated
           content:
             application/json:
               schema:
                 type: object
                 properties:
+                  filename:
+                    type: string
+                    description: Name of the translation file
+                    example: "fr.json"
                   locale:
                     type: string
-                    description: Locale file name
-                    example: "fr.json"
-                  status:
+                    description: Locale code for the translation file
+                    example: "fr"
+                  locale_name:
                     type: string
-                    enum: ["draft", "live"]
-                    description: Status of the translation file
-                    example: "draft"
-                  content:
-                    type: object
-                    description: Translation content
-                  created_at:
+                    description: Human-readable name of the locale
+                    example: "French"
+                  namespace:
+                    type: string
+                    nullable: true
+                    description: Namespace for the translation file, if any. Namespace can be used to group translations by feature or module.
+                    example: null
+                  action:
+                    type: string
+                    description: action done in the version compared to last commit.
+                    enum: ["added", "updated", "deleted", "unchanged"]
+                    example: "updated"
+                  updated_at:
                     type: string
                     format: date-time
-                    description: When the translation file was created
+                    description: When the translation file was last updated
+                  content:
+                    type: object
+                    description: Translation key-value pairs
+                    additionalProperties:
+                      type: string
               example:
-                locale: "fr.json"
-                status: "draft"
+                filename: "fr.json"
+                locale: "fr"
+                locale_name: "French"
+                namespace: null
+                action: "updated"
+                updated_at: "2025-10-29T17:14:33.048313Z"
                 content:
-                  welcome: "Bienvenue"
-                  goodbye: "Au revoir"
-                  greeting: "Bonjour, {{name}}!"
-                created_at: "2025-06-27T03:26:48.793551Z"
+                  task_created: "Tâche créée"
+                  task_completed: "Tâche terminée"
+                  task_due: "Tâche due"
+                  task_assigned: "Tâche assignée"
         '400':
           description: Invalid translation format
           content:
@@ -11733,11 +11800,9 @@ paths:
         '404':
           $ref: '#/components/responses/NotFoundError'
           description: Workspace not found
-
-  /v1/{workspace}/translation/locale_data/:
     get:
       summary: Get Translation
-      description: Retrieve the content of a translation file for a specific locale. Use the rollback parameter to get a previous version of the translation.
+      description: Retrieve the content of a translation file for a specific locale file.
       operationId: get-translation
       servers:
         - url: https://management-api.suprsend.com
@@ -11747,35 +11812,28 @@ paths:
         - lang: cURL
           label: Get Translation
           source: |
-            curl -X GET "https://management-api.suprsend.com/v1/{workspace}/translation/locale_data/?locale=fr" \
-              --header 'Authorization: ServiceToken <token>' \
-              --header 'Content-Type: application/json'
-        - lang: cURL
-          label: Rollback Translation
-          source: |
-            curl -X GET "https://management-api.suprsend.com/v1/{workspace}/translation/locale_data/?locale=fr&rollback=1" \
-              --header 'Authorization: ServiceToken <token>' \
-              --header 'Content-Type: application/json'
+            curl -X GET "https://management-api.suprsend.com/v1/{workspace}/translation/content/fr.json/" \
+              --header 'Authorization: ServiceToken <token>'
       parameters:
         - in: path
           name: workspace
           required: true
           schema:
             type: string
-          description: Workspace slug (staging, production, etc.)
-        - in: query
-          name: locale
+            description: Workspace slug (staging, production, etc.)
+        - in: path
+          name: locale_file
           required: true
           schema:
             type: string
-          description: Locale code (e.g., "fr", "es-MX", "en")
-          example: "fr"
+            description: Locale file name (e.g., "fr.json", "es-MX.json", "auth.en.json")
         - in: query
-          name: rollback
+          name: mode
           schema:
-            type: integer
-          description: Version number to rollback to. If not provided, returns the current version.
-          example: 1
+            type: string
+            enum: ["draft", "live"]
+            default: draft
+            description: Mode to fetch translation (draft or live). By default, draft translation is returned.
       responses:
         '200':
           description: Successfully retrieved translation content
@@ -11784,135 +11842,58 @@ paths:
               schema:
                 type: object
                 properties:
+                  filename:
+                    type: string
+                    description: Name of the translation file
+                    example: "fr.json"
                   locale:
                     type: string
-                    description: Locale code
+                    description: Locale code for the translation file
                     example: "fr"
+                  locale_name:
+                    type: string
+                    description: Human-readable name of the locale
+                    example: "French"
+                  namespace:
+                    type: string
+                    nullable: true
+                    description: Namespace for the translation file, if any
+                    example: null
+                  action:
+                    type: string
+                    description: action done in the version compared to last commit.
+                    enum: ["added", "updated", "deleted", "unchanged"]
+                    example: "updated"
+                  updated_at:
+                    type: string
+                    format: date-time
+                    description: When the translation file was last updated
                   content:
                     type: object
                     description: Translation key-value pairs
-                    additionalProperties: true
-                  version:
-                    type: integer
-                    description: Version number of the translation
-                    example: 1
-                  status:
-                    type: string
-                    enum: ["draft", "live"]
-                    description: Status of the translation
-                    example: "draft"
+                    additionalProperties:
+                      type: string
               example:
+                filename: "fr.json"
                 locale: "fr"
+                locale_name: "French"
+                namespace: null
+                action: "updated"
+                updated_at: "2025-10-29T17:14:33.048313Z"
                 content:
-                  welcome: "Bienvenue"
-                  goodbye: "Au revoir"
-                  greeting: "Bonjour, {{name}}!"
-                version: 1
-                status: "draft"
+                  task_created: "Tâche créée"
+                  task_completed: "Tâche terminée"
+                  task_due: "Tâche due"
+                  task_assigned: "Tâche assignée"
         '401':
           $ref: '#/components/responses/AuthenticationError'
           description: AuthenticationFailed - Invalid service token.
         '404':
           $ref: '#/components/responses/NotFoundError'
           description: Translation file or workspace not found
-
-  /v1/{workspace}/translation/version/{version}/:
-    get:
-      summary: Get Translation History
-      description: Retrieve version history information for translations, including all versions and their details.
-      operationId: get-translation-history
-      servers:
-        - url: https://management-api.suprsend.com
-      security:
-        - ServiceTokenAuth: []
-      x-codeSamples:
-        - lang: cURL
-          label: Get Translation History
-          source: |
-            curl -X GET "https://management-api.suprsend.com/v1/{workspace}/translation/version/1/" \
-              --header 'Authorization: ServiceToken <token>' \
-              --header 'Content-Type: application/json'
-      parameters:
-        - in: path
-          name: workspace
-          required: true
-          schema:
-            type: string
-          description: Workspace slug (staging, production, etc.)
-        - in: path
-          name: version
-          required: true
-          schema:
-            type: integer
-          description: Version number to retrieve
-          example: 1
-      responses:
-        '200':
-          description: Successfully retrieved translation version history
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  version:
-                    type: integer
-                    description: Version number
-                    example: 1
-                  translations:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        locale:
-                          type: string
-                          description: Locale file name
-                          example: "fr.json"
-                        content:
-                          type: object
-                          description: Translation content at this version
-                          additionalProperties: true
-                        created_at:
-                          type: string
-                          format: date-time
-                          description: When this version was created
-                        commit_message:
-                          type: string
-                          description: Commit message for this version
-                  created_at:
-                    type: string
-                    format: date-time
-                    description: When this version was created
-                  commit_message:
-                    type: string
-                    description: Commit message for this version
-              example:
-                version: 1
-                translations:
-                  - locale: "fr.json"
-                    content:
-                      welcome: "Bienvenue"
-                      goodbye: "Au revoir"
-                    created_at: "2025-06-27T03:26:48.793551Z"
-                    commit_message: "Initial French translation"
-                  - locale: "es.json"
-                    content:
-                      welcome: "Bienvenido"
-                      goodbye: "Hasta luego"
-                    created_at: "2025-06-27T03:26:48.793551Z"
-                    commit_message: "Initial Spanish translation"
-                created_at: "2025-06-27T03:26:48.793551Z"
-                commit_message: "Initial translation commit"
-        '401':
-          $ref: '#/components/responses/AuthenticationError'
-          description: AuthenticationFailed - Invalid service token.
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-          description: Version or workspace not found
-
-  /v1/{workspace}/translation/{locale_file}/:
     delete:
       summary: Delete Translation
-      description: Permanently delete a translation file from the workspace.
+      description: Marks a file for deletion in the next commit. Actual deletion will happen when you commit the draft.
       operationId: delete-translation
       servers:
         - url: https://management-api.suprsend.com
@@ -11922,9 +11903,8 @@ paths:
         - lang: cURL
           label: Delete Translation
           source: |
-            curl -X DELETE "https://management-api.suprsend.com/v1/{workspace}/translation/fr.json/" \
-              --header 'Authorization: ServiceToken <token>' \
-              --header 'Content-Type: application/json'
+            curl -X DELETE "https://management-api.suprsend.com/v1/{workspace}/translation/content/{locale_file}/" \
+              --header 'Authorization: ServiceToken <token>' 
       parameters:
         - in: path
           name: workspace
@@ -11949,10 +11929,221 @@ paths:
           $ref: '#/components/responses/NotFoundError'
           description: Translation file or workspace not found
 
+  /v1/{workspace}/translation/version/{version}/:
+    get:
+      summary: Get Translation History
+      description: Retrieve version history information for translations, including all versions and their details.
+      operationId: get-translation-history
+      servers:
+        - url: https://management-api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      x-codeSamples:
+        - lang: cURL
+          label: Get Translation History
+          source: |
+            curl -X GET "https://management-api.suprsend.com/v1/{workspace}/translation/version/{version_no}/" \
+              --header 'Authorization: ServiceToken <token>' 
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace slug (staging, production, etc.)
+        - in: path
+          name: version
+          required: true
+          schema:
+            type: integer
+          description: Version number to retrieve
+          example: 1
+      responses:
+        '200':
+          description: Successfully retrieved translation version history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        description: Total number of translation files
+                      limit:
+                        type: integer
+                        description: Maximum number of results per page
+                      offset:
+                        type: integer
+                        description: Number of results to skip in case offset is passed in the request
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        filename:
+                          type: string
+                          description: Name of the translation file. Should be in the format of <locale>.json or <namespace>.<locale>.json.
+                          example: "en.json"
+                        locale:
+                          type: string
+                          description: Locale code for the translation file. This would be matched with user locale code to fetch translation.
+                          example: "en"
+                        locale_name:
+                          type: string
+                          description: Human-readable name of the locale
+                          example: "English"
+                        namespace:
+                          type: string
+                          nullable: true
+                          description: Namespace for the translation file, if any. Namespace can be used to group translations by feature or module.
+                          example: task
+                        action:
+                          type: string
+                          description: action done in the version compared to last commit.
+                          enum: ["added", "updated", "deleted", "unchanged"]
+                          example: "added"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the translation file was last updated
+              example:
+                meta:
+                  count: 2
+                  limit: 10
+                  offset: 0
+                results:
+                  - filename: "en.json"
+                    locale: "en"
+                    locale_name: "English"
+                    namespace: null
+                    action: "unchanged"
+                    updated_at: "2025-10-30T12:23:50.380614Z"
+                  - filename: "fr.json"
+                    locale: "fr"
+                    locale_name: "French"
+                    namespace: null
+                    action: "added"
+                    updated_at: "2025-10-28T07:59:43.397124Z"
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+          description: Version or workspace not found
+
+  /v1/{workspace}/translation/version/{version_no}/rollback/:
+    post:
+      summary: Rollback Translation
+      description: Rollback translations to a previous version. This will replace all files with what was available at the previous version.
+      operationId: rollback-translation
+      servers:
+        - url: https://management-api.suprsend.com
+      security:
+        - ServiceTokenAuth: []
+      x-codeSamples:
+        - lang: cURL
+          label: Rollback Translation
+          source: |
+            curl -X POST "https://stagingapi.suprsend.com/v1/{workspace}/translation/version/{version_no}/rollback/" \
+              --header 'Authorization: ServiceToken <token>'
+      parameters:
+        - in: path
+          name: workspace
+          required: true
+          schema:
+            type: string
+          description: Workspace slug (staging, production, etc.)
+        - in: path
+          name: version_no
+          required: true
+          schema:
+            type: integer
+          description: Version number to rollback to
+          example: 1
+      responses:
+        '200':
+          description: Details of available translation files after rollback.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        description: Total number of translation files
+                      limit:
+                        type: integer
+                        description: Maximum number of results per page
+                      offset:
+                        type: integer
+                        description: Number of results to skip in case offset is passed in the request
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        filename:
+                          type: string
+                          description: Name of the translation file. Should be in the format of <locale>.json or <namespace>.<locale>.json.
+                          example: "en.json"
+                        locale:
+                          type: string
+                          description: Locale code for the translation file. This would be matched with user locale code to fetch translation.
+                          example: "en"
+                        locale_name:
+                          type: string
+                          description: Human-readable name of the locale
+                          example: "English"
+                        namespace:
+                          type: string
+                          nullable: true
+                          description: Namespace for the translation file, if any. Namespace can be used to group translations by feature or module.
+                          example: task
+                        action:
+                          type: string
+                          description: action done in the version compared to last commit.
+                          enum: ["added", "updated", "deleted", "unchanged"]
+                          example: "added"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the translation file was last updated
+              example:
+                meta:
+                  count: 2
+                  limit: 10
+                  offset: 0
+                results:
+                  - filename: "en.json"
+                    locale: "en"
+                    locale_name: "English"
+                    namespace: null
+                    action: "unchanged"
+                    updated_at: "2025-10-30T12:23:50.380614Z"
+                  - filename: "fr.json"
+                    locale: "fr"
+                    locale_name: "French"
+                    namespace: null
+                    action: "added"
+                    updated_at: "2025-10-28T07:59:43.397124Z"
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+          description: AuthenticationFailed - Invalid service token.
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+          description: Version or workspace not found
+
+
   /v1/{workspace}/translation/commit/:
     patch:
       summary: Commit Translation
-      description: Commit draft translation changes to make them live. All draft translations will be committed and become active.
+      description: Commit all files changes to make them live.
       operationId: commit-translation
       servers:
         - url: https://management-api.suprsend.com
@@ -11963,11 +12154,7 @@ paths:
           label: Commit Translation
           source: |
             curl -X PATCH "https://management-api.suprsend.com/v1/{workspace}/translation/commit/" \
-              --header 'Authorization: ServiceToken <token>' \
-              --header 'Content-Type: application/json' \
-              --data '{
-                "commit_message": "Updated French translations"
-              }'
+              --header 'Authorization: ServiceToken <token>'
       parameters:
         - in: path
           name: workspace
@@ -11975,19 +12162,12 @@ paths:
           schema:
             type: string
           description: Workspace slug (staging, production, etc.)
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                commit_message:
-                  type: string
-                  description: Optional commit message describing the changes
-                  example: "Updated French translations"
-            example:
-              commit_message: "Updated French translations"
+        - in: query
+          name: commit_message
+          required: false
+          schema:
+            type: string
+          description: Commit message describing the changes
       responses:
         '202':
           description: Translations committed successfully
@@ -11996,22 +12176,67 @@ paths:
               schema:
                 type: object
                 properties:
-                  message:
-                    type: string
-                    description: Success message
-                    example: "Translations committed successfully"
-                  committed_at:
-                    type: string
-                    format: date-time
-                    description: Timestamp when translations were committed
-                  commit_message:
-                    type: string
-                    description: Commit message
-                    example: "Updated French translations"
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        description: Total number of translation files
+                      limit:
+                        type: integer
+                        description: Maximum number of results per page
+                      offset:
+                        type: integer
+                        description: Number of results to skip in case offset is passed in the request
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        filename:
+                          type: string
+                          description: Name of the translation file. Should be in the format of <locale>.json or <namespace>.<locale>.json.
+                          example: "en.json"
+                        locale:
+                          type: string
+                          description: Locale code for the translation file. This would be matched with user locale code to fetch translation.
+                          example: "en"
+                        locale_name:
+                          type: string
+                          description: Human-readable name of the locale
+                          example: "English"
+                        namespace:
+                          type: string
+                          nullable: true
+                          description: Namespace for the translation file, if any. Namespace can be used to group translations by feature or module.
+                          example: task
+                        action:
+                          type: string
+                          description: action done in the version compared to last commit.
+                          enum: ["added", "updated", "deleted", "unchanged"]
+                          example: "added"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the translation file was last updated
               example:
-                message: "Translations committed successfully"
-                committed_at: "2025-06-27T04:48:20.653366Z"
-                commit_message: "Updated French translations"
+                meta:
+                  count: 2
+                  limit: 10
+                  offset: 0
+                results:
+                  - filename: "en.json"
+                    locale: "en"
+                    locale_name: "English"
+                    namespace: null
+                    action: "unchanged"
+                    updated_at: "2025-10-30T12:23:50.380614Z"
+                  - filename: "fr.json"
+                    locale: "fr"
+                    locale_name: "French"
+                    namespace: null
+                    action: "added"
+                    updated_at: "2025-10-28T07:59:43.397124Z"
         '401':
           $ref: '#/components/responses/AuthenticationError'
           description: AuthenticationFailed - Invalid service token.
