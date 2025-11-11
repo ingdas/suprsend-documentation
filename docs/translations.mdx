@@ -59,7 +59,6 @@ Translations are JSON objects that define the localized text for your app messag
 Let’s say you have a task management app and you want to notify users when a new task is created or completed — localized for English and French users.
 
 ```json {en.json}
-
 {
 "TaskCreated": "A new task has been created: {{task_name}}",
 "TaskCompleted": "Task {{task_name}} has been completed successfully!"
@@ -125,7 +124,6 @@ translations/
     ├── en-GB.json      
     └── orders.en-GB.json 
 ```
-
 
 ### Add locale files
 
@@ -237,6 +235,10 @@ If count is missing or null, the zero form is used by default.
   }
 }
 ```
+      **Rules:** 
+      - `count = 0` → uses `zero` form → `"No items"`
+      - `count = 1` → uses `one` form → `"1 item"`
+      - `count ≥ 2` → uses `other` form → `"5 items"`
 
 **template:**
 <CodeGroup>
@@ -252,9 +254,9 @@ If count is missing or null, the zero form is used by default.
 </CodeGroup>
 
 **Rendered content based on count:**
-- 0 → “You have no tasks”
-- 1 → “You have 1 task”
-- 5 → “You have 5 tasks”
+- 0 → "You have no tasks"
+- 1 → "You have 1 task"
+- 5 → "You have 5 tasks"
 
 #### Interpolation
 If your translation includes variables, you can dynamically replace them with values from your template or workflow data like this:
@@ -279,7 +281,7 @@ If your translation includes variables, you can dynamically replace them with va
 </CodeGroup>
 
 **Rendered content:**
-- “Hello, John!” when $recipient.name is “John”
+- "Hello, John!" when $recipient.name is "John"
 
 #### Combining with Handlebars helpers
 Here, are some examples of how you can combine translations with other Handlebars helpers.
