@@ -205,7 +205,6 @@ You can use translations in your templates using the `t` tag. Anything inside th
 #### Simple, Nested and Namespaced keys
 <CodeGroup>
 ```handlebars handlebars (sms, email, push, inbox)
---- handlebars ---
 {{t "key_name"}}
 {{t "feature:key_name"}} // for namespaced locale files
 {{t "nested_key.sub_key"}} // for nested keys
@@ -243,7 +242,6 @@ If count is missing or null, the zero form is used by default.
 **template:**
 <CodeGroup>
 ```handlebars handlebars (sms, email, push, inbox)
---- handlebars ---
 {{t "tasks" count=$batched_events_count}}
 ```
 ```jsonnet jsonnet (slack, ms_teams)
@@ -252,11 +250,6 @@ If count is missing or null, the zero form is used by default.
 }
 ```
 </CodeGroup>
-
-**Rendered content based on count:**
-- 0 → "You have no tasks"
-- 1 → "You have 1 task"
-- 5 → "You have 5 tasks"
 
 #### Interpolation
 If your translation includes variables, you can dynamically replace them with values from your template or workflow data like this:
