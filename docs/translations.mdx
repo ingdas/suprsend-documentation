@@ -3,8 +3,6 @@ title: "Translations"
 description: "Learn how to use translations to localize your notifications in SuprSend."
 ---
 
-import { Note, Accordion, Steps, Step, CodeGroup } from '@mintlify/components';
-
 Translations help you **localize notifications dynamically** based on your user's locale.  
 Instead of maintaining multiple templates per language, you can manage a single template and multiple translation files.
 
@@ -31,13 +29,13 @@ SuprSend automatically handles localization while sending notifications — no e
 
 If either the locale file or key inside the locale file is missing, SuprSend searches in this order:
 
-1. Exact locale match — e.g., `es_MX.json`
+1. Exact locale match — e.g., `es-MX.json`
 2. General language file — e.g., `es.json`
 3. Default language fallback — e.g., `en.json`
 
 ```mermaid
 flowchart TD
-Start["User's locale is es_MX"] --> Step1["Check es_MX.json"]
+Start["User's locale is es-MX"] --> Step1["Check es-MX.json"]
 Step1 -->|"Found ✓"| Success["✅ Use this translation"]
 Step1 -->|"File or Key Missing"| Step2["Check es.json"]
 Step2 -->|"Found ✓"| Success
@@ -114,7 +112,7 @@ All translation changes, including delete, is version controlled and needs to be
 ### Directory structure
 There are two ways to organize translation files:
 1. **By locale code** — one file per language, e.g. en.json, fr.json
-2. **By namespace + locale code** — group translations by feature or module within the same language, e.g. auth.en.json, tasks.fr.json. This comes in handy when you have different teams managing their translations or can have same key across different features or modules.
+2. **By namespace + locale code** — group translations by feature or module within the same language, e.g. `auth.en.json`, `tasks.fr.json`. This comes in handy when you have different teams managing their translations or can have same key across different features or modules.
 
 All files for a locale goes into a single directory.
 
@@ -135,8 +133,8 @@ translations/
   <Step title="Upload file">
     Go to **Developers** → **Translations** section. Click on `+New File` button and upload locale files. 
     Locale file naming convention:
-      - `{locale_code}.json`: example: `en.json`, `es_MX.json`
-      - `{namespace}.{locale_code}.json`: example: `auth.en.json`, `orders.es_MX.json`
+      - `{locale_code}.json`: example: `en.json`, `es-MX.json`
+      - `{namespace}.{locale_code}.json`: example: `auth.en.json`, `orders.es-MX.json`
 
       ![Upload Translation File](/images/translations.png)
 
