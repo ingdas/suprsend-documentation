@@ -298,7 +298,17 @@
           }
         ]
       },
-      
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Guides",
+            "pages": [
+              "docs/multi-tenant-modelling"
+            ]
+          }
+        ]
+      },
       {
         "tab": "API Reference",
         "groups": [
