@@ -126,7 +126,7 @@ Map your platform concepts to SuprSend equivalents:
         </tr>
         <tr>
           <td><strong>Preferences</strong></td>
-          <td><strong>Notification Categories</strong></td>
+          <td><strong>Categories</strong></td>
           <td>Multi-layered system</td>
         </tr>
       </tbody>
@@ -259,11 +259,11 @@ Templates are reusable message designs that work for all organizations. SuprSend
 
 ### Step 4: Choose Your Workflow Approach
 
-You can use two approaches to send notifications. Choose based on your needs:
+Choose between two workflow approaches based on your needs:
 
-<TabGroup>
-  <Tab title="Method A: Dynamic Workflows (Recommended)">
-    **Overview:** Your platform controls when and how to send notifications. Each notification step (invite, reminder, etc.) is triggered separately via API.
+<AccordionGroup>
+  <Accordion title="Method A: Dynamic Workflows (Recommended)" defaultOpen={true}>
+    Your platform controls when and how to send notifications. Each notification step (invite, reminder, etc.) is triggered separately via API at runtime.
 
     **How it works:**
     1. Create templates and notification categories in SuprSend
@@ -316,22 +316,25 @@ You can use two approaches to send notifications. Choose based on your needs:
       ```
     </CodeGroup>
 
-    **Advantages:**
-    - Runtime creation, no pre-setup required
-    - Faster go-live
-    - Minimal development effort
-    - Low-risk integration
-
-    **Trade-offs:**
-    - No visual builder
-    - Code changes required for workflow updates
-    - Per-notification analytics (not end-to-end flow)
+    <CardGroup cols={2}>
+      <Card title="✅ Advantages" icon="check-circle">
+        - Runtime creation, no pre-setup required<br/>
+        - Faster go-live<br/>
+        - Minimal development effort<br/>
+        - Low-risk integration
+      </Card>
+      <Card title="⚠️ Trade-offs" icon="info-circle">
+        - No visual builder<br/>
+        - Code changes required<br/>
+        - Per-notification analytics
+      </Card>
+    </CardGroup>
 
     [Learn more about dynamic workflows →](/reference/dynamic-workflow-trigger)
-  </Tab>
+  </Accordion>
 
-  <Tab title="Method B: Native Workflows">
-    **Overview:** SuprSend controls the workflow. Build notification journeys visually in the dashboard using the Workflow Builder with wait conditions, branches, and logic.
+  <Accordion title="Method B: Native Workflows">
+    SuprSend controls the workflow. Build notification journeys visually in the dashboard using the Workflow Builder with wait conditions, branches, and logic.
 
     **How it works:**
     1. Create templates and categories
@@ -344,11 +347,13 @@ You can use two approaches to send notifications. Choose based on your needs:
     - End-to-end analytics
     - Customer admin configuration
 
-    **Recommendation:** Start with Method A, consider Method B when you need visual management or non-technical stakeholders.
-
     [Learn more about workflows →](/reference/dynamic-workflow-trigger)
-  </Tab>
-</TabGroup>
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+**Recommendation:** Start with Method A (Dynamic Workflows) for initial rollout. Consider Method B (Native Workflows) when you need visual management or non-technical stakeholders to manage workflows.
+</Tip>
 
 ---
 
