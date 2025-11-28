@@ -5,321 +5,485 @@ description: "Learn how to model multi-tenant B2B platforms with modules, cycles
 
 ## Overview
 
-This guide shows how to model multi-tenant B2B platforms in SuprSend where each customer organization has different product areas, admins launch recurring campaigns or periods, and notifications need customization per organization or per campaign.
+This guide explains how to model multi-tenant B2B platforms in SuprSend. It covers setting up branded notifications per organization, custom messaging for campaigns, and user-controlled delivery preferences.
 
-**Platform structure:**
-- Each **customer organization** has multiple **product areas** (features with their own communications)
-- Within product areas, admins launch **campaigns or periods** such as recurring sprints, review periods, or marketing campaigns
-- Each campaign has multi-step, multi-channel communications with defaults provided by the platform and optional per-organization/per-campaign customization
-- Platform provides default workflow steps and default templates (can be customized)
-- **Branding** set at organization level (logo, colors) and applied globally; **content** can be overridden at campaign level
-- Goal: unified, consistent, granular controls across all product areas
-
-**Concept hierarchy:** Organization → Product Area → Event Type → Campaign → Message Step
-
-**Example:** In a project management platform, each organization (e.g., "Acme Corp") is a tenant. They have different product areas like "Software Development" and "Marketing Projects". When an event occurs during a specific campaign (e.g., "Sprint 2024-Q1"), the platform sends notifications with Acme Corp branding, using default templates that can be customized per campaign, supporting multi-channel delivery (email, Slack, Teams) while respecting user preferences.
-
----
-
-## Concept Mapping
-
-Map your platform concepts to SuprSend:
-
-| Your Platform | Meaning | SuprSend Concept | Notes |
-| --- | --- | --- | --- |
-| **Customer Organization** | A customer organization | **Tenant** | Branding lives here; global defaults & policies |
-| **Product Area** | Feature or section with its own communications | - | No need for mapping. Manage as tags in Templates / Workflows |
-| **Event Type** | Type of event that triggers notifications | Templates & Workflow | - |
-| **Campaign or Period** | A launched instance (e.g., sprint, campaign, review period) | - | No need for mapping. Manage as Variants in templates and tags in workflows |
-| **Default Templates** | Platform-provided copies | **Templates** | Stored once; referenced across all organizations and campaigns |
-| **Template Overrides for Campaigns** | Edits for a specific campaign | **Template Variants** | Variant key = `tenant + campaign`; falls back to `default` with `tenant` branding if no override |
-| **Workflow Steps** | Initial notification, reminders, alerts | **Dynamic Workflow** (recommended) | Workflows managed within your platform. Each step is an individual workflow in SuprSend, dynamically triggered |
-| **Recipient** | End user receiving notifications | **User** (distinct_id) / **ListObject** | Channel identities (email, Slack, Teams) mapped here |
-| **Organization Preferences - Product Area & Event Type** | Product Area → Event Type | **Notification Categories:** Section: Product Area, Sub-category: Event Type | - |
-| **Organization Preferences - Campaign** | Campaign-specific preferences | - | Campaign level preferences managed within your platform. Passed dynamically during workflow trigger |
-| **User Preferences** | Channel and product area preference for a user | **User Preferences** | - |
-
-<Note>
-**Template Overrides for Campaigns** depend on Variants support in Templates, available with Templates API v2.0.
-</Note>
+<CardGroup cols={3}>
+  <Card title="What You'll Build" icon="rocket">
+    Branded notifications per organization with automatic tenant customization
+  </Card>
+  <Card title="Key Features" icon="star">
+    Multi-layered preferences, dynamic workflows, and template variants
+  </Card>
+  <Card title="Use Cases" icon="briefcase">
+    B2B platforms like Jira, project management tools, and SaaS platforms
+  </Card>
+</CardGroup>
 
 ---
 
-## Implementation Steps
+## Understanding Your Platform Structure
 
-Follow these steps in order to set up your multi-tenant notification system.
+Most B2B platforms follow this hierarchical structure:
 
-### Step 1: Set Up Tenants
+<CardGroup cols={1}>
+  <Card title="Platform Hierarchy" icon="sitemap">
+    ```
+    Organization (Acme Corp)
+      └─ Module (Software Development)
+          └─ Event Type (Issue Assigned, Issue Resolved)
+              └─ Cycle (Sprint 2024-Q1)
+                  └─ Notification Step (Initial, Reminder 1, Reminder 2)
+    ```
+  </Card>
+</CardGroup>
 
-Create a tenant for each customer organization. Branding (logo, colors) stored here applies to all notifications automatically. For example, create a tenant for "Acme Corp" with their logo and brand colors.
+When an event occurs, you send notifications with organization branding, use default templates, allow custom content for cycles, and respect user preferences. SuprSend handles this automatically once you model your platform correctly.
 
-<Steps>
-  <Step title="Create tenant">
-    Use your platform's organization ID as the tenant ID in SuprSend.
-  </Step>
-  <Step title="Set branding">
-    Add logo URL, primary color, secondary color, social links. These become available as `$tenant.*` variables in templates.
-  </Step>
-  <Step title="Configure category visibility">
-    Set which notification categories are visible to this organization based on product areas they have access to.
-  </Step>
-</Steps>
+<Info>
+**Key insight:** Model your platform structure once, and SuprSend handles branding, customization, and preferences automatically for all organizations.
+</Info>
+
+---
+
+## How It Works
+
+Here's the notification flow from trigger to delivery:
+
+```mermaid
+graph LR
+    A[Event Occurs] --> B[Trigger Workflow]
+    B --> C{Template?}
+    C -->|Variant| D[Custom Variant]
+    C -->|Default| E[Default Template]
+    D --> F[Apply Branding]
+    E --> F
+    F --> G{Preferences?}
+    G --> H[Deliver]
+```
+
+<CardGroup cols={3}>
+  <Card title="1. Your Platform" icon="code">
+    Triggers workflow when events occur
+  </Card>
+  <Card title="2. SuprSend" icon="sparkles">
+    Picks template, applies branding, checks preferences
+  </Card>
+  <Card title="3. User Receives" icon="envelope">
+    Branded notification on preferred channel
+  </Card>
+</CardGroup>
+
+<Tip>
+**Example:** When an issue is assigned in Acme Corp's Sprint 2024-Q1, your platform triggers a workflow. SuprSend selects the appropriate template (variant if custom content exists, otherwise default), applies Acme Corp's branding, evaluates preferences across all layers, and delivers a branded email to the user on their preferred channel.
+</Tip>
+
+---
+
+## Platform Mapping
+
+Map your platform concepts to SuprSend equivalents:
+
+<AccordionGroup>
+  <Accordion title="Core Concepts Mapping" defaultOpen={true}>
+    <table>
+      <thead>
+        <tr>
+          <th>Your Platform</th>
+          <th>SuprSend Equivalent</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Account</strong></td>
+          <td><strong>Tenant</strong></td>
+          <td>Branding lives here</td>
+        </tr>
+        <tr>
+          <td><strong>Module</strong></td>
+          <td>Managed as tags</td>
+          <td>No separate mapping needed</td>
+        </tr>
+        <tr>
+          <td><strong>Event Type</strong></td>
+          <td><strong>Template</strong></td>
+          <td>One template per event type</td>
+        </tr>
+        <tr>
+          <td><strong>Cycle</strong></td>
+          <td>Variant or data field</td>
+          <td>Custom content for cycles</td>
+        </tr>
+        <tr>
+          <td><strong>Workflow Steps</strong></td>
+          <td><strong>Dynamic Workflow</strong></td>
+          <td>Triggered at runtime</td>
+        </tr>
+        <tr>
+          <td><strong>Recipient</strong></td>
+          <td><strong>User</strong></td>
+          <td>All channels linked to one ID</td>
+        </tr>
+        <tr>
+          <td><strong>Preferences</strong></td>
+          <td><strong>Notification Categories</strong></td>
+          <td>Multi-layered system</td>
+        </tr>
+      </tbody>
+    </table>
+  </Accordion>
+</AccordionGroup>
+
+<Info>
+**Key Principle:** Create templates once with placeholders for organization branding. SuprSend automatically applies branding, selects variants, and respects preferences.
+</Info>
+
+---
+
+### Step 1: Set Up Organizations (Tenants)
+
+Create a tenant for each customer organization. Tenants store branding information (logo, colors, social links) that SuprSend automatically applies to all notifications sent on their behalf.
+
+**Create tenants:**
+- **SDKs:** Programmatically via [Node.js](/docs/node-tenants), [Python](/docs/python-tenants), [Java](/docs/tenants-java), or [Go SDKs](/docs/tenants-go)
+- **Dashboard:** Go to [Tenants page](/docs/tenants) → "New Tenant" → Fill in details
+
+**Required fields:**
+- **Tenant ID:** Unique identifier (cannot be changed after creation)
+- **Tenant Name:** Organization name
+- **Logo URL:** Public URL to organization logo
+- **Brand Colors:** Primary, secondary, tertiary (hex format)
+
+**Optional fields:** Timezone, Social Links
+
+<CodeGroup>
+  ```javascript Node.js
+  const { Suprsend } = require("@suprsend/node-sdk");
+  const supr_client = new Suprsend("workspace_key", "workspace_secret");
+
+  const tenant_id = "acme_corp";
+  const tenant_payload = {
+    "tenant_name": "Acme Corp",
+    "logo": "https://acme.com/logo.png",
+    "primary_color": "#1A73E8",
+    "secondary_color": "#00ff00",
+    "tertiary_color": "#0000ff",
+    "timezone": "America/New_York"
+  };
+
+  const response = supr_client.tenants.upsert(tenant_id, tenant_payload);
+  response.then((res) => console.log("response", res));
+  ```
+
+  ```python Python
+  from suprsend import Suprsend, SuprsendAPIException
+
+  supr_client = Suprsend("workspace_key", "workspace_secret")
+  tenant_id = "acme_corp"
+  tenant_payload = {
+    "tenant_name": "Acme Corp",
+    "logo": "https://acme.com/logo.png",
+    "primary_color": "#1A73E8",
+    "secondary_color": "#00ff00",
+    "tertiary_color": "#0000ff",
+    "timezone": "America/New_York"
+  }
+
+  try:
+    response = supr_client.tenants.upsert(tenant_id, tenant_payload)
+    print(response)
+  except SuprsendAPIException as ex:
+    print(ex)
+  ```
+</CodeGroup>
 
 [Learn more about tenants →](/docs/tenants)
 
 ---
 
-### Step 2: Create Templates
+### Step 2: Create Notification Templates
 
-Create a template for each **event type** and **message step** (initial, reminder1, reminder2, alert).
+Templates are reusable message designs that work for all organizations. SuprSend automatically applies tenant branding and fills in dynamic content when sending.
 
-For example, create templates like:
-- `ISSUE_ASSIGNED_INITIAL_EMAIL` - Initial notification when issue is assigned
-- `ISSUE_ASSIGNED_REMINDER1_EMAIL` - First reminder if not acknowledged
-- `ISSUE_ASSIGNED_REMINDER2_EMAIL` - Second reminder
-- `ISSUE_ASSIGNED_INITIAL_SLACK` - Slack version of initial notification
+**Create templates:**
+1. Go to [Templates page](/docs/templates)
+2. Click "New Template"
+3. Design your content using the editor
+4. Publish when ready
 
-<Steps>
-  <Step title="Use naming pattern">
-    Use a consistent pattern: `{EVENT_TYPE}_{STEP}_{CHANNEL}` (e.g., `ISSUE_ASSIGNED_INITIAL_EMAIL`)
-  </Step>
-  <Step title="Reference tenant variables">
-    Use `$tenant.tenant_name`, `$tenant.logo`, `$tenant.primary_color` in templates. These automatically resolve to the tenant's branding.
-  </Step>
-  <Step title="Create for each combination">
-    Create templates for: Event type × Message step × Channel
-  </Step>
-</Steps>
+<Tip>
+**Naming pattern:** Use `{EVENT_TYPE}_{KIND}_{CHANNEL}` (e.g., `ISSUE_ASSIGNED__INITIAL__EMAIL`)
+</Tip>
 
-[Learn more about templates →](/docs/templates)
+**Template variables:** Use placeholders in your templates that get replaced with actual values when sending notifications.
 
----
+**Three types of variables:**
 
-### Step 3: Handle Campaign-Specific Overrides
+1. **Data variables** - Values you provide when triggering the workflow:
+   - Example: `{{issue.id}}`, `{{issue.title}}`
+   - How to use: Pass these values in the `data` field when triggering workflows
 
-When an organization admin edits content for a specific campaign, create a template variant. For example, if Acme Corp admin customizes the "Issue Assigned" notification content for "Sprint 2024-Q1", create a variant with `tenant=acme_corp`, `campaign=sprint-2024-q1`.
+2. **Tenant variables** - Automatically filled from tenant settings:
+   - Example: `{{$tenant.logo}}`, `{{$tenant.primary_color}}`
+   - How to use: Just add them to your template—SuprSend fills them automatically based on the `tenant_id` in your workflow trigger
 
-<Steps>
-  <Step title="Create variant">
-    Store as **Variant** with scope: `tenant={tenant_id}`, `campaign={campaign_id}`
-  </Step>
-  <Step title="Automatic resolution">
-    SuprSend automatically resolves:
-    - If variant exists: uses variant (custom content)
-    - If no variant: uses template + tenant branding (default content)
-  </Step>
-</Steps>
+3. **Recipient variables** - Automatically filled from user profile:
+   - Example: `{{$recipient.name}}`, `{{$recipient.email}}`
+   - How to use: Add them to your template—SuprSend fills them from the user's profile
 
-**Variant precedence** (highest → lowest): `tenant+campaign` → `template default`
+**Channel guides:** [Email templates](/docs/email-template) | [SMS templates](/docs/sms-template) | [Slack templates](/docs/slack-template)
 
 <Warning>
-**Template Variants require Templates API v2.0.** Until available, pass campaign-specific content as dynamic data in workflow triggers using template variables.
+**Template Variants:** Template Variants API (v2.0) for cycle-specific overrides is in beta. Until available, pass custom content in the `data` field. [Contact support →](mailto:support@suprsend.com) for early access.
 </Warning>
 
 ---
 
-### Step 4: Set Up Notification Categories
+### Step 3: Set Up Notification Categories
 
-Create notification categories to organize communications and enable preference management.
+[Notification categories](/docs/notification-category) organize notifications for preference management. Users control which types they receive and on which channels.
 
-For example:
-```
-Transactional Category
-  └─ Software Development (Section)
-      ├─ Issue Assigned (Sub-category)
-      ├─ Issue Resolved (Sub-category)
-      └─ Issue Commented (Sub-category)
-  └─ Marketing Projects (Section)
-      └─ Campaign Launched (Sub-category)
-```
+**Category structure:** Use **Sections** (Modules like "Software Development") and **Sub-categories** (Event Types like "Issue Assigned"). Users see and control sub-categories on their [preference page](/docs/user-preferences).
 
-<Steps>
-  <Step title="Create category structure">
-    Organize as: Section = Product Area name, Sub-category = Event Type
-  </Step>
-  <Step title="Set default preferences">
-    Configure default preferences for each sub-category.
-  </Step>
-</Steps>
+**Create categories:**
+1. Go to [Developers → Categories](https://app.suprsend.com/en/staging/developers/preference-categories) in the dashboard
+2. Create sections to group related notifications
+3. Create sub-categories under each section
+4. Pass the sub-category slug in `notification_category` when [triggering workflows](/reference/dynamic-workflow-trigger)
 
-[Learn more about notification categories →](/docs/notification-category)
+<Tip>
+**Best practice:** Don't create too many categories—group similar notifications together to avoid overwhelming users.
+</Tip>
 
 ---
 
-### Step 5: Choose Your Workflow Approach
+### Step 4: Choose Your Workflow Approach
+
+You can use two approaches to send notifications. Choose based on your needs:
+
+<TabGroup>
+  <Tab title="Method A: Dynamic Workflows (Recommended)">
+    **Overview:** Your platform controls when and how to send notifications. Each notification step (invite, reminder, etc.) is triggered separately via API.
+
+    **How it works:**
+    1. Create templates and notification categories in SuprSend
+    2. Store template slugs in your codebase
+    3. When an event occurs, trigger a workflow with: `workflow_name`, `template_slug`, `recipients`, `notification_category`, `tenant_id`, `data`
+    4. SuprSend handles: template resolution, branding, preferences, delivery, analytics
+
+    <CodeGroup>
+      ```curl cURL
+      curl -X POST "https://hub.suprsend.com/{workspace_key}/dynamic-workflow/" \
+        --header 'Authorization: Bearer __YOUR_API_KEY__' \
+        --header 'Content-Type: application/json' \
+        --data '{
+          "name": "Issue Assigned - Initial",
+          "template": "issue-assigned-initial-email",
+          "notification_category": "issue_assigned",
+          "users": [{"distinct_id": "user_123", "$email": ["john@example.com"], "$channels": ["email"]}],
+          "data": {"issue_id": "PROJ-456", "issue_title": "Fix authentication bug", "assignee_name": "John Doe", "sprint": "Sprint 2024-Q1"},
+          "tenant_id": "acme_corp"
+        }'
+      ```
+
+      ```javascript Node.js
+      const { Workflow } = require("@suprsend/node-sdk");
+      const workflow_body = {
+        "name": "Issue Assigned - Initial",
+        "template": "issue-assigned-initial-email",
+        "notification_category": "issue_assigned",
+        "users": [{"distinct_id": "user_123", "$email": ["john@example.com"], "$channels": ["email"]}],
+        "data": {"issue_id": "PROJ-456", "issue_title": "Fix authentication bug", "assignee_name": "John Doe", "sprint": "Sprint 2024-Q1"}
+      };
+      const wf = new Workflow(workflow_body, {tenant_id: "acme_corp", idempotency_key: "issue-456-assigned-2024-01-15"});
+      const response = supr_client.trigger_workflow(wf);
+      response.then((res) => console.log("response", res));
+      ```
+
+      ```python Python
+      from suprsend import Suprsend, Workflow
+      supr_client = Suprsend("workspace_key", "workspace_secret");
+      workflow_body = {
+        "name": "Issue Assigned - Initial",
+        "template": "issue-assigned-initial-email",
+        "notification_category": "issue_assigned",
+        "users": [{"distinct_id": "user_123", "$email": ["john@example.com"], "$channels": ["email"]}],
+        "data": {"issue_id": "PROJ-456", "issue_title": "Fix authentication bug", "assignee_name": "John Doe", "sprint": "Sprint 2024-Q1"}
+      }
+      wf = Workflow(workflow_body, {"tenant_id": "acme_corp", "idempotency_key": "issue-456-assigned-2024-01-15"})
+      response = supr_client.trigger_workflow(wf)
+      print(response)
+      ```
+    </CodeGroup>
+
+    **Advantages:**
+    - Runtime creation, no pre-setup required
+    - Faster go-live
+    - Minimal development effort
+    - Low-risk integration
+
+    **Trade-offs:**
+    - No visual builder
+    - Code changes required for workflow updates
+    - Per-notification analytics (not end-to-end flow)
+
+    [Learn more about dynamic workflows →](/reference/dynamic-workflow-trigger)
+  </Tab>
+
+  <Tab title="Method B: Native Workflows">
+    **Overview:** SuprSend controls the workflow. Build notification journeys visually in the dashboard using the Workflow Builder with wait conditions, branches, and logic.
+
+    **How it works:**
+    1. Create templates and categories
+    2. Build workflows in the SuprSend dashboard
+    3. Trigger using `workflow_slug`
+    4. SuprSend executes the full workflow automatically
+
+    **Benefits:**
+    - Visual builder that non-engineers can manage
+    - End-to-end analytics
+    - Customer admin configuration
+
+    **Recommendation:** Start with Method A, consider Method B when you need visual management or non-technical stakeholders.
+
+    [Learn more about workflows →](/reference/dynamic-workflow-trigger)
+  </Tab>
+</TabGroup>
+
+---
+
+### Step 5: Set Up Preferences
+
+SuprSend uses a four-layer preference system: Universal Set → Tenant Visibility → Tenant Admin → [User Preferences](/docs/user-preferences).
+
+<CardGroup cols={2}>
+  <Card title="Layer 1: Universal Set (U)" icon="globe">
+    Master list of all categories defined by your platform
+  </Card>
+  <Card title="Layer 2: Tenant Visibility (T1)" icon="eye">
+    Which categories are visible to each tenant
+  </Card>
+  <Card title="Layer 3: Tenant Admin (T2)" icon="user-shield">
+    Tenant admins can disable categories/channels
+  </Card>
+  <Card title="Layer 4: User Preferences (S)" icon="user">
+    Users opt-in/out at category, channel, or category×channel level
+  </Card>
+</CardGroup>
+
+**Evaluation flow:**
+
+```mermaid
+flowchart LR
+    U[Universal Set] --> T1[Tenant Visibility]
+    T1 --> T2[Tenant Admin]
+    T2 --> S[User Preferences]
+    S --> Final[Final Channels<br/>U ∩ T1 ∩ T2 ∩ S]
+```
+
+<Info>
+When a workflow triggers, SuprSend evaluates preferences in order. Final delivery channels = **U ∩ T1 ∩ T2 ∩ S** (intersection of all four layers).
+</Info>
+
+**Set user preferences:**
+
+<CodeGroup>
+  ```curl cURL
+  curl -X PATCH "https://hub.suprsend.com/v1/user/user_123/preference/issue-assigned/" \
+    --header 'Authorization: Bearer __YOUR_API_KEY__' \
+    --header 'Content-Type: application/json' \
+    --data '{"preference": "opt_in", "opt_out_channels": ["slack"]}'
+  ```
+</CodeGroup>
+
+**Preference precedence:** [User preferences](/docs/user-preferences) always win. If a user opted out of Slack, they won't receive Slack even if `$channels` includes it. The `$channels` field narrows the list but doesn't override user preferences. Learn more about [tenant preferences](/docs/tenant-preference).
+
+---
+
+### Step 6: Set Up Users
+
+[User profiles](/docs/users) store all communication channels linked to a single `distinct_id`. SuprSend sends to the right channel based on user preferences.
+
+**Create user profiles:**
+- **SDKs:** Programmatically via [Node.js](/docs/node-create-user-profile), [Python](/docs/python-create-user-profile), [Java](/docs/java-create-user-profile), or [Go SDKs](/docs/go-create-user-profile)
+- **Inline:** Pass channel info in workflow triggers (not recommended for production)
+
+**Supported channels:** Email, SMS, WhatsApp, Slack, Push (Android/iOS), MS Teams, Web Push
+
+<CodeGroup>
+  ```python Python
+  from suprsend import Suprsend
+  supr_client = Suprsend("workspace_key", "workspace_secret");
+  distinct_id = "user_123"
+  user = supr_client.users.get_edit_instance(distinct_id)
+  user.add_email("john@example.com")
+  user.add_sms("+15555555555")
+  user.add_slack({"email": "john@example.com", "access_token": "xoxb-XXXXXXXX"})
+  user.set("name", "John Doe")
+  user.set_timezone("America/New_York")
+  response = supr_client.users.async_edit(user)
+  print(response)
+  ```
+
+  ```javascript Node.js
+  const { Suprsend } = require("@suprsend/node-sdk");
+  const supr_client = new Suprsend("workspace_key", "workspace_secret");
+  const distinct_id = "user_123";
+  const user = supr_client.user.get_instance(distinct_id);
+  user.add_email("john@example.com");
+  user.add_sms("+15555555555");
+  user.add_slack({email: "john@example.com", access_token: "xoxb-XXXXXXXX"});
+  user.set("name", "John Doe");
+  user.set_timezone("America/New_York");
+  const response = user.save();
+  response.then((res) => console.log("response", res));
+  ```
+</CodeGroup>
+
+**For groups:** Use [Lists](/docs/list-sync-via-database) or Objects to send to multiple users at once.
+
+---
+
+## Troubleshooting
+
+Common issues and solutions when notifications don't work as expected:
 
 <AccordionGroup>
-  <Accordion title="Method A: Dynamic Workflows (Recommended for Initial Rollout)" defaultOpen>
-    Your platform continues to own workflow orchestration logic. Each workflow step (initial notification, first reminder, final reminder, alert) is treated as a **separate dynamic workflow** created and triggered on SuprSend **at runtime**.
+  <Accordion title="Notification not sending">
+    **Common causes:**
+    - **User profile not found:** Create user profiles before triggering workflows
+    - **No active channels:** Ensure users have active channels matching template channels
+    - **Preference blocking:** Check user/tenant preferences via API
 
-    **Campaigns managed as tags**
-
-    Campaigns are tags within workflows, dynamically passed for filtering workflow logs.
-
-    For example, when an issue is assigned during Sprint 2024-Q1:
-    1. Platform triggers "Issue Assigned - Initial" workflow with `campaign=sprint-2024-q1` tag
-    2. If not acknowledged after 24 hours, platform triggers "Issue Assigned - Reminder 1" workflow with same campaign tag
-    3. All notifications for this sprint can be filtered by `campaign=sprint-2024-q1` tag
-
-    **Implementation Steps**
-
-    <Steps>
-      <Step title="Create templates in SuprSend">
-        Create all templates for your notification types.
-      </Step>
-      <Step title="Define notification categories">
-        Create a list of notification categories in SuprSend.
-      </Step>
-      <Step title="Store template mappings">
-        Store `template_slugs` in your platform's codebase mapped to their respective events or triggers.
-      </Step>
-      <Step title="Trigger workflow dynamically">
-        When a communication event occurs, trigger a workflow in SuprSend with:
-        - `workflow_name`
-        - `template_slug`
-        - `recipients` (users, list, or object)
-        - `notification_category`
-        - applicable `channel` list
-        - `tenant_id`
-        - optional `tags` such as `event_type` and `campaign`
-      </Step>
-      <Step title="SuprSend handles execution">
-        SuprSend automatically handles: template resolution (including variant selection and tenant branding), template rendering, preference checks, multichannel delivery, and analytics.
-      </Step>
-    </Steps>
-
-    **Pros:**
-    - Dynamic workflow creation at runtime (via API) when a new campaign is triggered; no pre-creation required on UI
-    - Faster go-live: works with existing orchestration and scheduling logic; easy migration
-    - Minimal development effort: only requires triggers and mapping templates to triggers
-    - Low-risk integration: no dependency on new logic migration; existing flows remain intact
-
-    **Cons:**
-    - No visual orchestration: flows aren't visible in the UI, managed entirely inside code
-    - Dependent on engineers: changes in workflows require code changes
-    - Less workflow-level insight: analytics are per notification, not end-to-end flow
-
-    [Dynamic Workflow Trigger →](/reference/dynamic-workflow-trigger)
+    **Solution:** Review workflow logs in SuprSend dashboard to identify the specific issue.
   </Accordion>
 
-  <Accordion title="Method B: Native Workflows in SuprSend">
-    Your platform gradually migrates workflow orchestration into SuprSend using SuprSend's **Workflow Builder**. Each notification journey (e.g., Issue Assigned Flow, Issue Resolved Flow) becomes a **native workflow in SuprSend**, defined visually via the dashboard or programmatically through APIs.
+  <Accordion title="Template or tenant issues">
+    **Template not found:** Verify template slug is correct and template is published (not just in draft).
 
-    Each node within the workflow can represent a communication step or condition, and can include **wait timers, conditional branches, data checks** (dynamically populated based on customer customization).
+    **Tenant not found:** Create tenant before triggering workflows with `tenant_id`.
 
-    This enables greater flexibility & control for non-engineering stakeholders and potentially allows **customer admins** to manage limited configuration or dynamic steps in the future.
+    **Branding not applied:** Include `tenant_id` in workflow trigger and ensure tenant variables (`{{$tenant.*}}`) are used in templates.
+  </Accordion>
 
-    For example, create a native workflow "Issue Assigned Flow" with:
-    - Initial notification node (immediate)
-    - Wait 24 hours node
-    - Conditional branch: if not acknowledged → Reminder 1 node
-    - Wait 48 hours node
-    - Conditional branch: if still not acknowledged → Reminder 2 node
+  <Accordion title="Variables or duplicates">
+    **Variables not rendering:** Ensure all template variables are included in the `data` field of your workflow trigger.
 
-    **Implementation Steps**
-
-    <Steps>
-      <Step title="Create templates">
-        Create templates in SuprSend.
-      </Step>
-      <Step title="Define notification categories">
-        Define notification categories aligned with product areas.
-      </Step>
-      <Step title="Create native workflows">
-        Create native workflows in SuprSend, linking each workflow with the appropriate templates.
-      </Step>
-      <Step title="Trigger workflow">
-        Trigger a workflow execution using the `workflow_slug`.
-      </Step>
-      <Step title="SuprSend executes">
-        SuprSend executes the full workflow — processing wait conditions, branches, and logic — and delivers notifications after resolving the right template variant, tenant branding, and user preferences.
-      </Step>
-    </Steps>
-
-    [Workflow Execution →](/reference/dynamic-workflow-trigger)
+    **Duplicate notifications:** Add `idempotency_key` to workflow trigger to prevent duplicates on retries.
   </Accordion>
 </AccordionGroup>
 
-### Recommendation
-
-Adopt **Method A (Dynamic Workflows)** for the **initial rollout**, and gradually transition to **Method B (Native Workflows)** once there is a need to manage workflows by your platform's product teams or if workflow configs are to be exposed to customer admins.
+[Learn more about error handling →](/docs/error-guides)
 
 ---
 
-### Step 6: Configure Preferences
+## Best Practices
 
-SuprSend supports multi-layered preference management, enabling both **tenant-level controls** (for organizational governance) and **end-user controls** (for personal opt-in/out decisions).
-
-#### Preference Hierarchy
-
-Adding `tenant` context creates hierarchical preference control:
-
-```mermaid
-graph TD
-	Universal("Universal Preference set") --> Platform
-  Platform("Category visibility per tenant") --> Tenant("Account level opt out")
-  Tenant --> User("User Preferences")
-```
-
-#### Setup Steps
-
-For example:
-- Universal Set: All event types (Issue Assigned, Issue Resolved, Issue Commented, etc.)
-- Organization Visibility: Acme Corp only has "Software Development" product area → Hide "Marketing Projects" categories
-- Organization Admin: Acme Corp admin disables Slack notifications for "Issue Commented"
-- User Preferences: Developer prefers email for "Issue Assigned" but Slack for "Issue Resolved"
-- Campaign-Level: Sprint 2024-Q1 should only send via email (passed as `channel_list` in trigger)
-
-<Steps>
-  <Step title="Define Universal Set (U)">
-    Create the master list of categories/subcategories defined by your platform (e.g., Issue Assigned, Issue Resolved, Campaign Launched, etc.), optionally including workflow-step granularity.
-  </Step>
-  <Step title="Configure Organization Visibility (U → T1)">
-    Choose which preferences to expose to each organization based on product areas they have access to. Hide categories for organizations without access to certain product areas.
-  </Step>
-  <Step title="Enable Organization Admin Configuration (T1 → T2)">
-    Allow organization admins to disable certain categories or channels for their organization.
-  </Step>
-  <Step title="Set Up User Preferences (S)">
-    Enable individual users to manage their own notification preferences at category / sub-category level. Users can opt-in or opt-out at:
-    - Category level (e.g., Issue Assigned)
-    - Channel level (e.g., Email, Slack, Teams)
-    - Category × Channel combinations (e.g., receive Issue Assigned via Email but not Slack)
-  </Step>
-  <Step title="Handle Campaign-Level Preferences">
-    For specific campaigns, maintain preferences within your platform's scope and pass as `channel_list` during the workflow trigger.
-  </Step>
-</Steps>
-
-#### Execution Flow
-
-When a workflow is triggered, the following sequence occurs:
-
-For example, when an issue is assigned to a developer during Sprint 2024-Q1:
-1. Platform sends trigger with `tenant_id=acme_corp`, `notification_category=issue_assigned`, `campaign=sprint-2024-q1`
-2. SuprSend checks: Is "Issue Assigned" enabled for Acme Corp? ✓
-3. SuprSend checks: Is email enabled for this developer? ✓
-4. Final delivery: Email sent (if both checks pass)
-
-<Steps>
-  <Step title="Trigger Received">
-    Your platform sends a workflow trigger containing `tenant_id`, `recipient_id`, `notification_category`, and `channel_list`
-  </Step>
-  <Step title="Tenant Preference Evaluation">
-    SuprSend checks that the **category & channels** are enabled for the tenant
-  </Step>
-  <Step title="User Preference Evaluation">
-    SuprSend checks that the **category & channels** are enabled for the user
-  </Step>
-  <Step title="Final Channel Resolution">
-    The effective delivery channels are derived as: **U ∩ T1 ∩ T2 ∩ S**
-  </Step>
-</Steps>
-
-**Relevant APIs**
-
-- [Tenant Preferences](/reference/update-tenant-default-preference)
-- [User Preferences](/reference/update-user-category-preference)
+- **Store [API keys securely](/docs/best-practices-for-api-keys-management):** Use environment variables, never commit keys to source code
+- **Use idempotency keys:** Always include `idempotency_key` in [workflow triggers](/reference/dynamic-workflow-trigger) to prevent duplicate notifications
+- **Create [user profiles](/docs/users) upfront:** Pre-create profiles when users sign up rather than inline in workflows
+- **Use consistent template naming:** Follow a clear pattern like `{EVENT_TYPE}_{KIND}_{CHANNEL}` and always use `{{$tenant.*}}` variables in [templates](/docs/templates) for automatic branding
+- **Group notifications:** Don't create too many [categories](/docs/notification-category)—group similar notifications to avoid overwhelming users
 
 ---
 
@@ -327,15 +491,32 @@ For example, when an issue is assigned to a developer during Sprint 2024-Q1:
 
 <CardGroup cols={2}>
   <Card title="Set Up Tenants" icon="building" href="/docs/tenants">
-    Create and configure tenants for your organizations
+    Create organizations and add branding
   </Card>
   <Card title="Create Templates" icon="file-lines" href="/docs/templates">
-    Build your primary notification templates
+    Build notification templates
   </Card>
-  <Card title="Notification Categories" icon="tags" href="/docs/notification-category">
-    Organize and structure your notification categories
+  <Card title="Set Up Categories" icon="tags" href="/docs/notification-category">
+    Organize by module/event
   </Card>
-  <Card title="Dynamic Workflows" icon="code" href="/reference/dynamic-workflow-trigger">
-    Trigger your first dynamic workflow
+  <Card title="Trigger Workflows" icon="code" href="/reference/dynamic-workflow-trigger">
+    Start sending notifications
+  </Card>
+</CardGroup>
+
+### Additional Resources
+
+<CardGroup cols={2}>
+  <Card title="User Profiles" icon="user" href="/docs/users">
+    Set up user identities
+  </Card>
+  <Card title="Preferences" icon="sliders" href="/docs/user-preferences">
+    Configure preferences
+  </Card>
+  <Card title="Error Handling" icon="triangle-exclamation" href="/docs/error-guides">
+    Handle errors
+  </Card>
+  <Card title="Migration Guide" icon="arrow-right-arrow-left" href="/docs/migrating-your-existing-notifications">
+    Migrate from existing systems
   </Card>
 </CardGroup>
