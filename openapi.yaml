@@ -11003,9 +11003,9 @@ paths:
                     type: string
                     description: JSON schema reference for preference category structure
                     example: "https://schema.suprsend.com/preference_category/v1/schema.json"
-                  categories:
+                  root_categories:
                     type: array
-                    description: Array of preference categories
+                    description: Array of root preference categories
                     items:
                       type: object
                       properties:
@@ -11032,30 +11032,30 @@ paths:
                                 description: Tags to organize and filter sections. Use lowercase, hyphenated values.
                                 items:
                                   type: string
-                              subcategories:
+                              categories:
                                 type: array
-                                description: Array of subcategories within this section. Can be empty if not yet configured.
+                                description: Array of categories within this section. Can be empty if not yet configured.
                                 items:
                                   type: object
                                   properties:
                                     category:
                                       type: string
-                                      description: Unique identifier for the subcategory
+                                      description: Unique identifier for the category
                                       example: "password-reset"
                                     name:
                                       type: string
-                                      description: Display name for the subcategory
+                                      description: Display name for the category
                                       example: "Password Reset"
                                     description:
                                       type: string
-                                      description: Description of what notifications this subcategory covers
+                                      description: Description of what notifications this category covers
                                     default_preference:
                                       type: string
-                                      description: Default preference setting for this subcategory
+                                      description: Default preference setting for this category
                                       example: "opt_in"
                                     default_mandatory_channels:
                                       type: array
-                                      description: Channels that are mandatory for this subcategory
+                                      description: Channels that are mandatory for this category
                                       items:
                                         type: string
                                       example: ["email"]
@@ -11068,7 +11068,7 @@ paths:
                                       example: null
                                     tags:
                                       type: array
-                                      description: Tags to organize and filter subcategories. Use lowercase, hyphenated values (e.g., "user-management", "payment-alerts").
+                                      description: Tags to organize and filter categories. Use lowercase, hyphenated values (e.g., "user-management", "payment-alerts").
                                       items:
                                         type: string
                                         pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
@@ -11094,13 +11094,13 @@ paths:
                           type: string
               example:
                 $schema: "https://schema.suprsend.com/preference_category/v1/schema.json"
-                categories:
+                root_categories:
                   - root_category: "system"
                     sections: []
                   - root_category: "transactional"
                     sections:
                       - name: "Task Updates"
-                        subcategories:
+                        categories:
                           - category: "tagged-to-me"
                             name: "Tagged to Me"
                             description: "Status Update or mentions on tasks assigned by me or tagged to me"
@@ -11108,7 +11108,7 @@ paths:
                   - root_category: "promotional"
                     sections:
                       - name: "Product Updates"
-                        subcategories:
+                        categories:
                           - category: "newsletter"
                             name: "Newsletter"
                             default_preference: "opt_out"
@@ -11167,7 +11167,7 @@ paths:
               --header "Authorization: ServiceToken {token}" \
               --header "Content-Type: application/json" \
               --data '{
-                "categories": [
+                "root_categories": [
                   {
                     "root_category": "system"
                   },
@@ -11176,7 +11176,7 @@ paths:
                     "sections": [
                       {
                         "name": "Task Updates",
-                        "subcategories": [
+                        "categories": [
                           {
                             "category": "tagged-to-me",
                             "name": "Tagged to Me",
@@ -11192,7 +11192,7 @@ paths:
                     "sections": [
                       {
                         "name": "Product Updates",
-                        "subcategories": [
+                        "categories": [
                           {
                             "category": "newsletter",
                             "name": "Newsletter",
@@ -11228,9 +11228,9 @@ paths:
             schema:
               type: object
               properties:
-                categories:
+                root_categories:
                   type: array
-                  description: Array of preference categories. Include all three root categories (system, transactional, promotional) even if empty.
+                  description: Array of root preference categories. Include all three root categories (system, transactional, promotional) even if empty.
                   items:
                     type: object
                     properties:
@@ -11240,7 +11240,7 @@ paths:
                         enum: [system, transactional, promotional]
                       sections:
                         type: array
-                        description: Sections group related subcategories. Users cannot set preferences at section level.
+                        description: Sections group related categories. Users cannot set preferences at section level.
                         items:
                           type: object
                           properties:
@@ -11255,25 +11255,25 @@ paths:
                               description: Tags to organize and filter sections. Use lowercase, hyphenated values (e.g., "security", "billing").
                               items:
                                 type: string
-                            subcategories:
+                            categories:
                               type: array
-                              description: Subcategories that users can set preferences for.
+                              description: Categories that users can set preferences for.
                               items:
                                 type: object
                                 properties:
                                   category:
                                     type: string
-                                    description: Unique identifier for the subcategory. Use lowercase letters, numbers, and hyphens only.
+                                    description: Unique identifier for the category. Use lowercase letters, numbers, and hyphens only.
                                     pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
                                   name:
                                     type: string
-                                    description: Display name for the subcategory shown in the preference interface.
+                                    description: Display name for the category shown in the preference interface.
                                   description:
                                     type: string
-                                    description: Description of what notifications this subcategory covers.
+                                    description: Description of what notifications this category covers.
                                   default_preference:
                                     type: string
-                                    description: Default preference setting for this subcategory.
+                                    description: Default preference setting for this category.
                                     enum: [opt_in, opt_out, cant_unsubscribe]
                                   default_mandatory_channels:
                                     type: array
@@ -11290,7 +11290,7 @@ paths:
                                       enum: [email, sms, whatsapp, androidpush, inbox, iospush, slack, webpush, ms_teams]
                                   tags:
                                     type: array
-                                    description: Tags to organize and filter subcategories. Use lowercase, hyphenated values (e.g., "user-management", "payment-alerts").
+                                    description: Tags to organize and filter categories. Use lowercase, hyphenated values (e.g., "user-management", "payment-alerts").
                                     items:
                                       type: string
                                       pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
@@ -11306,9 +11306,9 @@ paths:
                     type: string
                     description: JSON schema reference for preference category structure
                     example: "https://schema.suprsend.com/preference_category/v1/schema.json"
-                  categories:
+                  root_categories:
                     type: array
-                    description: Array of preference categories
+                    description: Array of root preference categories
                     items:
                       type: object
                       properties:
@@ -11326,27 +11326,27 @@ paths:
                                 type: string
                                 description: Name of the section
                                 example: "Account Updates"
-                              subcategories:
+                              categories:
                                 type: array
-                                description: Array of subcategories within this section
+                                description: Array of categories within this section
                                 items:
                                   type: object
                                   properties:
                                     category:
                                       type: string
-                                      description: Unique identifier for the subcategory
+                                      description: Unique identifier for the category
                                       example: "password-reset"
                                     name:
                                       type: string
-                                      description: Display name for the subcategory
+                                      description: Display name for the category
                                       example: "Password Reset"
                                     default_preference:
                                       type: string
-                                      description: Default preference setting for this subcategory
+                                      description: Default preference setting for this category
                                       example: "opt_in"
                                     default_mandatory_channels:
                                       type: array
-                                      description: Channels that are mandatory for this subcategory
+                                      description: Channels that are mandatory for this category
                                       items:
                                         type: string
                                       example: ["email"]
@@ -11390,7 +11390,7 @@ paths:
                           type: string
               example:
                 $schema: "https://schema.suprsend.com/preference_category/v1/schema.json"
-                categories:
+                root_categories:
                   - root_category: "system"
                     sections: []
                   - root_category: "transactional"
@@ -11398,7 +11398,7 @@ paths:
                       - name: "Task Updates"
                         description: null
                         tags: null
-                        subcategories:
+                        categories:
                           - category: "tagged-to-me"
                             name: "Tagged to Me"
                             description: "Status Update or mentions on tasks assigned by me or tagged to me"
@@ -11411,7 +11411,7 @@ paths:
                       - name: "Product Updates"
                         description: null
                         tags: null
-                        subcategories:
+                        categories:
                           - category: "newsletter"
                             name: "Newsletter"
                             description: null
@@ -11471,7 +11471,7 @@ paths:
         - lang: cURL
           label: Commit Category
           source: |
-            curl -X PATCH "https://management-api.suprsend.com/v1/{workspace}/preference_category/commit/?commit_message=Added%20password-reset%20subcategory" \
+            curl -X PATCH "https://management-api.suprsend.com/v1/{workspace}/preference_category/commit/?commit_message=Added%20password-reset%20category" \
               --header "Authorization: ServiceToken {token}" \
               --header "Content-Type: application/json"
       parameters:
@@ -11499,9 +11499,9 @@ paths:
                     type: string
                     description: JSON schema reference for preference category structure
                     example: "https://schema.suprsend.com/preference_category/v1/schema.json"
-                  categories:
+                  root_categories:
                     type: array
-                    description: Array of preference categories
+                    description: Array of root preference categories
                     items:
                       type: object
                       properties:
@@ -11519,23 +11519,23 @@ paths:
                                 type: string
                                 description: Name of the section
                                 example: "Account Updates"
-                              subcategories:
+                              categories:
                                 type: array
-                                description: Array of subcategories within this section
+                                description: Array of categories within this section
                                 items:
                                   type: object
                                   properties:
                                     category:
                                       type: string
-                                      description: Unique identifier for the subcategory
+                                      description: Unique identifier for the category
                                       example: "password-reset"
                                     name:
                                       type: string
-                                      description: Display name for the subcategory
+                                      description: Display name for the category
                                       example: "Password Reset"
                                     default_preference:
                                       type: string
-                                      description: Default preference setting for this subcategory
+                                      description: Default preference setting for this category
                                       example: "opt_in"
                   status:
                     type: string
@@ -11549,7 +11549,7 @@ paths:
                   commit_message:
                     type: string
                     description: Commit message describing the changes that were made live
-                    example: "Added password-reset subcategory"
+                    example: "Added password-reset category"
                   committed_at:
                     type: string
                     format: date-time
@@ -11557,13 +11557,13 @@ paths:
                     example: "2025-10-03T09:52:55.273317+00:00"
               example:
                 $schema: "https://schema.suprsend.com/preference_category/v1/schema.json"
-                categories:
+                root_categories:
                   - root_category: "system"
                     sections:
                       - name: "Alerts"
                         description: null
                         tags: null
-                        subcategories:
+                        categories:
                           - category: "critical-updates"
                             name: "Critical Updates"
                             description: "Important system alerts requiring immediate attention"
@@ -11576,7 +11576,7 @@ paths:
                       - name: "Task Updates"
                         description: null
                         tags: null
-                        subcategories:
+                        categories:
                           - category: "tagged-to-me"
                             name: "Tagged to Me"
                             description: "Status updates or mentions on tasks assigned by me or tagged to me"
@@ -11589,7 +11589,7 @@ paths:
                       - name: "Product Updates"
                         description: null
                         tags: null
-                        subcategories:
+                        categories:
                           - category: "newsletter"
                             name: "Newsletter"
                             description: null
@@ -11599,7 +11599,7 @@ paths:
                             tags: null
                 version_no: 2
                 status: "active"
-                commit_message: "Added password-reset subcategory"
+                commit_message: "Added password-reset category"
                 committed_at: "2025-10-03T09:52:55.273317+00:00"
         '401':
           description: ServiceToken not found
