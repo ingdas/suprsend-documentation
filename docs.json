@@ -608,10 +608,11 @@
               "docs/best-practices-for-api-keys-management"]
             },
             {
-              "group": "Developer Tools",
+              "group": "MCP",
               "pages": [
-                "reference/cli-intro",
                 "reference/mcp-overview",
+                "reference/mcp-quickstart",
+                "reference/mcp-tool-list",
                 "reference/building-with-llm"
               ]
             },
