@@ -102,10 +102,20 @@
               "docs/users",
               "docs/events",
               "docs/workflows",
-              "docs/notification-category",
+              {
+                "group": "Notification Categories",
+                "pages": [
+                  "docs/notification-category",
+                  "docs/managing-notification-categories"
+                ]
+              },
               {
                 "group": "Preferences",
-                "pages": ["docs/user-preferences", "docs/tenant-preference"]
+                "pages": [
+                  "docs/user-preferences",
+                  "docs/tenant-preference",
+                  "docs/preference-evaluation"
+                ]
               },
               "docs/tenants",
               {
@@ -372,6 +382,7 @@
               {
                 "group": "Update User Preferences",
                 "pages": [
+                  "reference/update-user-full-preference",
                   "reference/update-user-category-preference",
                   "reference/update-user-channel-preference",
                   "reference/bulk-update-user-preference",
@@ -390,13 +401,18 @@
               {
                 "group": "Manage Tenant Preferences",
                 "pages": [
-                  "reference/update-tenant-default-preference",
-                  "reference/get-tenant-category-preferences"
+                  "reference/get-tenant-full-preference",
+                  "reference/get-tenant-preference-all-categories",
+                  "reference/get-tenant-preference-single-category",
+                  "reference/update-tenant-preference-single-category",
+                  "reference/get-tenant-category-preferences",
+                  "reference/update-tenant-default-preference"
                 ]
               },
               {
                 "group": "Update Object Preferences",
                 "pages": [
+                  "reference/update-object-full-preference",
                   "reference/object-preference-category",
                   "reference/update-object-channel-preference"
                 ]
@@ -488,7 +504,11 @@
             "pages": [
               "reference/get-category",
               "reference/create-update-category",
-              "reference/commit-category"
+              "reference/commit-category",
+              "reference/list-category-translation",
+              "reference/get-category-translation",
+              "reference/add-category-translation",
+              "reference/delete-category-translation"
             ]
           },
           {
@@ -572,7 +592,10 @@
               "reference/cli-category-list",
               "reference/cli-category-pull",
               "reference/cli-category-push",
-              "reference/cli-category-commit"
+              "reference/cli-category-commit",
+              "reference/cli-category-translation-list",
+              "reference/cli-category-translation-pull",
+              "reference/cli-category-translation-push"
             ]
           },
           {
