@@ -573,7 +573,8 @@
               "reference/cli-schema-list",
               "reference/cli-schema-pull",
               "reference/cli-schema-push",
-              "reference/cli-schema-commit"
+              "reference/cli-schema-commit",
+              "reference/cli-schema-generate-types"
             ]
           },
           {
@@ -786,7 +787,7 @@
                 "docs/developer/postman-collection"
               ]},
                 {"group": "Features",
-                  "pages": ["docs/validate-workflow-payload"]},
+                  "pages": ["docs/validate-workflow-payload", "docs/type-generation"]},
                 {"group": "Testing",
                   "pages": [
                     "docs/testing-the-template",
