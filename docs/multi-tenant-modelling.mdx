@@ -1,110 +1,111 @@
 ---
-title: "Set Up Branded Notifications for Customer Companies"
-description: "Learn how to model multi-tenant recruiting platforms (ATS) with tenant-specific preferences, branding, and vendor routing in SuprSend"
+title: "Design tenant-scoped notification architecture"
+description: "Learn how to model multi-tenant notification architecture in SuprSend with tenant-level preferences, branding, templates, and vendor routing."
 ---
 
-This guide explains how to model multi-tenant recruiting platforms (ATS) and hiring platforms in SuprSend, with tenant-specific branding, preferences, and vendor routing.
+Multi-tenant platforms run a shared notification system across many customer organizations (tenants). The key requirement is tenant-specific customization: the same notification type must adapt based on tenant context—branding/sender, templates and localization, user preferences, and routing (channel + vendor).
+
+In this guide, we'll show how to model this in SuprSend using a fictional employee engagement platform, **WorkVibe**. WorkVibe serves many companies and helps them run employee communications such as employee onboarding, performance reviews, pulse surveys, recognition messages, and policy updates.
 
 <Note>
-**Example scenario:** We'll use **Uber** as our example—a customer company running a Backend Engineer hiring pipeline (Jan 2026) that sends interview notifications with Uber branding, not the platform's branding.
+**Example scenario:** We'll use **Uber** as our example—a customer of WorkVibe, using the platform to run employee communications. WorkVibe's notification system must let its tenant Uber customize notifications, within WorkVibe's platform:
+
+- Message templates provided by WorkVibe (content, tone, localization)
+- Which channels (email, Slack, etc.) are used for communication
+- Employee notification preferences
+- Branding and sender identity for Uber (e.g., hr@uber.com)
+
+—all while WorkVibe continues to operate a single shared, multi-tenant notification system.
 
 This pattern is common in B2B2C platforms where users interact with the platform, but all notifications must appear to come from the customer company they're engaging with.
 </Note>
 
 ---
 
-## Company Structure
+## Understanding the Structure
 
-ATS platforms typically organize notifications using a hierarchy:
+WorkVibe organizes notifications using a clear hierarchy that scales across multiple customer companies:
 
 <Card title="Notification hierarchy" icon="sitemap">
   **Generic structure:**
   ```
-  Customer Company (Tenant) → Job / Role → Hiring Stage → Notification Type
+  Platform → Customer Company (Tenant) → Communication Type → Notification
   ```
 
-  **Uber example:**
+  **WorkVibe example:**
   ```
-  Uber → Backend Engineer → Interview Scheduled → Candidate Email
+  WorkVibe → Uber → Onboarding → New Employee Welcome Email
   ```
 </Card>
 
 This hierarchy helps you design notifications that scale across multiple customer companies without duplicating templates or workflows.
 
 <Info>
-**Ownership model:** The platform owns orchestration and infrastructure, while the customer company (tenant) owns branding, preferences, and delivery channels.
+**Ownership model:** The WorkVibe platform owns orchestration and infrastructure, while the customer company (tenant) owns branding, preferences, and delivery channels.
 </Info>
-
-**Components:**
-
-- **Customer Company (Tenant):** Uber—customer organization with branding
-- **Job / Role:** Backend Engineer—specific position being filled
-- **Hiring Stage:** Interview Scheduled—step in the hiring process
-- **Notification Type:** Candidate Email—individual notification (application received, interview scheduled, offer extended)
 
 ---
 
 ## Concept Mapping
 
-How ATS platform concepts map to SuprSend:
+How WorkVibe platform concepts map to SuprSend:
 
-    <table>
-      <thead>
-        <tr>
-      <th>ATS Platform</th>
+<table>
+  <thead>
+    <tr>
+      <th>WorkVibe Platform</th>
       <th>SuprSend</th>
       <th>Example</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Customer Company</strong></td>
-          <td><strong>Tenant</strong></td>
-      <td>Uber tenant</td>
-        </tr>
-        <tr>
-      <td><strong>Notification Type</strong></td>
-      <td><strong>Template</strong></td>
-      <td>Interview scheduled email template</td>
-        </tr>
-        <tr>
-          <td><strong>Orchestration Steps</strong></td>
-          <td><strong>Dynamic Workflow</strong></td>
-      <td>Application received and interview scheduled are triggered separately</td>
-        </tr>
-        <tr>
-      <td><strong>Candidate</strong></td>
-          <td><strong>User</strong></td>
-      <td>Candidate with email, phone number</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Environments</strong></td>
+      <td><strong>Workspace</strong></td>
+      <td>Dev / Staging / Pre-prod / Prod</td>
+    </tr>
+    <tr>
+      <td><strong>Customer Organization</strong></td>
+      <td><strong>Tenant</strong></td>
+      <td>Uber tenant with branding and preferences</td>
+    </tr>
+    <tr>
+      <td><strong>Employee</strong></td>
+      <td><strong>User</strong></td>
+      <td>Employee with email, phone, and profile data</td>
+    </tr>
+    <tr>
+      <td><strong>Orchestration Steps</strong></td>
+      <td><strong>Workflows</strong></td>
+      <td>Onboarding sequence: welcome email → first week check-in → manager introduction</td>
+    </tr>
+    <tr>
+      <td><strong>Message Templates</strong></td>
+      <td><strong>Templates</strong></td>
+      <td>New hire welcome email template with tenant branding</td>
     </tr>
     <tr>
       <td><strong>Company-level Controls</strong></td>
       <td><strong>Notification Categories</strong></td>
-      <td>`hiring.interview_updates`</td>
+      <td><code>onboarding.new_hire_welcome</code></td>
     </tr>
-        <tr>
-      <td><strong>Candidate Preferences</strong></td>
+    <tr>
+      <td><strong>Employee Preferences</strong></td>
       <td><strong>User Preferences</strong></td>
-      <td>Candidate opt-in/out</td>
-        </tr>
-      </tbody>
-    </table>
-
-<Info>
-**Tags (optional):** Tags can be used to group notifications logically (for example, all hiring-related messages) without affecting user-facing preferences. Tags are optional and not part of preference logic.
-</Info>
-
-<Warning>
-**Template Variants:** If you need campaign-specific content today, pass it via the `data` field. Variants API (v2.0) is in beta. [Contact support →](mailto:support@suprsend.com)
-</Warning>
+      <td>Employee opt-in/out for specific notification types</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
 ## Setup Steps
 
+Follow these steps to set up your tenant-scoped notification architecture:
+
 ### 1. Create Tenants
 
-Create a tenant for each customer company programmatically using the SuprSend API or SDK. For Uber, include their logo URL, brand colors, company name, timezone, and contact information.
+Create a tenant for each customer company programmatically using the SuprSend API or SDK. Each tenant stores branding attributes (logo, website, brand colors) along with any custom properties required for personalization.
 
 **Required fields:**
 
@@ -118,32 +119,37 @@ Create a tenant for each customer company programmatically using the SuprSend AP
   </ul>
 </Card>
 
+Other than tenant properties, notification preferences and vendors can be customized at the per-tenant level.
+
 <Tip>
 **Programmatic creation:** Create tenants automatically when new customer companies sign up. Use the SDK to create tenants with their branding information during onboarding.
 </Tip>
 
-📘 [Tenants →](/docs/tenants) | [Node.js SDK →](/docs/node-tenants) | [Python SDK →](/docs/python-tenants)
+📘 [Tenants →](/docs/tenants) | [Node.js SDK →](/docs/node-tenants) | [Python SDK →](/docs/python-tenants) | [Go SDK →](/docs/tenants-go)
 
 ---
 
 ### 2. Create Notification Categories
 
-Create categories mapping to your ATS platform's notification types. Use **Sections** for product areas and **Sub-categories** for notification types.
+Create categories mapping to your platform's notification types. These categories are linked to Workflows & Preferences. Use **Sections** for product areas and **Sub-categories** for notification types.
+
+For WorkVibe, the notification category structure will look like:
 
 **Category structure:**
-- **Section:** Product area (e.g., `hiring`)
-- **Sub-category:** Notification type (e.g., `interview_updates`)
+- **Section:** Product area (e.g., `Onboarding & Lifecycle`, `Feedback & Engagement`)
+- **Sub-category:** Notification type (e.g., `New Hire Welcome`, `First Week Check-in`, `Manager Feedback Request`)
 
-<Card title="Category examples for Uber" icon="tag">
+<Card title="Category examples for WorkVibe" icon="tag">
   <ul>
-    <li><code>hiring.application_updates</code> → Application status updates</li>
-    <li><code>hiring.interview_updates</code> → Interview scheduling and reminders</li>
-    <li><code>hiring.offer_updates</code> → Offer letters and negotiations</li>
+    <li><code>onboarding.new_hire_welcome</code> → Welcome email sent on first day</li>
+    <li><code>onboarding.first_week_checkin</code> → Check-in survey after first week</li>
+    <li><code>feedback.manager_review_request</code> → Request for manager feedback</li>
+    <li><code>engagement.pulse_survey</code> → Monthly employee pulse survey</li>
   </ul>
 </Card>
 
 <Tip>
-Group similar notifications together. For Uber's Backend Engineer hiring pipeline, group all interview steps (scheduled, reminder, rescheduled) under `hiring.interview_updates` instead of separate categories.
+Group similar notifications together for neatly organizing different notification types. Use `tags` in categories to filter categories within your application.
 </Tip>
 
 📘 [Notification Categories →](/docs/notification-category) | [Create categories →](https://app.suprsend.com/en/staging/developers/preference-categories)
@@ -159,19 +165,19 @@ SuprSend uses a four-layer preference system to determine which channels are use
     All categories defined by your platform
   </Card>
   <Card title="Tenant Visibility (T1)" icon="eye">
-    Categories visible to Uber
+    Categories visible to tenant
   </Card>
   <Card title="Tenant Admin (T2)" icon="user-shield">
-    Uber admins can disable categories/channels
+    Tenant admins can disable categories/channels
   </Card>
-  <Card title="Candidate Preferences (S)" icon="user">
-    Candidates opt-in/out at category/channel level
+  <Card title="End user Preferences (S)" icon="user">
+    End users opt-in/out at category/channel level
   </Card>
 </CardGroup>
 
 **How it works:**
 
-SuprSend determines final delivery channels by progressively applying platform rules, company controls, and candidate preferences.
+SuprSend determines final delivery channels by progressively applying platform rules, company controls, and employee preferences.
 
 **Evaluation formula:** `Final Channels = U ∩ T1 ∩ T2 ∩ S`
 
@@ -179,23 +185,23 @@ To make a category mandatory, set "Can't Unsubscribe" on the Notification Catego
 
 <Card title="Example: Channel evaluation" icon="filter">
   <ul>
-    <li><strong>Platform (U):</strong> Email ✅, SMS ✅, WhatsApp ✅</li>
-    <li><strong>Uber visibility:</strong> Email ✅, SMS ✅, WhatsApp ✅</li>
-    <li><strong>Uber admin:</strong> Email ✅, SMS ❌, WhatsApp ✅</li>
-    <li><strong>Candidate:</strong> Email ✅, SMS ✅, WhatsApp ❌</li>
+    <li><strong>WorkVibe Platform (U):</strong> Email ✅, SMS ✅, Slack ✅</li>
+    <li><strong>Uber visibility:</strong> Email ✅, SMS ✅, Slack ✅</li>
+    <li><strong>Uber admin:</strong> Email ✅, SMS ❌, Slack ✅</li>
+    <li><strong>Employee:</strong> Email ✅, SMS ✅, Slack ❌</li>
     <li><strong>Final result:</strong> <strong>Email ✅ only</strong></li>
   </ul>
 </Card>
 
 <Info>
-Critical notifications like interview updates are typically marked as mandatory to ensure candidates don't miss time-sensitive updates, while marketing or job recommendation messages remain optional.
+Critical notifications like onboarding updates are typically marked as mandatory to ensure employees don't miss time-sensitive updates, while optional communications like marketing messages remain opt-in.
 </Info>
 
 #### Expose Preferences to Customer Companies
 
-Allow customer companies like Uber, Airbnb, and Indeed to manage their notification preferences through your platform.
+Allow customer companies like Uber to manage their notification preferences through your platform.
 
-**Recommended approach:** Build an admin page in your app that calls SuprSend's Tenant Preference APIs. This gives you full control over the UI and integrates with your existing admin dashboard.
+**Recommended approach:** Build an admin page in your application that calls SuprSend's Tenant Preference APIs. This gives you full control over the UI and integrates with your existing admin dashboard.
 
 **Optional:** Embed SuprSend's preference UI for faster rollout if you don't need custom styling.
 
@@ -203,13 +209,13 @@ Allow customer companies like Uber, Airbnb, and Indeed to manage their notificat
 **Preference exposure:** Customer admins can control which notification categories are visible to their organization and which channels are enabled/disabled. This gives them control over their notification strategy while maintaining platform-level governance.
 </Note>
 
-📘 [Tenant Preferences →](/docs/tenant-preference) | [User Preferences →](/docs/user-preferences) | [Preference Evaluation →](/docs/preference-evaluation) | [Embedded Preferences →](/docs/embedded-preferences)
+📘 [Tenant Preferences →](/docs/tenant-preference) | [User Preferences →](/docs/user-preferences) | [Preference Evaluation →](/docs/preference-evaluation) | [Embedded Preferences →](/docs/embedded-preference-centre)
 
 ---
 
 ### 4. Create Templates
 
-Create templates for each notification type. For Uber's interview scheduling, create `INTERVIEW_SCHEDULED_EMAIL`. Use tenant variables for automatic branding.
+Create templates for each notification type. For Uber's new employee onboarding, create `NEW_HIRE_WELCOME_EMAIL`. Use tenant variables for automatic branding.
 
 <Note>
 **Template reuse:** Templates are created once by the platform and rendered at send time with tenant-specific branding. This avoids creating duplicate templates per customer while still ensuring fully branded communication.
@@ -217,27 +223,28 @@ Create templates for each notification type. For Uber's interview scheduling, cr
 
 **Naming convention:** `{NOTIFICATION_TYPE}_{CHANNEL}`
 
-Examples: `INTERVIEW_SCHEDULED_EMAIL`, `OFFER_EXTENDED_SMS`, `APPLICATION_RECEIVED_PUSH`
+Examples: `NEW_HIRE_WELCOME_EMAIL`, `FIRST_WEEK_CHECKIN_SLACK`, `PULSE_SURVEY_PUSH`
 
 **Template variables:**
 
 ```handlebars
 // Data variables
-{{job_title}}              → "Backend Engineer"
-{{interview_date}}         → "2026-01-15"
-{{interviewer_name}}       → "Sarah Chen"
+{{employee_name}}          → "Sarah Chen"
+{{start_date}}              → "2026-01-15"
+{{manager_name}}            → "John Doe"
+{{company_department}}      → "Engineering"
 
 // Tenant branding
-{{$tenant.logo}}          → Uber logo URL
-{{$tenant.primary_color}}  → "#000000"
-{{$tenant.tenant_name}}    → "Uber"
+{{$tenant.logo}}            → Uber logo URL
+{{$tenant.primary_color}}   → "#000000"
+{{$tenant.tenant_name}}     → "Uber"
 
 // Recipient info
-{{$recipient.name}}       → "John Doe"
-{{$recipient.email}}      → "john@example.com"
+{{$recipient.name}}         → "Sarah Chen"
+{{$recipient.email}}        → "sarah@uber.com"
 ```
 
-When Uber triggers an interview notification, SuprSend automatically applies Uber's branding.
+When Uber triggers a new hire notification, SuprSend automatically applies Uber's branding.
 
 #### Expose Templates to Customer Applications
 
@@ -254,7 +261,7 @@ Templates use standardized snake_case fields and handlebars variables (e.g., `{{
 
 **Benefits:**
 
-- **Tenant isolation:** Changes made by Uber won't affect Airbnb's templates
+- **Tenant isolation:** Changes made by Uber won't affect other tenants' templates
 - **Platform control:** Your platform maintains template structure and approval workflows
 - **Self-service:** Customers can customize content without engineering support
 
@@ -268,11 +275,11 @@ For channels requiring approval (WhatsApp, SMS DLT), templates must be approved 
 
 ### 5. Choose Workflow Strategy
 
-Choose between Native Workflows (visual builder) and Dynamic Workflows (programmatic triggers) based on your needs.
+Choose between Visual Builder Workflows and Dynamic Workflows based on your needs.
 
 <Tabs>
-  <Tab title="Native Workflows">
-    SuprSend owns orchestration. Build workflows visually in the dashboard with drag-and-drop nodes, conditions, and delays.
+  <Tab title="Visual Builder Workflows">
+    SuprSend owns orchestration logic. Build workflows visually in the dashboard with drag-and-drop nodes, conditions, and delays.
 
     **When to use:**
     - Non-engineers need to create or modify workflows
@@ -312,7 +319,7 @@ Choose between Native Workflows (visual builder) and Dynamic Workflows (programm
     - You want full programmatic control
 
     **Use cases:**
-    - Hiring pipeline notifications (application received, interview scheduled, offer generated)
+    - Employee onboarding notifications (welcome email, first week check-in, manager introduction)
     - Transactional notifications triggered by user actions
     - Real-time event-driven notifications
     - Complex workflows with custom business logic
@@ -322,24 +329,25 @@ Choose between Native Workflows (visual builder) and Dynamic Workflows (programm
     - `tenant_id` — Customer company identifier (required)
     - `recipient` — User identifiers (distinct_id, email, etc.)
     - `workflow` or `template` — Workflow/template identifier
-    - `category` — Notification category (e.g., `hiring.interview_updates`)
-    - `data` — Business data (job_title, interview_date, etc.)
+    - `category` — Notification category (e.g., `onboarding.new_hire_welcome`)
+    - `data` — Business data (employee_name, start_date, manager_name, etc.)
 
     **Example payload:**
 
     ```json
     {
       "tenant_id": "uber",
-      "category": "hiring.interview_updates",
+      "category": "onboarding.new_hire_welcome",
       "recipient": {
-        "distinct_id": "candidate_123",
-        "email": "john@example.com"
+        "distinct_id": "employee_123",
+        "email": "sarah@uber.com"
       },
-      "workflow": "interview_scheduled",
+      "workflow": "new_hire_onboarding",
       "data": {
-        "job_title": "Backend Engineer",
-        "interview_date": "2026-01-15",
-        "interviewer_name": "Sarah Chen"
+        "employee_name": "Sarah Chen",
+        "start_date": "2026-01-15",
+        "manager_name": "John Doe",
+        "department": "Engineering"
       }
     }
     ```
@@ -363,14 +371,14 @@ Choose between Native Workflows (visual builder) and Dynamic Workflows (programm
 </Tabs>
 
 <Tip>
-Most ATS platforms start with Dynamic Workflows for core hiring notifications and introduce Native Workflows when non-technical teams need to manage marketing or campaign workflows.
+Most platforms start with Dynamic Workflows for core transactional notifications and introduce Visual Builder Workflows when non-technical teams need to manage marketing or campaign workflows.
 </Tip>
 
 ---
 
 ### 6. Configure Tenant Vendors (Optional)
 
-Enterprise customers may require their own SMTP servers for deliverability and compliance. For Uber, configure their SMTP as a tenant vendor so all notifications route through their infrastructure.
+Enterprise customers may require their own SMTP servers for deliverability and compliance. For Uber, configure their SMTP within your email provider and set it as a custom property in the tenant. It can be referred to in the `from_email` in the template. If Uber has its own email provider or SMS provider that it wants to use, add it as a tenant vendor so all notifications route through their infrastructure.
 
 **When to use:**
 - Customer requires their own SMTP domain for branding
@@ -388,20 +396,20 @@ Enterprise customers may require their own SMTP servers for deliverability and c
 
 ## End-to-End Notification Flow
 
-When Uber's platform triggers a Backend Engineer interview scheduled notification, SuprSend handles everything automatically:
+When WorkVibe triggers a new employee onboarding notification for Uber, SuprSend handles everything automatically:
 
 <Steps>
   <Step title="1. Platform Identifies Tenant">
-    Platform passes `tenant_id: "uber"` in the workflow trigger payload. SuprSend uses this to identify which customer company's branding and preferences to apply.
+    WorkVibe passes `tenant_id: "uber"` in the workflow trigger payload. SuprSend uses this to identify which customer company's branding and preferences to apply.
   </Step>
   <Step title="2. Apply Tenant Preferences">
-    Checks Uber's defaults for `hiring.interview_updates`: Email enabled, SMS disabled, WhatsApp enabled.
+    Checks Uber's defaults for `onboarding.new_hire_welcome`: Email enabled, SMS disabled, Slack enabled.
   </Step>
-  <Step title="3. Apply Candidate Preferences">
-    Candidate opts out of WhatsApp → Final channels: Email only.
+  <Step title="3. Apply Employee Preferences">
+    Employee opts out of Slack → Final channels: Email only.
   </Step>
   <Step title="4. Resolve Template">
-    Checks for a Jan 2026 variant. Falls back to `INTERVIEW_SCHEDULED_EMAIL` with Uber branding.
+    Checks for a tenant-specific variant. Falls back to `NEW_HIRE_WELCOME_EMAIL` with Uber branding.
   </Step>
   <Step title="5. Render Branding">
     Applies Uber's logo, colors, and company name to template.
@@ -410,7 +418,7 @@ When Uber's platform triggers a Backend Engineer interview scheduled notificatio
     Routes through Uber's SMTP if configured, otherwise platform default.
   </Step>
   <Step title="7. Deliver">
-    Email sent with Uber branding and interview details.
+    Email sent with Uber branding and onboarding details.
   </Step>
 </Steps>
 
