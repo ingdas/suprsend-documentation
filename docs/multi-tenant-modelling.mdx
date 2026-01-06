@@ -17,7 +17,6 @@ In this guide, we'll show how to model this in SuprSend using a fictional employ
 
 —all while WorkVibe continues to operate a single shared, multi-tenant notification system.
 
-This pattern is common in B2B2C platforms where users interact with the platform, but all notifications must appear to come from the customer company they're engaging with.
 </Note>
 
 ---
@@ -29,7 +28,7 @@ WorkVibe organizes notifications using a clear hierarchy that scales across mult
 <Card title="Notification hierarchy" icon="sitemap">
   **Generic structure:**
   ```
-  Platform → Customer Company (Tenant) → Communication Type → Notification
+  Platform → Customer (Tenant) → Notification Type
   ```
 
   **WorkVibe example:**
@@ -39,10 +38,6 @@ WorkVibe organizes notifications using a clear hierarchy that scales across mult
 </Card>
 
 This hierarchy helps you design notifications that scale across multiple customer companies without duplicating templates or workflows.
-
-<Info>
-**Ownership model:** The WorkVibe platform owns orchestration and infrastructure, while the customer company (tenant) owns branding, preferences, and delivery channels.
-</Info>
 
 ---
 
@@ -121,10 +116,6 @@ Create a tenant for each customer company programmatically using the SuprSend AP
 
 Other than tenant properties, notification preferences and vendors can be customized at the per-tenant level.
 
-<Tip>
-**Programmatic creation:** Create tenants automatically when new customer companies sign up. Use the SDK to create tenants with their branding information during onboarding.
-</Tip>
-
 📘 [Tenants →](/docs/tenants) | [Node.js SDK →](/docs/node-tenants) | [Python SDK →](/docs/python-tenants) | [Go SDK →](/docs/tenants-go)
 
 ---
@@ -135,18 +126,8 @@ Create categories mapping to your platform's notification types. These categorie
 
 For WorkVibe, the notification category structure will look like:
 
-**Category structure:**
 - **Section:** Product area (e.g., `Onboarding & Lifecycle`, `Feedback & Engagement`)
 - **Sub-category:** Notification type (e.g., `New Hire Welcome`, `First Week Check-in`, `Manager Feedback Request`)
-
-<Card title="Category examples for WorkVibe" icon="tag">
-  <ul>
-    <li><code>onboarding.new_hire_welcome</code> → Welcome email sent on first day</li>
-    <li><code>onboarding.first_week_checkin</code> → Check-in survey after first week</li>
-    <li><code>feedback.manager_review_request</code> → Request for manager feedback</li>
-    <li><code>engagement.pulse_survey</code> → Monthly employee pulse survey</li>
-  </ul>
-</Card>
 
 <Tip>
 Group similar notifications together for neatly organizing different notification types. Use `tags` in categories to filter categories within your application.
@@ -193,15 +174,11 @@ To make a category mandatory, set "Can't Unsubscribe" on the Notification Catego
   </ul>
 </Card>
 
-<Info>
-Critical notifications like onboarding updates are typically marked as mandatory to ensure employees don't miss time-sensitive updates, while optional communications like marketing messages remain opt-in.
-</Info>
-
 #### Expose Preferences to Customer Companies
 
 Allow customer companies like Uber to manage their notification preferences through your platform.
 
-**Recommended approach:** Build an admin page in your application that calls SuprSend's Tenant Preference APIs. This gives you full control over the UI and integrates with your existing admin dashboard.
+**Recommended approach:** We will build an admin page in your application that calls SuprSend's Tenant Preference APIs. This gives you full control over the UI and integrates with the existing admin dashboard.
 
 **Optional:** Embed SuprSend's preference UI for faster rollout if you don't need custom styling.
 
@@ -221,10 +198,6 @@ Create templates for each notification type. For Uber's new employee onboarding,
 **Template reuse:** Templates are created once by the platform and rendered at send time with tenant-specific branding. This avoids creating duplicate templates per customer while still ensuring fully branded communication.
 </Note>
 
-**Naming convention:** `{NOTIFICATION_TYPE}_{CHANNEL}`
-
-Examples: `NEW_HIRE_WELCOME_EMAIL`, `FIRST_WEEK_CHECKIN_SLACK`, `PULSE_SURVEY_PUSH`
-
 **Template variables:**
 
 ```handlebars
@@ -232,7 +205,7 @@ Examples: `NEW_HIRE_WELCOME_EMAIL`, `FIRST_WEEK_CHECKIN_SLACK`, `PULSE_SURVEY_PU
 {{employee_name}}          → "Sarah Chen"
 {{start_date}}              → "2026-01-15"
 {{manager_name}}            → "John Doe"
-{{company_department}}      → "Engineering"
+{{department}}              → "Engineering"
 
 // Tenant branding
 {{$tenant.logo}}            → Uber logo URL
@@ -248,12 +221,38 @@ When Uber triggers a new hire notification, SuprSend automatically applies Uber'
 
 #### Expose Templates to Customer Applications
 
-One common approach is to allow customer companies to customize templates through embeddable templates.
+One common approach is to allow customer companies (like Uber) to customize templates through embeddable templates. As WorkVibe, you'll expose template editing capabilities to your customer companies.
 
 **How it works:**
 
-- **Template fetching:** Customers fetch templates by `template_slug`. Pass `tenant_id` and `language` to get qualified variants—if a tenant-specific variant exists, it's returned; otherwise, the default variant is shown.
-- **Variant creation:** Customers can edit existing variants or create new tenant-specific variants. When creating tenant variants, set conditions like `$tenant.id = "uber"`.
+- **Template fetching:** Your customer companies (like Uber) fetch templates by `template_slug`. They pass `tenant_id` and `language` to get qualified variants—if a tenant-specific variant exists, it's returned; otherwise, the default variant is shown.
+- **Variant creation:** Your customer companies can edit existing variants or create new tenant-specific variants. When creating tenant variants, they set conditions like `$tenant.id = "uber"`.
+
+**Scoped JWT Authentication:**
+
+To securely expose templates to your customer companies, use scoped JWT authentication. This ensures that each customer company can only access and modify templates for their own tenant.
+
+1. **Generate a signing key** from SuprSend Dashboard (Developers → API Keys → Signing Keys)
+2. **Create a scoped JWT token** on your backend with the following payload:
+
+```json
+{
+  "entity_type": "subscriber",
+  "entity_id": "customer_admin_user_id",
+  "exp": 1725814228,
+  "iat": 1725814228,
+  "scope": {
+    "tenant_id": "uber"
+  }
+}
+```
+
+3. **Sign the token** using ES256 algorithm with your signing key
+4. **Pass the token** to your customer company's frontend application
+
+<Note>
+**Security:** If the `tenant_id` passed in the template request doesn't match the JWT payload scope `tenant_id`, SuprSend will return a `403` error. This ensures tenant isolation and prevents customers from accessing other tenants' templates.
+</Note>
 
 **Template structure:**
 
@@ -265,126 +264,60 @@ Templates use standardized snake_case fields and handlebars variables (e.g., `{{
 - **Platform control:** Your platform maintains template structure and approval workflows
 - **Self-service:** Customers can customize content without engineering support
 
-<Tip>
-For channels requiring approval (WhatsApp, SMS DLT), templates must be approved before going live. For more details on template embedding, see the [Embeddable Template Editor →](/docs/embeddable-templates) guide.
-</Tip>
 
-📘 [Templates →](/docs/templates) | [Email Templates →](/docs/email-template) | [Embeddable Template Editor →](/docs/embeddable-templates)
+For more details on template embedding, see the [Embeddable Template Editor →](/docs/embeddable-templates) guide.
+
+📘 [Templates →](/docs/templates) | [Email Templates →](/docs/email-template)
 
 ---
 
 ### 5. Choose Workflow Strategy
 
-Choose between Visual Builder Workflows and Dynamic Workflows based on your needs.
+A **workflow** defines the orchestration logic for your notifications—the sequence of steps, conditions, delays, and channels used to deliver messages. For example, WorkVibe's product team might build a workflow for new employee onboarding that sends a welcome email on day one, a first-week check-in survey on day seven, and a manager introduction Slack message on day ten.
+
+SuprSend supports three types of workflows. Choose the approach that best fits your use case:
 
 <Tabs>
-  <Tab title="Visual Builder Workflows">
-    SuprSend owns orchestration logic. Build workflows visually in the dashboard with drag-and-drop nodes, conditions, and delays.
-
+  <Tab title="UI Builder">
+    Build workflows visually in the SuprSend dashboard with drag-and-drop nodes, conditions, and delays. Workflows are created and managed through the UI.
+    
     **When to use:**
     - Non-engineers need to create or modify workflows
-    - Customer admins need visibility into notification flows
-    - You want visual workflow management without code changes
     - Product or marketing teams need self-service workflow creation
-
-    **Use cases:**
-    - Marketing campaigns that change frequently
-    - Onboarding sequences managed by product teams
-    - Customer admins customizing their notification flows
-    - Workflows that need frequent A/B testing
-
-    <CardGroup cols={2}>
-      <Card title="Advantages" icon="check-circle">
-        - Visual builder<br/>
-        - No code required<br/>
-        - Self-service for non-technical teams
-      </Card>
-      <Card title="Trade-offs" icon="info-circle">
-        - Less flexible than code<br/>
-        - Dashboard access needed<br/>
-        - Limited programmatic control
-      </Card>
-    </CardGroup>
-
-    📘 [Workflows →](/docs/workflows)
+    - Workflows change frequently and need quick iteration
   </Tab>
 
   <Tab title="Dynamic Workflows">
-    Your platform owns orchestration. Trigger workflows programmatically from your application when events occur.
-
+     Trigger notifications programmatically without pre-creating workflows. Your platform owns orchestration and triggers workflows on-demand with template and category.
+    
     **When to use:**
     - Your platform already controls business logic
     - You need runtime workflow creation
-    - Workflows are tightly integrated with your codebase
-    - You want full programmatic control
-
-    **Use cases:**
-    - Employee onboarding notifications (welcome email, first week check-in, manager introduction)
     - Transactional notifications triggered by user actions
-    - Real-time event-driven notifications
-    - Complex workflows with custom business logic
+    - Faster go-live without workflow setup
+  </Tab>
 
-    **Required fields in trigger payload:**
-
-    - `tenant_id` — Customer company identifier (required)
-    - `recipient` — User identifiers (distinct_id, email, etc.)
-    - `workflow` or `template` — Workflow/template identifier
-    - `category` — Notification category (e.g., `onboarding.new_hire_welcome`)
-    - `data` — Business data (employee_name, start_date, manager_name, etc.)
-
-    **Example payload:**
-
-    ```json
-    {
-      "tenant_id": "uber",
-      "category": "onboarding.new_hire_welcome",
-      "recipient": {
-        "distinct_id": "employee_123",
-        "email": "sarah@uber.com"
-      },
-      "workflow": "new_hire_onboarding",
-      "data": {
-        "employee_name": "Sarah Chen",
-        "start_date": "2026-01-15",
-        "manager_name": "John Doe",
-        "department": "Engineering"
-      }
-    }
-    ```
-
-    <CardGroup cols={2}>
-      <Card title="Advantages" icon="check-circle">
-        - Runtime creation<br/>
-        - Faster go-live<br/>
-        - Works with existing orchestration<br/>
-        - Full programmatic control
-      </Card>
-      <Card title="Trade-offs" icon="info-circle">
-        - No visual builder<br/>
-        - Code changes required<br/>
-        - Engineering team dependency
-      </Card>
-    </CardGroup>
-
-    📘 [Dynamic Workflow Trigger →](/reference/dynamic-workflow-trigger)
+  <Tab title="Workflows API">
+     Create and update workflows programmatically using the Management API. Workflows are defined in code and synced to SuprSend via API.
+    
+    **When to use:**
+    - Workflows are version-controlled in your codebase
+    - You want to manage workflows as infrastructure-as-code
+    - CI/CD integration for workflow deployment
+    - Bulk workflow creation or migration
   </Tab>
 </Tabs>
 
-<Tip>
-Most platforms start with Dynamic Workflows for core transactional notifications and introduce Visual Builder Workflows when non-technical teams need to manage marketing or campaign workflows.
-</Tip>
+
+
+
+📘 [Workflows →](/docs/workflows) | [Dynamic Workflow Trigger →](/reference/dynamic-workflow-trigger) | [Workflows API →](/reference/create-update-workflow)
 
 ---
 
 ### 6. Configure Tenant Vendors (Optional)
 
-Enterprise customers may require their own SMTP servers for deliverability and compliance. For Uber, configure their SMTP within your email provider and set it as a custom property in the tenant. It can be referred to in the `from_email` in the template. If Uber has its own email provider or SMS provider that it wants to use, add it as a tenant vendor so all notifications route through their infrastructure.
-
-**When to use:**
-- Customer requires their own SMTP domain for branding
-- Compliance requirements (HIPAA, SOC 2, etc.)
-- Deliverability concerns with shared infrastructure
-- Customer has existing email infrastructure
+Enterprise customers may require their own SMTP servers or vendor accounts for deliverability, compliance, or branding requirements. For example, if Uber requires their own SMTP domain for branding (e.g., sending from `noreply@uber.com`), you can configure their SMTP within your email provider and set it as a custom property in the tenant. This can be referenced in the `from_email` field in your templates. Alternatively, if Uber has its own email provider or SMS provider that they want to use, you can add it as a tenant vendor.
 
 <Info>
 **Vendor fallback chain:** If Uber's SMTP fails, notifications automatically fall back to: Uber SMTP → Platform default SMTP (fallback)
@@ -437,7 +370,7 @@ This data modeling approach applies to various multi-tenant marketplaces and pla
   <Card title="Food delivery marketplaces" icon="utensils">
     Customers receive order updates branded by restaurants, each with their own branding and notification preferences
   </Card>
-  <Card title="E-commerce marketplaces" icon="shopping-cart">
+  <Card title="E-commerce marketplaces" icon="store">
     Shoppers receive purchase confirmations branded by sellers, with per-seller branding and vendor configuration
   </Card>
   <Card title="Event ticketing platforms" icon="ticket">
