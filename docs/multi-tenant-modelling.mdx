@@ -30,42 +30,62 @@ This example assumes WorkVibe implements the following notification architecture
 
 ```mermaid
 graph LR
-    subgraph Platform["WorkVibe Platform"]
+    subgraph Unified["WorkVibe's Unified Notification System"]
+        direction TB
+        Spacer[ ]
         Templates[Templates]
+        Workflows[Workflows]
+        Preferences[Preferences]
+        Vendors[Vendors]
+        SuprSend[SuprSend]
     end
     
-    subgraph TenantA["Tenant A (Uber) Admin"]
-        CustomizeA[Customize Templates<br/>& Preferences]
+    Trigger[Trigger] -.->|Input| Templates
+    
+    subgraph Admin["Customer Admin (Uber)"]
+        WorkVibe[WorkVibe<br/>Template Variant<br/>Preference Settings]
     end
     
-    subgraph TenantB["Tenant B Admin"]
-        CustomizeB[Customize Templates<br/>& Preferences]
+    subgraph EmpA["Employee A"]
+        direction LR
+        PrefsA[Preferences]
+        AlertA[Alert]
     end
     
-    subgraph DeliveryA["Tenant A Employee Notifications"]
-        EmployeeA[Employee]
-        AlertA[Notification Alert]
+    subgraph EmpB["Employee B"]
+        direction LR
+        PrefsB[Preferences]
+        AlertB[Alert]
     end
     
-    subgraph DeliveryB["Tenant B Employee Notifications"]
-        EmployeeB[Employee]
-        AlertB[Notification Alert]
-    end
+    Templates -.->|Config| Admin
+    Vendors -.->|Config| Admin
     
-    Platform -->|Tenant Config| TenantA
-    Platform -->|Tenant Config| TenantB
-    TenantA -->|Customized Settings| DeliveryA
-    TenantB -->|Customized Settings| DeliveryB
-    Platform -->|Deliver| DeliveryA
-    Platform -->|Deliver| DeliveryB
-    EmployeeA --> AlertA
-    EmployeeB --> AlertB
+    Preferences -.->|Settings| PrefsA
+    Preferences -.->|Settings| PrefsB
     
-    style Platform fill:#e8f4f8,stroke:#2c5aa0
-    style TenantA fill:#fff4e6,stroke:#d97706
-    style TenantB fill:#fff4e6,stroke:#d97706
-    style DeliveryA fill:#f0fdf4,stroke:#16a34a
-    style DeliveryB fill:#f0fdf4,stroke:#16a34a
+    WorkVibe -.->|Variant Template| PrefsA
+    PrefsA -->|Deliver| AlertA
+    
+    WorkVibe -.->|Variant Template| PrefsB
+    PrefsB -->|Deliver| AlertB
+    
+    style Unified fill:#e8f4f8,stroke:#2c5aa0,stroke-width:3px
+    style Admin fill:#fff4e6,stroke:#d97706,stroke-width:3px
+    style EmpA fill:#f0fdf4,stroke:#16a34a,stroke-width:3px
+    style EmpB fill:#f0fdf4,stroke:#16a34a,stroke-width:3px
+    style Trigger fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
+    style Spacer fill:transparent,stroke:transparent,stroke-width:0px,height:20px
+    style Templates fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
+    style Workflows fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
+    style Preferences fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
+    style Vendors fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
+    style SuprSend fill:#ddd6fe,stroke:#8b5cf6,stroke-width:2px
+    style WorkVibe fill:#fce7f3,stroke:#ec4899,stroke-width:2px
+    style PrefsA fill:#dcfce7,stroke:#22c55e,stroke-width:2px
+    style PrefsB fill:#dcfce7,stroke:#22c55e,stroke-width:2px
+    style AlertA fill:#fef3c7,stroke:#eab308,stroke-width:2px
+    style AlertB fill:#fef3c7,stroke:#eab308,stroke-width:2px
 ```
 
 
@@ -93,7 +113,7 @@ Implement the following components to model the multi-tenant notification archit
 
 ### 1. Tenants
 
-We create tenant entities for each customer organization programmatically via the SuprSend API or SDK. Each tenant entity stores branding attributes (logo, website, brand colors) along with custom properties required for personalization and tenant-scoped configuration.
+We create tenant entities for each customer organization programmatically via the [SuprSend API](/docs/developer/rest-api) or [SDK](/docs/developer/sdk-overview). Each tenant entity stores branding attributes (logo, website, brand colors) along with custom properties required for personalization and tenant-scoped configuration.
 
 **Required fields:**
 
@@ -101,7 +121,7 @@ We create tenant entities for each customer organization programmatically via th
   <ul>
     <li><strong>tenant_id:</strong> <code>uber</code> </li>
     <li><strong>tenant_name:</strong> Uber </li>
-    <li><strong>logo:</strong> https://assets.yourdomain.com/tenants/uber/logo.png </li>
+    <li><strong>logo:</strong> link to asset </li>
     <li><strong>primary_color:</strong> #000000 </li>
     <li><strong>timezone:</strong> America/Los_Angeles </li>
   </ul>
@@ -168,7 +188,7 @@ SuprSend computes final delivery channels by applying platform rules, tenant-lev
 
 Enable each tenant (Uber) to manage notification preferences within the WorkVibe administrative interface.
 
-WorkVibe implements an admin-only *Notification Settings* page within its application. This interface integrates with SuprSend's Tenant Preference APIs, authenticated via JWT scoped to the specific tenant, to fetch and update notification category configurations.
+WorkVibe implements an admin-only *Notification Settings* page within its application. This interface integrates with [SuprSend's Tenant Preference APIs](/reference/update-tenant-default-preference), authenticated via JWT scoped to the specific tenant, to fetch and update notification category configurations.
 
 This approach maintains UI and UX control within WorkVibe, integrates with existing admin dashboards, and enables tenant administrators to configure organization-level notification policies without leaving the WorkVibe platform.
 
@@ -268,7 +288,7 @@ SuprSend supports workflow creation through three methods. For WorkVibe, we crea
   </Tab>
 
   <Tab title="Workflows API">
-     Create and update workflows programmatically using the Management API. Workflows are defined as code and synchronized to SuprSend via API.
+     Create and update workflows programmatically using the [Management API](/docs/developer/management-api). Workflows are defined as code and synchronized to SuprSend via API.
     
     **When to use:**
     - Workflows are version-controlled in the codebase
@@ -365,32 +385,29 @@ Once the setup is complete (we've configured tenants, categories, preferences, t
 This data modeling approach applies to various multi-tenant marketplaces and platform architectures, including B2B2B (business-to-business-to-business) and B2B2C (business-to-business-to-consumer) scenarios:
 
 <CardGroup cols={2}>
+<Card title="Delivery and logistics platforms" icon="truck">
+    Customers receive delivery updates branded by logistics providers, with real-time tracking notifications and tenant-specific branding
+  </Card>
+  <Card title="E-commerce marketplaces" icon="store">
+    Shoppers receive purchase confirmations branded by sellers, with per-seller branding and vendor configuration
+  </Card>
   <Card title="Travel booking platforms" icon="plane">
     Travelers receive confirmations branded by hotels/airlines, with tenant-specific preference configurations and vendor routing policies
   </Card>
   <Card title="Food delivery marketplaces" icon="utensils">
     Customers receive order updates branded by restaurants, each with tenant-specific branding and notification preference settings
   </Card>
-  <Card title="E-commerce marketplaces" icon="store">
-    Shoppers receive purchase confirmations branded by sellers, with per-seller branding and vendor configuration
-  </Card>
-  <Card title="Delivery and logistics platforms" icon="truck">
-    Customers receive delivery updates branded by logistics providers, with real-time tracking notifications and tenant-specific branding
+  <Card title="Learning platforms" icon="graduation-cap">
+    Students receive course updates branded by educational institutions, with institution-specific branding and channel configurations
   </Card>
   <Card title="Event ticketing platforms" icon="ticket">
     Attendees receive tickets branded by event organizers, with organizer-level preferences and custom SMTP configuration
-  </Card>
-  <Card title="Learning platforms" icon="graduation-cap">
-    Students receive course updates branded by educational institutions, with institution-specific branding and channel configurations
   </Card>
   <Card title="Healthcare scheduling platforms" icon="heart">
     Patients receive appointment reminders branded by clinics, with clinic-level preferences and compliance-compliant routing
   </Card>
   <Card title="B2B2B platforms" icon="building">
     Enterprise customers receive notifications branded by their organization, with multi-level tenant hierarchies and custom vendor routing
-  </Card>
-  <Card title="B2B2C platforms" icon="users">
-    End consumers receive notifications branded by the business customer, with tenant-level customization and preference management
   </Card>
 </CardGroup>
 
