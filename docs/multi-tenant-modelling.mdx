@@ -40,7 +40,7 @@ graph LR
         SuprSend[SuprSend]
     end
     
-    Trigger[Trigger] -.->|Input| Templates
+    Trigger[Trigger] -.-> Templates
     
     subgraph Admin["Customer Admin (Uber)"]
         WorkVibe[WorkVibe<br/>Template Variant<br/>Preference Settings]
@@ -58,34 +58,30 @@ graph LR
         AlertB[Alert]
     end
     
-    Templates -.->|Config| Admin
-    Vendors -.->|Config| Admin
-    
-    Preferences -.->|Settings| PrefsA
-    Preferences -.->|Settings| PrefsB
+    Unified -.-> Admin
     
     WorkVibe -.->|Variant Template| PrefsA
-    PrefsA -->|Deliver| AlertA
+    PrefsA --> AlertA
     
     WorkVibe -.->|Variant Template| PrefsB
-    PrefsB -->|Deliver| AlertB
+    PrefsB --> AlertB
     
-    style Unified fill:#e8f4f8,stroke:#2c5aa0,stroke-width:3px
-    style Admin fill:#fff4e6,stroke:#d97706,stroke-width:3px
-    style EmpA fill:#f0fdf4,stroke:#16a34a,stroke-width:3px
-    style EmpB fill:#f0fdf4,stroke:#16a34a,stroke-width:3px
-    style Trigger fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
-    style Spacer fill:transparent,stroke:transparent,stroke-width:0px,height:20px
-    style Templates fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
-    style Workflows fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
-    style Preferences fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
-    style Vendors fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
-    style SuprSend fill:#ddd6fe,stroke:#8b5cf6,stroke-width:2px
-    style WorkVibe fill:#fce7f3,stroke:#ec4899,stroke-width:2px
-    style PrefsA fill:#dcfce7,stroke:#22c55e,stroke-width:2px
-    style PrefsB fill:#dcfce7,stroke:#22c55e,stroke-width:2px
-    style AlertA fill:#fef3c7,stroke:#eab308,stroke-width:2px
-    style AlertB fill:#fef3c7,stroke:#eab308,stroke-width:2px
+    style Unified fill:#e0f2fe,stroke:#0284c7,stroke-width:4px,color:#0c4a6e
+    style Admin fill:#fff7ed,stroke:#ea580c,stroke-width:4px,color:#7c2d12
+    style EmpA fill:#f0fdf4,stroke:#16a34a,stroke-width:4px,color:#14532d
+    style EmpB fill:#f0fdf4,stroke:#16a34a,stroke-width:4px,color:#14532d
+    style Trigger fill:#fef3c7,stroke:#f59e0b,stroke-width:3px,color:#78350f
+    style Spacer fill:transparent,stroke:transparent,stroke-width:0px
+    style Templates fill:#bfdbfe,stroke:#2563eb,stroke-width:2.5px,color:#1e3a8a
+    style Workflows fill:#bfdbfe,stroke:#2563eb,stroke-width:2.5px,color:#1e3a8a
+    style Preferences fill:#bfdbfe,stroke:#2563eb,stroke-width:2.5px,color:#1e3a8a
+    style Vendors fill:#bfdbfe,stroke:#2563eb,stroke-width:2.5px,color:#1e3a8a
+    style SuprSend fill:#e9d5ff,stroke:#9333ea,stroke-width:2.5px,color:#581c87
+    style WorkVibe fill:#fce7f3,stroke:#ec4899,stroke-width:2.5px,color:#831843
+    style PrefsA fill:#dcfce7,stroke:#22c55e,stroke-width:2.5px,color:#14532d
+    style PrefsB fill:#dcfce7,stroke:#22c55e,stroke-width:2.5px,color:#14532d
+    style AlertA fill:#fef3c7,stroke:#eab308,stroke-width:2.5px,color:#78350f
+    style AlertB fill:#fef3c7,stroke:#eab308,stroke-width:2.5px,color:#78350f
 ```
 
 
@@ -225,11 +221,11 @@ Templates use standardized snake_case field naming and Handlebars variable synta
 {{$recipient.email}}        → "sarah@uber.com"
 ```
 
-##### Email Template
+##### **Email Template**
 
 ![Template example: New Hire Welcome Alert - Email](/images/template__welcome.png)
 
-##### SMS Template
+##### **SMS Template**
 
 ![Template example: New Hire Welcome Alert - SMS](/images/sms_welcome.png)
 
