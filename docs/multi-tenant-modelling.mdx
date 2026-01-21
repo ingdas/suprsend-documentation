@@ -1,11 +1,11 @@
 ---
 title: "Designing Notifications for Multi-Tenant B2B2X Applications"
-description: "Learn how to model multi-tenant notification architecture in SuprSend with tenant-level preferences, templates, and vendor routing."
+description: "Learn how to model multi-tenant notification architecture in SuprSend with per-tenant preferences, templates, and vendor routing."
 ---
 
-Multi-tenant platforms operate a *shared notification infrastructure* across multiple customer organizations (tenants). The core requirement is *tenant-scoped customization*: notification types must dynamically adapt based on tenant context—preference configurations, template variants with localization, and routing policies (channel selection and vendor assignment).
+Multi-tenant applications often have a *shared notification service* across multiple customer organizations (tenants). However, their tenant admins can ask for customizations in notifications. These include per-tenant preference configurations, tenant created templates, and routing policies (eg. applicable channels, tenant vendors, etc).
 
-This guide demonstrates how to architect this model in SuprSend using an example employee engagement platform called **WorkVibe**. We use WorkVibe as our example throughout this guide. The platform enables customer organizations to send employee communications including onboarding sequences, performance review notifications, pulse survey invitations, recognition messages, and policy update alerts.
+This guide demonstrates how to architect this setup in SuprSend using an example of employee engagement platform called **WorkVibe**. WorkVibe enables HR admins in their customer organizations to send employee communications such as onboarding messages, performance review notifications, survey invitations, and policy updates.
 
 <Note>
 **Example scenario:** **Uber** serves as an example tenant of the WorkVibe platform. Uber leverages WorkVibe's infrastructure to deliver alerts to its employee base. The notification system must enable tenant-level customization within WorkVibe's platform:
@@ -69,8 +69,6 @@ We create tenant entities for each customer organization programmatically via th
   </ul>
 </Card>
 
-<img src="/images/docs/tenant-details.png" alt="Tenant configuration example" width="700" style={{ border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px', backgroundColor: '#f9fafb', display: 'block', margin: '20px auto' }} />
-
 Beyond branding properties, SuprSend enables tenant-level configuration of notification preferences and vendor routing policies.
 
 📘 [Tenants →](/docs/tenants) | [Node.js SDK →](/docs/node-tenants) | [Python SDK →](/docs/python-tenants) | [Go SDK →](/docs/tenants-go)
@@ -79,7 +77,7 @@ Beyond branding properties, SuprSend enables tenant-level configuration of notif
 
 ### 2. Notification Categories
 
-We create notification categories that map to WorkVibe's notification types. These categories are linked to Workflows and Preference configurations. SuprSend provides **Sections** and **Sub-categories** to organize notification categories hierarchically.
+We create notification categories that map to WorkVibe's notifications. These categories are linked to Workflows and Preference configurations. SuprSend provides **Sections** and **Sub-categories** to organize notification categories hierarchically.
 
 For WorkVibe, we organized the notification category structure as follows:
 
@@ -128,7 +126,7 @@ SuprSend computes final delivery channels by applying platform rules, tenant-lev
 | **Employee (S)** | ✅ | ✅ | ❌ |
 | **Final result** | **✅** | ❌ | ❌ |
 
-#### Expose Preferences to Customer Organizations
+#### Expose Preferences to Tenant Admins within WorkVibe App
 
 For WorkVibe, a notification settings page has been created to allow tenant admins to manage notification preferences within the WorkVibe administrative interface.
 
@@ -144,7 +142,7 @@ This approach maintains UI and UX control within WorkVibe, integrates with exist
 
 ### 4. Templates
 
-Templates are created for each notification type. For the new employee onboarding use case, the `NEW_HIRE_WELCOME_ALERT` template was created. Templates utilize tenant-scoped variables for tenant-specific rendering by default.
+Templates are created for each notification type. For the new employee onboarding use case, the `NEW_HIRE_WELCOME_ALERT` template is created. Templates utilize tenant-scoped variables for tenant-specific rendering by default.
 
 <Note>
 **Template reuse:** Templates are created once at the platform level and rendered at delivery time with tenant-specific branding. Templates can be exposed to tenant administrators for customization. This approach eliminates template duplication per tenant while maintaining fully branded communication.
@@ -179,7 +177,7 @@ Templates use standardized snake_case field naming and Handlebars variable synta
 
 <img src="/images/sms_welcome.png" alt="Template example: New Hire Welcome Alert - SMS" width="700" style={{ border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px', backgroundColor: '#f9fafb', display: 'block', margin: '20px auto' }} />
 
-#### Expose Templates to Customer Applications
+#### Expose Templates to Tenant Admins within WorkVibe App
 
 A common requirement is enabling tenant organizations (like Uber) to customize templates through embeddable template editors. For WorkVibe, template editing capabilities are exposed to tenant administrators within the notification settings page.
 
@@ -267,7 +265,7 @@ Enterprise tenants may require dedicated SMTP servers or vendor accounts for del
 
 ## End-to-End Notification Flow
 
-Once the setup is complete (we've configured tenants, categories, preferences, templates, workflows, and vendors), you can trigger workflows to send notifications. When WorkVibe triggers a workflow, SuprSend executes the following sequence automatically:
+Once the setup is complete (we've configured tenants, categories, preferences, templates, workflows, and vendors), workflows can be triggered to send notifications. When WorkVibe triggers a workflow, SuprSend executes the following sequence automatically:
 
 <Steps>
   <Step title="Workflow Trigger">
@@ -304,8 +302,8 @@ Once the setup is complete (we've configured tenants, categories, preferences, t
   <Step title="Apply Employee Preferences">
     Employee preference evaluation: Employee opts out of Slack → Final channel selection: Email only.
   </Step>
-  <Step title="Associated template">
-    The workflow slug maps to the appropriate templates for each channel. SuprSend checks for tenant-specific template variant and falls back to default `NEW_HIRE_WELCOME_ALERT` template if no variant exists. Uber's tenant branding (logo, colors, tenant name) is applied to the resolved template using tenant-scoped variables (`{{$tenant.logo}}`, `{{$tenant.primary_color}}`, etc.).
+  <Step title="Render template">
+    The workflow slug maps to the appropriate templates for each channel. SuprSend checks for tenant-specific template variant and falls back to default `NEW_HIRE_WELCOME_ALERT` template if no variant exists. Uber's tenant branding (logo, colors, tenant name) is applied to the resolved template using tenant-specific variables (`{{$tenant.logo}}`, `{{$tenant.primary_color}}`, etc.).
   </Step>
   <Step title="Route via Vendor">
     Routes through Uber's configured vendor if available, otherwise uses WorkVibe platform default vendor.
