@@ -28,7 +28,7 @@ All customization occurs within a single shared, multi-tenant notification infra
 
 This example assumes WorkVibe uses the following notification architecture, standardized across all tenant organizations:
 
-<img src="/images/wv-architecture.png" alt="WorkVibe Architecture Overview" width="1000" style={{ border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px', backgroundColor: '#f9fafb', display: 'block', margin: '20px auto' }} />
+<img src="/images/wf-arch.png" alt="WorkVibe Architecture Overview" width="1000" style={{ border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px', backgroundColor: '#f9fafb', display: 'block', margin: '20px auto' }} />
 
 
 The following sections detail how to model this architecture in SuprSend, enabling notification delivery across multiple tenants without template or workflow duplication.
@@ -69,7 +69,7 @@ We create tenant entities for each customer organization programmatically via th
   </ul>
 </Card>
 
-<img src="/images/docs/tenant-details.png" alt="Tenant configuration example" width="1000" style={{ border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px', backgroundColor: '#f9fafb', display: 'block', margin: '20px auto' }} />
+<img src="/images/docs/tenant-details.png" alt="Tenant configuration example" width="700" style={{ border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px', backgroundColor: '#f9fafb', display: 'block', margin: '20px auto' }} />
 
 Beyond branding properties, SuprSend enables tenant-level configuration of notification preferences and vendor routing policies.
 
@@ -132,6 +132,8 @@ SuprSend computes final delivery channels by applying platform rules, tenant-lev
 
 For WorkVibe, a notification settings page has been created to allow tenant admins to manage notification preferences within the WorkVibe administrative interface.
 
+<img src="/images/wv-prefsetting.png" alt="WorkVibe preference settings page" width="1000" style={{ border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px', backgroundColor: '#f9fafb', display: 'block', margin: '20px auto' }} />
+
 This interface integrates with [SuprSend's Tenant Preference APIs](/reference/update-tenant-default-preference), authenticated via JWT scoped to the specific tenant, to fetch and update notification category configurations.
 
 This approach maintains UI and UX control within WorkVibe, integrates with existing admin dashboards, and enables tenant administrators to configure organization-level notification policies without leaving the WorkVibe platform.
@@ -180,6 +182,8 @@ Templates use standardized snake_case field naming and Handlebars variable synta
 #### Expose Templates to Customer Applications
 
 A common requirement is enabling tenant organizations (like Uber) to customize templates through embeddable template editors. For WorkVibe, template editing capabilities are exposed to tenant administrators within the notification settings page.
+
+<img src="/images/wv-templatesett.png" alt="WorkVibe template settings page" width="1000" style={{ border: '2px solid #e5e7eb', borderRadius: '8px', padding: '16px', backgroundColor: '#f9fafb', display: 'block', margin: '20px auto' }} />
 
 **Setup:**
 
